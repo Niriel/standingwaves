@@ -1,0 +1,27 @@
+In this chapter, I present a solver and prove that it works, at least qualitatively, by using typical networks.
+
+ALL THEORY
+
+\section{Solver}
+
+Maths go here.
+
+\section{Generic networks}
+
+Scattering matrix of typical networks, with parameters.
+
+Some of these parameters may not be super physical, but are here to kinda absorb the imperfections and the mismatch when fitting.
+
+For the grid I use Houde \cite{houde_2001} because there is nothing simpler, but for the other networks I keep it as simple as I can.  Grids being VERY complex to model, I might spend a lot of time and space on that one.
+
+So, in the end, it's a list of scattering matrices.  It would be nice to augment each system with plots showing the effect of each parameter.
+
+\section{Simple systems}
+
+The idea is to show that it works and makes sense.
+
+I must illustrate the most simple cavity.  I show it creates a standing wave pattern, I show its FFT, prove it's consistent with the length of the cavity and its refractive index.
+
+Then I introduce a thin film beam splitter (that's already a heterodyne telescope when we think of it).  I show that it adds a slope to the previous pattern.  I show that it's actually a very slow standing wave, the period of which is consistent with infinite reflections inside the thin film.  The FFT should show that there are two picks close to the cavity-period: they are due to the fact that there are now two cavities: one using reflection on the near side, one on the far side of the beam splitter.
+
+All of this makes sense, we are confident that the model does its job properly.
