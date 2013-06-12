@@ -1,0 +1,51 @@
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
+\usepackage{makeidx}
+    % Needed to build the index.
+
+\usepackage{amsmath}
+    % Brings the align environment for lining up equations on the =.
+
+\usepackage{graphicx}
+    % Can't have pictures/photos/figures from files without that.
+    % Note that vanilla latex will only accept eps.
+    
+\usepackage{subfigure}
+    % Lets me have labels such as a) b) c) inside a figure environment.
+
+\usepackage[font=footnotesize, labelfont=bf]{caption}
+    % So that I can add long captions under figures.
+    % It provides me with \caption* that does not appear in the list of
+    % figures but formats the text like \caption does.  It also lets me
+    % use line breaks in the caption, and even bullet/enumerated lists.
+
+\usepackage{color}
+    % For rendering text is eps_tex files produced by InkScape, even
+    % if the text is black.
+
+\usepackage{booktabs}
+    % For professional-looking tables.
+    % Brings the \toprule, \midrule and \bottomrule.
+    % Remember not to use vertical rules in tables: they look cheap.
+
+\usepackage[version=3]{mhchem}
+    % For chemical formulas.
+    % Brings \ce.ormulas.
+
+\usepackage[mediumspace,mediumqspace,squaren]{SIunits}
+    % Otherwise I can't write the mu symbol for micrometers.
+    % It also brings me the \degree symbol, woo!
+    % No decibel though, I need to make this one myself.
+
+\usepackage{varioref}
+    % For fancier references that also tell the page number.
+    
+\usepackage{todonotes}
+    % Big post-its, handy while writing.
+
+\newcommand{\decibel}{dB}
+\newcommand{\figref}[1]{\figurename~\ref{#1}}
+\newcommand{\vfigref}[1]{\figurename~\vref{#1}} % Varioref variation.
+\newcommand{\equaldef}{\stackrel{\text{\tiny def}}{=}}
