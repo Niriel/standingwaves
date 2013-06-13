@@ -4,7 +4,170 @@ ALL THEORY
 
 \section{Solver}
 
-Maths go here.
+\subsection{Simplifications}
+
+Plane wave.
+Single mode.
+
+Not only a list, I must justify them.
+Anything below -40 dB can pretty much be ignored \todo{why?}.
+What does not couple is lost, so just model the higher modes with a loss parameter.
+This is going to work unless higher modes can come back to the fundamental mode, but that should be a very small effect.
+
+
+
+\subsection{Jones calculus in 3D}
+
+\subsection{Scattering matrices of Jones matrices}
+
+%=============================================================================
+\subsection{Solving a system}
+
+%-----------------------------------------------------------------------------
+\paragraph{Theory}
+
+We call $S$ the scattering matrix of the entire system.
+\begin{equation*}
+    S =
+    \begin{pmatrix}
+        S_{1, 1} & S_{1, 2} & \cdots & S_{1, n} \\
+        S_{2, 1} & S_{2, 2} & \cdots & S_{2, n} \\
+        \vdots   & \vdots   & \ddots & \vdots \\
+        S_{n, 1} & S_{n, 2} & \cdots & S_{n, n}
+    \end{pmatrix}
+\end{equation*}
+\begin{equation*}
+    b = Sa
+\end{equation*}
+S contains information about all the ports in the system: the ports that are open to the outside world, but also the ports hidden within the system because the networks are coupled to each other.
+Here, $n$ is the number of ports of $S$, equal to the sum of the number of ports of all the networks constituting the system.
+
+Some of the networks constituting the system are coupled by one port.
+If two networks G and H are coupled by their port $g$ and $h$, then the output of $g$ is the input of $h$ and the output of $h$ is the input of $g$, as illustrated by Equation~\eqref{eq:coupled_inputs_outputs}.
+\begin{equation}
+    \left\lbrace
+    \begin{aligned}
+        b_h &= a_g \\
+        b_g &= a_h
+    \end{aligned}
+    \right.
+    \label{eq:coupled_inputs_outputs}
+\end{equation}
+
+Ports that are coupled are called ``inside port'', those that are not coupled are called ``outside port''.
+If we note~$a^o$ the inputs from the outside world,~$b^o$ the outputs to the outside world,~$a^i$ the inputs inside the system and~$b^i$ the outputs outside the system, then we can reorder the rows and columns of the vectors~$a$,~$b$ and the matrix~$S$ to put together the inside ports and the outside ports: 
+\begin{equation}
+    \binom{b^o}{b^i} =
+    \begin{pmatrix}
+        S^{oo} & S^{oi} \\
+        S^{io} & S^{ii} \\
+    \end{pmatrix}
+    \binom{a^o}{a^i}
+    \label{eq:S_outside_inside}
+\end{equation}
+Only~$a^o$ is known: this corresponds to the input to the system and we control it.
+$a^i$,~$b^i$ and~$b^o$ are unknown.
+$b^o$ is the result we are looking for.
+$b^i$ and~$a^i$ are nice to have as they allow us to see what is happening inside the system.
+
+How are~$a^i$ and~$b^i$ related?
+Equation~\eqref{eq:coupled_inputs_outputs} indicates that each element of $a^i$ is equal to an element of $b^i$, therefore $a^i$ can be obtain by reordering $b^i$ and vice-versa.
+\index{permutation matrix}In other words, there exists a permutation matrix~$P$ such that
+\begin{equation}
+    a^i = P b^i \text{.} \label{eq:relation_ai_bi}
+\end{equation}
+
+To get $b_o$, the first step is to compute~$b_i$ from~$a_o$.
+\begin{align}
+    b^i &= S^{io}a^o + S^{ii}a^i \notag \\
+    b^i &= S^{io}a^o + S^{ii}Pb^i \notag \\
+    (I - S^{ii}P)b^i &= S^{io}a^o \notag \\
+    b^i &= (I - S^{ii}P)^{-1} S^{io}a^o \label{eq:compute_bi}
+\end{align}
+where~$I$ is the identity matrix with a dimension equal to that of~$S^{ii}P$.
+
+The second step is to compute~$b^o$ from~$a^o$ and~$b^i$.
+\begin{align}
+    b^o &= S^{oo}a^o + S^{oi}a^i \notag \\
+    b^o &= S^{oo}a^o + S^{oi}Pb^i \label{eq:compute_bo}
+\end{align}
+
+These two steps solve the system: from the inputs~$a^o$ we can compute the outputs~$b^o$ of the whole system.
+This method also tells gives us $a^i$ and $b^i$ which are two equivalent ways (Equation~\eqref{eq:relation_ai_bi}) of looking at what is happening inside the system.
+
+%-----------------------------------------------------------------------------
+\paragraph{Implementation}
+Although the mathematics are quite simple, the implementation requires careful book keeping of the many indices of the many matrices.
+
+\begin{itemize}
+    \item 
+The system contains $N$ networks.
+    \item 
+Each network is modeled with a~$n_i$--by--$n_i$ scattering matrix, where~$n_i$ is the number of ports the network $i$, with $i \in \llbracket 1, N \rrbracket$.
+    \item 
+The whole system is modeled with a~$n$--by--$n$ scattering matrix, where~$n$ is the number of ports of the whole system, with $n = \sum_{i=1}^N n_i$.
+\end{itemize}
+
+Each network $i$ comes with ports that are ordered from 1 to $n_i$.
+The networks themselves are ordered since they are indexed from 1 to $N$.
+Therefore, there is a natural way of numbering the ports of the whole system.
+The port~$j$ of the network~$i$ corresponds to the port~$k$ of the whole system, where
+\begin{equation}
+    k = \sum_{m=0}^{j - i}n_m + j \label{eq:port_numbering}
+\end{equation}
+
+With that information, it is trivial to fill the scattering matrix of the whole system, $S$, with values from the scattering matrices from each network $S_i$.
+$S$ contains mostly zeros, except for blocks on its diagonal containing copies of each~$S_i$.
+For example, Equation~\eqref{eq:block_scattering} shows what $S$ looks like for a system containing two networks $S_1$ and $S_2$.
+\begin{equation}
+    S =
+    \begin{pmatrix}
+        {S_1}_{1, 1} & \cdots & {S_1}_{1, n_1} &
+        0 & \cdots & 0
+        \\
+        \vdots & \ddots &\vdots &
+        \vdots & \ddots &\vdots 
+        \\
+        {S_1}_{n_1, 1} & \cdots & {S_1}_{n_1, n_1} &
+        0 & \cdots & 0
+        \\
+        0 & \cdots & 0 &
+        {S_2}_{1, 1} & \cdots & {S_2}_{1, n_2}
+        \\
+        \vdots & \ddots &\vdots &
+        \vdots & \ddots &\vdots
+        \\
+        0 & \cdots & 0 &
+        {S_2}_{n_2, 1} & \cdots & {S_2}_{n_2, n_2}
+    \end{pmatrix}
+    \label{eq:block_scattering}
+\end{equation}
+Note that the number of zeros increases with~$N^2$ while the number of non-zeros elements around the diagonal increases with~$N$.
+This remark has no importance from a purely mathematical point of view but is very important for the implementation of the solving algorithm.
+\index{space matrix}Indeed, matrices that contain many zeros are called ``sparse matrices'' and many algorithms exist that have been optimized for dealing with them.
+If we use such an optimized algorithm, then the matrix inversion that appears in Equation~\eqref{eq:compute_bi} will execute in $O(N)$ instead of $O(N^2)$ (using the ``big O notation'').
+
+To continue, we need to know which ports are coupled to which ports.
+We can represent the coupling with a matrix~$C$.
+$C$ contains 0 for the ports that are not coupled, 1 for those that are.
+A sane description of the coupling has the following properties:
+\begin{itemize}
+    \item A port is not coupled to itself; the diagonal of~$C$ contains only zeros.
+    \item A port is not coupled to more than one port; there is at most one 1 on a row or column of~$C$.
+    \item If the port~$i$ is coupled to the port~$j$, then the port~$j$ is coupled to the port~$i$;~$C$ is symmetric.
+    \item For every port in the system, there exist a path that connects it to an outside port; this cannot be ensured by looking only at~$C$ and requires using graph theory.
+\end{itemize}
+It is possible to use graph theory to detect some errors in the coupling matrix, but it is not required for the solver to work.
+From now on, we assume that the data is healthy.
+
+Unless we are lucky, the system-level scattering matrix (that we build from the network-level scattering matrices) is not organized into inside/outside sectors like shown on Equation~\eqref{eq:S_outside_inside}.
+However, there exists a permutation matrix~$P$ such as
+\begin{equation}
+    S' = P S P^{-1}
+\end{equation}
+with $S'$ having the form of Equation~\eqref{eq:S_outside_inside}.
+That permutation matrix $P$ is related to the coupling matrix $C$.
+
 
 \section{Generic networks}
 
