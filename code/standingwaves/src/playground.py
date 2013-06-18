@@ -5,28 +5,11 @@ Created on Jun 18, 2013
 '''
 import sw
 import numpy as np
-import scipy.constants
-
-TAU = 2 * np.pi
-
-def Gain(g):
-    return np.array([[0, g], [g, 0]], dtype=complex)
-
-def SemiTransparentMirror(r, t):
-    return np.array([[r, t], [t, r]], dtype=complex)
-
-def ComputeSpaceGain(n, length, frequency):
-    k0 = TAU * frequency / scipy.constants.speed_of_light  # In vacuum.
-    k = k0 * n  # In the medium.  Handles n complex.
-    return np.exp(1j * k * length)
-
-def Distance(n, length, frequency):
-    return Gain(ComputeSpaceGain(n, length, frequency))
 
 #-----------------
 
-space0 = Gain(.5)
-space1 = Gain(.2)
+space0 = sw.networks.Gain1(.5)
+space1 = sw.networks.Gain1(.2)
 networks = [space0, space1]
 couplings = [set([1, 2])]
 n = 4
@@ -46,13 +29,14 @@ print np.abs(b[1]), np.angle(b[1], True)
 
 frequencies = np.linspace(1000e9, 1004e9, 1001)
 y = []
-interface = SemiTransparentMirror(.1, .9)
+interface = sw.networks.SemiTransparentMirror1(.1, .9)
 couplings = [{1, 2}, {3, 4}]
 ao = np.array([1, 0], dtype=complex)
 n = 6
 presolver = sw.Solver(n, couplings)
 for f in frequencies:
-    networks = [interface, Distance(1, 1, f), interface]
+    distance = sw.networks.Distance1(1, 1, f)
+    networks = [interface, distance, interface]
     solver = presolver(networks)
     b = solver(ao)
     y.append(np.abs(b[5]) ** 2)

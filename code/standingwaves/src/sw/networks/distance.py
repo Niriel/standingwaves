@@ -15,3 +15,6 @@ def ComputeSpaceGain(n, length, frequency):
 
 def Distance(n, length, frequency):
     return gain.Gain(ComputeSpaceGain(n, length, frequency))
+
+def Distance1(n, length, frequency):
+    return gain.Gain1(ComputeSpaceGain(n, length, frequency))
