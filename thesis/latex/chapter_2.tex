@@ -2,8 +2,10 @@ In this chapter, I present a solver and prove that it works, at least qualitativ
 
 ALL THEORY
 
+%#############################################################################
 \section{Solver}
 
+%=============================================================================
 \subsection{Simplifications}
 
 Plane wave.
@@ -16,15 +18,17 @@ This is going to work unless higher modes can come back to the fundamental mode,
 
 
 
+%=============================================================================
 \subsection{Jones calculus in 3D}
 
+%=============================================================================
 \subsection{Scattering matrices of Jones matrices}
 
 %=============================================================================
 \subsection{Solving a system}
 
 %-----------------------------------------------------------------------------
-\paragraph{Theory}
+\paragraph{Theory.}
 
 We call $S$ the scattering matrix of the entire system.
 \begin{equation*}
@@ -63,13 +67,21 @@ If we note~$a^o$ the inputs from the outside world,~$b^o$ the outputs to the out
         S^{io} & S^{ii} \\
     \end{pmatrix}
     \binom{a^o}{a^i}
-    \label{eq:S_outside_inside}
+    \label{eq:s_outside_inside}
 \end{equation}
+The four regions of~$S$ have the following physical meaning:
+\begin{description}
+    \item[$S^{oo}$:] from outside to outside: signal that is reflected on the entrance ports and therefore never enters the system.
+    \item[$S^{io}$:] from outside to inside: signal that enters the system.
+    \item[$S^{ii}$:] from inside to inside: transmissions and reflections internal to the system.
+    \item[$S^{oi}$:] from inside to outside: signal that leaves the system.
+\end{description}
 Only~$a^o$ is known: this corresponds to the input to the system and we control it.
 $a^i$,~$b^i$ and~$b^o$ are unknown.
 $b^o$ is the result we are looking for.
 $b^i$ and~$a^i$ are nice to have as they allow us to see what is happening inside the system.
 
+\subparagraph{Solving the internal transmissions and reflections.}
 How are~$a^i$ and~$b^i$ related?
 Equation~\eqref{eq:coupled_inputs_outputs} indicates that each element of $a^i$ is equal to an element of $b^i$, therefore $a^i$ can be obtain by reordering $b^i$ and vice-versa.
 \index{permutation matrix}In other words, there exists a permutation matrix~$P$ such that
@@ -78,25 +90,124 @@ Equation~\eqref{eq:coupled_inputs_outputs} indicates that each element of $a^i$ 
 \end{equation}
 
 To get $b_o$, the first step is to compute~$b_i$ from~$a_o$.
-\begin{align}
-    b^i &= S^{io}a^o + S^{ii}a^i \notag \\
-    b^i &= S^{io}a^o + S^{ii}Pb^i \notag \\
-    (I - S^{ii}P)b^i &= S^{io}a^o \notag \\
-    b^i &= (I - S^{ii}P)^{-1} S^{io}a^o \label{eq:compute_bi}
-\end{align}
+\begin{subequations}
+    \begin{align}
+        b^i &= S^{io}a^o + S^{ii}a^i \label{eq:compute_bi_ai} \\
+        b^i &= S^{io}a^o + S^{ii}Pb^i \label{eq:compute_bi_bi} \\
+        (I - S^{ii}P)b^i &= S^{io}a^o \label{eq:compute_bi_solve} \\
+        b^i &= (I - S^{ii}P)^{-1} S^{io}a^o \label{eq:compute_bi_invert}
+    \end{align} \label{eq:compute_bi}
+\end{subequations}
 where~$I$ is the identity matrix with a dimension equal to that of~$S^{ii}P$.
 
+Can we go from~\eqref{eq:compute_bi_solve} to~\eqref{eq:compute_bi_invert}?
+The matrix~$I - S^{ii}P$ has an inverse if and only if it is not singular.
+A matrix is singular if and only if its determinant equals~0.
+Can the determinant of~$I - S^{ii}P$ equal~0 (equation~\eqref{eq:det_i_minus_siip})?
+\begin{equation}
+    \det(I - S^{ii}P) = 0 \label{eq:det_i_minus_siip}
+\end{equation}
+\index{eigenvalue}Equation~\eqref{eq:det_i_minus_siip} has the shape of an eigenvalue problem;
+equation~\eqref{eq:eigenvalue_typical} defines the eigenvalues~$\lambda$ of a matrix~$A$.
+\begin{equation}
+    \det(A - \lambda I) = 0 \label{eq:eigenvalue_typical}
+\end{equation}
+In our case, $\lambda=1$ and $A=S^{ii}P$.
+However, the sign is not the same: $I-A \neq A-I$.
+Fortunately, the determinant has the following property~\eqref{eq:determinant_scalar_multiplication}:
+\begin{equation}
+    \det(c A) = c^n \det(A) \label{eq:determinant_scalar_multiplication}
+\end{equation}
+for any $n$--by--$n$ matrix $A$.
+Therefore,
+\begin{subequations}
+    \begin{align}
+        \det(I - S^{ii}P)
+        &= \det(-1(S^{ii}P - I)) \\
+        &= (-1)^n \det(S^{ii}P - I) \text{.}
+    \end{align}
+\end{subequations}
+We do not need to worry about the parity of~$n$.
+Indeed, if $x=0$ then $(-1)^n x = 0$ as well.
+This means that for our eigenvalue problem, the sign does not matter, as summarized by equation~\eqref{eq:determinant_sign_does_not_matter}.
+\begin{equation}
+    \det(I - S^{ii}P) = 0
+    \quad
+    \Longleftrightarrow
+    \quad
+    \det(S^{ii}P - I) = 0
+    \label{eq:determinant_sign_does_not_matter}
+\end{equation}
+\index{eigenvector}We have succesfully identified our question of the invertibility of $I - S^{ii}P$ with a question regarding the eigenvectors of $S^{ii}P$ for the eivenvalue 1.
+Saying $\det(S^{ii}P - I) = 0$ is equivalent to saying that there exist non-zero vectors $v$, called ``eigenvectors'', such that $v = S^{ii}Pv$.
+The following argument, based on physical considerations, will demonstrate that there are no such vectors.
+
+$b^i$ is what $S^{ii}P$ is applied to in equation~\eqref{eq:compute_bi}, therefore we are looking for vectors $b^i$ satisfying
+\begin{equation}
+    b^i = S^{ii}P b^i \text{.} \label{eq:bi_eigenvector}
+\end{equation}
+The two equations~\eqref{eq:bi_eigenvector} and ~\eqref{eq:compute_bi_bi}, taken together, 
+lead to the following interesting equality:
+\begin{equation}
+    \left\lbrace
+        \begin{aligned}
+            b^i &= S^{ii}P b^i \\
+            b^i &= S^{io}a^0 + S^{ii}P b^i
+        \end{aligned}
+    \right.
+    \quad
+    \Longleftrightarrow
+    \quad
+    S^{io}a^o = 0
+\end{equation}
+The only way for $S^{io}a^o$ to equal 0 for any value of $a^o$ is for $S^{io}$ to contain only zeros.
+In other words, the system is totally blind: no energy from the outside world ($a^o$) ever enters the system.
+Blind systems cannot be solved by our method but this is not a problem since there is no point in trying to build them in the first place.
+For the rest of this demonstration, let us assume that the system is not blind, $S^{io}\neq 0$, but that instead we merely set $a^o$ to 0; let us also assume $b^i \neq 0$ (we somehow managed to inject energy inside the system before it got blind).
+What would $b^i = S^{ii}P b^i$ mean?
+
+$b^i$ is the list of all the outputs of the inside part of the system, fed back as input to that same system.
+What equation~\eqref{eq:bi_eigenvector} means is that there exists some fields that are unaffected by the system; if such a field would enter the system, it would be trapped inside the system, looping through $S^{ii}P$ forever.
+If $S^{ii}P$ has an eigenvector, then our system is totally lossless (for some fields) and can store any amount of energy forever.
+We know that all our networks have losses; even the propagation in free space has losses in the form of the beam diffracting slowly and becoming wider than its target, essentially leaking energy.
+Without using active components (external energy source, amplifiers), the best we can do is to aim for very low losses, which would produce very high-Q cavities but not perpetual storages.
+Because our systems have losses, $S^{ii}P$ has no eigenvectors.
+Therefore $S^{ii}P$ has no eigenvalues.
+Therefore 1 is not an eigenvalue.
+Therefore $\det(I-S^{ii}P) \neq 0$.
+Therefore $I-S^{ii}P$ has an inverse.
+Therefore equation~\eqref{eq:compute_bi_invert} is correct, and the system can be solved.
+
+It can be interesting to draw a parallel between our problem and the convergence of an infinite series.
+Indeed, an infinite series of ratio $q$ converges if $\vert q \vert < 1$:
+\begin{equation}
+    \sum_{i=0}^\infty q^i = \frac{1}{1-q} = (1-q)^{-1}
+\end{equation}
+The ressemblance with $(I - S^{ii}P)^{-1}$ is not due to chance.
+Our system acts like a cavity, maybe a very complex cavity but a cavity nontheless.
+Therefore we can think about it as a simple cavity delimited by two semi-transparent mirrors.
+The signal trapped inside the cavity is reflected an infinite amount of times, each double-reflection attenuates the signal by a factor $q=S^{ii}P$.
+As a result, the signal inside the cavity is the signal that enters the cavity multiplied by $1+q+q^2+q^3+\dots$ up to infinity.
+If there are losses, then $|q|<1$ and that series converges to $(1-q)^{-1}$ or, considering we are working with matrices, $I - S^{ii}P$.
+
+Note that for the implementation, we may want to avoid inverting the matrix.
+Indeed, inverting matrices is costly and numerically unstable \todo{citation needed}.
+Even though equation~\eqref{eq:compute_bi_invert} is mathematically correct, we would rather solve $b^i$ in equation~\eqref{eq:compute_bi_solve}.
+
+\subparagraph{Solving the output of the system.}
+Once we know the internal reflections of the system ($b^i$ as a function of itself), getting its output is trival.
 The second step is to compute~$b^o$ from~$a^o$ and~$b^i$.
+We do that by taking $b^o$ from equation~\eqref{eq:s_outside_inside} and eliminating $a^i$ with equation~\eqref{eq:relation_ai_bi}.
 \begin{align}
     b^o &= S^{oo}a^o + S^{oi}a^i \notag \\
     b^o &= S^{oo}a^o + S^{oi}Pb^i \label{eq:compute_bo}
 \end{align}
 
 These two steps solve the system: from the inputs~$a^o$ we can compute the outputs~$b^o$ of the whole system.
-This method also tells gives us $a^i$ and $b^i$ which are two equivalent ways (Equation~\eqref{eq:relation_ai_bi}) of looking at what is happening inside the system.
+This method also tells gives us $a^i$ and $b^i$ which are two equivalent ways of looking at what is happening inside the system.
 
 %-----------------------------------------------------------------------------
-\paragraph{Implementation}
+\paragraph{Implementation.}
 Although the mathematics are quite simple, the implementation requires careful book keeping of the many indices of the many matrices.
 
 \begin{itemize}
@@ -113,7 +224,7 @@ The networks themselves are ordered since they are indexed from 1 to $N$.
 Therefore, there is a natural way of numbering the ports of the whole system.
 The port~$j$ of the network~$i$ corresponds to the port~$k$ of the whole system, where
 \begin{equation}
-    k = \sum_{m=0}^{j - i}n_m + j \label{eq:port_numbering}
+    k = \sum_{m=0}^{i - 1}n_m + j \label{eq:port_numbering}
 \end{equation}
 
 With that information, it is trivial to fill the scattering matrix of the whole system, $S$, with values from the scattering matrices from each network $S_i$.
@@ -144,31 +255,299 @@ For example, Equation~\eqref{eq:block_scattering} shows what $S$ looks like for 
 \end{equation}
 Note that the number of zeros increases with~$N^2$ while the number of non-zeros elements around the diagonal increases with~$N$.
 This remark has no importance from a purely mathematical point of view but is very important for the implementation of the solving algorithm.
-\index{space matrix}Indeed, matrices that contain many zeros are called ``sparse matrices'' and many algorithms exist that have been optimized for dealing with them.
-If we use such an optimized algorithm, then the matrix inversion that appears in Equation~\eqref{eq:compute_bi} will execute in $O(N)$ instead of $O(N^2)$ (using the ``big O notation'').
+\index{sparse matrix}Indeed, matrices that contain many zeros are called ``sparse matrices'' and many algorithms exist that have been optimized for dealing with them.
+If we use such an optimized algorithm, then the matrix inversion that appears in Equation~\eqref{eq:compute_bi_invert} will execute in $O(N)$ instead of $O(N^2)$ (using the ``big O notation'').
 
-To continue, we need to know which ports are coupled to which ports.
-We can represent the coupling with a matrix~$C$.
-$C$ contains 0 for the ports that are not coupled, 1 for those that are.
-A sane description of the coupling has the following properties:
-\begin{itemize}
-    \item A port is not coupled to itself; the diagonal of~$C$ contains only zeros.
-    \item A port is not coupled to more than one port; there is at most one 1 on a row or column of~$C$.
-    \item If the port~$i$ is coupled to the port~$j$, then the port~$j$ is coupled to the port~$i$;~$C$ is symmetric.
-    \item For every port in the system, there exist a path that connects it to an outside port; this cannot be ensured by looking only at~$C$ and requires using graph theory.
-\end{itemize}
-It is possible to use graph theory to detect some errors in the coupling matrix, but it is not required for the solver to work.
-From now on, we assume that the data is healthy.
+Unless we are lucky, the system scattering matrix $S$ (that we build from the network scattering matrices $S_i$) is not organized into inside and outside sectors like shown on Equation~\eqref{eq:s_outside_inside}.
+\index{permutation matrix}However, there exists a permutation matrix~$Q$ such as
+\begin{gather}
+    \left\lbrace
+    \begin{aligned}
+        S' &= Q S Q^{-1} \\
+        a' &= Q a \\
+        b' &= Q b
+    \end{aligned}
+    \right.
+    \label{eq:permute_s}
+    \\
+    b = S a \quad \Longleftrightarrow \quad b' = S' a' \label{eq:permute_s_equiv}
+\end{gather}
+with $S'$ having the form of Equation~\eqref{eq:s_outside_inside}.
 
-Unless we are lucky, the system-level scattering matrix (that we build from the network-level scattering matrices) is not organized into inside/outside sectors like shown on Equation~\eqref{eq:S_outside_inside}.
-However, there exists a permutation matrix~$P$ such as
+The permutation matrix $Q$ must not be confused with the permutation matrix $P$ from equation~\eqref{eq:relation_ai_bi}, they are distinct, and both are needed.
+$Q$~separates the inside ports from the outside ports, while $P$~describes how the inside ports are coupled.
+Once the permutation matrix~$Q$ is known, we can solve the problem for~$S'$ and get~$b'$, from which we can retrieve~$b$ (Equation \eqref{eq:permute_s_equiv}).
+
+Permutation matrices permute the order of rows and columns of matrices.
+They contain one and only one 1 per row and per column, all the other elements are 0.
+Pre-multiplying by a permutation matrix changes the order of the rows.
+Post-multiplying by a permutation matrix changes the order of the columns.
+The transpose of a permutation matrix is also a permutation matrix.
+The transpose of a permutation matrix is also its inverse: $P^\top = P^{-1}$.
+This last property is important for optimization purposes because inverting matrices is expensive and unstable.
+
+Both permutation matrices~$P$ and~$Q$ can be derived from a single dataset.
+That dataset is a description of the ports that are coupled.
+That dataset obviously defines~$P$, the matrix that describe the couplings.
+But it also defines~$Q$, the matrix that separates the inside ports from the outside ports.
+Indeed, any port present in that dataset is by definition an inside port, and any port absent from that dataset is an outside port.
+
+\index{coupling descriptor}One way of representing the coupling of two ports is with a set of cardinal~2 that I name ``coupling descriptor''.
+Its two elements are the two identifiers of the ports that are coupled.
+For example, if the port 4 of the system is coupled to the port 10, then we can represent that coupling with the set $\lbrace 4, 10\rbrace$ which is equal to the set $\lbrace 10, 4\rbrace$ (sets are unordered).
+Enforcing a cardinal of 2 prevents the coupling of a port to itself: $\lbrace 4, 4\rbrace = \lbrace 4\rbrace$ which has a cardinal of~1.
+To be valid, each element must be between 1 and $n$, the number of ports in the whole system.
+
+A set of coupling descriptors defines all the couplings that exist in the system.
+To be valid, each of the coupling descriptors that it contains must be valid, and each port identifier can appear at most once.
+For example,
+$\lbrace \lbrace 1, 2 \rbrace, \lbrace 5, 3 \rbrace \rbrace$
+is valid, but 
+$\lbrace \lbrace 1, 2 \rbrace, \lbrace 5, 2 \rbrace \rbrace$
+is not because the port identifier~2 appears more than once.
+
+There are many possible permutation matrices $Q$: all that is required for $Q$ is to separate the inside ports from the outside ports, there is no constraint on the order of the ports beyond that.
+To ensure the reproducibility of our algorithm, we want to choose one specific $Q$, the one for which the inside and outside port identifiers are in ascending order.
+This is what the algorithm~\ref{algo:separate_inside_outside} provides.
+Algorithm~\ref{algo:separate_inside_outside} uses the outputs of algorithms~\ref{algo:find_inside} and~\ref{algo:find_outside}.
+
+\begin{algorithm}
+    \caption{FindInside}
+    \label{algo:find_inside}
+    \begin{algorithmic}
+        \REQUIRE {\textit{couplings}} \COMMENT{a valid set of coupling descriptors}
+        \STATE {\textit{inside} $\leftarrow \emptyset$}
+        \FORALL{\textit{coupling} $\in$ \textit{couplings}}
+            \STATE {\textit{inside} $\leftarrow$ \textit{inside} $\cup$ \textit{coupling}}
+        \ENDFOR
+        \RETURN {\textit{inside}} \COMMENT{a set containing all the coupled ports}
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{FindOutside}
+    \label{algo:find_outside}
+    \begin{algorithmic}
+        \REQUIRE {\textit{inside}} \COMMENT{a set containing all the coupled ports}
+        \REQUIRE {$n$} \COMMENT{number of ports in the system}
+        \STATE{\textit{allports} $\leftarrow \lbrace 1, 2, 3, \dots, n \rbrace$}
+        \STATE{\textit{outside} $\leftarrow$ \textit{allports} $\setminus$ \textit{inside}}
+        \RETURN {\textit{outside}} \COMMENT{a set containing all the non-coupled ports}
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{SeparateInsideOutside}
+    \label{algo:separate_inside_outside}
+    \begin{algorithmic}
+        \REQUIRE {\textit{inside}} \COMMENT{a set containing all the coupled ports}
+        \REQUIRE {\textit{outside}} \COMMENT{a set containing all the non-coupled ports}
+        \REQUIRE {$n$} \COMMENT{number of ports in the system}
+        \STATE{\textit{insorted} $\leftarrow$ sort(array(\textit{inside}))}
+        \STATE{\textit{outsorted} $\leftarrow$ sort(array(\textit{outside}))}
+        \STATE {$Q \leftarrow$ $n$--by--$n$ matrix filled with 0}
+        \FOR {$i = 1$ to length(\textit{outsorted})}
+            \STATE{$Q_{i, \textit{outsorted}[i]} \leftarrow$ 1}
+        \ENDFOR
+        \FOR {$i$ = 1 to length(\textit{insorted})}
+            \STATE{$Q$[$i$ + length(\textit{outsorted}), \textit{insorted}$[i]$] $\leftarrow$ 1}
+        \ENDFOR
+        \RETURN {$Q$} \COMMENT{Permutation matrix that separates inside/outside ports}
+    \end{algorithmic}
+\end{algorithm}
+
+Example: A system with $n=4$ ports has its ports 1 and 3 coupled together.
+Algorithm~\ref{algo:separate_inside_outside_example} shows how to compute $Q$ from a set of coupling descriptors.
+The ``Ensure'' statements are assertions, propositions that must be true if the algorithm is working properly.
+
+\begin{algorithm}[H]
+    \caption{SeparateInsideOutside, example}
+    \label{algo:separate_inside_outside_example}
+    \begin{algorithmic}
+        \STATE {couplings $\leftarrow \lbrace \lbrace 3, 1 \rbrace \rbrace$}
+        \STATE {$n \leftarrow 4$}
+        \STATE {inside $\leftarrow$ FindInside(couplings)}
+        \ENSURE {inside = $\lbrace 3, 1 \rbrace$} \COMMENT {Order does not matter for set equality.}
+        \STATE {outside $\leftarrow $ FindOutside(inside, $n$)}
+        \ENSURE {outside $= \lbrace 2, 4 \rbrace$}
+        \STATE {$Q \leftarrow$ SeparateInsideOutside(inside, outside, $n$)}
+        \ENSURE {
+        $
+        Q = \begin{pmatrix}
+            0 & 1 & 0 & 0\\
+            0 & 0 & 0 & 1\\
+            1 & 0 & 0 & 0\\
+            0 & 0 & 1 & 0
+        \end{pmatrix}
+        $
+        }
+    \end{algorithmic}
+\end{algorithm}
+Let us apply the permutation matrix $Q$ produced in the example algorithm~\ref{algo:separate_inside_outside_example} to a vector~$a$ and a scattering matrix~$S$, following equation~\eqref{eq:permute_s}.
+The results are given in equations~\eqref{eq:q_a_aprime} and~\eqref{eq:q_s_qtranspose_sprime}.
 \begin{equation}
-    S' = P S P^{-1}
+    Q a
+    =
+    \begin{pmatrix}
+        0 & 1 & 0 & 0\\
+        0 & 0 & 0 & 1\\
+        1 & 0 & 0 & 0\\
+        0 & 0 & 1 & 0
+    \end{pmatrix}
+    \begin{pmatrix}
+        a_1 \\ a_2 \\ a_3 \\ a_4
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        a_2 \\ a_4 \\ a_1 \\ a_3
+    \end{pmatrix}
+    =
+    a'\text{.}
+    \label{eq:q_a_aprime}
 \end{equation}
-with $S'$ having the form of Equation~\eqref{eq:S_outside_inside}.
-That permutation matrix $P$ is related to the coupling matrix $C$.
+\begin{equation}
+    Q S Q^{-1}
+    =
+    \begin{pmatrix}
+        S_{2,2} & S_{2,4} & S_{2,1} & S_{2,3} \\
+        S_{4,2} & S_{4,4} & S_{4,1} & S_{4,3} \\
+        S_{1,2} & S_{1,4} & S_{1,1} & S_{1,3} \\
+        S_{3,2} & S_{3,4} & S_{3,1} & S_{3,3}
+    \end{pmatrix}
+    =
+    S'
+    \label{eq:q_s_qtranspose_sprime}
+\end{equation}
+The next step, separating $a'$ in two and $S'$ in four, is trivial to implement.
+Equation~\eqref{eq:q_s_qtranspose_sprime_decomposed} shows a decomposition of the matrix $S'$ from equation~\eqref{eq:q_s_qtranspose_sprime} into inside and outside submatrices.
+\begin{equation}
+    \begin{aligned}
+    S'^{oo}
+    &=
+    \begin{pmatrix}
+        S_{2,2} & S_{2,4}  \\
+        S_{4,2} & S_{4,4}  \\
+    \end{pmatrix}
+    &
+    S'^{oi}
+    &=
+    \begin{pmatrix}
+        S_{2,1} & S_{2,3}  \\
+        S_{4,1} & S_{4,3}  \\
+    \end{pmatrix}
+    \\
+    S'^{io}
+    &=
+    \begin{pmatrix}
+        S_{1,2} & S_{1,4}  \\
+        S_{3,2} & S_{3,4}  \\
+    \end{pmatrix}
+    &
+    S'^{ii}
+    &=
+    \begin{pmatrix}
+        S_{1,1} & S_{1,3}  \\
+        S_{3,1} & S_{3,3}  \\
+    \end{pmatrix}
+    \end{aligned}
+    \label{eq:q_s_qtranspose_sprime_decomposed}
+\end{equation}
+Our algorithm successfully reorganized our data in a way compatible with equation~\eqref{eq:s_outside_inside}.
+
+We now wish to construct the permutation matrix~$P$ that appears in equation~\eqref{eq:relation_ai_bi}.
+Applied to our example, this corresponds to equation~\eqref{eq:relation_ai_bi_example}.
+\begin{equation}
+    \begin{pmatrix}
+        a_1 \\ a_3
+    \end{pmatrix}
+    =
+    P
+    \begin{pmatrix}
+        b_1 \\ b_3
+    \end{pmatrix}
+    \label{eq:relation_ai_bi_example}
+\end{equation}
+In our example, the ports 1 and 3 are coupled, therefore $a_1 = b_3$ and $a_3 = b_1$, which leads to equation~\eqref{eq:relation_bi_bi_example}.
+\begin{equation}
+    \begin{pmatrix}
+        b_3 \\ b_1
+    \end{pmatrix}
+    =
+    P
+    \begin{pmatrix}
+        b_1 \\ b_3
+    \end{pmatrix}
+    \label{eq:relation_bi_bi_example}
+\end{equation}
+It is obvious that the correct value for $P$ is that of equation~\eqref{eq:p_example}, but we need an algorithm to compute~$P$ for us in the general case.
+\begin{equation}
+    P =
+    \begin{pmatrix}
+        0 & 1 \\
+        1 & 0
+    \end{pmatrix}
+    \label{eq:p_example}
+\end{equation}
+One difficulty comes from the fact that we cannot use the indices of the coupled ports directly to access the matrices $a'^i$, $b'^i$ and $S'^{ii}$.
+Indeed, in our example, $b^i$ contains two elements only so we cannot reach $b_3$ by using directly the index 3.
+We need to map the indices given by the set of coupling descriptors to indices that can be used to address the various matrices.
+In our example, 1 is mapped to 1 ($b'^i_1 = b_1$), and 3 is mapped to 2 ($b'^i_2 = b_3$); therefore saying that ports 1 and 3 are coupled is equivalent to saying that indices 1 and 2 need to be permuted.
+Algorithm~\ref{algo:port_to_index} converts a port identifier to an index usable to address $S'^{ii}$.
+\begin{algorithm}
+    \caption{PortToIndex}
+    \label{algo:port_to_index}
+    \begin{algorithmic}
+        \REQUIRE{\textit{port}} \COMMENT{The port identifier for which we want the index.}
+        \REQUIRE{\textit{inside}} \COMMENT{Set of all the inside port identifiers.}
+        \STATE{\textit{insorted} $\leftarrow$ sort(array(\textit{inside}))}
+        \STATE{\textit{index} $\leftarrow$ position of \textit{port} in \textit{insorted}}
+        \RETURN{\textit{index}}
+    \end{algorithmic}
+\end{algorithm}
+
+We can now construct the permutation matrix $P$ with algorithm~\ref{algo:couple_inputs_to_outputs}.
+\begin{algorithm}
+    \caption{CoupleInputsToOutputs}
+    \label{algo:couple_inputs_to_outputs}
+    \begin{algorithmic}
+        \REQUIRE{\textit{couplings}}
+        \STATE {\textit{inside} $\leftarrow$ FindInside(\textit{couplings})}
+        \STATE {$m \leftarrow$ cardinal(\textit{inside})}
+        \STATE {$P \leftarrow$ $m$--by--$m$ matrix filled zith 0}
+        \FORALL {\textit{coupling} $\in$ \textit{couplings}}
+            \STATE {\textit{couplingArray} $\leftarrow$ array(\textit{coupling})}
+            \STATE {\textit{portA} $\leftarrow$ \textit{couplingArray}[1]}
+            \STATE {\textit{portB} $\leftarrow$ \textit{couplingArray}[2]}
+            \STATE {\textit{indexA} $\leftarrow$ PortToIndex(\textit{portA}, \textit{inside})}
+            \STATE {\textit{indexB} $\leftarrow$ PortToIndex(\textit{portB}, \textit{inside})}
+            \STATE {$P_{\textit{indexA}, \textit{indexB}} \leftarrow$ 1}
+            \STATE {$P_{\textit{indexB}, \textit{indexA}} \leftarrow$ 1}
+        \ENDFOR
+        \RETURN {$P$}
+    \end{algorithmic}
+\end{algorithm}
+
+If we apply algorithm~\ref{algo:couple_inputs_to_outputs} to our example, then there is only one value for \textit{coupling}: $\lbrace 1, 3\rbrace$.
+Therefore, \textit{couplingArray}=[1, 3], \textit{portA}=1, \textit{portB}=3.
+The two calls to PortToIndex take \textit{inside}=$\lbrace 1, 3\rbrace$ and make a sorted array from it, \textit{insorted}=[1, 3].
+The position of \textit{portA} in that sorted array is 1, that of \textit{portB} is 2, so \textit{indexA}=1 and \textit{indexB}=2.
+The matrix $P$ is filled with zeros, except for the elements $P_{1, 2}$ and $P_{2, 1}$ that equal 1, matching equation~\eqref{eq:p_example}.
+
+We have now everything we need to solve equation~\eqref{eq:compute_bi_solve}, which I reproduce here (equation~\eqref{eq:compute_bi_solve_prime}) using the \textit{prime} version of the variables resulting from the permutations involving~$Q$.
+\begin{equation}
+    (I - S'^{ii})b'^i = S'^{io}a'o \label{eq:compute_bi_solve_prime}
+\end{equation}
+In equation~\eqref{eq:compute_bi_solve_prime}, everything is known except~$b'^i$.
+We wish to solve this equation for~$b'^i$.
+This is a very common problem for which many numerical packages offer solutions.
+Solving systems of linear equations is also decribed at length in the chapter 2 of Numerical Recipes \cite{Press:2007:NRE:1403886}.
+The developer is free to choose any method.
+I suggest however something along the line of a LU decomposition.
+Indeed, that LU decomposition can be computed once, its result stored, and then used several times to solve the same system for different values of $a'^o$.
+Big systems may benefit from using sparse matrices.
 
 
+%#############################################################################
 \section{Generic networks}
 
 Scattering matrix of typical networks, with parameters.
@@ -179,6 +558,7 @@ For the grid I use Houde \cite{houde_2001} because there is nothing simpler, but
 
 So, in the end, it's a list of scattering matrices.  It would be nice to augment each system with plots showing the effect of each parameter.
 
+%#############################################################################
 \section{Simple systems}
 
 The idea is to show that it works and makes sense.
