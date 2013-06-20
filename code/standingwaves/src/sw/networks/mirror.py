@@ -1,11 +1,10 @@
-'''
-Created on Jun 18, 2013
 
-@author: delforge
-'''
 import numpy as np
 
 def Mirror(r):
+    """
+
+    """
     return np.array([[r, 0, 0],
                      [0, r, 0],
                      [0, 0, r]], dtype=complex)

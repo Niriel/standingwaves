@@ -1,5 +1,5 @@
 import numpy as np
-import geometry as geo
+import sw.geometry as geo
 from distance import ComputeSpaceGain
 
 def _ThinFilmRT(n1, n2, thickness, frequency, angle1):
@@ -46,11 +46,11 @@ def _ThinFilmGeometry(tb, attitude, k1):
     roll21 = -2 * angle1
     roll41 = -2 * angle1
     roll43 = -2 * angle1
-    R12 = tb.around(ipn_h, ipn_p, -roll21)
-    R21 = tb.around(ipn_h, ipn_p, roll21)
-    R34 = tb.around(ipn_h, ipn_p, -roll43)
-    R43 = tb.around(ipn_h, ipn_p, roll43)
-    R41 = tb.around(ipn_h, ipn_p, roll41)
+    R12, _ = tb.around(ipn_h, ipn_p, -roll21)
+    R21, _ = tb.around(ipn_h, ipn_p, roll21)
+    R34, _ = tb.around(ipn_h, ipn_p, -roll43)
+    R43, _ = tb.around(ipn_h, ipn_p, roll43)
+    R41, _ = tb.around(ipn_h, ipn_p, roll41)
     k2 = -R21.dot(k1)
     k3 = k1
     k4 = R41.dot(k1)

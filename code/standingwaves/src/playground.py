@@ -1,46 +1,39 @@
-'''
-Created on Jun 18, 2013
-
-@author: delforge
-'''
 import sw
 import numpy as np
 
-#-----------------
 
-space0 = sw.networks.Gain1(.5)
-space1 = sw.networks.Gain1(.2)
-networks = [space0, space1]
-couplings = [set([1, 2])]
-n = 4
+def compute():
+    frequencies = np.linspace(1000e9, 1004e9, 1000)
+    tb = sw.geometry.TaitBryan(0, 1, 2)
+    n1 = 1
+    n2 = 2
+    thickness = 10e-6
+    attitude = [sw.geometry.TAU / 8, 0, 0]
+    k1 = np.array([0, 0, 1])
 
-presolver = sw.Solver(n, couplings) 
-solver = presolver(networks)
-ao = np.array([1, 0], dtype=complex)
-b = solver(ao)
-print np.abs(b[3]), np.angle(b[3], True)
+    black = sw.networks.Mirror(0)
+    couplings = [{1, 4}, {3, 5}]
+    couplings = sw.ExpandCouplingsTo3d(couplings)
+    presolve = sw.Solver(6 * 3, couplings)
 
-b = space0.dot(np.array([1, 0], dtype=complex))
-b = space1.dot(np.array([b[1], 0], dtype=complex))
-print np.abs(b[1]), np.angle(b[1], True)
+    a1o = np.array([1, 0, 0, 0, 0, 0])
+    def runModel(frequency):
+        film, k2, k3, k4 = sw.networks.ThinFilm(n1, n2, thickness, frequency, tb, attitude, k1)
+        networks = [film, black, black]
+        solver = presolve(networks)
+        b = solver(a1o)
+        return np.abs(b[2 * 3]) ** 2
+    y = np.array(map(runModel, frequencies), dtype=float)
+    return frequencies, y
 
+try:
+    import cProfile as profile
+except ImportError:
+    import profile
+profile.run('x, y = compute()', 'profile.prf')
+import pstats
+pstats.Stats('profile.prf').sort_stats('time').print_stats(50)
 
-#---------------
-
-frequencies = np.linspace(1000e9, 1004e9, 1001)
-y = []
-interface = sw.networks.SemiTransparentMirror1(.1, .9)
-couplings = [{1, 2}, {3, 4}]
-ao = np.array([1, 0], dtype=complex)
-n = 6
-presolver = sw.Solver(n, couplings)
-for f in frequencies:
-    distance = sw.networks.Distance1(1, 1, f)
-    networks = [interface, distance, interface]
-    solver = presolver(networks)
-    b = solver(ao)
-    y.append(np.abs(b[5]) ** 2)
-print y
 import matplotlib.pyplot as plt
-plt.plot(frequencies / 1.e9, y)
+plt.plot(x / 1.e9, y)
 plt.show()
