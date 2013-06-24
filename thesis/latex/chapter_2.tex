@@ -547,18 +547,97 @@ Indeed, that LU decomposition can be computed once, its result stored, and then 
 Big systems may benefit from using sparse matrices.
 
 
+
+
+
 %#############################################################################
+
 \section{Generic networks}
 
 Scattering matrix of typical networks, with parameters.
 
 Some of these parameters may not be super physical, but are here to kinda absorb the imperfections and the mismatch when fitting.
 
-For the grid I use Houde \cite{houde_2001} because there is nothing simpler, but for the other networks I keep it as simple as I can.  Grids being VERY complex to model, I might spend a lot of time and space on that one.
+For the grid I use Houde \cite{houde_2001} because there is nothing simpler, but for the other networks I keep it as simple as I can.
+Grids being VERY complex to model, I might spend a lot of time and space on that one.
 
 So, in the end, it's a list of scattering matrices.  It would be nice to augment each system with plots showing the effect of each parameter.
 
+
+
+%=============================================================================
+
+\subsection{Distance}
+Let us assume an homogeneous isotropic propagation medium with an refractive index $n$.
+$n$ can be complex.
+
+\begin{figure}[hbtp]
+    \centering
+    \missingfigure{Propagation in a homogeneous medium.}
+    \caption{\label{fig:net_distance} Propagation in a homogeneous medium.}
+\end{figure}
+Figure \ref{fig:net_distance} shows two points $z_1$ and $z_2$ along the path of a plane wave traveling through a medium of index $n$.
+The line joining the two points is parallel to the direction of propagation of the wave.
+The two points are separated by a distance $d$.
+Then, at any time, the electric fields at the two points are linked by equation~\eqref{eq:net_distance}.
+\begin{equation}
+    e(z_2) = e(z_1) \exp
+    \left(
+        - i 2\pi d n f / c_0
+    \right)
+    \label{eq:net_distance}
+\end{equation}
+
+The argument of the exponential can be separated into a real and an imaginary part as shown with equation~\eqref{eq:absorption_phase}.
+\begin{gather}
+    \begin{aligned}
+        - i 2\pi d n f / c_0
+        &= - i 2\pi d \left(\Re(n) + i\Im(n)\right) f / c_0 \\
+        &= 2\pi d f / c_0 \left(\Im(n) - i\Re(n) \right) \\
+        &= a + i \phi
+    \end{aligned}
+    \label{eq:absorption_phase}
+    \\
+    \begin{aligned}
+        a &= 2\pi d \Im(n) f / c_0   &   \phi &= -2\pi d \Re(n) f / c_0
+    \end{aligned}
+\end{gather}
+The real part~$a$ constitutes an absorption factor while the imaginary part~$\phi$ constitutes a phase factor.
+The imaginary part of the refractive index is small for dielectric and big for metals,
+leading to a very strong absorption of the wave in metals.
+The minus sign for the phase comes from the fact that the wave reaches $z_1$ before it reaches $z_2$: the field in $z_2$ is late relatively to the field in $z_1$.
+Note that $\Re(n) f / c_0 = 1 / \lambda$, with $\lambda$ the wavelength of the wave in the medium.
+
+When modeling a distance of homogeneous isotropic propagation medium, two ports are enough.
+\begin{equation}
+    S =
+    \begin{pmatrix}
+        S_{1, 1} & S_{1, 2} \\
+        S_{2, 1} & S_{2, 2}
+    \end{pmatrix}
+\end{equation}
+There are no reflections on the ports (reflections occur at interfaces between materials of different refractive indices, we shall study these later).
+\begin{equation}
+    S_{1, 1} = S_{2, 2} =
+    \begin{pmatrix}
+        0 & 0 & 0 \\
+        0 & 0 & 0 \\
+        0 & 0 & 0
+    \end{pmatrix}
+\end{equation}
+The transmission is the same both ways, and because of the isotropy, all three components of the field are affected in the same way.
+\begin{equation}
+    S_{1, 2} = S_{1, 2} =
+    \exp(- i 2\pi d n f / c_0)
+    \begin{pmatrix}
+        1 & 0 & 0 \\
+        0 & 1 & 0 \\
+        0 & 0 & 1
+    \end{pmatrix}
+\end{equation}
+
 %#############################################################################
+
 \section{Simple systems}
 
 The idea is to show that it works and makes sense.
