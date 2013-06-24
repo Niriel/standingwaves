@@ -283,7 +283,7 @@ They contain one and only one 1 per row and per column, all the other elements a
 Pre-multiplying by a permutation matrix changes the order of the rows.
 Post-multiplying by a permutation matrix changes the order of the columns.
 The transpose of a permutation matrix is also a permutation matrix.
-The transpose of a permutation matrix is also its inverse: $P^\top = P^{-1}$.
+The transpose of a permutation matrix is also its inverse: $P\transp = P^{-1}$.
 This last property is important for optimization purposes because inverting matrices is expensive and unstable.
 
 Both permutation matrices~$P$ and~$Q$ can be derived from a single dataset.
@@ -608,13 +608,14 @@ leading to a very strong absorption of the wave in metals.
 The minus sign for the phase comes from the fact that the wave reaches $z_1$ before it reaches $z_2$: the field in $z_2$ is late relatively to the field in $z_1$.
 Note that $\Re(n) f / c_0 = 1 / \lambda$, with $\lambda$ the wavelength of the wave in the medium.
 
-When modeling a distance of homogeneous isotropic propagation medium, two ports are enough.
+A distance of homogeneous isotropic propagation medium constitutes a two-ports network (equation~\eqref{eq:s_2_ports}).
 \begin{equation}
     S =
     \begin{pmatrix}
         S_{1, 1} & S_{1, 2} \\
         S_{2, 1} & S_{2, 2}
     \end{pmatrix}
+    \label{eq:s_2_ports}
 \end{equation}
 There are no reflections on the ports (reflections occur at interfaces between materials of different refractive indices, we shall study these later).
 \begin{equation}
@@ -635,6 +636,159 @@ The transmission is the same both ways, and because of the isotropy, all three c
         0 & 0 & 1
     \end{pmatrix}
 \end{equation}
+
+
+%=============================================================================
+
+\subsection{Interface at normal incidence}
+
+\begin{figure}[hbtp]
+    \centering
+    \missingfigure{Interface at normal incidence}
+    \caption{\label{fig:net_interface_normal}Interface at normal incidence.}
+\end{figure}
+An interface is an implicit surface defined by a change in refractive index.
+Generally, interfaces both reflect and transmit light.
+The amount of reflection and transmission depends on the refractive indices on the two sides of the interface.
+One particular case is the case where both indices are equal; in this case the interface does not really exist and has no effect on the wave: no reflection and full transmission.
+
+When the direction of propagation is normal to the surface, we are in a case of normal incidence.
+In case of normal incidence, the interface is a two-ports network and its scattering matrix has the shape of equation~\eqref{eq:s_2_ports}.
+
+Equations~\eqref{eq:fresnel_normal} are the Fresnel equations~\eqref{eq:fresnel_oblique} rewritten for the case of normal incidence.
+\begin{subequations}
+    \begin{align}
+        r &= \frac{n_i - n_t}{n_i + n_t} \label{eq:fresnel_r}\\
+        t &= \frac{2 n_i}{n_i + n_t} \label{eq:fresnel_t}
+    \end{align}
+    \label{eq:fresnel_normal}
+\end{subequations}
+The $i$ and $t$ subscripts stand for ``incident'' and ``transmitted''.
+The two materials, ``material 1'' and ``material 2'', have for refraction indices $n_1$ and $n_2$.
+When when going from material 1 to material 2, $n_i = n_1$ and $n_t = n_2$.
+When when going from material 2 to material 1, $n_i = n_2$ and $n_t = n_1$.
+Therefore, the four elements of the scattering matrix are given by equation~\eqref{eq:s_interface_normal} in which $I$ is the 3--by--3 identity matrix.
+\begin{subequations}
+    \begin{align}
+        S_{1, 1} &= \frac{n_1 - n_2}{n_1 + n_2} I
+        \\
+        S_{2, 2} &= \frac{n_2 - n_1}{n_2 + n_1} I
+        \\
+        S_{1, 2} &= \frac{2 n_2}{n_2 + n_1} I
+        \\
+        S_{2, 1} &= \frac{2 n_1}{n_1 + n_2} I
+    \end{align}
+    \label{eq:s_interface_normal}
+\end{subequations}
+
+%=============================================================================
+
+\subsection{Interface at oblique incidence}
+Interfaces at oblique incidence are more complex to model than interfaces at normal incidence because it needs more parameters to describe.
+In addition to the two refractive indices, we need the direction of propagation and the orientation of the interface in space.
+This is required because the reflection and transmission on an oblique interface depend on the polarization of the wave seen by the surface.
+
+\index{plane-of-incidence}As described by Hecht in \cite{hecht2002optics} (chapter 4), reflection and transmission depend on whether the field is contained in, or is normal to, the plane-of-incidence.
+The plane-of-incidence is the plane that contains both the direction of propagation and the normal to the interface.
+In case of normal incidence, the plane-of-incidence is undefined.
+
+\begin{figure}[hbtp]
+    \centering
+    \missingfigure{Interface at oblique incidence}
+    \caption{\label{fig:net_interface_oblique}Interface at oblique incidence.}
+\end{figure}
+\index{Fresnel equations}Equations~\eqref{eq:fresnel_oblique} are the Fresnel equations corresponding to the field directions described in figure \ref{fig:fresnel_directions}.
+\begin{subequations}
+    \begin{align}
+        r_\parallel & =
+        \frac{n_i \cos \theta_t - n_t \cos \theta_i}{n_i \cos \theta_t + n_t \cos \theta_i}
+        \label{eq:fresnel_rp}
+        \\
+        r_\perp & =
+        \frac{n_i \cos \theta_i - n_t \cos \theta_t}{n_i \cos \theta_i + n_t \cos \theta_t}
+        \label{eq:fresnel_rs}
+        \\
+        t_\parallel & =
+        \frac {2 n_i \cos \theta_i}{n_i \cos \theta_t + n_t \cos \theta_i}
+        \label{eq:fresnel_tp}
+        \\
+        t_\perp & =
+        \frac {2 n_i \cos \theta_i}{n_i \cos \theta_i + n_t \cos \theta_t}
+        \label{eq:fresnel_ts}
+    \end{align}
+    \label{eq:fresnel_oblique}
+\end{subequations}
+These equations apply only if the magnetic permeability is the same for the two propagation media, which is pretty much guaranteed when both media are dielectric.
+Equation~\eqref{eq:fresnel_rp} differs from that given by Hecht in \cite{hecht2002optics}.
+This comes from a different convention for the direction of the reflected field.
+Our convention for the direction of the parallel reflected field makes the parallel and perpendicular results consistent when the angle of incidence is zero.
+
+% In Hecht's chapter 4, when you try to get the equations to line up for the
+% case of normal incidence, then the two transmissions have the same limit,
+% but the two reflections disagree.  Why?  It should not be the case, should
+% it?  Which one is the correct one, if any?  When the angle is 0, the
+% incidence plane is not defined.  Therefore it is not possible to be parallel
+% to it.  Then again, it is not really possible to be perpendicular to it
+% either.
+%
+% Hecht is mentioning something in his section about the Fresnel equations: the
+% choice of reference frame matters.  By choosing another reference frame for
+% the perp case, we can flip the sign of $r_perp$ and leave the rest untouched.
+% Actually, when I look at his figures 4.39 and 4.40, I am not surprised that
+% his signs are messed up since his vectors do not overlap in the same way when
+% the angles converge toward 0.  Indeed, Ei and Et overlap in his perp case,
+% but not in his para case.  So if I fix this, I get a minus sign for
+% $r_para$.
+
+Before we can apply the reflection and transmission coefficients given in~\eqref{eq:fresnel_oblique}, we need to decompose the incident field into a parallel and a perpendicular component.
+The incident field can be decomposed into a component that is parallel to the plane-of-incidence and one that is perpendicular to it.
+
+We need notations.
+I call $k$ the direction of propagation, $n$ the normal to the interface, and $u$ the normal to the plane-of-incidence (because $p$ and $i$ are already taken).
+Equations~\eqref{eq:para_perp_decomposition_field} show how we build the matrices of equation~\eqref{eq:para_perp_decomposition_matrix}.
+We get $e_\perp$ by projecting $e$ on the unit vector $u$.
+$M_\perp$ and $M_\parallel$ decompose a vector~$e$ into its perpendicular and parallel components~$e_\perp$ and~$e_\parallel$ on which we can apply the Fresnel equations.
+\begin{gather}
+    \begin{aligned}
+        e_\perp
+        &= u (u \cdot e) \\
+        &= u (u\transp e) \\
+        &= (u u\transp) e
+        \\
+        e_\parallel &= e - e_\perp
+    \end{aligned}
+    \label{eq:para_perp_decomposition_field}
+    \\
+    \begin{aligned}
+        M_\perp &= u u\transp   \\
+        M_\parallel & = I - M_\perp
+    \end{aligned}
+    \label{eq:para_perp_decomposition_matrix}
+\end{gather}
+
+One more step is required: we need to compute $u$ from $n$ and $k$.
+This step is very straightforward.
+Since $u$ is normal to the plane-of-incidence, and since the plane-of-incidence contains $n$ and $k$, then $u$ is normal to both $n$ and $k$.
+In other words, $u$ is collinear to the cross product of $n$ and $k$.
+We know that the cross-product is antisymetric but in our case the order does not matter.
+Indeed, the sign cancels itself out in $u u^T$.
+\begin{equation}
+    u = \frac{1}{||n \times k||} n \times k
+\end{equation}
+
+
+\begin{figure}[hbtp]
+    \centering
+    \subfigure[Parallel case.]{
+        \missingfigure{para case}
+        \label{fig:fresnel_directions_para}
+    }
+    \subfigure[Perpendicular case.]{
+        \missingfigure{perp case}
+        \label{fig:fresnel_directions_perp}
+    }
+    \caption{\label{fig:fresnel_directions}Field directions chosen to express the Fresnel equations.}
+\end{figure}
 
 %#############################################################################
 

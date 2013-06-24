@@ -57,6 +57,9 @@ def _ThinFilmGeometry(tb, attitude, k1):
     return angle1, P, S, R12, R21, R34, R43, k2, k3, k4
 
 def ThinFilm(n1, n2, thickness, frequency, tb, attitude, k1):
+    """Thin film of material n2 at non-normal incidence.  4 ports.
+
+    """
     angle1, P, S, R12, R21, R34, R43, k2, k3, k4 = _ThinFilmGeometry(tb, attitude, k1)
     rp, tp, rs, ts = _ThinFilmRT(n1, n2, thickness, frequency, angle1)
     # Transmission: no rotation.
@@ -74,3 +77,10 @@ def ThinFilm(n1, n2, thickness, frequency, tb, attitude, k1):
                           [S31, S32, S33, S34],
                           [S41, S42, S43, S44]]))
     return S, k2, k3, k4
+
+def ThinFilmNormal(n1, n2, thickness, frequency, tb, attitude):
+    """Thin film of material n2 at normal incidence.  2 ports.
+
+    """
+#     rp12, tp12, rs12, ts12 = geo.Fresnel(n1, n2, 0)
+#     rp21, tp21, rs21, ts21 = geo.Fresnel(n2, n1, 0)

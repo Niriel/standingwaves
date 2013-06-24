@@ -26,6 +26,8 @@ def compute():
     y = np.array(map(runModel, frequencies), dtype=float)
     return frequencies, y
 
+
+x = y = None  # To shut the IDE up.
 try:
     import cProfile as profile
 except ImportError:
