@@ -667,16 +667,16 @@ The $i$ and $t$ subscripts stand for ``incident'' and ``transmitted''.
 The two materials, ``material 1'' and ``material 2'', have for refraction indices $n_1$ and $n_2$.
 When when going from material 1 to material 2, $n_i = n_1$ and $n_t = n_2$.
 When when going from material 2 to material 1, $n_i = n_2$ and $n_t = n_1$.
-Therefore, the four elements of the scattering matrix are given by equation~\eqref{eq:s_interface_normal} in which $I$ is the 3--by--3 identity matrix.
+Therefore, the four elements of the scattering matrix are given by equation~\eqref{eq:s_interface_normal} in which $I_3$ is the 3--by--3 identity matrix.
 \begin{subequations}
     \begin{align}
-        S_{1, 1} &= \frac{n_1 - n_2}{n_1 + n_2} I
+        S_{1, 1} &= \frac{n_1 - n_2}{n_1 + n_2} I_3
         \\
-        S_{2, 2} &= \frac{n_2 - n_1}{n_2 + n_1} I
+        S_{2, 2} &= \frac{n_2 - n_1}{n_2 + n_1} I_3
         \\
-        S_{1, 2} &= \frac{2 n_2}{n_2 + n_1} I
+        S_{1, 2} &= \frac{2 n_2}{n_2 + n_1} I_3
         \\
-        S_{2, 1} &= \frac{2 n_1}{n_1 + n_2} I
+        S_{2, 1} &= \frac{2 n_1}{n_1 + n_2} I_3
     \end{align}
     \label{eq:s_interface_normal}
 \end{subequations}
@@ -740,20 +740,51 @@ Our convention for the direction of the parallel reflected field makes the paral
 % but not in his para case.  So if I fix this, I get a minus sign for
 % $r_para$.
 
+\begin{figure}[hbtp]
+    \centering
+    \subfigure[Parallel case.]{
+        \missingfigure{para case}
+        \label{fig:fresnel_directions_para}
+    }
+    \subfigure[Perpendicular case.]{
+        \missingfigure{perp case}
+        \label{fig:fresnel_directions_perp}
+    }
+    \caption{\label{fig:fresnel_directions}Field directions chosen to express the Fresnel equations.}
+\end{figure}
+
 Before we can apply the reflection and transmission coefficients given in~\eqref{eq:fresnel_oblique}, we need to decompose the incident field into a parallel and a perpendicular component.
 The incident field can be decomposed into a component that is parallel to the plane-of-incidence and one that is perpendicular to it.
 
 We need notations.
 I call $k$ the direction of propagation, $n$ the normal to the interface, and $u$ the normal to the plane-of-incidence (because $p$ and $i$ are already taken).
-Equations~\eqref{eq:para_perp_decomposition_field} show how we build the matrices of equation~\eqref{eq:para_perp_decomposition_matrix}.
-We get $e_\perp$ by projecting $e$ on the unit vector $u$.
-$M_\perp$ and $M_\parallel$ decompose a vector~$e$ into its perpendicular and parallel components~$e_\perp$ and~$e_\parallel$ on which we can apply the Fresnel equations.
+
+We get $e_\perp$ by projecting $e$ on the unit vector $u$ according to equation~\eqref{eq:paraperp_1}.
+\begin{equation}
+    e_\perp = u \times (u \cdot e) \label{eq:paraperp_1}
+\end{equation}
+In equation~\eqref{eq:paraperp_1}, $u \cdot e$~represents the inner product (dot product) of~$u$ by~$e$ and the symbol~``$\times$'' refers to the multiplication of a matrix (here~$u$) by a scalar (here~$u \cdot e$).
+We wish to replace the scalar multiplication with a matrix multiplication.
+To do that, we replace the scalar~$u \cdot e$ by the 1--by--1 matrix~$[u \cdot e]$ containing that scalar as shown in equation~\eqref{eq:paraperp_2}.
+We do not use any symbol for the matrix multiplication, we simply juxtapose the matrices.
+\begin{equation}
+    e_\perp = u [u \cdot e] \label{eq:paraperp_2}
+\end{equation}
+The dimensions match: $u$~is a 3--by--1 matrix and $[u \cdot e]$~is a 1--by--1 matrix, resulting in~$e_\perp$ being a 3--by--1 matrix.
+For the next step, we note that the inner product $u \cdot e$ is related to the outer product $u\transp e$ by equation~\eqref{eq:paraperp_3}.
+\begin{equation}
+    [u \cdot e] = u\transp e \label{eq:paraperp_3}
+\end{equation}
+Injecting equation~\eqref{eq:paraperp_3} into equation~\eqref{eq:paraperp_2} gives equation~\eqref{eq:paraperp_4}.
+\begin{equation}
+    e_\perp = u \left( u\transp e \right) \label{eq:paraperp_4}
+\end{equation}
+By associativity of the matrix multiplication we can transform equation~\eqref{eq:paraperp_4} into equation~\eqref{eq:para_perp_decomposition_field}.
+Then, by identification, we can find our decomposition matrices.
+In equation~\eqref{eq:para_perp_decomposition_matrix}, the matrices~$M_\perp$ and~$M_\parallel$ decompose a vector~$e$ into its perpendicular and parallel components~$e_\perp$ and~$e_\parallel$ on which we can apply the Fresnel equations~\eqref{eq:fresnel_oblique}.
 \begin{gather}
     \begin{aligned}
-        e_\perp
-        &= u (u \cdot e) \\
-        &= u (u\transp e) \\
-        &= (u u\transp) e
+        e_\perp &= \left(u u\transp \right) e
         \\
         e_\parallel &= e - e_\perp
     \end{aligned}
@@ -773,22 +804,13 @@ In other words, $u$ is collinear to the cross product of $n$ and $k$.
 We know that the cross-product is antisymetric but in our case the order does not matter.
 Indeed, the sign cancels itself out in $u u^T$.
 \begin{equation}
-    u = \frac{1}{||n \times k||} n \times k
+    u = \frac{1}{\norm{n \times k}} n \times k
 \end{equation}
 
+We are now able to calculate the reflected and transmitted fields of an incident plane wave on an interface at oblique incidence.
+However, the results are in a reference frame local to the reflected or transmitted wave, not a global reference frame shared by the three waves.
 
-\begin{figure}[hbtp]
-    \centering
-    \subfigure[Parallel case.]{
-        \missingfigure{para case}
-        \label{fig:fresnel_directions_para}
-    }
-    \subfigure[Perpendicular case.]{
-        \missingfigure{perp case}
-        \label{fig:fresnel_directions_perp}
-    }
-    \caption{\label{fig:fresnel_directions}Field directions chosen to express the Fresnel equations.}
-\end{figure}
+
 
 %#############################################################################
 
