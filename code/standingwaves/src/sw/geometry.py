@@ -182,3 +182,43 @@ def MakeParaPerpDecompositionMatrices(plane_normal):
     S = n.dot(n.T)
     P = np.identity(3) - S
     return P, S
+
+def RotationAroundAxisQuaternion(axis, angle):
+    # Source: wikipedia.  Need better source.
+    # I can probably go back to Hamilton's book, if I can find it.
+    x, y, z = axis
+    c = np.cos(.5 * angle)
+    s = np.sin(.5 * angle)
+    return np.array([c, x * s, y * z, z * s])
+
+def RotationMatrixFromQuaternion(quat):
+    # Source: wikipedia.  Need better source.
+    w, x, y, z = quat
+    x2 = x * x
+    y2 = y * y
+    z2 = z * z
+    return np.array([[1 - 2 * y2 - 2 * z2,
+                      2 * x * y - 2 * z * w,
+                      2 * x * z + 2 * y * w],
+                     [2 * x * y + 2 * z * w,
+                      1 - 2 * x2 - 2 * z2,
+                      2 * y * z - 2 * x * w],
+                     [2 * x * z - 2 * y * w,
+                      2 * y * z + 2 * x * w,
+                      1 - 2 * x2 - 2 * y2]])
+
+def QuatMult(p, q):
+    # While waiting to find Hamilton's book:
+    # @article{vicci2001quaternions,
+    #  title={Quaternions and rotations in 3-space: The algebra and its geometric interpretation},
+    #  author={Vicci, Leandra},
+    #  journal={Microelectronic Systems Laboratory, Departement of Computer Science, University of North Carolina at Chapel Hill},
+    #  year={2001},
+    #  publisher={Citeseer}
+    # }
+    p1, p2, p3, p4 = p
+    q1, q2, q3, q4 = q
+    return np.array([p1 * q1 - p2 * q2 - p3 * q3 - p4 * q4,
+                     p1 * q2 + p2 * q1 + p3 * q4 - p4 * q3,
+                     p1 * q3 + p3 * q1 + p4 * q2 - p2 * q4,
+                     p1 * q4 + p4 * q1 + p2 * q3 - p3 * q2])
