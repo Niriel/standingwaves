@@ -641,6 +641,7 @@ The transmission is the same both ways, and because of the isotropy, all three c
 %=============================================================================
 
 \subsection{Interface at normal incidence}
+\label{sec:interface_at_normal_incidence}
 
 \begin{figure}[hbtp]
     \centering
@@ -801,16 +802,66 @@ One more step is required: we need to compute $u$ from $n$ and $k$.
 This step is very straightforward.
 Since $u$ is normal to the plane-of-incidence, and since the plane-of-incidence contains $n$ and $k$, then $u$ is normal to both $n$ and $k$.
 In other words, $u$ is collinear to the cross product of $n$ and $k$.
-We know that the cross-product is antisymetric but in our case the order does not matter.
-Indeed, the sign cancels itself out in $u u^T$.
+We know that the cross-product is antisymetric but in our case the order does not matter; indeed, the sign cancels itself out in $u u^T$.
 \begin{equation}
     u = \frac{1}{\norm{n \times k}} n \times k
 \end{equation}
+The order will matter in the next part when we consider the geometry of the system.
 
 We are now able to calculate the reflected and transmitted fields of an incident plane wave on an interface at oblique incidence.
 However, the results are in a reference frame local to the reflected or transmitted wave, not a global reference frame shared by the three waves.
+Figure~\ref{fig:fresnel_rotations} shows how the reflected and transmitted reference frames are obtained by rotating the incident reference frame around~$u$, the normal to the plane-of-incidence.
+\begin{figure}[hbtp]
+    \centering
+    \missingfigure{Fresnel rotations.}
+    \caption{\label{fig:fresnel_rotations}Fresnel rotations.}
+\end{figure}
 
-
+The angle-of-incidence, noted $\theta_i$, is defined in equation~\eqref{eq:angle_of_incidence_definition} as the angle between the incident direction of propagation~$k_i$ and the normal to the surface~$n$.
+\begin{equation}
+    \theta_i \equiv \widehat{n k_i} \pmod{2\pi}
+    \label{eq:angle_of_incidence_definition}
+\end{equation}
+Equation~\eqref{eq:dot_product_cos} shows a relation between the dot-product of two vectors and the angle between them.
+\begin{equation}
+    v \cdot w = \norm{v} \norm{w} \cos \widehat{vw}
+    \label{eq:dot_product_cos}
+\end{equation}
+The dot-product~$v \cdot w$ can also be calculated by summing the component-wise product of $v$ and $w$ (equation~\eqref{eq:dot_product_elementwise}, which is a method that does not require knowing~$\widehat{vw}$.
+\begin{equation}
+    v \cdot w = \sum_i v_i w_i
+    \label{eq:dot_product_elementwise}
+\end{equation}
+Equations~\eqref{eq:dot_product_cos} and~\eqref{eq:dot_product_elementwise} form a system from which we can extract the angle~$\widehat{uv}$.
+Its solution is given in equation~\eqref{eq:angle_from_dot_product}, provided that the angle is between 0 and $\pi$.
+This is due to a limitation of the range of the $\arccos$ function.
+\begin{equation}
+    \left\lbrace
+        \begin{aligned}
+            \widehat{vw} &\in [0, \pi]
+            \\
+            \widehat{vw} &= \arccos
+            \left(
+                \frac{
+                    \sum_i v_i w_i
+                }{
+                    \norm{v} \norm{w}
+                }
+            \right)
+        \end{aligned}
+    \right.
+    \label{eq:angle_from_dot_product}
+\end{equation}
+The limitation~$\widehat{vw} \in [0, \pi]$ does not impede us.
+Indeed, $\theta_i \in ]0, \pi/2[$.
+\begin{itemize}
+    \item 0 is excluded because this corresponds to the case of normal incidence which results in a two-ports network and not a four-ports network.  We have treated this particular case in section~\vref{sec:interface_at_normal_incidence}.
+    \item $\pi/2$ is excluded because this corresponds to a direction of propagation parallel to the surface, the wave would therefore never hit the interface.
+    \item Angles between $\pi/2$ and $\pi$ are excluded because the incident wave would be coming from the wrong side of the interface.
+    \item Angles between 0 and $-\pi$ are excluded because the rotation axis~$u$ adapts its direction to make sure that the angle from $n$ to $k_i$ is always positive from the point of view of~$u$.
+    \item The other angles fall into the previous categories because of the modulo~$2\pi$.
+\end{itemize}
+It is therefore safe to apply equation~\eqref{eq:angle_from_dot_product} to retreive~$\theta_i$ from $n$ and $k_i$.
 
 %#############################################################################
 
