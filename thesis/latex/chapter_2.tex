@@ -685,20 +685,20 @@ Therefore, the four elements of the scattering matrix are given by equation~\eqr
 %=============================================================================
 
 \subsection{Interface at oblique incidence}
-Interfaces at oblique incidence are more complex to model than interfaces at normal incidence because it needs more parameters to describe.
+Interfaces at oblique incidence are more complex to model than interfaces at normal incidence because they need more parameters to describe.
 In addition to the two refractive indices, we need the direction of propagation and the orientation of the interface in space.
 This is required because the reflection and transmission on an oblique interface depend on the polarization of the wave seen by the surface.
 
 \index{plane-of-incidence}As described by Hecht in \cite{hecht2002optics} (chapter 4), reflection and transmission depend on whether the field is contained in, or is normal to, the plane-of-incidence.
 The plane-of-incidence is the plane that contains both the direction of propagation and the normal to the interface.
 In case of normal incidence, the plane-of-incidence is undefined.
-
 \begin{figure}[hbtp]
     \centering
     \missingfigure{Interface at oblique incidence}
     \caption{\label{fig:net_interface_oblique}Interface at oblique incidence.}
 \end{figure}
-\index{Fresnel equations}Equations~\eqref{eq:fresnel_oblique} are the Fresnel equations corresponding to the field directions described in figure \ref{fig:fresnel_directions}.
+
+\index{Fresnel equations}Equations~\eqref{eq:fresnel_oblique} are the Fresnel equations corresponding to the field directions described in figure \ref{fig:fresnel_directions} for linear homogeneous isotropic dielectric materials.
 \begin{subequations}
     \begin{align}
         r_\parallel & =
@@ -719,7 +719,6 @@ In case of normal incidence, the plane-of-incidence is undefined.
     \end{align}
     \label{eq:fresnel_oblique}
 \end{subequations}
-These equations apply only if the magnetic permeability is the same for the two propagation media, which is pretty much guaranteed when both media are dielectric.
 Equation~\eqref{eq:fresnel_rp} differs from that given by Hecht in \cite{hecht2002optics}.
 This comes from a different convention for the direction of the reflected field.
 Our convention for the direction of the parallel reflected field makes the parallel and perpendicular results consistent when the angle of incidence is zero.
@@ -743,15 +742,12 @@ Our convention for the direction of the parallel reflected field makes the paral
 
 \begin{figure}[hbtp]
     \centering
-    \subfigure[Parallel case.]{
-        \missingfigure{para case}
-        \label{fig:fresnel_directions_para}
-    }
-    \subfigure[Perpendicular case.]{
-        \missingfigure{perp case}
-        \label{fig:fresnel_directions_perp}
-    }
+    \input{figures/fresnel_reference_frames.eps_tex}
     \caption{\label{fig:fresnel_directions}Field directions chosen to express the Fresnel equations.}
+    \caption*{
+        $n$ is normal to the interface, $u$ is normal to the plane of incidence.
+        The vectors~$p_i$ indicate the direction of the field parallel to the plane-of-incidence (plane of the page) for each port.  The vectors~$s_i$ do the same for the perpendicular direction.
+    }
 \end{figure}
 
 Before we can apply the reflection and transmission coefficients given in~\eqref{eq:fresnel_oblique}, we need to decompose the incident field into a parallel and a perpendicular component.
@@ -862,6 +858,83 @@ Indeed, $\theta_i \in ]0, \pi/2[$.
     \item The other angles fall into the previous categories because of the modulo~$2\pi$.
 \end{itemize}
 It is therefore safe to apply equation~\eqref{eq:angle_from_dot_product} to retreive~$\theta_i$ from $n$ and $k_i$.
+
+The vectors~$n$ and $k_1$ and the refractive incides $n_a$ and $n_b$ are sufficient to determine the geometry of the whole network.
+In other words, the orientation of one port constrains that of the three other ports.
+Because each port can be seen as an incident, reflected or transmitted port, I shall stop using the notation $\theta_i$, $\theta_r$ and $\theta_t$;
+instead, I shall use $\theta_a$ and $\theta_b$.
+$\theta_a$ refers to the angle between the direction of propagation and the normal to the interface on the A side of the interface;
+likewise, $\theta_b$ refers to the corresponding angle on the B side.
+\index{Snell's law}The angles~$\theta_a$ and~$\theta_b$ are related to the refractive incides~$n_a$ and~$n_b$ of the propagation media A and B by Snell's Law~\eqref{eq:snell}.
+\begin{gather}
+    \Re(n_a) \sin \theta_a = \Re(n_b) \sin \theta_b
+    \label{eq:snell}
+    \\
+    \left\lbrace
+        \begin{aligned}
+            \theta_b &\in [-\pi/2, \pi/2]
+            \\
+            \theta_b &= \arcsin
+            \left(
+                \frac{\Re(n_a)}{\Re(n_b)}
+                \sin \theta_a
+            \right)
+        \end{aligned}
+    \right.
+    \label{eq:snell_thetab}
+\end{gather}
+Once again, the limited range of~$\theta_b$ does not impede us.
+
+Upon reflection and refraction, the direction of the electric field rotates around $u$.
+Since there is no connection between the port 1 and the port 4, and between the port 2 and the port 3, we are interested in eight angles only: $\theta_{1 \rightarrow 2}$, $\theta_{1 \rightarrow 3}$, $\theta_{2 \rightarrow 1}$, $\theta_{2 \rightarrow 4}$, $\theta_{3 \rightarrow 1}$, $\theta_{3 \rightarrow 4}$, $\theta_{4 \rightarrow 2}$ and $\theta_{4 \rightarrow 3}$.
+The values for these angles are listed in equations~\eqref{eq:interface_rotations}.
+\begin{equation}
+    \begin{aligned}
+        \theta_{1 \rightarrow 2} &= \pi - 2\theta_a
+        &
+        \theta_{2 \rightarrow 1} &= -\pi + 2\theta_a
+        \\
+        \theta_{3 \rightarrow 4} &= \pi - 2\theta_b
+        &
+        \theta_{4 \rightarrow 3} &= -\pi + 2\theta_b
+        \\
+        \theta_{1 \rightarrow 3} &= \theta_b - \theta_a
+        &
+        \theta_{3 \rightarrow 1} &= \theta_a - \theta_b
+        \\
+        \theta_{2 \rightarrow 4} &= \theta_a - \theta_b
+        &
+        \theta_{4 \rightarrow 2} &= \theta_b - \theta_a
+    \end{aligned}
+    \label{eq:interface_rotations}
+\end{equation}
+To each angle $\theta$ of equation~\eqref{eq:interface_rotations} corresponds a rotation matrix $R$.
+From an implementation point of view, computing the matrix corresponding to a rotation around an axis (here $u$) may be best done using a quaternion.
+We do not need to enter into details, the two following steps are all we need to create the rotation matrix we want.
+First, we construct the quaternion corresponding to a rotation of~$\theta$ around a vector $u=(u_x, u_y, y_z)$ with equation~\eqref{eq:quaternion_rotation_around_axis}.
+\begin{equation}
+    \begin{aligned}
+        q &= w + xi + yj + zk
+        \\
+        q &= \cos \frac{\theta}{2}
+           + u_x \sin \frac{\theta}{2} i
+           + u_y \sin \frac{\theta}{2} j
+           + u_z \sin \frac{\theta}{2} k
+    \end{aligned}
+    \label{eq:quaternion_rotation_around_axis}
+\end{equation}
+Then we convert that quaternion into a rotation matrix with equation~\eqref{eq:quaternion_to_rotation_matrix}.
+\begin{equation}
+    R =
+    \begin{pmatrix}
+        1 - 2y^2 - 2z^2   &   2xy - 2zw         &   2xz + 2yw \\
+        2xy + 2zw         &   1 - 2x^2 - 2z^2   &   2yz - 2xw \\
+        2xz - 2yw         &   2yz + 2xw         &   1 - 2x^2 - 2y^2
+    \end{pmatrix}
+    \label{eq:quaternion_to_rotation_matrix}
+\end{equation}
+
+
 
 %#############################################################################
 
