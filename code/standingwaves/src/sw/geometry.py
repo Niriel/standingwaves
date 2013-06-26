@@ -189,7 +189,7 @@ def RotationAroundAxisQuaternion(axis, angle):
     x, y, z = axis
     c = np.cos(.5 * angle)
     s = np.sin(.5 * angle)
-    return np.array([c, x * s, y * z, z * s])
+    return np.array([c, x * s, y * s, z * s])
 
 def RotationMatrixFromQuaternion(quat):
     # Source: wikipedia.  Need better source.
