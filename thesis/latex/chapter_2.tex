@@ -761,7 +761,7 @@ We get $e_\perp$ by projecting $e$ on the unit vector $u$ according to equation~
     e_\perp = u \times (u \cdot e) \label{eq:paraperp_1}
 \end{equation}
 In equation~\eqref{eq:paraperp_1}, $u \cdot e$~represents the inner product (dot product) of~$u$ by~$e$ and the symbol~``$\times$'' refers to the multiplication of a matrix (here~$u$) by a scalar (here~$u \cdot e$).
-We wish to replace the scalar multiplication with a matrix multiplication.
+We wish to replace that scalar multiplication with a matrix multiplication.
 To do that, we replace the scalar~$u \cdot e$ by the 1--by--1 matrix~$[u \cdot e]$ containing that scalar as shown in equation~\eqref{eq:paraperp_2}.
 We do not use any symbol for the matrix multiplication, we simply juxtapose the matrices.
 \begin{equation}
@@ -932,6 +932,61 @@ Then we convert that quaternion into a rotation matrix with equation~\eqref{eq:q
         2xz - 2yw         &   2yz + 2xw         &   1 - 2x^2 - 2y^2
     \end{pmatrix}
     \label{eq:quaternion_to_rotation_matrix}
+\end{equation}
+
+We can finally put it all together.
+Equation~\eqref{eq:interface_S} lists all the elements of the scattering matrix of an interface at normal indicence.
+The matrices $R$ are rotation matrices produced by~\eqref{eq:quaternion_to_rotation_matrix} for each angle~\eqref{eq:interface_rotations}.
+The matrices $M_\parallel$ and $M_\perp$ are defined in~\eqref{eq:para_perp_decomposition_matrix} and decompose the fields into their parallel and perpendicular components.
+The various~$r$ and~$t$ refer to the Fresnel equations~\eqref{eq:fresnel_oblique}; the subscript~$a$ denoting incidence on the A side of the interface, and~$b$ to the B side of the interface.
+\begin{equation}
+    \begin{gathered}
+    \begin{aligned}
+        S_{1, 2} &= R^{2 \rightarrow 1} \left(
+            r_{\parallel a} M_\parallel +
+            r_{\perp a} M_\perp
+        \right)
+        &
+        S_{2, 1} &= R^{1 \rightarrow 2} \left(
+            r_{\parallel a} M_\parallel +
+            r_{\perp a} M_\perp
+        \right)
+        \\
+        S_{1, 3} &= R^{3 \rightarrow 1} \left(
+            t_{\parallel b} M_\parallel +
+            t_{\perp b} M_\perp
+        \right)
+        &
+        S_{3, 1} &= R^{1 \rightarrow 3} \left(
+            t_{\parallel a} M_\parallel +
+            t_{\perp a} M_\perp
+        \right)
+        \\
+        S_{2, 4} &= R^{4 \rightarrow 2} \left(
+            t_{\parallel b} M_\parallel +
+            t_{\perp b} M_\perp
+        \right)
+        &
+        S_{4, 2} &= R^{2 \rightarrow 4} \left(
+            t_{\parallel a} M_\parallel +
+            t_{\perp a} M_\perp
+        \right)
+        \\
+        S_{3, 4} &= R^{4 \rightarrow 3} \left(
+            r_{\parallel b} M_\parallel +
+            r_{\perp b} M_\perp
+        \right)
+        &
+        S_{4, 3} &= R^{3 \rightarrow 4} \left(
+            r_{\parallel b} M_\parallel +
+            r_{\perp b} M_\perp
+        \right)
+        \\
+    \end{aligned}
+    \\
+    S_{1, 1} = S_{1, 4} = S_{2, 2} = S_{2, 3} = S_{3, 2} = S_{3, 3} = S_{4, 1} = S_{4, 4} = 0
+    \end{gathered}
+    \label{eq:interface_S}
 \end{equation}
 
 
