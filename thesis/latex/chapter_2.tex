@@ -988,6 +988,31 @@ The various~$r$ and~$t$ refer to the Fresnel equations~\eqref{eq:fresnel_oblique
     \end{gathered}
     \label{eq:interface_S}
 \end{equation}
+This concludes our work on the scattering matrix of the interface between two linear homogeneous isotropic media.
+However, for this network to find its place in a system, we also need to compute the directions of propagations $k_2$, $k_3$ and $k_4$: these may be required by other networks.
+
+\begin{figure}[hbtp]
+    \centering
+    \missingfigure{fig:interface propagation rotation}
+    \caption{\label{fig:interface_propagation_rotation}interface propagation rotation}
+\end{figure}
+Equations~\eqref{eq:interface_propagation_rotation} lists the rotations matrices that transform~$k_1$ into $k_2$, $k_3$ and $k_4$, represented in figure~\ref{fig:interface_propagation_rotation}.
+\begin{equation}
+    \begin{aligned}
+        k_2 &= R^{1 \rightarrow 2} k_1 \\
+        k_3 &= R^{1 \rightarrow 3} k_1 \\
+        k_4 &= R^{1 \rightarrow 4} k_1 \\
+    \end{aligned}
+    \label{eq:interface_propagation_rotation}
+\end{equation}
+We already know~$R^{1 \rightarrow 2}$ and~$R^{1 \rightarrow 3}$ (see equations~\eqref{eq:interface_rotations}) but we do not have~$R^{1 \rightarrow 4}$ yet.
+The angle~$\theta_{1 \rightarrow 4}$ is easy to determine with figure~\ref{fig:interface_propagation_rotation} and is given by equation~\eqref{eq:interface_rotation_1_to_4}.
+We can use~\eqref{eq:quaternion_rotation_around_axis} and~\eqref{eq:quaternion_to_rotation_matrix} to derive~$R^{1 \rightarrow 4}$ from~$\theta_{1 \rightarrow 4}$.
+\begin{equation}
+    \theta_{1 \rightarrow 4} = -\theta_a - \theta_b
+    \label{eq:interface_rotation_1_to_4}
+\end{equation}
+With that final step, we can now connect the network to other networks since we can provide them with their own~$k_1$.
 
 
 
