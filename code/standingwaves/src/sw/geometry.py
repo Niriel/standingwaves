@@ -67,7 +67,7 @@ def Snell(ni, nt, anglei):
     # t = arcsin(si ni / nt)
     return np.arcsin(np.sin(anglei) * ni.real / nt.real)
 
-def Fresnel(ni, nt, anglei):
+def FresnelOblique(ni, nt, anglei):
     """
     Returns:
         rp, tp, rs, ts
@@ -108,6 +108,13 @@ def Fresnel(ni, nt, anglei):
     return rp, tp, rs, ts
 
 def FresnelNormal(ni, nt):
+    """Fresnel equations for normal incidence.
+
+    This is not really needed since the Fresnel function can do this. However,
+    its usage is more clear in the case of normal incidence. Indeed, it does not
+    require to specify an angle, and it returns only two values instead of four.
+
+    """
     # The incidence plane is undefined in the case of normal incidence.
     den = ni + nt
     r = (ni - nt) / den
@@ -206,6 +213,9 @@ def RotationMatrixFromQuaternion(quat):
                      [2 * x * z - 2 * y * w,
                       2 * y * z + 2 * x * w,
                       1 - 2 * x2 - 2 * y2]])
+
+def RotationAroundAxisMatrix(axis, angle):
+    return RotationMatrixFromQuaternion(RotationAroundAxisQuaternion(axis, angle))
 
 def QuatMult(p, q):
     # While waiting to find Hamilton's book:
