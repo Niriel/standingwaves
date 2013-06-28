@@ -63,12 +63,12 @@ class TaitBryan(object):
             p = -p
         return h, p
     def around(self, h, p, r):
-        hp, hm = self.rotH(h), self.rotH(-h)
-        pp, pm = self.rotP(p), self.rotP(-p)
-        rp, rm = self.rotR(r), self.rotR(-r)
-        rdir = hp.dot(pp).dot(rp).dot(pm).dot(hm)
-        rinv = hm.dot(pm).dot(rm).dot(pp).dot(hp)
-        return rdir, rinv
+        """Rotation matrix for an angle r around an axis of given heading and pitch."""
+        # First, rotate the universe so that the given axis coincides with the rest axis.
+        # Do the rotation by r.
+        # Put the universe back in place.
+        universe = self.rotH(h).dot(self.rotP(p))
+        return universe.dot(self.rotR(r)).dot(universe.T)
 
 def Snell(ni, nt, anglei):
     # ni si = nt st

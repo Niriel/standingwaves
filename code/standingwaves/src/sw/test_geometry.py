@@ -142,9 +142,9 @@ class TestTaitBryan(unittest.TestCase):
         self.assertTrue(np.allclose(vr3, v3))
         self.assertTrue(np.allclose(vr4, v4))
         self.assertTrue(np.allclose(vr5, v5))
-        # It's kinda funny. For a right handed tb, you can map the components d,
+        # It's kinda funny. For a left handed tb, you can map the components d,
         # e and f directly onto the axes of the tb definition: d=0, e=2, f=1.
-        # However, for the left handed case it does not work. Indeed, abc=012
+        # However, for the right handed case it does not work. Indeed, abc=012
         # for v1, abc=201 for v3 and abc=120 for v4.
     def testHp(self):
         """Retrieve the heading and pitch of a vector."""
@@ -162,8 +162,16 @@ class TestTaitBryan(unittest.TestCase):
                 hr, pr = tb.hp(vr)
                 self.assertAlmostEqual(hr, h, 7)
                 self.assertAlmostEqual(pr, p, 7)
-
-
+    def testAround(self):
+        r = geo.TAU / 3  # Rotation of that angle
+        u = np.array([1, 1, 1])  # around this axis
+        v = np.array([1, 0, 0])  # of that vector
+        vv = np.array([0, 1, 0])  # gives that vector.
+        for H, P, R in itertools.permutations(range(3)):
+            tb = geo.TaitBryan(H, P, R)
+            h, p = tb.hp(u)
+            vr = tb.around(h, p, r).dot(v)
+            self.assertTrue(np.allclose(vr, vv))
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']
