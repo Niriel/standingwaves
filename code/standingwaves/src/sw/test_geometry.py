@@ -35,16 +35,8 @@ class TestRotXYZ(unittest.TestCase):
         self.assertTrue(np.allclose(vrz, vz))
 
 class TestTaitBryan(unittest.TestCase):
-    def testRotRotinv(self):
-        """A rotation and its inverse cancel each other.
-
-        This is a regression test using a bunch of random angles for every
-        possible Tait-Bryan convention.
-
-        The goal is to make sure that the two rotation matrices returned by
-        TaitBryan.rot are inverse of each other.
-
-        """
+    def testRotinv(self):
+        """The inverse of a rotation matrix is its transpose."""
         randomizer = random.Random()
         randomizer.seed(0)
         rnd = randomizer.random
@@ -125,10 +117,10 @@ class TestTaitBryan(unittest.TestCase):
         r = np.arccos(3 / 5)
         R0 = geo.TaitBryan(0, 1, 2).rot(h, p, r)  # Right handed.
         R1 = geo.TaitBryan(0, 2, 1).rot(h, p, r)  # Left handed.
-        R2 = geo.TaitBryan(1, 0, 2).rot(h, p, r)  # Counter clockwise.
-        R3 = geo.TaitBryan(1, 2, 0).rot(h, p, r)  # Left handed.
-        R4 = geo.TaitBryan(2, 0, 1).rot(h, p, r)  # Left handed.
-        R5 = geo.TaitBryan(2, 1, 0).rot(h, p, r)  # Counter clockwise.
+        R2 = geo.TaitBryan(1, 0, 2).rot(h, p, r)  # Left handed.
+        R3 = geo.TaitBryan(1, 2, 0).rot(h, p, r)  # Right handed.
+        R4 = geo.TaitBryan(2, 0, 1).rot(h, p, r)  # Right handed.
+        R5 = geo.TaitBryan(2, 1, 0).rot(h, p, r)  # Left handed.
         vr0 = R0.dot(v)
         vr1 = R1.dot(v)
         vr2 = R2.dot(v)
@@ -150,10 +142,10 @@ class TestTaitBryan(unittest.TestCase):
         self.assertTrue(np.allclose(vr3, v3))
         self.assertTrue(np.allclose(vr4, v4))
         self.assertTrue(np.allclose(vr5, v5))
-        # It's kinda funny. For a counter right handed tb, you can map the
-        # components d, e and f directly onto the axes of the tb definition:
-        # d=0, e=2, f=1.  However, for the left handed case it does not work.
-        # Indeed, abc=012 for v1, abc=201 for v3 and abc=120 for v4.
+        # It's kinda funny. For a right handed tb, you can map the components d,
+        # e and f directly onto the axes of the tb definition: d=0, e=2, f=1.
+        # However, for the left handed case it does not work. Indeed, abc=012
+        # for v1, abc=201 for v3 and abc=120 for v4.
     def testHp(self):
         """Retrieve the heading and pitch of a vector."""
         randomizer = random.Random()
