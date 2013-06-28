@@ -41,6 +41,8 @@ class TaitBryan(object):
         self.rotH = ROTS[H]
         self.rotP = ROTS[P]
         self.rotR = ROTS[R]
+        signature = H - P
+        self.right_handed = signature == -1 or signature == 2
     def rot(self, h, p, r):
         rdir = self.rotH(h).dot(self.rotP(p)).dot(self.rotR(r))
         rinv = self.rotR(-r).dot(self.rotP(-p)).dot(self.rotH(-h))
@@ -50,8 +52,11 @@ class TaitBryan(object):
         if norm == 0:
             return 0.0, 0.0
         vn = v / norm
-        h = np.arcsin(vn[self.H])
-        p = np.arctan2(-vn[self.P], vn[self.R])
+        h = np.arctan2(-vn[self.P], vn[self.R])
+        p = np.arcsin(vn[self.H])
+        if not self.right_handed:
+            h = -h
+            p = -p
         return h, p
     def around(self, h, p, r):
         hp, hm = self.rotH(h), self.rotH(-h)
