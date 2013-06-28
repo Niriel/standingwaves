@@ -44,9 +44,13 @@ class TaitBryan(object):
         signature = H - P
         self.right_handed = signature == -1 or signature == 2
     def rot(self, h, p, r):
-        rdir = self.rotH(h).dot(self.rotP(p)).dot(self.rotR(r))
-        rinv = self.rotR(-r).dot(self.rotP(-p)).dot(self.rotH(-h))
-        return rdir, rinv
+        """Rotation matrix for the given heading, pitch and roll.
+
+        This returns the direct rotation matrix.  For its inverse, just
+        transpose it. Indeed, the inverse of a rotation matrix is its transpose.
+
+        """
+        return self.rotH(h).dot(self.rotP(p)).dot(self.rotR(r))
     def hp(self, v):
         norm = np.linalg.norm(v)
         if norm == 0:

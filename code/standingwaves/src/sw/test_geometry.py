@@ -48,14 +48,12 @@ class TestTaitBryan(unittest.TestCase):
         randomizer = random.Random()
         randomizer.seed(0)
         rnd = randomizer.random
-        I = np.identity(3)
         for H, P, R in itertools.permutations(range(3)):
             tb = geo.TaitBryan(H, P, R)
             hprs = ((rnd(), rnd(), rnd()) for _ in range(100))
             for h, p, r in hprs:
-                Rd, Ri = tb.rot(h * geo.TAU, p * geo.TAU, r * geo.TAU)
-                self.assertTrue(np.allclose(Rd.dot(Ri), I))
-                self.assertTrue(np.allclose(Ri.dot(Rd), I))
+                R = tb.rot(h * geo.TAU, p * geo.TAU, r * geo.TAU)
+                self.assertTrue(np.allclose(R.T, np.linalg.inv(R)))
     def testRest(self):
         """Roll has no effect on the rest vector."""
         randomizer = random.Random()
@@ -65,16 +63,15 @@ class TestTaitBryan(unittest.TestCase):
             tb = geo.TaitBryan(H, P, R)
             rs = (rnd() for _ in range(100))
             for r in rs:
-                Rd, Ri = tb.rot(0, 0, r * geo.TAU)
-                self.assertTrue(np.allclose(Rd.dot(tb.rest), tb.rest))
-                self.assertTrue(np.allclose(Ri.dot(tb.rest), tb.rest))
+                R = tb.rot(0, 0, r * geo.TAU)
+                self.assertTrue(np.allclose(R.dot(tb.rest), tb.rest))
     def testH(self):
         """Heading properly refers to x, y or z."""
         v = np.array([1, 1, 1], dtype=complex)
         angle = geo.TAU / 4
-        Rx, _ = geo.TaitBryan(0, 1, 2).rot(angle, 0, 0)
-        Ry, _ = geo.TaitBryan(1, 2, 0).rot(angle, 0, 0)
-        Rz, _ = geo.TaitBryan(2, 0, 1).rot(angle, 0, 0)
+        Rx = geo.TaitBryan(0, 1, 2).rot(angle, 0, 0)
+        Ry = geo.TaitBryan(1, 2, 0).rot(angle, 0, 0)
+        Rz = geo.TaitBryan(2, 0, 1).rot(angle, 0, 0)
         vx = np.array([1, -1, 1], dtype=complex)
         vy = np.array([1, 1, -1], dtype=complex)
         vz = np.array([-1, 1, 1], dtype=complex)
@@ -85,9 +82,9 @@ class TestTaitBryan(unittest.TestCase):
         """Pitch properly refers to x, y or z."""
         v = np.array([1, 1, 1], dtype=complex)
         angle = geo.TAU / 4
-        Ry, _ = geo.TaitBryan(0, 1, 2).rot(0, angle, 0)
-        Rz, _ = geo.TaitBryan(1, 2, 0).rot(0, angle, 0)
-        Rx, _ = geo.TaitBryan(2, 0, 1).rot(0, angle, 0)
+        Ry = geo.TaitBryan(0, 1, 2).rot(0, angle, 0)
+        Rz = geo.TaitBryan(1, 2, 0).rot(0, angle, 0)
+        Rx = geo.TaitBryan(2, 0, 1).rot(0, angle, 0)
         vx = np.array([1, -1, 1], dtype=complex)
         vy = np.array([1, 1, -1], dtype=complex)
         vz = np.array([-1, 1, 1], dtype=complex)
@@ -98,9 +95,9 @@ class TestTaitBryan(unittest.TestCase):
         """Roll properly refers to x, y or z."""
         v = np.array([1, 1, 1], dtype=complex)
         angle = geo.TAU / 4
-        Rz, _ = geo.TaitBryan(0, 1, 2).rot(0, 0, angle)
-        Rx, _ = geo.TaitBryan(1, 2, 0).rot(0, 0, angle)
-        Ry, _ = geo.TaitBryan(2, 0, 1).rot(0, 0, angle)
+        Rz = geo.TaitBryan(0, 1, 2).rot(0, 0, angle)
+        Rx = geo.TaitBryan(1, 2, 0).rot(0, 0, angle)
+        Ry = geo.TaitBryan(2, 0, 1).rot(0, 0, angle)
         vx = np.array([1, -1, 1], dtype=complex)
         vy = np.array([1, 1, -1], dtype=complex)
         vz = np.array([-1, 1, 1], dtype=complex)
@@ -126,12 +123,12 @@ class TestTaitBryan(unittest.TestCase):
         h = np.arccos(44 / 125)
         p = np.arccos(7 / 25)
         r = np.arccos(3 / 5)
-        R0, _ = geo.TaitBryan(0, 1, 2).rot(h, p, r)  # Right handed.
-        R1, _ = geo.TaitBryan(0, 2, 1).rot(h, p, r)  # Left handed.
-        R2, _ = geo.TaitBryan(1, 0, 2).rot(h, p, r)  # Counter clockwise.
-        R3, _ = geo.TaitBryan(1, 2, 0).rot(h, p, r)  # Left handed.
-        R4, _ = geo.TaitBryan(2, 0, 1).rot(h, p, r)  # Left handed.
-        R5, _ = geo.TaitBryan(2, 1, 0).rot(h, p, r)  # Counter clockwise.
+        R0 = geo.TaitBryan(0, 1, 2).rot(h, p, r)  # Right handed.
+        R1 = geo.TaitBryan(0, 2, 1).rot(h, p, r)  # Left handed.
+        R2 = geo.TaitBryan(1, 0, 2).rot(h, p, r)  # Counter clockwise.
+        R3 = geo.TaitBryan(1, 2, 0).rot(h, p, r)  # Left handed.
+        R4 = geo.TaitBryan(2, 0, 1).rot(h, p, r)  # Left handed.
+        R5 = geo.TaitBryan(2, 1, 0).rot(h, p, r)  # Counter clockwise.
         vr0 = R0.dot(v)
         vr1 = R1.dot(v)
         vr2 = R2.dot(v)
@@ -169,11 +166,10 @@ class TestTaitBryan(unittest.TestCase):
                 h = (h - .5) * geo.TAU  # Between -tau/2 and tau/2.
                 p = (p - .5) * geo.TAU / 2  # Between -tau/4 and tau/4.
                 r *= geo.TAU  # Totally free, should not matter.
-                Rd, _ = tb.rot(h, p, r)
-                vr = Rd.dot(tb.rest)
+                vr = tb.rot(h, p, r).dot(tb.rest)
                 hr, pr = tb.hp(vr)
-                self.assertAlmostEqual(hr, h, 5)
-                self.assertAlmostEqual(pr, p, 5)
+                self.assertAlmostEqual(hr, h, 7)
+                self.assertAlmostEqual(pr, p, 7)
 
 
 
