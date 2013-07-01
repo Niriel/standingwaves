@@ -1,3 +1,4 @@
+import warnings
 import numpy as np
 
 TAU = 2 * np.pi
@@ -74,6 +75,15 @@ def Snell(ni, nt, anglei):
     # ni si = nt st
     # st = si ni / nt
     # t = arcsin(si ni / nt)
+    if TAU / 4 < anglei % TAU < 3 * TAU / 4:
+        warnings.warn("Angle-of-incidence greater than pi/4.")
+        return np.nan
+    # The following arcsin may return nan if its argument is out of -1..1. It
+    # will also raise a warning.  This is why I do the same with the check
+    # regarding the limits of anglei.  I can understand why they return nan
+    # rather than crash: they're trying to have total functions.  I may consider
+    # trigger a crash if a flag is raised to help with debugging, but by default
+    # I stick to numpy's behavior.
     return np.arcsin(np.sin(anglei) * ni.real / nt.real)
 
 def FresnelOblique(ni, nt, anglei):

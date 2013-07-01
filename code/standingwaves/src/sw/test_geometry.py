@@ -173,6 +173,33 @@ class TestTaitBryan(unittest.TestCase):
             vr = tb.around(h, p, r).dot(v)
             self.assertTrue(np.allclose(vr, vv))
 
+class TestSnell(unittest.TestCase):
+    def testZero(self):
+        angle_t = geo.Snell(2, 3, 0)
+        self.assertEqual(angle_t, 0)
+    def testTotalReflection(self):
+        self.assertTrue(np.isnan(geo.Snell(10, 1, geo.TAU / 3)))
+    def testStupidAngle(self):
+        self.assertTrue(np.isnan(geo.Snell(1, 1, 2 * geo.TAU / 3)))
+        self.assertTrue(np.isnan(geo.Snell(1, 1, 2 * -geo.TAU / 3)))
+    def testNoChange(self):
+        randomizer = random.Random()
+        randomizer.seed(0)
+        rnd = randomizer.random
+        for a, n in ((rnd(), rnd()) for _ in range(100)):
+            actual_n = n * 100 * .00001
+            if a == 0:
+                continue  # Tangent incidence is evil.
+            angle_i = (a - .5) * geo.TAU / 2
+            angle_t = geo.Snell(actual_n, actual_n, angle_i)
+            self.assertAlmostEqual(angle_t, angle_i)
+    def testDecentValues(self):
+        angle_i = -geo.TAU / 8  # -45 degrees.
+        ni = 1
+        nt = 2
+        angle_t = geo.Snell(ni, nt, angle_i)
+        self.assertAlmostEqual(angle_t, -0.361367123906707805589188676)
+
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
