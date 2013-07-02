@@ -224,6 +224,33 @@ class TestFresnelNormal(unittest.TestCase):
         self.assertAlmostEqual(r, -1 / 3)
         self.assertAlmostEqual(t, 2 / 3)
 
+class TestFresnelOblique(unittest.TestCase):
+    def testBrewsterAngle(self):
+        """Angle for which the reflection is totally (s) polarized."""
+        ni = 1
+        nt = 2
+        theta_b = np.arctan(nt / ni)
+        rp, tp, rs, ts = geo.FresnelOblique(ni, nt, theta_b)  # @UnusedVariable
+        self.assertAlmostEqual(rp, 0)
+    def testCriticalAngle(self):
+        ni = 2
+        nt = 1
+        theta_c = np.arcsin(nt / ni)
+        # This theta_c equals 30 degrees.  For an incidence theta_i = theta_c,
+        # the angle of refraction is 90 degrees, sin(theta_t) = 1.
+        rp, tp, rs, ts = geo.FresnelOblique(ni, nt, theta_c)
+        self.assertAlmostEqual(rp, -1)
+        self.assertAlmostEqual(tp, 4)
+        self.assertAlmostEqual(rs, 1)
+        self.assertAlmostEqual(ts, 2)
+        # Beyond the critical angle theta_c, there is no refraction, everything
+        # is reflected.  We do not support this functionality for now.
+        above_c = theta_c * 1.0001
+        rp, tp, rs, ts = geo.FresnelOblique(ni, nt, above_c)
+        self.assertTrue(np.isnan(rp))
+        self.assertTrue(np.isnan(tp))
+        self.assertTrue(np.isnan(rs))
+        self.assertTrue(np.isnan(ts))
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']
