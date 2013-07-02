@@ -194,11 +194,13 @@ class TestSnell(unittest.TestCase):
             angle_t = geo.Snell(actual_n, actual_n, angle_i)
             self.assertAlmostEqual(angle_t, angle_i)
     def testDecentValues(self):
-        angle_i = -geo.TAU / 8  # -45 degrees.
-        ni = 1
-        nt = 2
+        angle_i = -geo.TAU / 8
+        # These contrived refractive indices will convert sqrt(2)/2 into
+        # sqrt(3)/2, transforming 45 degrees (tau/8) into 60 degrees (tau/6).
+        ni = 1 / np.sqrt(2)
+        nt = 1 / np.sqrt(3)
         angle_t = geo.Snell(ni, nt, angle_i)
-        self.assertAlmostEqual(angle_t, -0.361367123906707805589188676)
+        self.assertAlmostEqual(angle_t, -geo.TAU / 6)
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']
