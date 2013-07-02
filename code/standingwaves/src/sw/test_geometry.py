@@ -202,6 +202,29 @@ class TestSnell(unittest.TestCase):
         angle_t = geo.Snell(ni, nt, angle_i)
         self.assertAlmostEqual(angle_t, -geo.TAU / 6)
 
+class TestFresnelNormal(unittest.TestCase):
+    def testNoChange(self):
+        randomizer = random.Random()
+        randomizer.seed(0)
+        rnd = randomizer.random
+        for n in (rnd() for _ in range(100)):
+            actual_n = n * 100 * .00001
+            r, t = geo.FresnelNormal(actual_n, actual_n)
+            self.assertAlmostEqual(r, 0)
+            self.assertAlmostEqual(t, 1)
+    def testSigns(self):
+        r, t = geo.FresnelNormal(1, 2)
+        self.assertTrue(r < 0)
+        self.assertTrue(t > 0)
+        r, t = geo.FresnelNormal(2, 1)
+        self.assertTrue(r > 0)
+        self.assertTrue(t > 0)
+    def testDecentValues(self):
+        r, t = geo.FresnelNormal(1, 2)
+        self.assertAlmostEqual(r, -1 / 3)
+        self.assertAlmostEqual(t, 2 / 3)
+
+
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
