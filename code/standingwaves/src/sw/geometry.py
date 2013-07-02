@@ -76,7 +76,7 @@ def Snell(ni, nt, anglei):
     # st = si ni / nt
     # t = arcsin(si ni / nt)
     if TAU / 4 < anglei % TAU < 3 * TAU / 4:
-        warnings.warn("Angle-of-incidence greater than pi/4.")
+        warnings.warn("Angle-of-incidence greater than pi/2.")
         return np.nan
     # The following arcsin may return nan if its argument is out of -1..1. It
     # will also raise a warning.  This is why I do the same with the check
