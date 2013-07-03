@@ -252,6 +252,18 @@ class TestFresnelOblique(unittest.TestCase):
         self.assertTrue(np.isnan(rs))
         self.assertTrue(np.isnan(ts))
 
+class TestComputeIncidencePlaneNormal(unittest.TestCase):
+    def testNoIncidencePlane(self):
+        n = np.array([0, 0, 1])
+        k = np.array([0, 0, 1])
+        self.assertRaises(ZeroDivisionError, geo.ComputeIncidencePlaneNormal, n, k)
+    def testDecentValues(self):
+        n = np.array([0, 0, 1])
+        k = np.array([0, 1, 1])  # Note that it's not a unit vector.
+        u = np.array([-1, 0, 0])  # Expected result, unit nonetheless.
+        ur = geo.ComputeIncidencePlaneNormal(n, k)
+        self.assertTrue(np.allclose(ur, u))
+
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
