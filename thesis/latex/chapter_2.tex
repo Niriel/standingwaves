@@ -1020,7 +1020,121 @@ With that final step, we can now connect the network to other networks since we 
 
 \subsection{Wire grid polarizer}
 In their paper from \citeyear{houde_2001} \citetitle{houde_2001}, \textcite{houde_2001} present a set of equations that approximate the electric field at any point near a wire grid polarizer.
-The incident wave is assumed plane, the surrounding propagation medium assumed homogeneous and isotropic, and the wires assumed to be free floating (no dielectric substrate) and to have a cylindrical section.
+The incident wave is assumed plane, the surrounding propagation medium is assumed homogeneous and isotropic, and the wires are assumed to be free floating (no dielectric substrate) and to have a cylindrical section.
+
+The set of equations that interest us here are the equations numbered 23 to 35, 62 and 63 in \cite{houde_2001}.
+\begin{align}
+    K^x &= \frac{E_0}{F} \cdot \alpha' \frac{N_x}{\Delta_x}
+    \\
+    K^\theta &= (-j) \frac{E_0}{F} \cdot (\gamma' \beta - \beta' \gamma) \frac{N_\theta}{\Delta_\theta}
+\end{align}
+with
+\begin{align}
+    N_x
+    &=
+    1 - j \frac{Z_s}{Z_0} \cdot \frac{ka}{2}
+    \\
+    \Delta_x
+    &=
+    (1 - \alpha^2) S_1 - j \frac{Z_s}{Z_0} \cdot \sqrt{1 - \alpha^2}H_1^{(2)} (k'a)
+    \\
+    N_\theta
+    &=
+    1 + j \frac{Z_s}{Z_0} \cdot \frac{2}{ka}
+    \\
+    \Delta_\theta
+    &=
+    \sqrt{1 - \alpha^2} H_1^{(2)} (k'a) + j \frac{Z_s}{Z_0} \cdot (1 - \alpha^2) S_1
+\end{align}
+and
+\begin{equation}
+    S_1 = H_0^{(2)} (k'a) + 2
+    \sum_{n=1}^\infty
+    H_0^{(2)}(k'nd) \cos (k \beta nd)
+    \text{.}
+    \label{eq:infinite_hankel}
+\end{equation}
+The following equations use the previous definitions.
+They describe the reflected and transmitted fields in three dimensions for a grid in the $xy$-plane, wires along~$x$.
+\begin{align}
+    R^x
+    &=
+    -\frac{F}{E_0}
+    \cdot
+    \frac{\lambda}{\pi d}
+    \cdot
+    \frac{1 - \alpha^2}{\gamma} K^x
+    \\
+    R^y
+    &=
+    \phantom{-}
+    \frac{F}{E_0}
+    \cdot
+    \frac{\lambda}{\pi d}
+    \left[
+        \frac{\alpha \beta}{\gamma} K^x
+        -
+        j \frac{ka}{2} K^\theta
+    \right]
+    \\
+    R^z
+    &=
+    -\frac{F}{E_0}
+    \cdot
+    \frac{\lambda}{\pi d}
+    \left[
+       \alpha K^x
+       +
+       j \frac{\beta}{\gamma} \cdot \frac{ka}{2} K^\theta
+    \right]
+    \\
+    T^x &= \alpha' + R^x
+    \\
+    T^y
+    &=
+    \beta' +
+    \frac{F}{E_0}
+    \cdot
+    \frac{\lambda}{\pi d}
+    \left[
+        \frac{\alpha \beta}{\gamma} K^x + j \frac{ka}{2} K^\theta
+    \right]
+    \\
+    T^z
+    &=
+    \gamma' +
+    \frac{F}{E_0}
+    \cdot
+    \frac{\lambda}{\pi d}
+    \left[
+        \alpha K^x - j \frac{\beta}{\gamma} \frac{ka}{2} K^\theta
+    \right]
+\end{align}
+Note that Houde calls these $R$ and $T$ ``reflection'' and ``transmission coefficient'', something they are not quite that since they contain $\alpha'$, $\beta'$ and $\gamma'$, corresponding to the amplitude of the incoming electric field.
+These amplitudes have to be factored out if we want to really speak about reflection or transmission coefficients.
+
+When implementing these equations, some simplifications are obvious.
+For example, $\frac{E_0}{F}$ inside $K^x$ and $K^\theta$ cancels $\frac{F}{E_0}$ in $R$ and $T$;
+the complex unit $j$ within $k^\theta$ combines with $j$ in $R$ and $T$ to become -1.
+
+In these equations, $\alpha'$, $\beta'$ and $\gamma'$ are the three components of the incident electric field, which we would usually write $e_x$, $e_y$, $e_z$.
+In order to rewrite these equations in a matrix form, one needs to split each coefficient of transmission and reflection into three, like this:
+\begin{equation}
+    e_{rx} = R^{xx} e_x + R^{xy} e_y + R^{xz} e_z
+\end{equation}
+so that we can write
+\begin{equation}
+    e_r = R 
+    \begin{pmatrix}
+        R_{xx} & R_{xy} & R_{xz} \\
+        R_{yx} & R_{yy} & R_{yz} \\
+        R_{zx} & R_{zy} & R_{zz}
+    \end{pmatrix}
+    e_i
+\end{equation}
+and same thing for T.
+
+
 
 
 
