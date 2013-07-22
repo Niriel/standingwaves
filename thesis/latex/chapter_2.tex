@@ -1032,19 +1032,19 @@ with
 \begin{align}
     N_x
     &=
-    1 - j \frac{Z_s}{Z_0} \cdot \frac{ka}{2}
+    1 - j \frac{Z_s}{Z_0} \frac{ka}{2}
     \\
     \Delta_x
     &=
-    (1 - \alpha^2) S_1 - j \frac{Z_s}{Z_0} \cdot \sqrt{1 - \alpha^2}H_1^{(2)} (k'a)
+    (1 - \alpha^2) S_1 - j \frac{Z_s}{Z_0} \sqrt{1 - \alpha^2}H_1^{(2)} (k'a)
     \\
     N_\theta
     &=
-    1 + j \frac{Z_s}{Z_0} \cdot \frac{2}{ka}
+    1 + j \frac{Z_s}{Z_0} \frac{2}{ka}
     \\
     \Delta_\theta
     &=
-    \sqrt{1 - \alpha^2} H_1^{(2)} (k'a) + j \frac{Z_s}{Z_0} \cdot (1 - \alpha^2) S_1
+    \sqrt{1 - \alpha^2} H_1^{(2)} (k'a) + j \frac{Z_s}{Z_0} (1 - \alpha^2) S_1
 \end{align}
 and
 \begin{equation}
@@ -1060,16 +1060,14 @@ They describe the reflected and transmitted fields in three dimensions for a gri
     R^x
     &=
     -\frac{F}{E_0}
-    \cdot
     \frac{\lambda}{\pi d}
-    \cdot
     \frac{1 - \alpha^2}{\gamma} K^x
+    \label{eq:houde_Rx}
     \\
     R^y
     &=
     \phantom{-}
     \frac{F}{E_0}
-    \cdot
     \frac{\lambda}{\pi d}
     \left[
         \frac{\alpha \beta}{\gamma} K^x
@@ -1080,12 +1078,11 @@ They describe the reflected and transmitted fields in three dimensions for a gri
     R^z
     &=
     -\frac{F}{E_0}
-    \cdot
     \frac{\lambda}{\pi d}
     \left[
        \alpha K^x
        +
-       j \frac{\beta}{\gamma} \cdot \frac{ka}{2} K^\theta
+       j \frac{\beta}{\gamma} \frac{ka}{2} K^\theta
     \right]
     \\
     T^x &= \alpha' + R^x
@@ -1094,7 +1091,6 @@ They describe the reflected and transmitted fields in three dimensions for a gri
     &=
     \beta' +
     \frac{F}{E_0}
-    \cdot
     \frac{\lambda}{\pi d}
     \left[
         \frac{\alpha \beta}{\gamma} K^x + j \frac{ka}{2} K^\theta
@@ -1104,7 +1100,6 @@ They describe the reflected and transmitted fields in three dimensions for a gri
     &=
     \gamma' +
     \frac{F}{E_0}
-    \cdot
     \frac{\lambda}{\pi d}
     \left[
         \alpha K^x - j \frac{\beta}{\gamma} \frac{ka}{2} K^\theta
@@ -1117,8 +1112,9 @@ When implementing these equations, some simplifications are obvious.
 For example, $\frac{E_0}{F}$ inside $K^x$ and $K^\theta$ cancels $\frac{F}{E_0}$ in $R$ and $T$;
 the complex unit $j$ within $k^\theta$ combines with $j$ in $R$ and $T$ to become -1.
 
-In these equations, $\alpha'$, $\beta'$ and $\gamma'$ are the three components of the incident electric field, which we would usually write $e_x$, $e_y$, $e_z$.
-In order to rewrite these equations in a matrix form, one needs to split each coefficient of transmission and reflection into three, like this:
+In these equations, $\alpha'$, $\beta'$ and $\gamma'$ are the three components of the direction of the incident electric field, satisfying $\alpha'^2 + \beta'^2 + \gamma'^2 = 1$.
+The incident electric field is $(e_x, e_y, e_z) = E_0(\alpha', \beta', \gamma')$.
+In order to rewrite these equations in a matrix form that depends on $e_x$, $e_y$ and $e_z$, one needs to split each coefficient of transmission and reflection into three, like this:
 \begin{equation}
     e_{rx} = R^{xx} e_x + R^{xy} e_y + R^{xz} e_z
 \end{equation}
@@ -1132,11 +1128,502 @@ so that we can write
     \end{pmatrix}
     e_i
 \end{equation}
-and same thing for T.
+for the reflection $R$ and a similar equation for the transmission $e_t = T e_i$.
+I start with $R_x$ defined in equation~\eqref{eq:houde_Rx} to get $R_{xx}$, $R_{xy}$ and $R_{xz}$.
+\begin{align*}
+    e_{rx} &= R^x E_0
+    \\
+           &= -\frac{F}{E_0}
+              \frac{\lambda}{\pi d}
+              \frac{1-\alpha^2}{\gamma}
+              K^x
+              E_0
+    \\
+           &= -\cancel{\frac{F}{E_0}}
+              \frac{\lambda}{\pi d}
+              \frac{1-\alpha^2}{\gamma}
+              \cancel{\frac{E_0}{F}}
+              \frac{N_x}{\Delta_x}
+              \underbrace{
+                  \alpha'
+                  E_0
+              }_{e_{ix}}
+    \\
+           &= -\frac{\lambda}{\pi d}
+              \frac{1-\alpha^2}{\gamma}
+              \frac{N_x}{\Delta_x}
+              e_{ix}
+\end{align*}
+By identification, we find these values for $R_{xx}$, $R_{xy}$ and $R_{xz}$.
+\begin{equation}
+    \left\lbrace
+    \begin{aligned}
+        R_{xx} &= -\frac{\lambda}{\pi d}
+                  \frac{1-\alpha^2}{\gamma}
+                  \frac{N_x}{\Delta_x}
+        \\
+        R_{xy} &= 0
+        \\
+        R_{xz} &= 0
+    \end{aligned}
+    \right.
+\end{equation}
+Let us continue with $R_y$.
+\begin{align*}
+    e_{ry}
+    &= R^y E_0
+    \\
+    &= \frac{F}{E_0}
+       \frac{\lambda}{\pi d}
+       \left[
+           \frac{\alpha \beta}{\gamma}
+           K^x
+           -
+           j
+           \frac{\beta}{\alpha}
+           \frac{ka}{2}
+           K^\theta           
+       \right]
+       E_0
+    \\
+    &= \cancel{\frac{F}{E_0}}
+       \frac{\lambda}{\pi d}
+       \left[
+           \frac{\alpha \beta}{\gamma}
+           \cancel{\frac{E_0}{F}}
+           \frac{N_x}{\Delta_x}
+           \alpha'
+           -
+           j
+           \frac{\beta}{\alpha}
+           \frac{ka}{2}
+           (-j)
+           \cancel{\frac{E_0}{F}}
+           \frac{N_\theta}{\Delta_\theta}
+           (\gamma' \beta - \beta' \gamma)           
+       \right]
+       E_0
+    \\
+    &= \frac{\lambda}{\pi d}
+       \left[
+           \frac{\alpha \beta}{\gamma}
+           \frac{N_x}{\Delta_x}
+           \alpha'
+           +
+           \frac{\beta}{\alpha}
+           \frac{ka}{2}
+           \frac{N_\theta}{\Delta_\theta}
+           \gamma
+           \beta'
+           -
+           \frac{\beta}{\alpha}
+           \frac{ka}{2}
+           \frac{N_\theta}{\Delta_\theta}
+           \beta
+           \gamma'
+       \right]
+       E_0
+    \\
+    &= \frac{\lambda}{\pi d}
+       \frac{\alpha \beta}{\gamma}
+       \frac{N_x}{\Delta_x}
+       \underbrace{E_0 \alpha'}_{e_{ix}}
+       +
+       \frac{\lambda}{\pi d}
+       \frac{\beta}{\alpha}
+       \frac{ka}{2}
+       \frac{N_\theta}{\Delta_\theta}
+       \gamma
+       \underbrace{E_0 \beta'}_{e_{iy}}
+       -
+       \frac{\lambda}{\pi d}
+       \frac{\beta}{\alpha}
+       \frac{ka}{2}
+       \frac{N_\theta}{\Delta_\theta}
+       \beta
+       \underbrace{E_0 \gamma'}_{e_{iz}}
+\end{align*}
+\begin{equation}
+    \left\lbrace
+    \begin{aligned}
+        R_{yx}
+        &=
+        \phantom{-}
+        \frac{\lambda}{\pi d}
+        \frac{\alpha \beta}{\gamma}
+        \frac{N_x}{\Delta_x}
+        \\
+        R_{yy}
+        &=
+        \phantom{-}
+        \frac{\lambda}{\pi d}
+        \frac{\beta}{\alpha}
+        \frac{ka}{2}
+        \frac{N_\theta}{\Delta_\theta}
+        \gamma
+        \\
+        R_{yz}
+        &=
+        -
+        \frac{\lambda}{\pi d}
+        \frac{\beta}{\alpha}
+        \frac{ka}{2}
+        \frac{N_\theta}{\Delta_\theta}
+        \beta
+    \end{aligned}
+    \right.
+\end{equation}
+Same thing for $R_z$.
+\begin{align*}
+    e_{rz} &= R^z E_0
+    \\
+    &=
+    -
+    \frac{F}{E_0}
+    \frac{\lambda}{\pi d}
+    \left[
+        \alpha K^x
+        +
+        j
+        \frac{\beta}{\gamma}
+        \frac{ka}{2}
+        k^\theta
+    \right]
+    E_0
+    \\
+    &=
+    -
+    \cancel{\frac{F}{E_0}}
+    \frac{\lambda}{\pi d}
+    \left[
+        \alpha
+        \cancel{\frac{E_0}{F}}
+        \frac{N_x}{\Delta_x}
+        \alpha'
+        +
+        j
+        \frac{\beta}{\gamma}
+        \frac{ka}{2}
+        (-j)
+        \cancel{\frac{E_0}{F}}
+        (\gamma' \beta - \beta' \gamma)
+        \frac{N_\theta}{\Delta_\theta}
+    \right]
+    E_0
+    \\
+    &=
+    -
+    \frac{\lambda}{\pi d}
+    \alpha
+    \frac{N_x}{\Delta_x}
+    \underbrace{E_0 \alpha'}_{e_{ix}}
+    +
+    \frac{\lambda}{\pi d}
+    \frac{\beta}{\gamma}
+    \frac{ka}{2}
+    \frac{N_\theta}{\Delta_\theta}
+    \gamma
+    \underbrace{E_0 \beta'}_{e_{iy}}
+    -
+    \frac{\lambda}{\pi d}
+    \frac{\beta}{\gamma}
+    \frac{ka}{2}
+    \frac{N_\theta}{\Delta_\theta}
+    \beta
+    \underbrace{E_0 \gamma'}_{e_{iz}}
+\end{align*}
+\begin{equation}
+    \left\lbrace
+    \begin{aligned}
+        R_{zx}
+        &=
+        -
+        \frac{\lambda}{\pi d}
+        \alpha
+        \frac{N_x}{\Delta_x}
+        \\
+        R_{zy}
+        &=
+        \phantom{-}
+        \frac{\lambda}{\pi d}
+        \frac{\beta}{\gamma}
+        \frac{ka}{2}
+        \frac{N_\theta}{\Delta_\theta}
+        \gamma
+        \\
+        R_{zz}
+        &=
+        -
+        \frac{\lambda}{\pi d}
+        \frac{\beta}{\gamma}
+        \frac{ka}{2}
+        \frac{N_\theta}{\Delta_\theta}
+        \beta
+    \end{aligned}
+    \right.
+\end{equation}
+We have the reflection matrix.
+Now, we compute the transmission matrix.
+\begin{align*}
+    e_{tx} &= T^x E_0
+    \\
+    &= (\alpha' + R^x) E_0
+    \\
+    &= \underbrace{\alpha' E_0}_{e_{ix}}
+       -
+       \frac{\lambda}{\pi d}
+       \frac{1 - \alpha^2}{\gamma}
+       \frac{N_x}{\Delta_x}
+       \underbrace{\alpha' E_0}_{e_{ix}}
+    \\
+    &= \left(
+           1
+           -
+           \frac{\lambda}{\pi d}
+           \frac{1 - \alpha^2}{\gamma}
+           \frac{N_x}{\Delta_x}
+       \right)
+       e_{ix}
+\end{align*}
+\begin{equation}
+    \left\lbrace
+    \begin{aligned}
+        T_{xx}
+        &= 1
+           -
+           \frac{\lambda}{\pi d}
+           \frac{1 - \alpha^2}{\gamma}
+           \frac{N_x}{\Delta_x}
+        \\
+        T_{xy} &= 0
+        \\
+        T_{xz} &= 0
+    \end{aligned}
+    \right.
+\end{equation}
 
+\begin{align*}
+    e_{ty} &= T^y E_0
+    \\
+    &=
+    \left(
+        \beta'
+        +
+        \frac{F}{E_0}
+        \frac{\lambda}{\pi d}
+        \left[
+            \frac{\alpha \beta}{\gamma}
+            K^x
+            +
+            j
+            \frac{ka}{2}
+            K^\theta
+        \right]
+    \right)
+    E_0
+    \\
+    &=
+    \left(
+        \beta'
+        +
+        \cancel{\frac{F}{E_0}}
+        \frac{\lambda}{\pi d}
+        \left[
+            \frac{\alpha \beta}{\gamma}
+            \cancel{\frac{E_0}{F}}
+            \frac{N_x}{\Delta_x}
+            \alpha'
+            +
+            j
+            \frac{ka}{2}
+            (-j)
+            \cancel{\frac{E_0}{F}}
+            \frac{N_\theta}{\Delta_\theta}
+            (\gamma' \beta - \beta' \gamma)
+        \right]
+    \right)
+    E_0
+    \\
+    &=
+    \left(
+        \beta'
+        +
+        \frac{\lambda}{\pi d}
+        \frac{\alpha \beta}{\gamma}
+        \frac{N_x}{\Delta_x}
+        \alpha'
+        -
+        \frac{\lambda}{\pi d}
+        \frac{ka}{2}
+        \frac{N_\theta}{\Delta_\theta}
+        \gamma
+        \beta'
+        +
+        \frac{\lambda}{\pi d}
+        \frac{ka}{2}
+        \frac{N_\theta}{\Delta_\theta}
+        \beta
+        \gamma'
+    \right)
+    E_0
+    \\
+    &=
+    \frac{\lambda}{\pi d}
+    \frac{\alpha \beta}{\gamma}
+    \frac{N_x}{\Delta_x}
+    \underbrace{E_0 \alpha'}_{e_{ix}}
+    +
+    \left(
+        1
+        -
+        \frac{\lambda}{\pi d}
+        \frac{ka}{2}
+        \frac{N_\theta}{\Delta_\theta}
+        \gamma
+    \right)
+    \underbrace{E_0 \beta'}_{e_{iy}}
+    +
+    \frac{\lambda}{\pi d}
+    \frac{ka}{2}
+    \frac{N_\theta}{\Delta_\theta}
+    \beta
+    \underbrace{E_0 \gamma'}_{e_{iz}}
+\end{align*}
+\begin{equation}
+    \left\lbrace
+    \begin{aligned}
+        T_{yx}
+        &= \frac{\lambda}{\pi d}
+           \frac{\alpha \beta}{\gamma}
+           \frac{N_x}{\Delta_x}
+        \\
+        T_{yy}
+        &= 1
+           -
+           \frac{\lambda}{\pi d}
+           \frac{ka}{2}
+           \frac{N_\theta}{\Delta_\theta}
+           \gamma
+        \\
+        T_{yz}
+        &= \frac{\lambda}{\pi d}
+           \frac{ka}{2}
+           \frac{N_\theta}{\Delta_\theta}
+           \beta
+    \end{aligned}
+    \right.
+\end{equation}
 
-
-
+\begin{align*}
+    e_{tz} &= T^z E_0
+    \\
+    &=
+    \left(
+        \gamma' +
+        \frac{F}{E_0}
+        \frac{\lambda}{\pi d}
+        \left[
+            \alpha K^x - j \frac{\beta}{\gamma} \frac{ka}{2} K^\theta
+        \right]
+    \right)
+    E_0
+    \\
+    &=
+    \left(
+        \gamma' +
+        \cancel{\frac{F}{E_0}}
+        \frac{\lambda}{\pi d}
+        \left[
+            \alpha
+            \cancel{\frac{E_0}{F_0}}
+            \frac{N_x}{\Delta_x}
+            \alpha'
+            -
+            j
+            \frac{\beta}{\gamma}
+            \frac{ka}{2}
+            (-j)
+            \cancel{\frac{E_0}{F}}
+            \frac{N_\theta}{\Delta_\theta}
+            (\gamma' \beta - \beta' \gamma)
+        \right]
+    \right)
+    E_0
+    \\
+    &=
+    \left(
+        \gamma' +
+        \frac{\lambda}{\pi d}
+        \left[
+            \alpha
+            \frac{N_x}{\Delta_x}
+            \alpha'
+            +
+            \frac{\beta}{\gamma}
+            \frac{ka}{2}
+            \frac{N_\theta}{\Delta_\theta}
+            \gamma
+            \beta'
+            -
+            \frac{\beta}{\gamma}
+            \frac{ka}{2}
+            \frac{N_\theta}{\Delta_\theta}
+            \beta
+            \gamma'
+        \right]
+    \right)
+    E_0
+    \\
+    &=
+    \frac{\lambda}{\pi d}
+    \alpha
+    \frac{N_x}{\Delta_x}
+    \underbrace{E_0 \alpha'}_{e_{ix}}
+    +
+    \frac{\lambda}{\pi d}
+    \frac{\beta}{\gamma}
+    \frac{ka}{2}
+    \frac{N_\theta}{\Delta_\theta}
+    \gamma
+    \underbrace{E_0 \beta'}_{e_{iy}}
+    +
+    \left(
+        1
+        -
+        \frac{\lambda}{\pi d}
+        \frac{\beta}{\gamma}
+        \frac{ka}{2}
+        \frac{N_\theta}{\Delta_\theta}
+        \beta
+    \right)
+    \underbrace{E_0 \gamma'}_{e_{iz}}
+\end{align*}
+\begin{equation}
+    \left\lbrace
+    \begin{aligned}
+        T_{zx}
+        &= \frac{\lambda}{\pi d}
+           \alpha
+           \frac{N_x}{\Delta_x}
+        \\
+        T_{zy}
+        &= \frac{\lambda}{\pi d}
+           \frac{\beta}{\gamma}
+           \frac{ka}{2}
+           \frac{N_\theta}{\Delta_\theta}
+           \gamma
+        \\
+        T_{zz}
+        &= 1
+           -
+           \frac{\lambda}{\pi d}
+           \frac{\beta}{\gamma}
+           \frac{ka}{2}
+           \frac{N_\theta}{\Delta_\theta}
+           \beta
+    \end{aligned}
+    \right.
+\end{equation}
 
 %#############################################################################
 
