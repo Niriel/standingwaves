@@ -21,6 +21,12 @@ This is going to work unless higher modes can come back to the fundamental mode,
 %=============================================================================
 \subsection{Jones calculus in 3D}
 
+Rotating Jones matrices.
+\begin{equation}
+    J' = A J A^{-1}
+    \label{eq:jones_rotation}
+\end{equation}
+
 %=============================================================================
 \subsection{Scattering matrices of Jones matrices}
 
@@ -1159,8 +1165,8 @@ By identification, we find these values for $R_{xx}$, $R_{xy}$ and $R_{xz}$.
     \left\lbrace
     \begin{aligned}
         R_{xx} &= -\frac{\lambda}{\pi d}
-                  \frac{1-\alpha^2}{\gamma}
                   \frac{N_x}{\Delta_x}
+                  \frac{1-\alpha^2}{\gamma}
         \\
         R_{xy} &= 0
         \\
@@ -1180,7 +1186,6 @@ Let us continue with $R_y$.
            K^x
            -
            j
-           \frac{\beta}{\alpha}
            \frac{ka}{2}
            K^\theta           
        \right]
@@ -1195,7 +1200,6 @@ Let us continue with $R_y$.
            \alpha'
            -
            j
-           \frac{\beta}{\alpha}
            \frac{ka}{2}
            (-j)
            \cancel{\frac{E_0}{F}}
@@ -1210,13 +1214,11 @@ Let us continue with $R_y$.
            \frac{N_x}{\Delta_x}
            \alpha'
            +
-           \frac{\beta}{\alpha}
            \frac{ka}{2}
            \frac{N_\theta}{\Delta_\theta}
            \gamma
            \beta'
            -
-           \frac{\beta}{\alpha}
            \frac{ka}{2}
            \frac{N_\theta}{\Delta_\theta}
            \beta
@@ -1230,14 +1232,12 @@ Let us continue with $R_y$.
        \underbrace{E_0 \alpha'}_{e_{ix}}
        +
        \frac{\lambda}{\pi d}
-       \frac{\beta}{\alpha}
        \frac{ka}{2}
        \frac{N_\theta}{\Delta_\theta}
        \gamma
        \underbrace{E_0 \beta'}_{e_{iy}}
        -
        \frac{\lambda}{\pi d}
-       \frac{\beta}{\alpha}
        \frac{ka}{2}
        \frac{N_\theta}{\Delta_\theta}
        \beta
@@ -1250,25 +1250,23 @@ Let us continue with $R_y$.
         &=
         \phantom{-}
         \frac{\lambda}{\pi d}
-        \frac{\alpha \beta}{\gamma}
         \frac{N_x}{\Delta_x}
+        \frac{\alpha \beta}{\gamma}
         \\
         R_{yy}
         &=
         \phantom{-}
         \frac{\lambda}{\pi d}
-        \frac{\beta}{\alpha}
-        \frac{ka}{2}
         \frac{N_\theta}{\Delta_\theta}
+        \frac{ka}{2}
         \gamma
         \\
         R_{yz}
         &=
         -
         \frac{\lambda}{\pi d}
-        \frac{\beta}{\alpha}
-        \frac{ka}{2}
         \frac{N_\theta}{\Delta_\theta}
+        \frac{ka}{2}
         \beta
     \end{aligned}
     \right.
@@ -1339,26 +1337,24 @@ Same thing for $R_z$.
         &=
         -
         \frac{\lambda}{\pi d}
-        \alpha
         \frac{N_x}{\Delta_x}
+        \alpha
         \\
         R_{zy}
         &=
         \phantom{-}
         \frac{\lambda}{\pi d}
-        \frac{\beta}{\gamma}
-        \frac{ka}{2}
         \frac{N_\theta}{\Delta_\theta}
-        \gamma
+        \frac{ka}{2}
+        \beta
         \\
         R_{zz}
         &=
         -
         \frac{\lambda}{\pi d}
-        \frac{\beta}{\gamma}
-        \frac{ka}{2}
         \frac{N_\theta}{\Delta_\theta}
-        \beta
+        \frac{ka}{2}
+        \frac{\beta^2}{\gamma}
     \end{aligned}
     \right.
 \end{equation}
@@ -1392,8 +1388,8 @@ Now, we compute the transmission matrix.
         &= 1
            -
            \frac{\lambda}{\pi d}
-           \frac{1 - \alpha^2}{\gamma}
            \frac{N_x}{\Delta_x}
+           \frac{1 - \alpha^2}{\gamma}
         \\
         T_{xy} &= 0
         \\
@@ -1494,21 +1490,21 @@ Now, we compute the transmission matrix.
     \begin{aligned}
         T_{yx}
         &= \frac{\lambda}{\pi d}
-           \frac{\alpha \beta}{\gamma}
            \frac{N_x}{\Delta_x}
+           \frac{\alpha \beta}{\gamma}
         \\
         T_{yy}
         &= 1
            -
            \frac{\lambda}{\pi d}
-           \frac{ka}{2}
            \frac{N_\theta}{\Delta_\theta}
+           \frac{ka}{2}
            \gamma
         \\
         T_{yz}
         &= \frac{\lambda}{\pi d}
-           \frac{ka}{2}
            \frac{N_\theta}{\Delta_\theta}
+           \frac{ka}{2}
            \beta
     \end{aligned}
     \right.
@@ -1603,27 +1599,123 @@ Now, we compute the transmission matrix.
     \begin{aligned}
         T_{zx}
         &= \frac{\lambda}{\pi d}
-           \alpha
            \frac{N_x}{\Delta_x}
+           \alpha
         \\
         T_{zy}
         &= \frac{\lambda}{\pi d}
-           \frac{\beta}{\gamma}
-           \frac{ka}{2}
            \frac{N_\theta}{\Delta_\theta}
+           \frac{ka}{2}
+           \frac{\beta}{\gamma}
            \gamma
         \\
         T_{zz}
         &= 1
            -
            \frac{\lambda}{\pi d}
-           \frac{\beta}{\gamma}
-           \frac{ka}{2}
            \frac{N_\theta}{\Delta_\theta}
+           \frac{ka}{2}
+           \frac{\beta}{\gamma}
            \beta
     \end{aligned}
     \right.
 \end{equation}
+
+Another simplification:
+\begin{equation}
+    k = 2\pi / \lambda
+    \quad \Rightarrow \quad
+    \frac{\lambda}{\pi d} \frac{ka}{2}
+    =
+    \frac{\lambda}{\pi d} \frac{2\pi a}{2\lambda}
+    =
+    \frac{a}{d}
+\end{equation}
+
+\begin{equation}
+    R =
+    \begin{pmatrix}
+        -\frac{\lambda}{\pi d}
+        \frac{N_x}{\Delta_x}
+        \frac{1 - \alpha^2}{\gamma}
+        &
+        0
+        &
+        0
+        \\
+        \frac{\lambda}{\pi d}
+        \frac{N_x}{\Delta_x}
+        \frac{\alpha \beta}{\gamma}
+        &
+        \frac{\lambda}{\pi d}
+        \frac{N_\theta}{\Delta_\theta}
+        \frac{ka}{2}
+        \gamma
+        &
+        -
+        \frac{a}{d}
+        \frac{N_\theta}{\Delta_\theta}
+        \beta
+        \\
+        -
+        \frac{\lambda}{\pi d}
+        \frac{N_x}{\Delta_x}
+        \alpha
+        &
+        \frac{a}{d}
+        \frac{N_\theta}{\Delta_\theta}
+        \beta
+        &
+        -
+        \frac{a}{d}
+        \frac{N_\theta}{\Delta_\theta}
+        \frac{\beta^2}{\gamma}
+    \end{pmatrix}
+\end{equation}
+\begin{equation}
+    T =
+    \begin{pmatrix}
+        1 -
+        \frac{\lambda}{\pi d}
+        \frac{N_x}{\Delta_x}
+        \frac{1 - \alpha^2}{\gamma}
+        &
+        0
+        &
+        0
+        \\
+        \frac{\lambda}{\pi d}
+        \frac{N_x}{\Delta_x}
+        \frac{\alpha \beta}{\gamma}
+        &
+        1 -
+        \frac{a}{d}
+        \frac{N_\theta}{\Delta_\theta}
+        \gamma
+        &
+        \frac{a}{d}
+        \frac{N_\theta}{\Delta_\theta}
+        \beta
+        \\
+        \frac{\lambda}{\pi d}
+        \frac{N_x}{\Delta_x}
+        \alpha
+        &
+        \frac{a}{d}
+        \frac{N_\theta}{\Delta_\theta}
+        \beta
+        &
+        1 -
+        \frac{a}{d}
+        \frac{N_\theta}{\Delta_\theta}
+        \frac{\beta^2}{\gamma}
+    \end{pmatrix}
+\end{equation}
+This reflection and transmission matrix are Jones matrices.
+They must find their place inside the scattering matrix.
+But before, we must apply rotation matrices to them in order to account for the arbitrary orientation of the grid.
+Indeed, these Jones matrices are valid for grid lying in the $(x, y)$ plane, with the wires along $x$.
+Doing this follows the usual method for rotating Jones matrices described by equation~\eqref{eq:jones_rotation}.
 
 %#############################################################################
 
