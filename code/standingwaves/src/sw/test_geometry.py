@@ -264,6 +264,41 @@ class TestComputeIncidencePlaneNormal(unittest.TestCase):
         ur = geo.ComputeIncidencePlaneNormal(n, k)
         self.assertTrue(np.allclose(ur, u))
 
+class TestQuaternion(unittest.TestCase):
+    # I go straight to the useful part: rotations.  If these work, it means that
+    # the low level things like multiplication work too.
+    def testQuatEulerEquiv(self):
+        # We are testing a lot of things at the same time here.
+        randomizer = random.Random()
+        randomizer.seed(0)
+        rnd = randomizer.random
+        # This defines a rotation axis and an rotation angle around that axis.
+        tb = geo.TaitBryan(0, 1, 2)
+        def randAngle():
+            # We don't limit our tests to [0, TAU].
+            return (rnd() - .5) * geo.TAU * 10
+        hpa_s = ((randAngle(), randAngle(), randAngle()) for _ in range(100))
+        # We will apply these rotations to all these vectors:
+        def randCoord():
+            return (rnd() - .5) * 10
+        vs = (np.array([randCoord(), randCoord(), randCoord()]) for _ in range(20))
+        for h, p, angle in hpa_s:
+            # Pure euler matrix method.
+            Re = tb.around(h, p, angle)
+            # Various quaternion methods.
+            axis = tb.rot(h, p, 0).dot(tb.rest)
+            q = geo.RotationAroundAxisQuaternion(axis, angle)
+            Rq1 = geo.RotationMatrixFromQuaternion(q)
+            Rq2 = geo.RotationAroundAxisMatrix(axis, angle)
+            # Compare the matrices from Euler to the matrices from the quaternions.
+            self.assertTrue(np.allclose(Re, Rq1))
+            self.assertTrue(np.all(Rq1 == Rq2))
+            # Now, compare Euler rotation with Quaternion rotation.
+            for v in vs:
+                vr = Re.dot(v)  # Matrix multiplication.
+                vq = geo.QuatRotate(q, v)  # Quaternion Hamilton product.
+                self.assertTrue(np.allclose(vr, vq))
+
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

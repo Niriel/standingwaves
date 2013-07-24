@@ -257,3 +257,15 @@ def QuatMult(p, q):
                      p1 * q2 + p2 * q1 + p3 * q4 - p4 * q3,
                      p1 * q3 + p3 * q1 + p4 * q2 - p2 * q4,
                      p1 * q4 + p4 * q1 + p2 * q3 - p3 * q2])
+
+def QuatConj(q):
+    return np.array([q[0], -q[1], -q[2], -q[3]])
+
+def QuatHamilton(p, q):
+    """Return qpq*, quaternion Hamilton product."""
+    return QuatMult(q, QuatMult(p, QuatConj(q)))
+
+def QuatRotate(q, v):
+    p = np.array([0, v[0], v[1], v[2]])
+    p1 = QuatHamilton(p, q)
+    return p1[1:]
