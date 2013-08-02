@@ -68,8 +68,23 @@
 \graphicspath{{./figures/}}
 \addbibresource{bibliography.bib}
 
-\title{}
-\author{}
+\title{Understanding standing waves by network modeling
+\\
+HIFI untangled, and prospects for future instrumentation}
+\author{Bertrand Delforge$^{1, 2}$
+       \and
+       Marc Verheijen$^2$
+       \and
+       John Pearson$^3$
+       \and
+       Peter Roelfsema$^1$
+       \and
+       Willem Jellema$^1$
+       \and
+       \\ \footnotesize $^1$ SRON, Netherlands Institute for Space Research
+       \\ \footnotesize $^2$ Kapteyn Astronomical Institute
+       \\ \footnotesize $^3$ JPL, Jet Propulsion Laboratory
+}
 
 \begin{document}
 
@@ -77,6 +92,11 @@
 %\tableofcontents
 
 \begin{abstract}
+As is the case for many instruments also in HIFI, the Heterodyne Instrument for the Far Infrared on the Herschel space observatory, standing waves affect the nominal coupling of the mixer to the local oscillator, calibration black bodies and even the sky.  This results in obvious distortions of the spectral baselines and strongly influences less obvious measures such as the sideband ratio.  Current uncertainties on HIFI's sideband ratio are about 2-10 percent, depending on the frequency, and are mainly a consequence of an insufficient understanding of the HIFI standing wave phenomenon.
+
+We are developing a systematic and generic methodology for modeling standing waves in coherent optical and quasi-optical systems, using scattering matrices of Jones matrices.  This approach allows for a correct processing of the phase and polarization information of multi-port networks, and serves as a foundation for a framework that combines an arbitrarily large number of networks and predicts their interactions.
+
+Our numerical simulations have successfully reproduced, and qualitatively explained, many artifacts observed in actual HIFI data while we are currently improving our technique to produce quantitative predictions.  With HIFI as a hands-on show case for our successful standing wave modeling technique, we are confident that our generic approach for understanding and predicting standing waves can play a significant role in improving the design of future instruments.
 \end{abstract}
 
 
@@ -87,14 +107,14 @@
 
 \section{Introduction}
 HIFI \cite{AA_518_L6} on the HSO \cite{AA_518_L1}.
-Built to do such and such science [REFERENCE].
+Built to do such and such science \cite{AA_518_L6}.
 Works on this principle (heterodyne, therefore coherent).
 Coherence allows for interferences.
 Interferences give rise to standing waves.
 Standing waves modulate the coupling of the backend to the LO, the sky and the calibration black bodies.
 If the calibration ignores the standing waves, then the result has error bars that can easily dominate all the other sources of uncertainty, as shown on figure~\ref{fig:scatter_real_data}.
 
-\begin{figure}
+\begin{figure}[hbtp]
     \centering
     \includegraphics[width=\textwidth]{1342190892_4a_line_frequency_1037-080GHz_level_usb_20_WBS-H_max_intensity}
     \caption{\label{fig:scatter_real_data}The same line observed at 25 different LO frequencies.  If there were no standing waves, all the red curves (left plot) would overlap and there would be no scatter of the peak intensity (right plot).  Standing waves modulate the gain of the system, and the current calibration scheme ignores them.}
@@ -113,25 +133,107 @@ If the calibration ignores the standing waves, then the result has error bars th
 %-----------------------------------------------------------------------------
 
 \subsection{Principle}
-
-Jones matrices capture the idea of transfering energy from one polarization to another \cite{hecht2002optics}.
-Note that they cannot handle non-polarized light.
-This is not a problem for us as wire grid polarizers ensure that everything in our system is polarized (linearly or elliptically).
-They traditionally work in 2D but it is trivial to extend them to work in 3D.
-
-Scattering matrices \cite{siegman1986lasers} capture the idea of transfering energy from one side (port) of an optical element (network) to another.
-
-Putting 3D Jones matrices inside scattering matrices is a natural way of doing both the port-to-port and the polarization energy transfer at the same time.
-
-A system like HIFI is made of a few dozens of networks.
-All these networks interact together, two by two, since there exist at least one optical path between each pair or networks.
+A system like the Focal Plane Unit of HIFI is made of a few dozens of optical elements, also called ``networks'': wire grid polarizers, roof-top mirrors, horns, attenuators, free space, etc..
+All these networks interact together two by two since there exist at least one optical path between each pair or networks.
 The number of interactions in the system increases with the square of the number of networks.
-
 We propose a method to reduce the number of networks without losing any information.
 Our model computes the scattering matrix of the network equivalent to the whole system.
 Then, knowing how the system reacts to an input is merely a matter of multipling the scattering matrix of the network equivalent to the whole system with a vector of inputs to get a vector of outputs.
 
-As shown of figure~\ref{fig:cascading}, two networks A and B connected by one port (port $\alpha$ for A and port $\beta$ for B) can be seen as a single equivalent  network C.
+Scattering matrices \cite{siegman1986lasers} model the transfer of energy or field from one side (port) of a network to another (figure~\ref{fig:ports}).
+\begin{figure}[hbtp]
+    \centering
+    \input{figures/scattering_matrix_notations.eps_tex}
+    \caption{\label{fig:ports}A 4-ports network showing 4 inputs $a_i$ and four ouputs $b_i$.  For example, this network could be a wire grid polarizer or a semi-transparent mirror, both acting as beam splitters.}
+\end{figure}
+Equation~\ref{eq:scattering_matrix} presents the scattering matrix $S$ that models the relation between a vector of inputs $a$ and a vector of outputs $b$ for a $n$-ports network.
+The diagonal contains the reflections terms and the rest contains the transmissions.
+\begin{align}
+    b &= S a
+    &
+    \begin{pmatrix}
+        b_1\\
+        b_2\\
+        \vdots\\
+        b_n
+    \end{pmatrix}
+    &=
+    \begin{pmatrix}
+        S_{1, 1} & S_{1, 2} & \cdots & S_{1, n} \\
+        S_{2, 1} & S_{2, 2} & \cdots & S_{2, n} \\
+        \vdots   & \vdots   & \ddots & \vdots   \\
+        S_{n, 1} & S_{n, 2} & \cdots & S_{n, n}
+    \end{pmatrix}
+    \begin{pmatrix}
+        a_1\\
+        a_2\\
+        \vdots\\
+        a_n
+    \end{pmatrix}
+    \label{eq:scattering_matrix}
+\end{align}
+The standard way to include the polarization into a scattering matrix is to double (local reference frame: horizontal and vertical directions) or triple (global reference frame: $x$, $y$ and $z$ directions) its number of ports.
+For our model, we chose a different approach that allows us think of a polarized field as a single entity instead of two or three, and keep the number of ports to its minimum.
+For this, we decided that the elements of the scattering matrix be Jones matrices and not scalars.
+
+Jones matrices model the transfer of amplitude and phase from one polarization to another \cite{hecht2002optics}.
+Putting 3D Jones matrices inside scattering matrices is a natural way of doing both the port-to-port and the polarization energy transfer at the same time.
+In equation~\eqref{eq:jones_matrix_short}, the polarized input field $e_i$ is related to the polarized output field~$e_o$ by the Jones matrix $J$.
+As shown on equations~\eqref{eq:jones_matrix}, Jones matrices traditionally work in 2D~\eqref{eq:jones_matrix_2d} but it is trivial to extend them to work in 3D~\eqref{eq:jones_matrix_3d}.
+Each $S_{i, j}$ is a 3D Jones matrix; each $a_j$ and each $b_i$ are 3D Jones vectors.
+\begin{subequations}    
+    \begin{align}
+        % Small form.
+        e_o &= J e_i
+        \label{eq:jones_matrix_short}
+        \\
+        % Jones matrix in 2D.
+        \begin{pmatrix}
+            e_{o, h}\\
+            e_{o, v}
+        \end{pmatrix}
+        &=
+        \begin{pmatrix}
+            J_{h, h}   &   J_{h, v} \\
+            J_{v, h}   &   J_{v, v}
+        \end{pmatrix}
+        \begin{pmatrix}
+            e_{i, h}\\
+            e_{i, v}
+        \end{pmatrix}
+        \label{eq:jones_matrix_2d}
+        \\
+        % Jones matrix in 3D.
+        \begin{pmatrix}
+            e_{o, x}\\
+            e_{o, y}\\
+            e_{o, z}
+        \end{pmatrix}
+        &=
+        \begin{pmatrix}
+            J_{x, x}   &   J_{x, y}   &   J_{x, z} \\
+            J_{y, x}   &   J_{y, y}   &   J_{y, z} \\
+            J_{z, x}   &   J_{z, y}   &   J_{z, z}
+        \end{pmatrix}
+        \begin{pmatrix}
+            e_{i, x}\\
+            e_{i, y}\\
+            e_{i, z}
+        \end{pmatrix}
+        \label{eq:jones_matrix_3d}
+    \end{align}
+    \label{eq:jones_matrix}
+\end{subequations}
+Extending Jones matrices to 3D makes it easier to work in a common reference frame, but it also allows to model birefringent networks in which the electric field may have a component along the direction of propagation.
+Jones matrices cannot handle non-polarized light but this is not a problem for us as wire grid polarizers ensure that everything in our system is polarized (linearly or elliptically).
+
+
+
+
+
+
+
+As shown of figure~\ref{fig:cascading}, two networks P and Q connected by one port (port $\alpha$ for P and port $\beta$ for Q) can be seen as a single equivalent  network S.
 The scattering matrix of that equivalent network takes into account the infinite reflections between the two original networks.
 \begin{figure}[hbtp]
     \centering
@@ -182,7 +284,7 @@ For example, if a higher mode does not couple to a mixer, then its power is --fo
         The scattering matrices of P, Q and S are noted $P$, $Q$ and $S$.
         }
 \end{figure}
-Figure~\ref{fig:between_networks} expands on figure~\ref{fig:cascading} to introduce notations useful for describing mathematically what happens to the electric field between two connected networks.
+Figure~\ref{fig:between_networks} expands on figure~\ref{fig:cascading} to introduce notations useful for describing the electric field between two connected networks.
 In order to simplify the reasoning and shorten the equations, we use an indexing system that is common to $P$, $Q$ and $S$.  This means that the way we index our matrices is unconventional: the matrix $Q$ is indexed by port numbers ranging from $n_P+1$ to $n_P + n_Q$, therefore $Q_{1, j}$ does not exist since the port 1 does not belong to Q.  In order to write a software implementation of these equations, one level of indirection is required to transform the port numbers into conventional matrix indices.
 Finally, the elements of the matrices $P$, $Q$ and $S$ are themselves matrices: they are Jones matrices.
 
@@ -229,7 +331,8 @@ Equation~\eqref{eq:d} presents the solution of this system for~$d$.
     \label{eq:d}
 \end{equation}
 In equation~\eqref{eq:d}, $I$ represents the identity matrix that matches the size of $Q_{\beta, \beta}P_{\alpha, \alpha}$ (that is, 3--by--3 as these are 3D Jones matrices).
-We are certain that $I - Q_{\beta, \beta} P_{\alpha, \alpha}$ has an inverse because the system has losses: if it did not have an inverse then the system could store an infinite amount of energy and therefore never reach a steady state, this system would not be physical.
+We are certain that $I - Q_{\beta, \beta} P_{\alpha, \alpha}$ has an inverse because the system has losses:
+if it did not have an inverse then the system could store an infinite amount of energy and therefore never reach a steady state, this system would not be physical.
 Since~$d$ is an input for~P, we can express the outputs of P in terms of~$d$.
 \begin{gather}
 \begin{aligned}
