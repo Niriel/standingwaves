@@ -1,0 +1,200 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+    % Can't have pictures/photos/figures from files without that.
+    % Note that vanilla latex will only accept eps.
+\usepackage{color}
+    % For rendering text is eps_tex files produced by InkScape, even
+    % if the text is black.
+\usepackage[font=footnotesize, labelfont=bf]{caption}
+    % So that I can add long captions under figures.
+    % It provides me with \caption* that does not appear in the list of
+    % figures but formats the text like \caption does.  It also lets me
+    % use line breaks in the caption, and even bullet/enumerated lists.
+\usepackage[]{biblatex}
+    % Bibliography manager more flexible than the built-in one.
+
+\graphicspath{{./figures/}}
+\addbibresource{bibliography.bib}
+
+\title{}
+\author{}
+
+\begin{document}
+
+\maketitle
+%\tableofcontents
+
+\begin{abstract}
+\end{abstract}
+
+
+
+
+
+%=============================================================================
+
+\section{Introduction}
+HIFI \cite{AA_518_L6} on the HSO \cite{AA_518_L1}.
+Built to do such and such science [REFERENCE].
+Works on this principle (heterodyne, therefore coherent).
+Coherence allows for interferences.
+Interferences give rise to standing waves.
+Standing waves modulate the coupling of the backend to the LO, the sky and the calibration black bodies.
+If the calibration ignores the standing waves, then the result has error bars that can easily dominate all the other sources of uncertainty, as shown on figure~\ref{fig:scatter_real_data}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{1342190892_4a_line_frequency_1037-080GHz_level_usb_20_WBS-H_max_intensity}
+    \caption{\label{fig:scatter_real_data}The same line observed at 25 different LO frequencies.  If there were no standing waves, all the red curves (left plot) would overlap and there would be no scatter of the peak intensity (right plot).  Standing waves modulate the gain of the system, and the current calibration scheme ignores them.}
+\end{figure}
+
+
+
+
+
+%=============================================================================
+
+\section{Modeling standing waves}
+
+
+
+%-----------------------------------------------------------------------------
+
+\subsection{Principle}
+
+Jones matrices capture the idea of transfering energy from one polarization to another \cite{hecht2002optics}.
+Note that they cannot handle non-polarized light.
+This is not a problem for us as wire grid polarizers ensure that everything in our system is polarized (linearly or elliptically).
+They traditionally work in 2D but it is trivial to extend them to work in 3D.
+
+Scattering matrices \cite{siegman1986lasers} capture the idea of transfering energy from one side (port) of an optical element (network) to another.
+
+Putting 3D Jones matrices inside scattering matrices is a natural way of doing both the port-to-port and the polarization energy transfer at the same time.
+
+A system like HIFI is made of a few dozens of networks.
+All these networks interact together, two by two, since there exist at least one optical path between each pair or networks.
+The number of interactions in the system increases with the square of the number of networks.
+
+We propose a method to reduce the number of networks without losing any information.
+Our model computes the scattering matrix of the network equivalent to the whole system.
+Then, knowing how the system reacts to an input is merely a matter of multipling the scattering matrix of the network equivalent to the whole system with a vector of inputs to get a vector of outputs.
+
+As shown of figure~\ref{fig:cascading}, two networks A and B connected by one port (port $\alpha$ for A and port $\beta$ for B) can be seen as a single equivalent  network C.
+The scattering matrix of that equivalent network takes into account the infinite reflections between the two original networks.
+\begin{figure}[hbtp]
+    \centering
+    \input{figures/cascading.eps_tex}
+    \caption{\label{fig:cascading}Two networks connected by one port have an equivalent network.}
+\end{figure}
+
+If we have a method to compute an equivalent network, then we can apply it recursively to an entire system to get the network equivalent to the whole system.
+This is illustrated by figure~\ref{fig:cascading_example}
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{cascading_example}
+    \caption{\label{fig:cascading_example}}
+\end{figure}
+
+Not iterative; it's a one-pass solver that directly gives the steady state.
+
+%-----------------------------------------------------------------------------
+
+\subsection{Simplifications}
+
+The frequency regime suggests that we should use quasi optics to properly account for the diffraction of the beams.
+However, this complicates things a lot, and therefore we simplified the problem.
+$\Rightarrow$ Plane waves, single mode.
+
+Plane wave isn't bad anyway since we put all our networks at the waists of the beams, where the wave front is flat.
+
+The discrepencies due to these simplifications can be abstracted by parameters in our model.
+For example, if a higher mode does not couple to a mixer, then its power is --for all practical purpose-- lost, and therefore a term of loss can model it.
+
+%-----------------------------------------------------------------------------
+
+\subsection{Elements of modeling.}
+
+Now comes some maths, not fully detailed, but at least the first and the last line.
+I only give the math that computes the infinite reflection between the two networks, and therefore the scattering matrix of the whole thing.
+I do not spend time explaining how I recursively apply it to solve everything.
+
+Most are easy to model, at least at the first order.
+Only the grids are really a pain.
+\begin{itemize}
+    \item Space: propagation changes the phase.
+    \item Mirrors: they don't do much, just ignore them.
+    \item Rooftop mirrors: these matter as they rotate polarization.
+    \item Rectangular horns: at the first order, they transmit one linear polarization and reflect the other.
+    \item Black bodies: weak reflection, scramble the polarization.
+    \item Attenuator: reduces the amplitude.
+    \item Grids: used Houde's work \cite{houde_2001}.
+\end{itemize}
+
+%=============================================================================
+
+\section{Qualitative achievement}
+Calibration paper: \cite{AA_537_A17}
+
+The method described above allows us to compute the scattering matrix of a system provided we know the scattering matrices of the networks that constitute that systems.
+
+Our test case is the HIFI spectrometer.
+Its focal plane unit has many networks.
+
+
+I put it all together to model the bands 3 and 4 of HIFI, which use martin puplet  interferometers (REFERENCE) to inject the LO and signal power with a minimum of loss.
+These devices are nice because they allow you to get pretty much 100 percent of the incoming signal, but they come with a price: more reflections, therefore more standing waves.
+
+I ran the model for different sources: the local oscillator, the sky on source, the sky off source, and the calibration black bodies.
+Each simulation gave me a coupling spectrum.
+I multiplied these couplings with a model of the radiation from the source (gaussian line), and the LO BB OFF sources (flat continuums).
+Then I folded them simply, without using a physical model of the mixer, just by overlaping the LSB and USB.
+Then I applied the calibration steps like HIFI does.
+
+The result is visible on figure~\ref{fig:simulated_spectrum_dirty}.
+The goal was to qualitatively replicate the observation presented in figure~\ref{fig:scatter_real_data}.
+Even with rough guesses for the parameters, and the approximations we made, we do reproduce a scatter of the peak intensity of the line, with the right order.
+\begin{figure}
+    \centering
+    \includegraphics{bb-on_narrow}
+    \caption{\label{fig:simulated_spectrum_dirty}Simulated spectra, the peak intensity varies because each LO tuning brings its own set of standing waves that modulates the coupling.}
+\end{figure}
+
+Our model gives us information that we do not get with real data: the sideband ratio.
+The upper and lower sidebands are both modulated by standing waves, but they are modulated differently.
+In a perfect system, the sideband ratio USB/(LSB+USB) is 0.5, but in reality it varies.
+If we know the sideband ratio, then we can put it into the calibration equation in order to better calibrate the line or the continnuum intensity (one or the other).
+Our model gives us access to the simulated sideband ratio, as shown on figure~\ref{fig:sbr}.
+\begin{figure}
+    \centering
+    \includegraphics{sbr}
+    \caption{\label{fig:sbr}Simulated sideband ratio}
+\end{figure}
+
+I recalibrated the spectrum to use the SBR information on the sky path; the result is shown in figure~\ref{fig:simulated_spectrum_corrected}.
+It is better, but not perfect, because the SBR on the Black Body path is not taken into account.  If I make the black bodies really black, then the spectrum is perfect.
+\begin{figure}
+    \centering
+    \includegraphics{bb-on_corrected-2}
+    \caption{\label{fig:simulated_spectrum_corrected} Simulated spectrum, with calibration corrected for SBR on the sky, but not on the black bodies.  It's already better.  I can work a bit more on the calibration equation to clean it totally, because with non-reflective black bodies I get a perfectly corrected spectrum.}
+\end{figure}
+
+
+
+
+
+%=============================================================================
+
+\section{Conclusion}
+We have a way of modeling the interferences, and therefore the standing waves, in any coherent instrument.
+The model produces results that are qualitatively consistent with many HIFI observations.
+We showed that the model can give us information (notably the sideband ratio) that we can use to better calibrate data.
+By modeling more acurately the networks, we are expecting to reproduce quantitatively HIFI data.
+This would allow us to significantly reduce the incertainties in the calibration.
+
+%=============================================================================
+
+\printbibliography
+\end{document}
