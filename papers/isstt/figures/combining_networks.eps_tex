@@ -1,0 +1,65 @@
+%% Creator: Inkscape inkscape 0.48.2, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'combining_networks.eps' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{311.81103516bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.45454545)%
+    \put(0,0){\includegraphics[width=\unitlength]{combining_networks.eps}}%
+    \put(0.27272725,0.21818191){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{P}}}%
+    \put(0.78181812,0.21818191){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{Q}}}%
+    \put(0.13636362,0.21818191){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{1}}}%
+    \put(0.27272725,0.08181815){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{2}}}%
+    \put(0.38181816,0.21818191){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\alpha=3$}}}%
+    \put(0.83636361,0.12727258){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{6}}}%
+    \put(0.83636361,0.30909109){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{7}}}%
+    \put(0.70909082,0.21818191){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\beta=5$}}}%
+    \put(0.27272725,0.35454568){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{4}}}%
+    \put(0.54263262,0.29090929){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$b_\alpha=c=a_\beta$}}}%
+    \put(0.54831445,0.1454547){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$a_\alpha=d=b_\beta$}}}%
+  \end{picture}%
+\endgroup%
