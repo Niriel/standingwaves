@@ -41,11 +41,6 @@
     % For chemical formulas.
     % Brings \ce.ormulas.
 
-\usepackage[mediumspace,mediumqspace,squaren]{SIunits}
-    % Otherwise I can't write the mu symbol for micrometers.
-    % It also brings me the \degree symbol, woo!
-    % No decibel though, I need to make this one myself.
-
 \usepackage{stmaryrd}
     % For the llbracket and rrbracket to denote integer intervals.
 
@@ -59,6 +54,11 @@
     % Fantastic bibliography manager that I'll use just for its
     % \citetitle command.
 
+%\usepackage[mediumspace,mediumqspace,squaren]{SIunits}
+\usepackage{siunitx}
+    % Otherwise I can't write the mu symbol for micrometers.
+    % It also brings me the \degree symbol, woo!
+    % No decibel though, I need to make this one myself.
 \newcommand{\decibel}{dB}
 \newcommand{\equaldef}{\stackrel{\text{\tiny def}}{=}}
 \newcommand{\transp}{^T}
@@ -106,19 +106,42 @@ Our numerical simulations have successfully reproduced, and qualitatively explai
 %=============================================================================
 
 \section{Introduction}
-HIFI \cite{AA_518_L6} on the HSO \cite{AA_518_L1}.
-Built to do such and such science \cite{AA_518_L6}.
-Works on this principle (heterodyne, therefore coherent).
-Coherence allows for interferences.
-Interferences give rise to standing waves.
-Standing waves modulate the coupling of the backend to the LO, the sky and the calibration black bodies.
-If the calibration ignores the standing waves, then the result has error bars that can easily dominate all the other sources of uncertainty, as shown on figure~\ref{fig:scatter_real_data}.
+The HIFI instrument on the Herschel Space Observatory \cite{AA_518_L1} operates at frequencies between \SI{480}{\giga\hertz} and \SI{1910}{\giga\hertz}
+and produces spectra with a resolution ranging from \SI{1}{\mega\hertz} to \SI{125}{\kilo\hertz} \cite{AA_518_L6}.
+This high frequency resolution enables the study the chemistry of a wide range of phenomena, from planetary atmosphere to star forming regions.
 
-\begin{figure}[hbtp]
+At such a high resolution, the thermic noise of the astronomical source and that of the calibration black bodies qualify as ``narrowband gaussian noise signal'' \cite{siegman1986lasers} and have a coherence time $\tau$ equal to the inverse of their bandwidth~$\tau=1/\Delta f$.
+A bandwith of~\SI{1}{\mega\hertz} results in a coherence time of \SI{1e-6}{\second} or, when multiplied by the speed of light, a coherence length of \SI{300}{\meter} which is a hundred times the longest distance inside HIFI.
+Therefore, in HIFI, both the LO signal and the signals from the sources are coherent.
+
+Coherence allows for inteferences.
+Interferences inside electromagnetic cavities give birth to standing waves which trap energy inside these cavity.
+The mixer cannot detect the energy that is trapped; 
+therefore the coupling of the incoming signals to the mixer is modulated by these standing waves.
+
+\begin{figure}[hbt]
     \centering
-    \includegraphics[width=\textwidth]{1342190892_4a_line_frequency_1037-080GHz_level_usb_20_WBS-H_max_intensity}
-    \caption{\label{fig:scatter_real_data}The same line observed at 25 different LO frequencies.  If there were no standing waves, all the red curves (left plot) would overlap and there would be no scatter of the peak intensity (right plot).  Standing waves modulate the gain of the system, and the current calibration scheme ignores them.}
+    % CO 9-8 line of NCG7538-IRS1 observed on 21-02-2010.
+    \includegraphics[width=\textwidth]{obsid_5000352C}
+    \caption{\label{fig:scatter_real_data}
+    The same extragalactic emission line observed by HIFI at 25 different LO frequencies in its band 4a.
+    If the calibration were perfect, all these line profiles would overlap within the noise.
+    However, we observe a scatter on the line peak intensity that has a standard deviation three times greater than the expected noise (represented by the error bars).
+    This scatter is due to standing waves that are ignored by the calibration: each LO frequency requires a specific tuning of the diplexer, which changes the optical path and therefore the periods of the standing waves, moduling the coupling of the mixer to the sky, LO and calibration loads.
+    Our objective is to model the complex relationship between parameters such as the LO frequency and the coupling modulation due to standing waves.
+    }
 \end{figure}
+
+Figure~\ref{fig:scatter_real_data} illustrates this phenomenon.
+HIFI observed a single emission feature from a galactic source.
+It did so 25 times for 25 local oscilator frequencies.
+Even though each of these 25 spectra looks individually clean from standing wave modulations (no apparent periodic distorsion of the spectrum), their comparison shows that standing waves cause an uncertainty on the peak amplitude of the line.
+In that specific case, the uncertainty due to standing waves is three times greater than that due to the noise.
+In other terms, almost half of the observing time is wasted reducing the noise below the standing-wave uncertainty.
+When an observation is taken at one LO frequency only, the astronomer has little to no way of knowing how much standing waves distort the line.
+
+This motivates the present work.
+Our goal is to model the instrument to a level which allows to accurately predict the effect of the standing waves, and include a correction of their effect in the calibration scheme of HIFI.
 
 
 
@@ -227,12 +250,6 @@ Each $S_{i, j}$ is a 3D Jones matrix; each $a_j$ and each $b_i$ are 3D Jones vec
 Extending Jones matrices to 3D makes it easier to work in a common reference frame, but it also allows to model birefringent networks in which the electric field may have a component along the direction of propagation.
 Jones matrices cannot handle non-polarized light but this is not a problem for us as wire grid polarizers ensure that everything in our system is polarized (linearly or elliptically).
 
-
-
-
-
-
-
 As shown of figure~\ref{fig:cascading}, two networks P and Q connected by one port (port $\alpha$ for P and port $\beta$ for Q) can be seen as a single equivalent  network S.
 The scattering matrix of that equivalent network takes into account the infinite reflections between the two original networks.
 \begin{figure}[hbtp]
@@ -255,7 +272,7 @@ Not iterative; it's a one-pass solver that directly gives the steady state.
 
 \subsection{Simplifications}
 
-The frequency regime suggests that we should use quasi optics to properly account for the diffraction of the beams.
+The frequency regime suggests that we could use quasi optics to properly account for the diffraction of the beams \cite{goldsmith1998quasioptical}.
 However, this complicates things a lot, and therefore we simplified the problem.
 $\Rightarrow$ Plane waves, single mode.
 
