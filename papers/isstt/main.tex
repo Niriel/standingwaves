@@ -124,7 +124,7 @@ therefore the coupling of the incoming signals to the mixer is modulated by thes
     % CO 9-8 line of NCG7538-IRS1 observed on 21-02-2010.
     \includegraphics[width=\textwidth]{obsid_5000352C}
     \caption{\label{fig:scatter_real_data}
-    The same extragalactic emission line observed by HIFI at 25 different LO frequencies in its band 4a.
+    The same extragalactic emission feature observed by HIFI at 25 different LO frequencies in its band 4a.
     If the calibration were perfect, all these line profiles would overlap within the noise.
     However, we observe a scatter on the line peak intensity that has a standard deviation three times greater than the expected noise (represented by the error bars).
     This scatter is due to standing waves that are ignored by the calibration: each LO frequency requires a specific tuning of the diplexer, which changes the optical path and therefore the periods of the standing waves, moduling the coupling of the mixer to the sky, LO and calibration loads.
@@ -156,12 +156,14 @@ Our goal is to model the instrument to a level which allows to accurately predic
 %-----------------------------------------------------------------------------
 
 \subsection{Principle}
-A system like the Focal Plane Unit of HIFI is made of a few dozens of optical elements, also called ``networks'': wire grid polarizers, roof-top mirrors, horns, attenuators, free space, etc..
-All these networks interact together two by two since there exist at least one optical path between each pair or networks.
+Our method is inspired from laser and circuit theory: we deal with discrete inputs and outputs rather than, for example, a continuous description of the fields in space.
+A system like the Focal Plane Unit of HIFI is made of a few dozens of optical elements, also called ``networks'': wire grid polarizers, roof-top mirrors, horns, attenuators, free space, all having one or more input and output.
+All these networks interact together two by two since there exists at least one optical path between each pair or networks.
 The number of interactions in the system increases with the square of the number of networks.
-We propose a method to reduce the number of networks without losing any information.
+One way to solve a system's reaction to a set of input would be to propagate the inputs from network to network, back and forth, until the fields appear to converge to a steady state.
+Instead, we propose a method to reduce the number of networks without losing any information, in a way that can be compared to calculating the equivalend impedence of an electric circuit.
 Our model computes the scattering matrix of the network equivalent to the whole system.
-Then, knowing how the system reacts to an input is merely a matter of multipling the scattering matrix of the network equivalent to the whole system with a vector of inputs to get a vector of outputs.
+Then, knowing how the system reacts to an input is merely a matter of multipling its scattering matrix with a vector of inputs to get a vector of outputs\footnote{The LO output and the sky/blackbody output must be calculated separately and added in the end even though both use the same scattering matrix: each is coherent, but they are not phase-locked to each other and therefore do not interfere together}.
 
 Scattering matrices \cite{siegman1986lasers} model the transfer of energy or field from one side (port) of a network to another (figure~\ref{fig:ports}).
 \begin{figure}[hbtp]
@@ -247,8 +249,9 @@ Each $S_{i, j}$ is a 3D Jones matrix; each $a_j$ and each $b_i$ are 3D Jones vec
     \end{align}
     \label{eq:jones_matrix}
 \end{subequations}
-Extending Jones matrices to 3D makes it easier to work in a common reference frame, but it also allows to model birefringent networks in which the electric field may have a component along the direction of propagation.
-Jones matrices cannot handle non-polarized light but this is not a problem for us as wire grid polarizers ensure that everything in our system is polarized (linearly or elliptically).
+Extending Jones matrices to 3D makes it easier to work in a common reference frame in which the networks can have arbitrary orientations.
+It also relieves the constraint of TEM modes and enables hybrid modes, allowing to model birefringent networks in which the electric field may have a component along the direction of propagation.
+Jones matrices cannot handle non-polarized light but this is not a problem for us as wire grid polarizers ensure that everything in our system is linearly or elliptically polarized.
 
 As shown of figure~\ref{fig:cascading}, two networks P and Q connected by one port (port $\alpha$ for P and port $\beta$ for Q) can be seen as a single equivalent  network S.
 The scattering matrix of that equivalent network takes into account the infinite reflections between the two original networks.
@@ -263,23 +266,33 @@ This is illustrated by figure~\ref{fig:cascading_example}
 \begin{figure}[hbtp]
     \centering
     \includegraphics{cascading_example}
-    \caption{\label{fig:cascading_example}}
+    \caption{\label{fig:cascading_example}
+    We recursively combine networks two by two until there is only one network left.
+    This example presents a HIFI diplexer unit; it contains two rooftop mirrors (pentagons) and a wire grid polarizer (dotted line) separated by free space (rectangles), its purpose is to align the polarization of the LO and the sky signals in order to couple both to the mixer (crossed circle).
+    }
 \end{figure}
 
-Not iterative; it's a one-pass solver that directly gives the steady state.
+Our method is recursive but not iterative: it passes over each network only once.
+Once the scattering matrix of the whole system is calculated, we have direct access to the steady state of that system.
+
+
 
 %-----------------------------------------------------------------------------
 
 \subsection{Simplifications}
 
-The frequency regime suggests that we could use quasi optics to properly account for the diffraction of the beams \cite{goldsmith1998quasioptical}.
-However, this complicates things a lot, and therefore we simplified the problem.
-$\Rightarrow$ Plane waves, single mode.
-
-Plane wave isn't bad anyway since we put all our networks at the waists of the beams, where the wave front is flat.
-
-The discrepencies due to these simplifications can be abstracted by parameters in our model.
+HIFI operates in the sub-millimeter regime where the wavelength is not much shorter than the dimensions of the networks.
+We could use quasi optics to properly account for the diffraction of the beams \cite{goldsmith1998quasioptical}.
+Instead, we have decided to focus on the first order effects and ignore the diffraction.
+Our model assumes plane, and therefore single-mode, waves.
+The plane-wave hypothesis is acceptable at a first order because the networks are placed at the waist of the beams where the wave front is plane.
+Furthermore, the discrepencies due to these simplifications can be abstracted by parameters in our model.
 For example, if a higher mode does not couple to a mixer, then its power is --for all practical purpose-- lost, and therefore a term of loss can model it.
+
+Our model can be extended to higher order modes.
+This can be done by adding components to the Jones vectors/matrices, or by adding an additional layer of matrices between the scattering matrix and the Jones matrix, which would take care of the transfer of energy between modes.
+
+
 
 %-----------------------------------------------------------------------------
 
