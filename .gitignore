@@ -30,6 +30,29 @@
 *.vrb
 *.xdy
 *.tdo
-*.*~
-*.pyc
+# Something created by biblatex I think.
+*-blx.bib
 
+
+# Backup files generated bu gedit.
+# --------------------------------
+*.*~
+
+# Eclipse.
+# --------
+*.pyc
+.project
+.pydevproject
+
+# The data files I generate when I profile my code for speed.
+# -----------------------------------------------------------
+*.prf
+
+# I never use xml myself.
+# -----------------------
+# Apparently my latex pipeline spits out some xml, go figure.
+*.xml
+
+# The pdfs are my end product, I don't push those since I push their code.
+# ------------------------------------------------------------------------
+*.pdf
