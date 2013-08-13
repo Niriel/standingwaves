@@ -151,9 +151,34 @@ class TestRT(unittest.TestCase):
         b = np.array([0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0])
         self.compare(G, a, b)
     def testAttitude3(self):
+        a = 1e-9  # Very tiny, perfect.
+        d = 10e-9  # Because a<<d required.
+        s = 1e10  # Extremely good conductor, perfect.
+        f = 1e12  # 1 THz, typical HIFI frequency.
+        tb = geo.TaitBryan(0, 1, 2)
+        attitude = (geo.TAU / 8, 0, 0)
+        k1 = np.array([0, 0, 1])
+        G = grid.Grid(a, d, s, f, tb, attitude, k1)
+        # I send x on 1.
+        # Reflection on 2, no transmission on 3.
+        a = np.array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        b = np.array([0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.compare(G, a, b)
+        # I send y on 1.
+        # No reflection on 2, transmission on 3.
+        a = np.array([0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        b = np.array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0])
+        self.compare(G, a, b)
+        # I send both x and y on 1.
+        # x should be reflected on 2 and y transmitted on 3.
+        f = np.sqrt(2) * .5
+        a = np.array([f, f, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        b = np.array([0, 0, 0, -f, 0, 0, 0, f, 0, 0, 0, 0])
+        self.compare(G, a, b)
+    def testAttitude4(self):
         # Diplexer beam splitter configuration. The angle of incidence is 45
         # degrees. In addition, the wires APPEAR at 45 degrees relatively to the
-        # polarization of the wave.
+        # polarization of the wave (angle=atan(sqrt(2)).
         a = 1e-9  # Very tiny, perfect.
         d = 10e-9  # Because a<<d required.
         s = 1e10  # Extremely good conductor, perfect.
