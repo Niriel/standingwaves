@@ -28,6 +28,8 @@ COLORS_ISCC_CBS = [
                    ]
 WIDTH_ARTICLE = 360
 WIDTH_BEAMER = 270
+WIDTH_IEEE_TEXT = 516
+WIDTH_IEEE_COLUMN = 252
 
 def latexT(s):
     return "$\\textrm{%s}$" % s
@@ -41,7 +43,7 @@ def pretty(linewidth=2):
     mpl.rc('axes', edgecolor=AXES_COLOR, labelcolor=LABEL_COLOR, grid=True)
     mpl.rc('xtick', color=AXES_COLOR)
     mpl.rc('ytick', color=AXES_COLOR)
-    mpl.rc('grid', color=AXES_COLOR)
+    mpl.rc('grid', color=AXES_COLOR)  # , linestyle=':', linewidth=.25)
 
 INCHES_PER_PT = 1 / 72.27
 
@@ -55,9 +57,9 @@ def startlatex(width_pt, aspect_ratio=scipy.constants.golden):
     fig_size = computeFigureSize(width_pt, aspect_ratio)
     params = {'backend': 'ps',
               'text.usetex': True,
-              'axes.labelsize': 10,
-              'text.fontsize': 10,
-              'legend.fontsize': 10,
+              'axes.labelsize': 8,
+              'text.fontsize': 8,
+              'legend.fontsize': 8,
               'xtick.labelsize': 8,
               'ytick.labelsize': 8,
               'text.latex.preamble' : ['\usepackage{siunitx}'],
