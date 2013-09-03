@@ -71,7 +71,7 @@
 % \documentclass[journal]{../sty/IEEEtran}
 
 
-
+\usepackage[utf8]{inputenc}
 
 
 % Some very useful LaTeX packages include:
@@ -103,7 +103,7 @@
 
 % *** CITATION PACKAGES ***
 %
-%\usepackage{cite}
+\usepackage{cite}
 % cite.sty was written by Donald Arseneau
 % V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
 % \cite{} output to follow that of IEEE. Loading the cite package will
@@ -138,12 +138,12 @@
   % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
   % will default to the driver specified in the system graphics.cfg if no
   % driver is specified.
-  % \usepackage[dvips]{graphicx}
+  \usepackage[dvips]{graphicx}
   % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
+  \graphicspath{{figures/}}
   % and their extensions so you won't have to specify these with
   % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.eps}
+  \DeclareGraphicsExtensions{.eps}
 \fi
 % graphicx was written by David Carlisle and Sebastian Rahtz. It is
 % required if you want graphics, photos, etc. graphicx.sty is already
@@ -193,7 +193,9 @@
     % It also brings me the \degree symbol, woo!
     % No decibel though, I need to make this one myself.
 
-
+\usepackage{color}
+    % For rendering text is eps_tex files produced by InkScape, even
+    % if the text is black.
 
 % *** SPECIALIZED LIST PACKAGES ***
 %
@@ -375,7 +377,7 @@
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
 % Do not put math or special symbols in the title.
-\title{Understanding Standing Waves by Network Modeling}
+\title{Understanding Standing Waves\\by Network Modeling}
 %
 %
 % author names and IEEE memberships
@@ -387,14 +389,16 @@
 % was not built to handle multiple paragraphs
 %
 
-\author{Michael~Shell,~\IEEEmembership{Member,~IEEE,}
-        John~Doe,~\IEEEmembership{Fellow,~OSA,}
-        and~Jane~Doe,~\IEEEmembership{Life~Fellow,~IEEE}% <-this % stops a space
-\thanks{M. Shell is with the Department
-of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta,
-GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this % stops a space
-\thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
-\thanks{Manuscript received April 19, 2005; revised December 27, 2012.}}
+\author{Bertrand~Delforge,~\IEEEmembership{Member,~IEEE,}
+        John~Pearson,~\IEEEmembership{Fellow,~OSA,}
+        Peter~Roelfsema,~\IEEEmembership{Fellow,~OSA,}
+        Marc~Verheijen,~\IEEEmembership{Fellow,~OSA,}
+        and~Willem~Jellema,~\IEEEmembership{Life~Fellow,~IEEE}% <-this % stops a space
+\thanks{B. Delforge, P. Roelfsema and W. Jellema are with SRON Netherlands Institute for Space Research, Groningen, Netherlands e-mail: b.delforge@sron.nl.}% <-this % stops a space
+\thanks{B. Delforge, P. Roelfsema and Marc Verheijen are with the Kapteyn Astronomical Institute, Rijksuniversiteit Groningen, Netherlands.}% <-this % stops a space
+\thanks{J. Pearson is with the Jet Propulsion Laboratory.}% <-this % stops a space
+\thanks{Manuscript received April 19, 2005; revised December 27, 2012.*****}}
+
 
 % note the % following the last \IEEEmembership and also \thanks - 
 % these prevent an unwanted space from occurring between the last author name
@@ -417,8 +421,8 @@ GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this %
 
 
 % The paper headers
-\markboth{Journal of \LaTeX\ Class Files,~Vol.~11, No.~4, December~2012}%
-{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
+\markboth{24th International Symposium on Space Terahertz Technology}%
+{Delforge \MakeLowercase{\textit{et al.}}: Understanding Standing Waes by Network Modeling}
 % The only time the second header will appear is for the odd numbered pages
 % after the title page when using the twoside option.
 % 
@@ -450,7 +454,7 @@ GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this %
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-As is the case for many coherent instruments like HIFI, the Heterodyne Instrument for the Far Infrared on the Herschel space observatory, standing waves affect the nominal coupling of the mixer to the local oscillator, calibration black bodies and even the sky.  This results in obvious distortions of the spectral baselines and strongly influences other parameters such as the sideband ratio.  Current uncertainties on HIFI's sideband ratio are about 2-10 percent, depending on the frequency, and are mainly a consequence of an insufficient understanding of the HIFI standing wave phenomenon.
+As is the case for many coherent instruments like HIFI, the Heterodyne Instrument for the Far Infrared on the Herschel space observatory, standing waves affect the nominal coupling of the mixer to the local oscillator, calibration black bodies and even the sky.  This results in obvious distortions of the spectral baselines and strongly influences other parameters such as the sideband ratio.  Current uncertainties on HIFI's sideband ratio are about 2--10 percent, depending on the frequency, and are mainly a consequence of an insufficient understanding of the HIFI standing wave phenomenon.
 
 We are developing a systematic and generic methodology for modeling standing waves in coherent optical and quasi-optical systems, using scattering matrices combined with Jones matrices.
 This approach allows for a consistent processing of both the phase and polarization information of multi-port networks, and serves as a foundation to combine an arbitrarily large number of networks and predict their interactions.
@@ -501,13 +505,13 @@ IEEEtran, journal, \LaTeX, paper, template.
 % and "HIS" in caps to complete the first word.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-\IEEEPARstart{T}{he} HIFI instrument on the Herschel Space Observatory \cite{AA_518_L1} is a heterodyne receiver that operates at frequencies between \SI{480}{\giga\hertz} and \SI{1910}{\giga\hertz},
-producing spectra with a resolution ranging from \SI{1}{\mega\hertz} to \SI{125}{\kilo\hertz} \cite{AA_518_L6}.
+\IEEEPARstart{T}{he} HIFI instrument on the Herschel Space Observatory~\cite{AA_518_L1} is a heterodyne receiver that operates at frequencies between \SI{480}{\giga\hertz} and \SI{1910}{\giga\hertz},
+producing spectra with a resolution ranging from \SI{1}{\mega\hertz} to \SI{125}{\kilo\hertz}~\cite{AA_518_L6}.
 This high frequency resolution enables the astronomers to study the chemistry of a wide range of phenomena, from planetary atmospheres to star forming regions.
 
-At such a high resolution, the thermal noise of the astronomical source, the calibration black bodies and the local oscillator (LO) qualify as ``narrow band Gaussian noise signals'' \cite{siegman1986lasers}.
+At such a high resolution, the thermal noise of the astronomical source, the calibration black bodies and the local oscillator (LO) qualify as ``narrow band Gaussian noise signals''~\cite{siegman1986lasers}.
 They have a coherence time~$\tau$ equal to the inverse of their bandwidth~$\tau=1/\Delta f$.
-A bandwith of~\SI{1}{\mega\hertz} results in a coherence time of \SI{1}{\micro\second} equivalent to a coherence length of \SI{300}{\meter}.
+A bandwith of~\SI{1}{\mega\hertz} results in a coherence time of~\SI{1}{\micro\second} equivalent to a coherence length of~\SI{300}{\meter}.
 This is a hundred times the longest distance inside HIFI.
 Therefore, in HIFI, the signals from the LO, the calibration sources and the sky are coherent.
 
@@ -528,10 +532,6 @@ When an observation is taken at one LO frequency only, the astronomer has little
 
 Our goal is to model the instrument to a level which allows to accurately predict the effect of the standing waves, and include a correction of their effect in the calibration scheme of HIFI.
 
-\hfill mds
- 
-\hfill December 27, 2012
-
 %=============================================================================
 
 \section{Modeling standing waves}
@@ -546,7 +546,25 @@ Instead, we propose a method to reduce the number of networks without losing any
 Our model computes the scattering matrix of the network equivalent to the whole system.
 Then, knowing how the system reacts to an input is merely a matter of multiplying its scattering matrix with a vector of inputs to get a vector of outputs.
 
+\begin{figure}
+    \centering
+    % CO 9-8 line of NCG7538-IRS1 observed on 21-02-2010.
+    \includegraphics{obsid_5000352C}
+    \caption{
+    The plot shows the same extragalactic emission feature observed by HIFI at 25 different LO frequencies in its band 4a.
+    The standard deviation scatter on the line peak is three times greater than the expected noise (inset plots).
+    }%
+    \label{fig:scatter_real_data}
+\end{figure}
+
 Scattering matrices \cite{siegman1986lasers} model the transfer of power or field from one side (port) of a network to another (figure~\ref{fig:ports}).
+
+\begin{figure}
+    \centering
+    \input{figures/scattering_matrix_notations.eps_tex}
+    \caption{A 4-ports network showing 4 inputs $a_i$ and four outputs $b_i$.  For example, this network could be a wire grid polarizer or a semi-transparent mirror, both acting as beam splitters.}%
+    \label{fig:ports}
+\end{figure}
 
 Equation~\ref{eq:scattering_matrix} presents the scattering matrix $S$ that models the relation between a vector of inputs $a$ and a vector of outputs $b$ for a $n$-ports network.
 The diagonal contains the reflections terms and the rest contains the transmissions.
@@ -580,7 +598,7 @@ For this, we adapt the traditional scattering matrix formalism to our need:
 the elements~$S_{i, j}$ of the scattering matrix~$S$ are not scalars, but Jones matrices.
 
 Jones matrices model the transfer of amplitude and phase from one polarization to another \cite{hecht2002optics}.
-In equation~\eqref{eq:jones_matrix_short}, the polarized input field $e_i$ is related to the polarized output field~$e_o$ by the Jones matrix $J$.
+In~\eqref{eq:jones_matrix_short}, the polarized input field $e_i$ is related to the polarized output field~$e_o$ by the Jones matrix $J$.
 $e_i$ and $e_o$ are called ``Jones vectors''.
 \begin{equation}
     % Small form.
@@ -622,7 +640,7 @@ Therefore, this cannot model propagation in a birefringent material.
 One way to accomodate this is to relax the constraint of orthogonality of the reference frame, allowing for the horizontal and vertical directions to have a component along the direction of propagation.
 If we do this, then the full description of the field gets even more complicated as we need to carry along, not just the orientation of its reference frame, but the full description of that non-cartesian reference frame.
 
-Instead, we can express all the fields in a common global cartesian reference frame, essentially extending Jones calculus from two to three dimensions, as illustrated in equation~\eqref{eq:jones_matrix_3d}.
+Instead, we can express all the fields in a common global cartesian reference frame, essentially extending Jones calculus from two to three dimensions, as illustrated in~\eqref{eq:jones_matrix_3d}.
 \begin{equation}
     % Jones matrix in 3D.
     \begin{pmatrix}
@@ -644,12 +662,28 @@ Instead, we can express all the fields in a common global cartesian reference fr
     \label{eq:jones_matrix_3d}
 \end{equation}
 
+\begin{figure}
+    \centering
+    \input{figures/cascading.eps_tex}
+    \caption{\label{fig:cascading}Two networks P~and~Q connected by one port are equivalent to a network S.}
+\end{figure}
 As shown on figure~\ref{fig:cascading}, two networks~P and~Q connected by one port can be seen as a single equivalent network~S.
 Our model can compute the scattering matrix of~S from the scattering matrices of~P and~Q for any P~and~Q connected by any port.
 The scattering matrix of S takes into account the infinite reflections on the ports by which P~and~Q are connected.
 
 Once we have this method to compute~S from~P and~Q, then we apply it recursively to get the scattering matrix of the whole system.
 This is illustrated by figure~\ref{fig:cascading_example}, where we use a HIFI diplexer unit as an example and reduce it to a single network.
+
+\begin{figure*} % The star version creates a float that spans two columns.
+    \centering
+    \input{figures/cascading_example.eps_tex}
+    \caption{
+    A system comprising several networks connected by one port can be reduced to a single equivalent network.
+    This is done by recursively combining networks two by two until there is only one network left.
+    This example presents a HIFI diplexer unit; its Martin-Puplett interferometer contains two rooftop mirrors (pentagons) and a wire grid polarizer (dotted line) separated by free space (rectangles); its purpose is to align the polarization of the LO and the sky signals in order to couple both to the mixer (crossed circle).
+    }%
+    \label{fig:cascading_example}
+\end{figure*}
 
 Our method is recursive but not iterative: it passes over each network only once.
 Once the scattering matrix of the whole system is calculated, we have direct access to the steady state of that system.
@@ -689,15 +723,39 @@ In order to reproduce the behavior illustrated in figure~\ref{fig:scatter_real_d
 Each of these integrations also sees noise from the local oscillator, approximated with a~\SI{120}{\kelvin} black body.
 The result is given in figure~\ref{fig:calibrated_std}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{bb-on_corrected-2}
+    \caption{Simulated line with standard HIFI calibration for 25 LO frequencies.
+    Standing waves introduce a weak periodic modulation of the baseline and a strong scatter of the peak intensity of the line.}%
+    \label{fig:calibrated_std}
+\end{figure}
+
 Figure~\ref{fig:calibrated_std} shows that our model properly reproduces the scatter seen on real data (figure~\ref{fig:scatter_real_data}).
 It also reveals the effect of standing waves on the baseline, but this effect is drowned in the noise.
 
-
+\begin{figure}
+    \includegraphics[width=\columnwidth]{bb-on_corrected-3}
+    \caption{Calibration scheme that uses the sideband ratio provided by the model.}
+    \label{fig:calibrated_sbr}
+%    \caption{\label{fig:calibrated}Simulated spectra.
+%    Each LO tuning brings its own set of standing waves that modulate the couplings to the different sources.
+%    Without knowledge of these couplings, the calibration is not perfect.
+%    The model gives us some information that allows us to properly calibrate out all the standing waves.}
+\end{figure}
 
 Our model gives us information that is absent from real data: the sideband ratio.
-Standing waves, being frequency-dependent, modulate the lower and upper sidebands differently, resulting in an imbalanced ratio between the two sidebands during the folding by the mixer, see figure~\ref{fig:sbr}
+Standing waves, being frequency-dependent, modulate the lower and upper sidebands differently, resulting in an imbalanced coupling ratio between the two sidebands during the folding by the mixer, see figure~\ref{fig:sbr}.
 By using the sideband ratio predicted by the model, we are able to properly calibrate our simulated spectrum, as illustrated in figure~\ref{fig:calibrated_sbr}.
-
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{sbr}
+    \caption{Simulated sideband ratio for a diplexer band of HIFI at 25 different LO~frequencies.
+    The sideband ratio is defined in terms of the LSB and USB gains as $G_\text{USB}/(G_\text{LSB} + G_\text{USB})$.  Its ideal value is 0.5; above 0.5, the channel is USB-dominated, and under 0.5 it is LSB-dominated.
+    The sideband ratio varies quickly over the intermediate frequency (IF), as several standing wave patterns beat and modulate each other.
+    The \SI{620}{\mega\hertz}-wide periodic modulation comes from the standing wave between the mixers and the closest roof-top mirrors of the diplexer assemblies.  The wide envelop results from the fact that the diplexer tuning is optimal at the center of the IF and degrades on the edges.  The short-period features correspond to the cavities formed by the mixers and the local oscilator (\SI{100}{\mega\hertz}), cold black body (\SI{60}{\mega\hertz}) or hot black body (\SI{75}{\mega\hertz}) (revealed by taking Fourier transforms of these spectra).}%
+    \label{fig:sbr}
+\end{figure}
 
 
 
@@ -857,6 +915,7 @@ The authors would like to thank...
 % http://www.michaelshell.org/tex/ieeetran/bibtex/
 \bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
+\nocite{martin1982polarizing}
 \bibliography{IEEEabrv,bibliography}
 %
 % <OR> manually copy in the resultant .bbl file
@@ -881,7 +940,7 @@ The authors would like to thank...
 %\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
 % or if you just want to reserve a space for a photo:
 
-\begin{IEEEbiography}{Michael Shell}
+\begin{IEEEbiography}{Bertrand Delforge}
 Biography text here.
 \end{IEEEbiography}
 
