@@ -75,9 +75,9 @@
        \and
        John Pearson$^3$
        \and
-       Marc Verheijen$^2$
+       Peter Roelfsema$^{1, 2}$
        \and
-       Peter Roelfsema$^1$
+       Marc Verheijen$^2$
        \and
        Willem Jellema$^1$
        \and
@@ -92,11 +92,15 @@
 %\tableofcontents
 
 \begin{abstract}
-As is the case for many instruments like HIFI, the Heterodyne Instrument for the Far Infrared on the Herschel space observatory, standing waves affect the nominal coupling of the mixer to the local oscillator, calibration black bodies and even the sky.  This results in obvious distortions of the spectral baselines and strongly influences less obvious measures such as the sideband ratio.  Current uncertainties on HIFI's sideband ratio are about 2-10 percent, depending on the frequency, and are mainly a consequence of an insufficient understanding of the HIFI standing wave phenomenon.
+As is the case for many coherent instruments like HIFI, the Heterodyne Instrument for the Far Infrared on the Herschel space observatory, standing waves affect the nominal coupling of the mixer to the local oscillator, calibration black bodies and even the sky.  This results in obvious distortions of the spectral baselines and strongly influences other parameters such as the sideband ratio.  Current uncertainties on HIFI's sideband ratio are about 2-10 percent, depending on the frequency, and are mainly a consequence of an insufficient understanding of the HIFI standing wave phenomenon.
 
-We are developing a systematic and generic methodology for modeling standing waves in coherent optical and quasi-optical systems, using scattering matrices of Jones matrices.  This approach allows for a correct processing of the phase and polarization information of multi-port networks, and serves as a foundation for a framework that combines an arbitrarily large number of networks and predicts their interactions.
+We are developing a systematic and generic methodology for modeling standing waves in coherent optical and quasi-optical systems, using scattering matrices combined with Jones matrices.
+This approach allows for a consistent processing of both the phase and polarization information of multi-port networks, and serves as a foundation to combine an arbitrarily large number of networks and predict their interactions.
 
-Our numerical simulations successfully reproduce, and qualitatively explain, many artifacts observed in actual HIFI data while we are currently improving our technique to produce quantitative predictions.  With HIFI as a hands-on show case for our successful standing wave modeling technique, we are confident that our generic approach for understanding and predicting standing waves can play a significant role in improving the design of future instruments.
+Our numerical simulations successfully reproduce, and qualitatively explain, many artifacts observed in actual HIFI data.
+We are currently improving our technique to produce quantitative predictions.
+With HIFI as a hands-on show case for our successful standing wave modeling technique,
+we are confident that this generic approach for understanding and predicting standing waves can play a significant role in improving the design of future instruments.
 \end{abstract}
 
 
@@ -106,42 +110,43 @@ Our numerical simulations successfully reproduce, and qualitatively explain, man
 %=============================================================================
 
 \section{Introduction}
-The HIFI instrument on the Herschel Space Observatory \cite{AA_518_L1} operates at frequencies between \SI{480}{\giga\hertz} and \SI{1910}{\giga\hertz}
-and produces spectra with a resolution ranging from \SI{1}{\mega\hertz} to \SI{125}{\kilo\hertz} \cite{AA_518_L6}.
-This high frequency resolution enables the study the chemistry of a wide range of phenomena, from planetary atmosphere to star forming regions.
+The HIFI instrument on the Herschel Space Observatory \cite{AA_518_L1} is a heterodyne receiver that operates at frequencies between \SI{480}{\giga\hertz} and \SI{1910}{\giga\hertz},
+producing spectra with a resolution ranging from \SI{1}{\mega\hertz} to \SI{125}{\kilo\hertz} \cite{AA_518_L6}.
+This high frequency resolution enables the astronomers to study the chemistry of a wide range of phenomena, from planetary atmospheres to star forming regions.
 
-At such a high resolution, the thermal noise of the astronomical source and that of the calibration black bodies and local oscillator (LO) qualify as ``narrow band Gaussian noise signal'' \cite{siegman1986lasers} and have a coherence time $\tau$ equal to the inverse of their bandwidth~$\tau=1/\Delta f$.
-A bandwith of~\SI{1}{\mega\hertz} results in a coherence time of \SI{1}{\micro\second} or, when multiplied by the speed of light, a coherence length of \SI{300}{\meter} which is a hundred times the longest distance inside HIFI.
-Therefore, in HIFI, both the LO signal and the signals from the sources are coherent.
+At such a high resolution, the thermal noise of the astronomical source, the calibration black bodies and the local oscillator (LO) qualify as ``narrow band Gaussian noise signals'' \cite{siegman1986lasers}.
+They have a coherence time~$\tau$ equal to the inverse of their bandwidth~$\tau=1/\Delta f$.
+A bandwith of~\SI{1}{\mega\hertz} results in a coherence time of \SI{1}{\micro\second} equivalent to a coherence length of \SI{300}{\meter}.
+This is a hundred times the longest distance inside HIFI.
+Therefore, in HIFI, the signals from the LO, the calibration sources and the sky are coherent.
 
-Coherence allows for interferences.
-Interferences inside electromagnetic cavities give birth to standing waves which trap energy inside these cavity.
-The mixer cannot detect the energy that is trapped; 
-therefore the coupling of the incoming signals to the mixer is modulated by these standing waves.
+In a coherent system, interferences can appear.
+Interference inside electromagnetic cavities give rise to standing waves which trap energy inside these cavity.
+The energy that is trapped inside a cavity is not available for frequency conversion by the mixer.
+In other words, the mixer coupling of the incoming signals is modulated by these standing waves.
 
 \begin{figure}[hbt]
     \centering
     % CO 9-8 line of NCG7538-IRS1 observed on 21-02-2010.
     \includegraphics{obsid_5000352C}
     \caption{\label{fig:scatter_real_data}
-    The same extragalactic emission feature observed by HIFI at 25 different LO frequencies in its band 4a.
-    If the calibration were perfect, all these line profiles would overlap within the noise.
-    However, after subtracting the baseline, we observe a scatter on the line peak intensity that has a standard deviation three times greater than the expected noise (which is represented by the error bars).
-    This scatter is due to standing waves that are ignored by the calibration: each LO frequency requires a specific tuning of the diplexer, which changes the optical path and therefore the periods of the standing waves, modulating the coupling of the mixer to the sky, LO and calibration loads.
-    Our objective is to model the complex relationship between parameters such as the LO frequency and the coupling modulation due to standing waves.
+    The left plot shows the same extragalactic emission feature observed by HIFI at 25 different LO frequencies in its band 4a.
+    The scatter on the line peak is greater than the expected noise (inset plots).
+    The peak fluxes and the corresponding noise levels are reported in the right plot: the error bars representing the noise.
+    The scatter on the peak flux is three times greater than the noise.
     }
 \end{figure}
 
-Figure~\ref{fig:scatter_real_data} illustrates this phenomenon.
-HIFI observed a single emission feature from a galactic source.
-It did so 25 times for 25 local oscillator frequencies.
-This is an engineering observation designed to show subtle standing waves effects.
-Even though each of these 25 spectra looks individually clean from standing wave modulations (no apparent periodic distortion of the spectrum), their comparison shows that standing waves cause an uncertainty on the peak amplitude of the line.
-In that specific case, the uncertainty due to standing waves is three times greater than that due to the noise.
-In other terms, almost half of the observing time is invested in reducing the noise below the standing-wave uncertainty, which cannot be reduced by longer integration times.
+Figure~\ref{fig:scatter_real_data} illustrates this phenomenon for a very subtle case
+(the calibration paper~\cite{AA_537_A17} illustrates more obvious ones).
+HIFI observed a single emission feature from a galactic source for 25 local oscillator frequencies.
+If there were no standing waves, or if the standing waves were perfectly calibrated out, then all these line profiles would overlap within the noise.
+Instead, their peak intensity is scattered by more than the expected noise.
+This scatter is due to standing waves that are ignored by the calibration: each LO frequency requires a specific tuning of the diplexer, which changes the optical paths, which changes the periods of the standing waves, which changes the mixer coupling to the sky, LO and calibration loads.
+This case is a subtle one: each of these 25 spectra looks individually clean from standing wave modulations (no apparent periodic distortion of the spectrum), only their comparison reveals the effect of standing waves.
+Standing waves introduce a systematic uncertainty that cannot be reduced by integrating longer.
 When an observation is taken at one LO frequency only, the astronomer has little to no way of knowing how much standing waves distort the line.
 
-This motivates the present work.
 Our goal is to model the instrument to a level which allows to accurately predict the effect of the standing waves, and include a correction of their effect in the calibration scheme of HIFI.
 
 
@@ -157,16 +162,16 @@ Our goal is to model the instrument to a level which allows to accurately predic
 %-----------------------------------------------------------------------------
 
 \subsection{Principle}
-Our method is inspired from laser and circuit theory: we deal with discrete inputs and outputs rather than, for example, a continuous description of the fields in space.
-A system like the Focal Plane Unit of HIFI comprises a few dozens of optical elements, also called ``networks'': wire grid polarizers, roof-top mirrors, horns, attenuators, free space, all having one or more input and output.
+Our method is inspired from laser and circuit theory: we deal with discrete inputs and outputs rather than, for example, a spatial description of the fields.
+A system like the Focal Plane Unit of HIFI comprises a few dozens of optical elements, refered in the litterature as ``networks'' \cite{siegman1986lasers}: wire grid polarizers, roof-top mirrors, horns, attenuators, free space, all having one or more input and output.
 All these networks interact together two by two since there exists at least one optical path between each pair or networks.
 The number of interactions in the system increases with the square of the number of networks.
 One way to solve a system's reaction to a set of input would be to propagate the inputs from network to network, back and forth, until the fields appear to converge to a steady state.
 Instead, we propose a method to reduce the number of networks without losing any information, in a way that can be compared to calculating the equivalent impedance of an electric circuit.
 Our model computes the scattering matrix of the network equivalent to the whole system.
-Then, knowing how the system reacts to an input is merely a matter of multiplying its scattering matrix with a vector of inputs to get a vector of outputs\footnote{The LO output and the sky/blackbody output must be calculated separately and added in the end even though both use the same scattering matrix: each is coherent, but they are not phase-locked to each other and therefore do not interfere together}.
+Then, knowing how the system reacts to an input is merely a matter of multiplying its scattering matrix with a vector of inputs to get a vector of outputs.
 
-Scattering matrices \cite{siegman1986lasers} model the transfer of energy or field from one side (port) of a network to another (figure~\ref{fig:ports}).
+Scattering matrices \cite{siegman1986lasers} model the transfer of power or field from one side (port) of a network to another (figure~\ref{fig:ports}).
 \begin{figure}[hbtp]
     \centering
     \input{figures/scattering_matrix_notations.eps_tex}
@@ -200,70 +205,91 @@ The diagonal contains the reflections terms and the rest contains the transmissi
 \end{align}
 The standard way to include the polarization into a scattering matrix is to double (local reference frame: horizontal and vertical directions) or triple (global reference frame: $x$, $y$ and $z$ directions) its number of ports.
 For our model, we chose a different approach that allows us consider a polarized field as a single entity instead of two or three, and keep the number of ports to a minimum.
-For this, we decided that the elements of the scattering matrix be Jones matrices and not scalars.
+For this, we adapt the traditional scattering matrix formalism to our need:
+the elements~$S_{i, j}$ of the scattering matrix~$S$ are not scalars, but Jones matrices.
 
 Jones matrices model the transfer of amplitude and phase from one polarization to another \cite{hecht2002optics}.
-Putting 3D Jones matrices inside scattering matrices is a natural way of doing both the port-to-port and the polarization energy transfer at the same time.
 In equation~\eqref{eq:jones_matrix_short}, the polarized input field $e_i$ is related to the polarized output field~$e_o$ by the Jones matrix $J$.
-As shown in equations~\eqref{eq:jones_matrix}, Jones matrices traditionally work in 2D~\eqref{eq:jones_matrix_2d} but it is trivial to extend them to work in 3D~\eqref{eq:jones_matrix_3d}.
-Each $S_{i, j}$ is a 3D Jones matrix; each $a_j$ and each $b_i$ are 3D Jones vectors.
-\begin{subequations}    
-    \begin{align}
-        % Small form.
-        e_o &= J e_i
-        \label{eq:jones_matrix_short}
-        \\
-        % Jones matrix in 2D.
-        \begin{pmatrix}
-            e_{o, h}\\
-            e_{o, v}
-        \end{pmatrix}
-        &=
-        \begin{pmatrix}
-            J_{h, h}   &   J_{h, v} \\
-            J_{v, h}   &   J_{v, v}
-        \end{pmatrix}
-        \begin{pmatrix}
-            e_{i, h}\\
-            e_{i, v}
-        \end{pmatrix}
-        \label{eq:jones_matrix_2d}
-        \\
-        % Jones matrix in 3D.
-        \begin{pmatrix}
-            e_{o, x}\\
-            e_{o, y}\\
-            e_{o, z}
-        \end{pmatrix}
-        &=
-        \begin{pmatrix}
-            J_{x, x}   &   J_{x, y}   &   J_{x, z} \\
-            J_{y, x}   &   J_{y, y}   &   J_{y, z} \\
-            J_{z, x}   &   J_{z, y}   &   J_{z, z}
-        \end{pmatrix}
-        \begin{pmatrix}
-            e_{i, x}\\
-            e_{i, y}\\
-            e_{i, z}
-        \end{pmatrix}
-        \label{eq:jones_matrix_3d}
-    \end{align}
-    \label{eq:jones_matrix}
-\end{subequations}
-Extending Jones matrices to 3D makes it easier to work in a common reference frame in which the networks can have arbitrary orientations.
-It also relieves the constraint of TEM modes and enables hybrid modes, allowing to model birefringent networks in which the electric field may have a component along the direction of propagation.
-Jones matrices cannot handle non-polarized light but this is not a problem for us as wire grid polarizers ensure that everything in our system is linearly or elliptically polarized.
+$e_i$ and $e_o$ are called ``Jones vectors''.
+\begin{equation}
+    % Small form.
+    e_o = J e_i
+    \label{eq:jones_matrix_short}
+\end{equation}
+The components of the Jones vectors are phasors: complex numbers that encode the amplitude and phase of the field along different axes.
+The components of the Jones matrices are also complex numbers, these encode changes in amplitude and phase.
 
-As shown of figure~\ref{fig:between_networks}, two networks P and Q connected by one port (port $\alpha$ for P and port $\beta$ for Q) can be seen as a single equivalent  network S.
-The scattering matrix of that equivalent network takes into account the infinite reflections between the two original networks.
+Equation~\eqref{eq:jones_matrix_2d} presents the traditional form of Jones vectors and matrices.
+\begin{equation}
+    % Jones matrix in 2D.
+    \begin{pmatrix}
+        e_{o, h}\\
+        e_{o, v}
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        J_{h, h}   &   J_{h, v} \\
+        J_{v, h}   &   J_{v, v}
+    \end{pmatrix}
+    \begin{pmatrix}
+        e_{i, h}\\
+        e_{i, v}
+    \end{pmatrix}
+    \label{eq:jones_matrix_2d}
+\end{equation}
+The field is seen as the superposition of a horizontal and a vertical component, both linearly polarized.
+The phase difference between these components determines the handedness and the ellipticity of the polarization of the field.
+Although very useful for many applications, these Jones matrices and vectors have limitations.
 
-If we have a method to compute an equivalent network, then we can apply it recursively to an entire system to get the network equivalent to the whole system.
-This is illustrated by figure~\ref{fig:cascading_example}
+First, the field is always expressed in a local reference frame: the horizontal and vertical directions are valid for one beam only and may change after any reflection or refraction.
+Therefore, to completely describe a field, the Jones vector is not enough since one needs to keep track of the orientation of its reference frame with three angles, a quaternion or a rotation matrix.
+
+Second, the horizontal and vertical directions are normal to each other and to the direction of propagation.
+This limits us to modeling either TE or TM waves\footnote{transverse electric, transverse magnetic} depending on whether the Jones vector represents the electric or the magnetic field.
+However, this cannot model hybrid waves, in which both the electric and the magnetic field can have a component along the direction of propagation.
+Therefore, this cannot model propagation in a birefringent material.
+One way to accomodate this is to relax the constraint of orthogonality of the reference frame, allowing for the horizontal and vertical directions to have a component along the direction of propagation.
+If we do this, then the full description of the field gets even more complicated as we need to carry along, not just the orientation of its reference frame, but the full description of that non-cartesian reference frame.
+
+Instead, we can express all the fields in a common global cartesian reference frame, essentially extending Jones calculus from two to three dimensions, as illustrated in equation~\eqref{eq:jones_matrix_3d}.
+\begin{equation}
+    % Jones matrix in 3D.
+    \begin{pmatrix}
+        e_{o, x}\\
+        e_{o, y}\\
+        e_{o, z}
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        J_{x, x}   &   J_{x, y}   &   J_{x, z} \\
+        J_{y, x}   &   J_{y, y}   &   J_{y, z} \\
+        J_{z, x}   &   J_{z, y}   &   J_{z, z}
+    \end{pmatrix}
+    \begin{pmatrix}
+        e_{i, x}\\
+        e_{i, y}\\
+        e_{i, z}
+    \end{pmatrix}
+    \label{eq:jones_matrix_3d}
+\end{equation}
+
 \begin{figure}[hbtp]
     \centering
-    \includegraphics{cascading_example}
+    \input{figures/cascading.eps_tex}
+    \caption{\label{fig:cascading}Two networks P~and~Q connected by one port are equivalent to a network S.}
+\end{figure}
+As shown on figure~\ref{fig:cascading}, two networks~P and~Q connected by one port can be seen as a single equivalent network~S.
+Our model can compute the scattering matrix of~S from the scattering matrices of~P and~Q for any P~and~Q connected by any port.
+The scattering matrix of S takes into account the infinite reflections on the ports by which P~and~Q are connected.
+
+Once we have this method to compute~S from~P and~Q, then we apply it recursively to get the scattering matrix of the whole system.
+This is illustrated by figure~\ref{fig:cascading_example}, where we use a HIFI diplexer unit as an example and reduce it to a single network.
+\begin{figure}[hbtp]
+    \centering
+    \input{figures/cascading_example.eps_tex}
     \caption{\label{fig:cascading_example}
-    We recursively combine networks two by two until there is only one network left.
+    A system comprising several networks connected by one port can be reduced to a single equivalent network.
+    This is done by recursively combining networks two by two until there is only one network left.
     This example presents a HIFI diplexer unit; it contains two rooftop mirrors (pentagons) and a wire grid polarizer (dotted line) separated by free space (rectangles), its purpose is to align the polarization of the LO and the sky signals in order to couple both to the mixer (crossed circle).
     }
 \end{figure}
@@ -271,214 +297,27 @@ This is illustrated by figure~\ref{fig:cascading_example}
 Our method is recursive but not iterative: it passes over each network only once.
 Once the scattering matrix of the whole system is calculated, we have direct access to the steady state of that system.
 
-
+The detail of the mathematics and algorithms used in this model falls out of the scope of this paper and shall be presented in a later publication~\cite{delforge_2014_phdthesis}.
 
 %-----------------------------------------------------------------------------
 
 \subsection{Simplifications}
 
-HIFI operates in the sub-millimeter regime where the wavelength is not much shorter than the dimensions of the networks.
+HIFI operates in the sub-millimeter regime where the wavelength is of the same order as the dimensions of the networks.
 We could use quasi optics to properly account for the diffraction of the beams \cite{goldsmith1998quasioptical}.
-Instead, we have decided to focus on the first order effects and ignore the diffraction.
-Our model assumes plane, and therefore single-mode, waves.
+However, our model assumes plane, and therefore single-mode, waves.
 The plane-wave hypothesis is acceptable at a first order because the networks are placed at the waist of the beams where the wave front is plane.
 Furthermore, the discrepancies due to these simplifications can be abstracted by parameters in our model.
 For example, if a higher mode does not couple to a mixer, then its power is --for all practical purpose-- lost, and therefore a term of loss can model it.
 
 Our model can be extended to higher order modes.
-This can be done by adding components to the Jones vectors/matrices, or by adding an additional layer of matrices between the scattering matrix and the Jones matrix, which would take care of the transfer of energy between modes.
+This can be done by adding components to the Jones vectors/matrices, or by adding an additional layer of matrices between the scattering matrix and the Jones matrix, which would take care of the transfer of power between modes.
 
-
-
-%-----------------------------------------------------------------------------
-
-\subsection{Elements of modeling}
-\paragraph{Chaining networks.}
-\begin{figure}[hbtp]
-    \centering
-    \input{figures/combining_networks.eps_tex}
-    \caption{\label{fig:between_networks}
-        Two networks P and Q connected by one port have an equivalent network S.
-        Notations used to describe two networks P and Q connected by one port:
-        P~has $n_P$~ports and Q has $n_Q$~ports, here $n_P=4$ and $n_Q=3$;
-        the equivalent network S has $n_S = n_P + n_Q - 2$ ports, here $n_S=5$.
-        We use a common indexing scheme for the scattering matrices of P, Q and S:
-        ports 1 to $n_P$ are ports of P (here 1 to 4),
-        ports $n_P+1$ to $n_P+n_Q$ are ports of Q (here 5 to 7),
-        ports 1 to $n_P+n_Q$ except $\alpha$ and $\beta$ are ports of S (here 1 to 7 except 3 and 5).
-        The port~$\alpha$ of~P is connected to the port~$\beta$ of~Q, here $\alpha=3$ and $\beta=5$.
-        Because of the connection, the output of port $\alpha$, $b_\alpha$, is equal to the input of port $\beta$ noted $a_\beta$; we name it $c$.  Likewise, we name $d$ the output of $\beta$ which is equal to the input of $\alpha$.
-        The scattering matrices of P, Q and S are noted $P$, $Q$ and $S$.
-        }
-\end{figure}
-Figure~\ref{fig:between_networks} introduces notations useful for describing the electric field between two connected networks.
-In order to simplify the reasoning and shorten the equations, we use an indexing system that is common to $P$, $Q$ and $S$.  This means that the way we index our matrices is unconventional: the matrix $Q$ is indexed by port numbers ranging from $n_P+1$ to $n_P + n_Q$, therefore $Q_{1, j}$ does not exist since the port 1 does not belong to Q.  In order to write a software implementation of these equations, one level of indirection is required to transform the port numbers into conventional matrix indices.
-Finally, the elements of the matrices $P$, $Q$ and $S$ are themselves matrices: they are Jones matrices.
-
-Equation~\eqref{eq:between_networks} describes the electric field between P and Q once the steady state is established.
-\begin{equation}
-    \left\lbrace
-    \begin{aligned}
-        c
-        &=
-        P_{\alpha, \alpha} d + \sum_{j = 1 \atop j \neq \alpha}^{n_P}
-        \left(
-            P_{\alpha, j}a_j
-        \right)
-        \\
-        d
-        &=
-        Q_{\beta, \beta} c + \sum_{j = n_P+1 \atop j \neq \beta}^{n_P + n_Q}
-        \left(
-            Q_{\beta, j}a_j
-        \right)
-    \end{aligned}
-    \right.
-    \label{eq:between_networks}
-\end{equation}
-In equation~\eqref{eq:between_networks}, $c$~and~$d$ depend on each other.
-Equation~\eqref{eq:d} presents the solution of this system for~$d$.
-\begin{equation}
-    d =
-    (I - Q_{\beta, \beta} P_{\alpha, \alpha})^{-1}
-    \left[
-        Q_{\beta, \beta}
-        \sum_{j = 1 \atop j \neq \alpha}^{n_P}
-        \left(
-            P_{\alpha, j}
-            a_j
-        \right)
-        +
-        \sum_{j = n_P \atop j \neq \beta}^{n_P + n_Q}
-        \left(
-            Q_{\beta, j}
-            a_j
-        \right)
-    \right]
-    \label{eq:d}
-\end{equation}
-In equation~\eqref{eq:d}, $I$ represents the identity matrix that matches the size of $Q_{\beta, \beta}P_{\alpha, \alpha}$ (that is, 3--by--3 as these are 3D Jones matrices).
-We are certain that $I - Q_{\beta, \beta} P_{\alpha, \alpha}$ has an inverse because the system has losses:
-if it did not have an inverse then the system could store an infinite amount of energy and therefore never reach a steady state, this system would not be physical.
-Since~$d$ is an input for~P, we can express the outputs of P in terms of~$d$.
-\begin{gather}
-\begin{aligned}
-    \forall i, i
-    &\in
-    \left\llbracket 1 ; n_P \right\rrbracket, i \neq \alpha
-    &
-    b_i
-    &=
-    P_{i, \alpha} d
-    + \sum_{j = 1 \atop j \neq \alpha}^{n_P}
-    \left(
-        P_{i, j}a_j
-    \right)
-\end{aligned}
-\notag
-\\
-\begin{aligned}
-    b_i
-    &=
-        \sum_{j = 1 \atop j \neq \alpha}^{n_P}
-        \left[
-            \left(
-                P_{i, \alpha}
-                (I - Q_{\beta, \beta} P_{\alpha, \alpha})^{-1}
-                Q_{\beta, \beta}
-                P_{\alpha, j}
-                +
-                P_{i, j}
-            \right)
-            a_j
-        \right]
-    \\
-    &+
-        \sum_{j = n_P+1 \atop j \neq \beta}^{n_P + n_Q}
-        \left[
-            \left(
-                P_{i, \alpha}
-                (I - Q_{\beta, \beta} P_{\alpha, \alpha})^{-1}
-                Q_{\beta, j}
-            \right)
-            a_j
-        \right]
-\end{aligned}
-\label{eq:P_side_of_S}
-\end{gather}
-Equation~\ref{eq:P_side_of_S} gives us what we are looking for: the outputs~$b_i$ as functions of the inputs~$a_j$.
-It is however limited to what we can call the ``P-side'' of the equivalent network S: the output ports~$b_1$ to~$b_{n_P}$.
-We repeat this reasoning with~$c$ and~$Q$ to get~$b_i$ for the ``Q-side'' of the equivalent network S: outputs~$b_{n_P}$ to~$b_{n_P+n_Q}$.
-
-We have expressed the elements of~$b$ as a linear combinations of the elements of~$a$,
-therefore we have all the coefficients~$S_{i, j}$ of the matrix of our equivalent network.
-This matrix is divided into four sections depending on the port numbers:
-$i \in \llbracket 1 ; n_Q \rrbracket$ and
-$i \in \llbracket n_P + 1 ; n_P + n_Q \rrbracket$,
-and the same for~$j$ as shown in table \ref{table:equivalent_network}.
-\begin{table}[htbp]
-    \centering
-    \begin{tabular}{r|c c}
-        \toprule
-            $S_{i, j}$
-            &
-            $j \in \llbracket 1 ; n_P \rrbracket$
-            &
-            $j \in \llbracket n_P + 1 ; n_P + n_Q \rrbracket$ \\
-        \midrule
-            $i \in \llbracket 1 ; n_P \rrbracket$
-            &
-            $
-                P_{i, \alpha}
-                R_P
-                Q_{\beta, \beta}
-                P_{\alpha, j}
-                +
-                P_{i, j}
-            $
-            &
-            $
-                P_{i, \alpha}
-                R_P
-                Q_{\beta, j}
-            $
-            \\
-            $i \in \llbracket n_P + 1 ; n_P + n_Q \rrbracket$
-            &
-            $
-                Q_{i, \beta}
-                R_Q
-                P_{\alpha, j}
-            $
-            &
-            $
-                Q_{i, \beta}
-                R_Q
-                P_{\alpha, \alpha}
-                Q_{\beta, j}
-                +
-                Q_{i, j}
-            $
-            \\
-        \bottomrule
-    \end{tabular}
-    \caption{\label{table:equivalent_network}S-parameters coefficients of the network S equivalent to P and Q connected by the ports~$\alpha$ (for P) and~$\beta$ (for Q) using a common indexing.}
-    \caption*{
-        Neither~$i$ nor~$j$ can take the values~$\alpha$ or~$\beta$: these two ports are hidden inside the equivalent network and are not accessible to the outside.
-
-        $R_P = (I - Q_{\beta, \beta} P_{\alpha, \alpha})^{-1}$ and $R_Q = (I - P_{\alpha, \alpha} Q_{\beta, \beta})^{-1}$.
-        These matrices correspond to the infinite reflections between the two networks P and Q, either seen from P or seen from Q.
-    }
-\end{table}
-
-Table~\ref{table:equivalent_network} tells us how to compute the scattering matrix of a network S equivalent to two networks P and Q.
-We can apply this method in order to recursively reduce the entire system, made of many networks arranged in a tree (in the graph theory sense of the word ``tree''), to one single network (Figure~\ref{fig:cascading_example}).
-Calculating the response of a complex system to an input is then just a matter of multiplying its scattering matrix with an input vector.
 
 \paragraph{Typical networks.}
 Most typical networks can be easily modeled at the first order;
 we generate their scattering matrices with parameters such as refractive index, thickness, orientation in space, attenuation, etc..
-Wire grid polarizer are much more difficult to model; we adapted the work of \citeauthor{houde_2001}~\cite{houde_2001} to out matrix format.
+Wire grid polarizers are much more difficult to model; we adapted the work of \citeauthor{houde_2001}~\cite{houde_2001} to out matrix format.
 
 
 
@@ -486,28 +325,28 @@ Wire grid polarizer are much more difficult to model; we adapted the work of \ci
 
 \section{Qualitative achievement}
 
-We have put together, using the method described in this article, models for several bands of the HIFI spectrometer.
-In order to mimic a typical HIFI observing template, we present four sources to that model: a perfect Gaussian line of~\SI{18}{\kelvin} on top of a~\SI{1}{\kelvin} continuum, a reference source with no signal (no continuum no line), and on two calibration black bodies (\SI{10}{\kelvin} and \SI{100}{\kelvin}).
+Using the method presented in this article, we modeled the optical part of HIFI, that is the networks 
+A typical HIFI observation consists in four integrations: one on the astronomical source, one on a reference position in the sky, and two internal black bodies used for intensity calibration.
 
-With the standard HIFI calibration scheme (figure~\ref{fig:calibrated_std}), we reproduce qualitatively the behavior observed in figure~\ref{fig:scatter_real_data}.
+In order to reproduce the behavior illustrated in figure~\ref{fig:scatter_real_data}, we present four sources to that model: a perfect Gaussian line of~\SI{18}{\kelvin} on top of a~\SI{1}{\kelvin} continuum, a reference source with no signal (no continuum no line), and on two calibration black bodies at \SI{10}{\kelvin} and \SI{100}{\kelvin}.
+Each of these integrations also sees noise from the local oscillator, approximated with a~\SI{120}{\kelvin} black body.
+The result is given in figure~\ref{fig:calibrated_std}
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{bb-on_corrected-2}
+    \caption{\label{fig:calibrated_std}Simulated line with standard HIFI calibration for 25 LO frequencies.
+    Standing waves introduce a weak periodic modulation of the baseline and a strong scatter of the peak intensity of the line.}
+\end{figure}
+Figure~\ref{fig:calibrated_std} shows that our model properly reproduces the scatter seen on real data (figure~\ref{fig:scatter_real_data}).
+It also reveals the effect of standing waves on the baseline, but this effect is drowned in the noise.
 
 \begin{figure}
-    \centering
-    \subfigure[\label{fig:calibrated_std}
-    \footnotesize{Standard HIFI calibration.
-    }]
-    {
-        \includegraphics[width=.45\textwidth]{bb-on_narrow}
-    }
-    \subfigure[\label{fig:calibrated_sbr}
-    \footnotesize{Calibration scheme that uses the sideband ratio provided by the model.
-    }]{
-        \includegraphics[width=.45\textwidth]{bb-on_corrected-3}
-    }
-    \caption{\label{fig:calibrated}Simulated spectra.
-    Each LO tuning brings its own set of standing waves that modulate the couplings to the different sources.
-    Without knowledge of these couplings, the calibration is not perfect.
-    The model gives us some information that allows us to properly calibrate out all the standing waves.}
+    \includegraphics[width=.45\textwidth]{bb-on_corrected-3}
+    \caption{\label{fig:calibrated_sbr}Calibration scheme that uses the sideband ratio provided by the model.}
+%    \caption{\label{fig:calibrated}Simulated spectra.
+%    Each LO tuning brings its own set of standing waves that modulate the couplings to the different sources.
+%    Without knowledge of these couplings, the calibration is not perfect.
+%    The model gives us some information that allows us to properly calibrate out all the standing waves.}
 \end{figure}
 
 Our model gives us information that is absent from real data: the sideband ratio.
