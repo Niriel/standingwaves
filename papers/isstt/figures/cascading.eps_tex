@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{287.71652832bp}%
+    \setlength{\unitlength}{250.8661377bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -48,11 +48,11 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.3657375)%
+  \begin{picture}(1,0.35028245)%
     \put(0,0){\includegraphics[width=\unitlength]{cascading.eps}}%
-    \put(0.17375591,0.16398131){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{P}}}%
-    \put(0.39345538,0.16439736){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{Q}}}%
-    \put(0.81016902,0.16438854){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{S}}}%
-    \put(0.54180357,0.16679442){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\sim$}}}%
+    \put(0.17581698,0.16580631){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{P}}}%
+    \put(0.39432457,0.16622023){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{Q}}}%
+    \put(0.8087775,0.16621148){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{S}}}%
+    \put(0.54186796,0.16860413){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\sim$}}}%
   \end{picture}%
 \endgroup%

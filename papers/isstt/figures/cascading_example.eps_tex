@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{212.5984375bp}%
+    \setlength{\unitlength}{317.48029785bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -48,7 +48,8 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.8399999)%
+  \begin{picture}(1,0.54464286)%
     \put(0,0){\includegraphics[width=\unitlength]{cascading_example.eps}}%
+    \put(0.72321434,0.27678568){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\sim$}}}%
   \end{picture}%
 \endgroup%
