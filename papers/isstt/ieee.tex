@@ -182,7 +182,7 @@
 %
 % Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
 % thus preventing page breaks from occurring within multiline equations. Use:
-%\interdisplaylinepenalty=2500
+\interdisplaylinepenalty=2500
 % after loading amsmath to restore such page breaks as IEEEtran.cls normally
 % does. amsmath.sty is already installed on most LaTeX systems. The latest
 % version and documentation can be obtained at:
@@ -422,7 +422,7 @@
 
 % The paper headers
 \markboth{24th International Symposium on Space Terahertz Technology}%
-{Delforge \MakeLowercase{\textit{et al.}}: Understanding Standing Waes by Network Modeling}
+{Delforge \MakeLowercase{\textit{et al.}}: Understanding Standing Waves by Network Modeling}
 % The only time the second header will appear is for the odd numbered pages
 % after the title page when using the twoside option.
 % 
@@ -511,7 +511,7 @@ This high frequency resolution enables the astronomers to study the chemistry of
 
 At such a high resolution, the thermal noise of the astronomical source, the calibration black bodies and the local oscillator (LO) qualify as ``narrow band Gaussian noise signals''~\cite{siegman1986lasers}.
 They have a coherence time~$\tau$ equal to the inverse of their bandwidth~$\tau=1/\Delta f$.
-A bandwith of~\SI{1}{\mega\hertz} results in a coherence time of~\SI{1}{\micro\second} equivalent to a coherence length of~\SI{300}{\meter}.
+A bandwidth of~\SI{1}{\mega\hertz} results in a coherence time of~\SI{1}{\micro\second} equivalent to a coherence length of~\SI{300}{\meter}.
 This is a hundred times the longest distance inside HIFI.
 Therefore, in HIFI, the signals from the LO, the calibration sources and the sky are coherent.
 
@@ -538,7 +538,7 @@ Our goal is to model the instrument to a level which allows to accurately predic
 
 \subsection{Principle}
 Our method is inspired from laser and circuit theory: we deal with discrete inputs and outputs rather than, for example, a spatial description of the fields.
-A system like the Focal Plane Unit of HIFI comprises a few dozens of optical elements, refered in the litterature as ``networks'' \cite{siegman1986lasers}: wire grid polarizers, roof-top mirrors, horns, attenuators, free space, all having one or more input and output.
+A system like the Focal Plane Unit of HIFI comprises a few dozens of optical elements, referred in the literature as ``networks'' \cite{siegman1986lasers}: wire grid polarizers, roof-top mirrors, horns, attenuators, free space, all having one or more input and output.
 All these networks interact together two by two since there exists at least one optical path between each pair or networks.
 The number of interactions in the system increases with the square of the number of networks.
 One way to solve a system's reaction to a set of input would be to propagate the inputs from network to network, back and forth, until the fields appear to converge to a steady state.
@@ -552,7 +552,7 @@ Then, knowing how the system reacts to an input is merely a matter of multiplyin
     \includegraphics{obsid_5000352C}
     \caption{
     The plot shows the same extragalactic emission feature observed by HIFI at 25 different LO frequencies in its band 4a.
-    The standard deviation scatter on the line peak is three times greater than the expected noise (inset plots).
+    The standard deviation of the scatter on the line peak is three times greater than the expected noise (inset plots).
     }%
     \label{fig:scatter_real_data}
 \end{figure}
@@ -637,10 +637,10 @@ Second, the horizontal and vertical directions are normal to each other and to t
 This limits us to modeling either TE or TM waves\footnote{transverse electric, transverse magnetic} depending on whether the Jones vector represents the electric or the magnetic field.
 However, this cannot model hybrid waves, in which both the electric and the magnetic field can have a component along the direction of propagation.
 Therefore, this cannot model propagation in a birefringent material.
-One way to accomodate this is to relax the constraint of orthogonality of the reference frame, allowing for the horizontal and vertical directions to have a component along the direction of propagation.
-If we do this, then the full description of the field gets even more complicated as we need to carry along, not just the orientation of its reference frame, but the full description of that non-cartesian reference frame.
+One way to accommodate this is to relax the constraint of orthogonality of the reference frame, allowing for the horizontal and vertical directions to have a component along the direction of propagation.
+If we do this, then the full description of the field gets even more complicated as we need to carry along, not just the orientation of its reference frame, but the full description of that non-Cartesian reference frame.
 
-Instead, we can express all the fields in a common global cartesian reference frame, essentially extending Jones calculus from two to three dimensions, as illustrated in~\eqref{eq:jones_matrix_3d}.
+Instead, we can express all the fields in a common global Cartesian reference frame, essentially extending Jones calculus from two to three dimensions, as illustrated in~\eqref{eq:jones_matrix_3d}.
 \begin{equation}
     % Jones matrix in 3D.
     \begin{pmatrix}
@@ -662,18 +662,6 @@ Instead, we can express all the fields in a common global cartesian reference fr
     \label{eq:jones_matrix_3d}
 \end{equation}
 
-\begin{figure}
-    \centering
-    \input{figures/cascading.eps_tex}
-    \caption{\label{fig:cascading}Two networks P~and~Q connected by one port are equivalent to a network S.}
-\end{figure}
-As shown on figure~\ref{fig:cascading}, two networks~P and~Q connected by one port can be seen as a single equivalent network~S.
-Our model can compute the scattering matrix of~S from the scattering matrices of~P and~Q for any P~and~Q connected by any port.
-The scattering matrix of S takes into account the infinite reflections on the ports by which P~and~Q are connected.
-
-Once we have this method to compute~S from~P and~Q, then we apply it recursively to get the scattering matrix of the whole system.
-This is illustrated by figure~\ref{fig:cascading_example}, where we use a HIFI diplexer unit as an example and reduce it to a single network.
-
 \begin{figure*} % The star version creates a float that spans two columns.
     \centering
     \input{figures/cascading_example.eps_tex}
@@ -684,6 +672,21 @@ This is illustrated by figure~\ref{fig:cascading_example}, where we use a HIFI d
     }%
     \label{fig:cascading_example}
 \end{figure*}
+
+\begin{figure}
+    \centering
+    \input{figures/cascading.eps_tex}
+    \caption{\label{fig:cascading}Two networks P~and~Q connected by one port are equivalent to a network S.}
+\end{figure}
+
+As shown on figure~\ref{fig:cascading}, two networks~P and~Q connected by one port can be seen as a single equivalent network~S.
+Our model can compute the scattering matrix of~S from the scattering matrices of~P and~Q for any P~and~Q connected by any port.
+The scattering matrix of S takes into account the infinite reflections on the ports by which P~and~Q are connected.
+
+Once we have this method to compute~S from~P and~Q, then we apply it recursively to get the scattering matrix of the whole system.
+This is illustrated by figure~\ref{fig:cascading_example}, where we use a HIFI diplexer unit as an example and reduce it to a single network.
+
+
 
 Our method is recursive but not iterative: it passes over each network only once.
 Once the scattering matrix of the whole system is calculated, we have direct access to the steady state of that system.
@@ -701,27 +704,52 @@ HIFI operates in the sub-millimeter regime where the wavelength is of the same o
 We could use quasi optics to properly account for the diffraction of the beams \cite{goldsmith1998quasioptical}.
 However, our model assumes plane, and therefore single-mode, waves.
 The plane-wave hypothesis is acceptable at a first order because the networks are placed at the waist of the beams where the wave front is plane.
-Furthermore, the discrepancies due to these simplifications can be abstracted by parameters in our model.
+Furthermore, the discrepancies due to these simplifications can be abstracted, withing reason, by physical parameters in our model.
 For example, if a higher mode does not couple to a mixer, then its power is --for all practical purpose-- lost, and therefore a term of loss can model it.
 
 Our model can be extended to higher order modes.
 This can be done by adding components to the Jones vectors/matrices, or by adding an additional layer of matrices between the scattering matrix and the Jones matrix, which would take care of the transfer of power between modes.
 
-\subsubsection{Typical networks.}
+\subsection{Typical networks.}
 Most typical networks can be easily modeled at the first order;
 we generate their scattering matrices with parameters such as refractive index, thickness, orientation in space, attenuation, etc..
-Wire grid polarizers are much more difficult to model; we adapted the work of \cite{houde_2001} to out matrix format.
+Our model can compute the scattering matrices of dielectric thin films, mirrors, rooftop mirrors, horns, free space (or space of any refractive index), attenuators and black bodies (which are not totally black).
+
+Wire grid polarizers are much more difficult to model; we adapted the work of Martin Houde et al. \cite{houde_2001} to our matrix format.
 
 %=============================================================================
 
 \section{Qualitative achievement}
 
-Using the method presented in this article, we modeled the optical part of HIFI, that is the networks 
-A typical HIFI observation consists in four integrations: one on the astronomical source, one on a reference position in the sky, and two internal black bodies used for intensity calibration.
+A typical HIFI observation consists in four integrations: one on the astronomical source, one on a reference position in the sky, and two internal black bodies (``Hot'' and ``Cold'') used for intensity calibration.
+The details of the intensity calibration of HIFI are described in \cite{ossenkopf2002intensity}.
+A traditional calibration scheme using these four integrations would follow~\eqref{eq:std_calibration}.
+\begin{equation}
+    \text{flux}_\text{source} = 
+    \text{constant}
+    \times
+    \frac{\text{source} - \text{reference}}{\text{hot} - \text{cold}}
+    \label{eq:std_calibration}
+\end{equation}
+In~\eqref{eq:std_calibration}, the subtractions correct for constant terms such as the local oscillator noise, the division corrects for the bandpass of the system and the constant converts the CCD counts into physical units such as Jansky.
+This is not sufficient for HIFI.
+HIFI is special in that it is double-sideband: to every channel of the spectrometer correspond two frequencies, one from the lower sideband~``LSB'' and one from the upper sideband~``USB''.
+The output of the mixer at the intermediate frequency~``IF'' is a weighted sum of the signals at the LSB and USB frequencies~\eqref{eq:weighted_sum}.
+\begin{equation}
+    J_\text{IF} = G_\text{LSB} J_\text{LSB} + G_\text{USB} J_\text{USB}
+    \label{eq:weighted_sum}
+\end{equation}
+In~\eqref{eq:weighted_sum}, $J$ refers to an intensity and $G$ to a gain.
+Standing waves, being frequency-dependent, affect the lower and upper sidebands differently.
+This results in an imbalanced coupling of the two sidebands to the mixer: $G_\text{LSB} \neq G_\text{USB}$.
+The problem is the following: the spectral lines are narrow features that appear in one sideband only while the continuum is present in both sidebands.
+If one does not know~$G_\text{LSB}$ and~$G_\text{USB}$, one cannot properly retrieve the amplitude of the line from $J_\text{IF}$.
 
-In order to reproduce the behavior illustrated in figure~\ref{fig:scatter_real_data}, we present four sources to that model: a perfect Gaussian line of~\SI{18}{\kelvin} on top of a~\SI{1}{\kelvin} continuum, a reference source with no signal (no continuum no line), and on two calibration black bodies at \SI{10}{\kelvin} and \SI{100}{\kelvin}.
-Each of these integrations also sees noise from the local oscillator, approximated with a~\SI{120}{\kelvin} black body.
-The result is given in figure~\ref{fig:calibrated_std}
+Disentangling the sidebands requires some a-priory knowledge of the instrument.
+In absence of that knowledge, we have to make assumptions.
+In~\cite{ossenkopf2002intensity}, it is assumed that the standing waves are the same, or are very similar, on the Hot and Cold integrations even though the optical paths are different.
+We know that this assumption does not always hold because some HIFI spectra show ripples that have periods corresponding to standing waves between the mixer and the black bodies; the calibration did not cancel them out.
+By calculating the effect of standing waves on the coupling of the mixers to the source, our model can give us $G_\text{LSB}$ and~$G_\text{USB}$ and relieve us from the need of making assumptions.
 
 \begin{figure}
     \centering
@@ -731,12 +759,17 @@ The result is given in figure~\ref{fig:calibrated_std}
     \label{fig:calibrated_std}
 \end{figure}
 
-Figure~\ref{fig:calibrated_std} shows that our model properly reproduces the scatter seen on real data (figure~\ref{fig:scatter_real_data}).
-It also reveals the effect of standing waves on the baseline, but this effect is drowned in the noise.
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{sbr}
+    \caption{Simulated sideband ratio for a diplexer band of HIFI at 25 different LO~frequencies.
+    The sideband ratio varies quickly over the intermediate frequency, as several standing wave patterns beat and modulate each other.}%
+    \label{fig:sbr}
+\end{figure}
 
 \begin{figure}
     \includegraphics[width=\columnwidth]{bb-on_corrected-3}
-    \caption{Calibration scheme that uses the sideband ratio provided by the model.}
+    \caption{Simulated line for 25 LO frequencies, with a calibration scheme that uses the sideband ratio provided by the model.  The 25 plots overlap perfectly.}
     \label{fig:calibrated_sbr}
 %    \caption{\label{fig:calibrated}Simulated spectra.
 %    Each LO tuning brings its own set of standing waves that modulate the couplings to the different sources.
@@ -744,18 +777,52 @@ It also reveals the effect of standing waves on the baseline, but this effect is
 %    The model gives us some information that allows us to properly calibrate out all the standing waves.}
 \end{figure}
 
-Our model gives us information that is absent from real data: the sideband ratio.
-Standing waves, being frequency-dependent, modulate the lower and upper sidebands differently, resulting in an imbalanced coupling ratio between the two sidebands during the folding by the mixer, see figure~\ref{fig:sbr}.
-By using the sideband ratio predicted by the model, we are able to properly calibrate our simulated spectrum, as illustrated in figure~\ref{fig:calibrated_sbr}.
-\begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{sbr}
-    \caption{Simulated sideband ratio for a diplexer band of HIFI at 25 different LO~frequencies.
-    The sideband ratio is defined in terms of the LSB and USB gains as $G_\text{USB}/(G_\text{LSB} + G_\text{USB})$.  Its ideal value is 0.5; above 0.5, the channel is USB-dominated, and under 0.5 it is LSB-dominated.
-    The sideband ratio varies quickly over the intermediate frequency (IF), as several standing wave patterns beat and modulate each other.
-    The \SI{620}{\mega\hertz}-wide periodic modulation comes from the standing wave between the mixers and the closest roof-top mirrors of the diplexer assemblies.  The wide envelop results from the fact that the diplexer tuning is optimal at the center of the IF and degrades on the edges.  The short-period features correspond to the cavities formed by the mixers and the local oscilator (\SI{100}{\mega\hertz}), cold black body (\SI{60}{\mega\hertz}) or hot black body (\SI{75}{\mega\hertz}) (revealed by taking Fourier transforms of these spectra).}%
-    \label{fig:sbr}
-\end{figure}
+Using the method presented in this article, we model the optical part of HIFI, that is the networks between the sky and the mixers.
+In order to reproduce the behavior illustrated in figure~\ref{fig:scatter_real_data}, we present four sources to that model: a perfect Gaussian line of~\SI{18}{\kelvin} on top of a~\SI{1}{\kelvin} continuum, a reference source with no signal (no continuum no line), and two calibration black bodies at \SI{10}{\kelvin} and \SI{100}{\kelvin}.
+Each of these integrations also sees noise from the local oscillator, approximated with a~\SI{120}{\kelvin} black body.
+With the standard calibration~\eqref{eq:std_calibration}, which ignores standing waves, the result is given in figure~\ref{fig:calibrated_std}
+
+Figure~\ref{fig:calibrated_std} shows that our model properly reproduces the scatter seen on real data (figure~\ref{fig:scatter_real_data}).
+It also reveals the effect of standing waves on the baseline.
+The ripples on the baseline are not visible on figure~\ref{fig:scatter_real_data} because the noise level is high (a strong line does not need a long integration time); spectra of weak lines have a lower noise level and show ripples on the baseline.
+
+Our model gives us information we need to calibrate our data: $G_\text{LSB}$ and $G_\text{USB}$.
+We define the sideband ratio with equation~\eqref{eq:sbr}, it is a measure of the coupling imbalance between the two sidebands.
+Its ideal value is 0.5; above 0.5, the channel is USB-dominated, and under 0.5 it is LSB-dominated.
+\begin{equation}
+    \text{sideband ratio}
+    =
+    \frac{G_\text{USB}}{G_\text{LSB} + G_\text{USB}}
+    \label{eq:sbr}
+\end{equation}
+The sideband ratios corresponding to our simulation of the integration on the hot black body, for 25 local oscillator frequencies, are plotted on figure~\ref{fig:sbr}.
+
+The \SI{620}{\mega\hertz}-wide periodic modulation of the sideband ratio (figure~\ref{fig:sbr}) comes from the standing wave between the mixers and the closest roof-top mirrors of the diplexer assemblies (described in~\cite{jackson2002hifi, martin1982polarizing}).
+The wide envelop results from the fact that the diplexer tuning is optimal at the center of the bandwidth and degrades on the edges.
+A Fourier transform of these plots reveals many short period features.
+The short-period features correspond to the cavities formed by the mixers and
+the local oscillator ($\approx$\SI{100}{\mega\hertz}),
+cold black body ($\approx$\SI{60}{\mega\hertz}) or
+hot black body ($\approx$\SI{75}{\mega\hertz}).
+The cold and hot standing waves in this simulation do not correspond to that of the real instrument (which are~\SI{98}{\mega\hertz} for cold and~\SI{92}{\mega\hertz} for hot): this is deliberate, our model can reproduce the exact cold and hot standing waves, but in this case their periods are so close that it is difficult to tell them apart and track their contribution.
+
+To complicate the situation, each short-period feature appears twice, at two slightly different periods, because the two rooftop mirrors of the diplexer assemblies produce two slightly different optical path lengths.
+
+Finally, there is some ``cross-talk'' between the two polarizations: the vertical mixer sees the horizontal one and vice-versa.
+This is due to imperfections of the wire grid polarizers.
+
+Our model computes all these effects at once.
+Using this information, we can properly calibrate our simulated spectrum, as illustrated in figure~\ref{fig:calibrated_sbr}.
+It must be noted that solving the calibration equation requires to know the spectrum of the local oscillator in the lower and upper side band.
+Indeed, the contribution of the local oscillator is not canceled by the $\text{hot}-\text{cold}$ subtraction since it is affected by different standing waves for hot and for cold.
+
+The framework presented in this article is able to qualitatively predict the behavior of coherent systems as complex as HIFI.
+It can be applied to any coherent instrument.
+
+Reaching a quantitative level of prediction is possible.
+It requires a precise modeling of each network of the system.
+The algorithm that combines the networks together and predicts their interactions is, as we have demonstrated, already in place.
+
 
 
 
@@ -763,10 +830,15 @@ By using the sideband ratio predicted by the model, we are able to properly cali
 
 \section{Conclusion}
 We have designed and implemented a framework to model the interferences, and therefore the standing waves, in any coherent instrument.
-The model produces results that are qualitatively consistent with many HIFI observations.
-We showed that the model can give us information (notably the sideband ratio) that we can use to better calibrate data.
-By modeling more accurately the networks, we are expecting to reproduce quantitatively HIFI data.
-This would allow us to significantly reduce the uncertainties in the calibration.
+
+This model qualitatively reproduces and explains a wide range of phenomena observed in HIFI data.
+This makes it a powerful tool to assist the design of future instruments.
+Its applications are not limited to astronomy; for example, this method can be applied to optimize cavity ring-down spectrometers.
+It is not restricted to the submillimetric domain either, as any coherent system (optical lasers for instance) can be studied with this framework.
+
+By modeling more accurately the individual networks of HIFI, we are expecting to reproduce its behavior at a quantitative level.
+If successful, this processing would find its place in the calibration pipeline of HIFI, improving significantly the accuracy of the data taken during its mission.
+
 
 %=============================================================================
 % An example of a floating figure using the graphicx package.
@@ -874,16 +946,7 @@ This would allow us to significantly reduce the uncertainties in the calibration
 
 
 \appendices
-%\section{Proof of the First Zonklar Equation}
-%Appendix one text goes here.
 
-% you can choose not to have a title for an appendix
-% if you want by leaving the argument blank
-%\section{}
-%Appendix two text goes here.
-
-
-% use section* for acknowledgement
 \section*{Acknowledgment}
 
 
@@ -915,7 +978,6 @@ The authors would like to thank...
 % http://www.michaelshell.org/tex/ieeetran/bibtex/
 \bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
-\nocite{martin1982polarizing}
 \bibliography{IEEEabrv,bibliography}
 %
 % <OR> manually copy in the resultant .bbl file
@@ -928,34 +990,6 @@ The authors would like to thank...
 %  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
 %
 %\end{thebibliography}
-
-% biography section
-% 
-% If you have an EPS/PDF photo (graphicx package needed) extra braces are
-% needed around the contents of the optional argument to biography to prevent
-% the LaTeX parser from getting confused when it sees the complicated
-% \includegraphics command within an optional argument. (You could create
-% your own custom macro containing the \includegraphics command to make things
-% simpler here.)
-%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
-% or if you just want to reserve a space for a photo:
-
-\begin{IEEEbiography}{Bertrand Delforge}
-Biography text here.
-\end{IEEEbiography}
-
-% if you will not have a photo at all:
-\begin{IEEEbiographynophoto}{John Doe}
-Biography text here.
-\end{IEEEbiographynophoto}
-
-% insert where needed to balance the two columns on the last page with
-% biographies
-%\newpage
-
-\begin{IEEEbiographynophoto}{Jane Doe}
-Biography text here.
-\end{IEEEbiographynophoto}
 
 % You can push biographies down or up by placing
 % a \vfill before or after them. The appropriate
@@ -973,5 +1007,3 @@ Biography text here.
 
 % that's all folks
 \end{document}
-
-
