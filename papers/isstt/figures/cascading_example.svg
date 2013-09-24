@@ -51,15 +51,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="352.55268"
-     inkscape:cy="120.08015"
+     inkscape:zoom="2.8"
+     inkscape:cx="75.971653"
+     inkscape:cy="138.61932"
      inkscape:document-units="cm"
      inkscape:current-layer="layer2"
      showgrid="true"
      units="in"
-     inkscape:window-width="1366"
-     inkscape:window-height="738"
+     inkscape:window-width="1280"
+     inkscape:window-height="994"
      inkscape:window-x="0"
      inkscape:window-y="30"
      inkscape:window-maximized="0">
@@ -117,9 +117,9 @@
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
        id="Background"
-       width="396.85037"
+       width="414.56689"
        height="216.14172"
-       x="31.889763"
+       x="14.173228"
        y="-67.323189"
        inkscape:label="#background">
       <desc
@@ -168,11 +168,12 @@
      sodipodi:insensitive="true">
     <path
        style="color:#000000;fill:none;stroke:#bbbbbb;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 35.433071,910.62972 35.433071,0"
+       d="m 276.37795,910.62967 -35.43307,0"
        id="path3018"
        inkscape:connector-curvature="0" />
     <g
-       id="g3832">
+       id="g3832"
+       transform="matrix(-1,0,0,1,311.81102,-5.381859e-5)">
       <path
          inkscape:connector-curvature="0"
          id="path3811"
@@ -305,30 +306,53 @@
     <path
        inkscape:connector-curvature="0"
        id="path3813-9-8"
-       d="m 354.33071,910.62972 -17.71655,0"
+       d="m 407.48024,910.62972 17.71655,0"
        style="color:#000000;fill:none;stroke:#bbbbbb;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <path
        inkscape:connector-curvature="0"
        id="path3813-9"
-       d="m 389.76378,857.48011 0,17.71654"
+       d="m 372.04717,857.48011 0,17.71654"
        style="color:#000000;fill:none;stroke:#bbbbbb;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <rect
        style="fill:none;stroke:#606060;stroke-width:1.77165341;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline"
        id="rect3830-9"
        width="70.866074"
        height="70.866135"
-       x="354.33072"
-       y="875.19659" />
+       x="-407.48022"
+       y="875.19659"
+       transform="scale(-1,1)" />
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
-       x="318.89764"
+       x="308.26773"
        y="914.17303"
        id="text3073"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3075"
-         x="318.89764"
+         x="308.26773"
          y="914.17303">$\sim$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
+       x="159.56526"
+       y="818.5116"
+       id="text3032"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3034"
+         x="159.56526"
+         y="818.5116">Source and LO</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
+       x="272.83463"
+       y="903.54303"
+       id="text3036"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3038"
+         x="272.83463"
+         y="903.54303">IF</tspan></text>
   </g>
 </svg>
