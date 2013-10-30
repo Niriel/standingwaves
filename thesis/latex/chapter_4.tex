@@ -1,11 +1,55 @@
-This is a tough part.  Now, we are trying to quatitatively predict what HIFI does.
+\section{Current HIFI calibration}
 
+HIFI uses a four-points calibration scheme to calibrate its flux: source, reference, hot and cold.
+These four equations can be used to retreive four variables.
+However, there are many more variables:
+\begin{itemize}
+    \item LSB sky signal
+    \item USB sky signal
+    \item LSB LO signal
+    \item USB LO signal
+    \item LSB cold black body signal
+    \item USB cold black body signal
+    \item LSB hot black body signal
+    \item USB hot black body signal
+    \item coupling mixer -- LSB sky
+    \item coupling mixer -- USB sky
+    \item coupling mixer -- LSB LO
+    \item coupling mixer -- USB LO
+    \item coupling mixer -- LSB CBB
+    \item coupling mixer -- USB CBB
+    \item coupling mixer -- LSB HBB
+    \item coupling mixer -- USB HBB
+    \item LSB mixer gain
+    \item USB mixer gain
+    \item LSB mixer noise
+    \item USB mixer noise
+    \item spectrometer gain
+    \item spectrometer noise
+\end{itemize}
+The first two are what we are looking for, the rest is just annoying.
+Too many variables, not enough equations, we need to make assumptions.
+My model is here to provide information on all the ``coupling'' variables.
+
+\section{New calibration using the LO power and my model}
+The LO power has always been ignored.
+However, even though it is weakly coupled to the mixer, it is so strong that we get a significant amount of energy from it.
+If we say that the LO is a 120 Kelvin black body, then it is perfectly reasonable to expect the mixer to see one or two kelvins from it.
+This is commensurable with many astronomical signals, even sometimes dominant.
+The current calibration pretends that the LO does not exist, assuming that the subtractions src-ref and hot-cold take it away.  This is not true for hot-cold as the standing waves are different.
+
+\section{Deriving model parameters from HIFI data}
 We need the best knowledge of the instrument.
-Someone must really sit with me to help me translate all these matcad files into values I can use in my code.
 Some parameters come from design, some from measure, and some are guesses.
 
-HIFI has 7 bands.  I must therefore produce 7 systems.  
+HIFI has 7 bands.  Therefore we could expect 7 systems.
+Realistically, doing band 1 and band 3 or 4 would be enough.
+Indeed, band 1 is a beam splitter band, bands 3 and 4 are diplexer bands.
+What we learn there can be applied to bands 2, 3 and 5.
+HEB bands are stained by another type of standing waves (electrical, after the mixer), we leave them apart from now.
+However, they use diplexers, so my band 3 model can work here too.  It may just be more difficult to fit parameters because of all the electrical standing waves on top.
 
-Try to reproduce some of the calibration observations we took on January.  There are diplexer scans that should help with the phase factor of the reflection coefficient of the LO and mixer, and there are observations of a CO line to constrain the sideband ratio.
-
-There is much fitting to be done.
+\subsection{Phase factors}
+The mixers and the local oscillators have complex coefficient of reflections.
+It is necessary to know them in order to predict the phase of the standing wave pattern.
+Here, we attempt to reproduce some of the calibration observations we took on January.  There are diplexer scans that should help with the phase factor of the reflection coefficient of the LO and mixer, and there are observations of a CO line to constrain the sideband ratio.

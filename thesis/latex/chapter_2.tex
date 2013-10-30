@@ -212,6 +212,9 @@ We do that by taking $b^o$ from equation~\eqref{eq:s_outside_inside} and elimina
 These two steps solve the system: from the inputs~$a^o$ we can compute the outputs~$b^o$ of the whole system.
 This method also tells gives us $a^i$ and $b^i$ which are two equivalent ways of looking at what is happening inside the system.
 
+\subparagraph{Internal sources}
+
+
 %-----------------------------------------------------------------------------
 \paragraph{Implementation.}
 Although the mathematics are quite simple, the implementation requires careful book keeping of the many indices of the many matrices.
@@ -748,7 +751,7 @@ Our convention for the direction of the parallel reflected field makes the paral
 
 \begin{figure}[hbtp]
     \centering
-    \input{figures/fresnel_reference_frames.eps_tex}
+    \input{\MyGraphicsPath fresnel_reference_frames.pdf_tex}
     \caption{\label{fig:fresnel_directions}Field directions chosen to express the Fresnel equations.}
     \caption*{
         $n$ is normal to the interface, $u$ is normal to the plane of incidence.
@@ -1023,7 +1026,16 @@ With that final step, we can now connect the network to other networks since we 
 
 
 %=============================================================================
+\subsection{Thin film}
+The thin film can be seen as its own network, or as two interfaces separated by a given distance.  Both should yield the same result.
 
+Here, we treat the thin film as its own network.
+This is convenient because the direction of propagation after the film is identical to that before the film.  The person using this network does not have to worry about what happens between the interfaces which is dealt with automatically.
+
+Then, we run simulations to show that it performs exactly like the combination of three elementary networks.
+
+
+%=============================================================================
 \subsection{Wire grid polarizer}
 In their paper from \citeyear{houde_2001} \citetitle{houde_2001}, \textcite{houde_2001} present a set of equations that approximate the electric field at any point near a wire grid polarizer.
 The incident wave is assumed plane, the surrounding propagation medium is assumed homogeneous and isotropic, and the wires are assumed to be free floating (no dielectric substrate) and to have a cylindrical section.
@@ -1723,8 +1735,10 @@ Doing this follows the usual method for rotating Jones matrices described by equ
 
 The idea is to show that it works and makes sense.
 
+\subsection{The simplest cavity}
 I must illustrate the most simple cavity.  I show it creates a standing wave pattern, I show its FFT, prove it's consistent with the length of the cavity and its refractive index.
 
+\subsection{Thin film beam splitter}
 Then I introduce a thin film beam splitter (that's already a heterodyne telescope when we think of it).  I show that it adds a slope to the previous pattern.  I show that it's actually a very slow standing wave, the period of which is consistent with infinite reflections inside the thin film.  The FFT should show that there are two picks close to the cavity-period: they are due to the fact that there are now two cavities: one using reflection on the near side, one on the far side of the beam splitter.
 
 All of this makes sense, we are confident that the model does its job properly.

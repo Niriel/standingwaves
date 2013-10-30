@@ -10,7 +10,9 @@
 \makeindex
 \addbibresource{bibliography.bib}
 
-\graphicspath{{./figures/}}
+\newcommand{\MyGraphicsPath}{../../figures/}
+\graphicspath{{\MyGraphicsPath}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
 
 \begin{document}
 \frontmatter
@@ -49,6 +51,11 @@ Put acknowledgements here.
 \cleardoublepage
 \chapter{Astronomy}
 \input{chapter_5}
+
+\begin{appendices}
+\chapter{Diplexer}
+\input{appendix_a}
+\end{appendices}
 
 \backmatter
 
