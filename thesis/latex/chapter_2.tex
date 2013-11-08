@@ -433,7 +433,7 @@ The port~$j$ of the network~$i$ corresponds to the port~$k$ of the whole system,
 \end{equation}
 
 With that information, it is trivial to fill the scattering matrix of the whole system, $S$, with values from the scattering matrices from each network $S_i$.
-This is what algorithm~\cref{algo:gather_networks} does.
+This is what \cref{algo:gather_networks} does.
 \begin{algorithm}
     \caption{GatherNetworks}
     \label{algo:gather_networks}
@@ -543,8 +543,8 @@ is not because the port identifier~2 appears more than once.
 
 There are many possible permutation matrices $Q$: all that is required for $Q$ is to separate the inside ports from the outside ports, there is no constraint on the order of the ports beyond that.
 To ensure the reproducibility of our algorithm, we want to choose one specific $Q$, the one for which the inside and outside port identifiers are in ascending order.
-This is what the algorithm~\cref{algo:separate_inside_outside} provides.
-Algorithm~\cref{algo:separate_inside_outside} uses the outputs of algorithms~\cref{algo:find_inside} and~\cref{algo:find_outside}.
+This is what the \cref{algo:separate_inside_outside} provides.
+\Cref{algo:separate_inside_outside} uses the outputs of algorithms~\ref{algo:find_inside} and~\ref{algo:find_outside}.
 
 \begin{algorithm}
     \caption{FindInside}
@@ -598,7 +598,7 @@ Algorithm~\cref{algo:separate_inside_outside} uses the outputs of algorithms~\cr
 \end{algorithm}
 
 Example: A system with $n=4$ ports has its ports 1 and 3 coupled together.
-Algorithm~\cref{algo:separate_inside_outside_example} shows how to compute $Q$ from a set of coupling descriptors.
+\Cref{algo:separate_inside_outside_example} shows how to compute $Q$ from a set of coupling descriptors.
 The ``Ensure'' statements are assertions, propositions that must be true if the algorithm is working properly.
 
 \begin{algorithm}[H]
@@ -624,8 +624,8 @@ The ``Ensure'' statements are assertions, propositions that must be true if the 
         }
     \end{algorithmic}
 \end{algorithm}
-Let us apply the permutation matrix $Q$ produced in the example algorithm~\cref{algo:separate_inside_outside_example} to a vector~$a$ and a scattering matrix~$S$, following \cref{eq:permute_s}.
-The results are given in equations~\cref{eq:q_a_aprime} and~\cref{eq:q_s_qtranspose_sprime}.
+Let us apply the permutation matrix $Q$ produced in the example \cref{algo:separate_inside_outside_example} to a vector~$a$ and a scattering matrix~$S$, following \cref{eq:permute_s}.
+The results are given in equations~\eqref{eq:q_a_aprime} and~\eqref{eq:q_s_qtranspose_sprime}.
 \begin{equation}
     Q a
     =
@@ -733,7 +733,7 @@ One difficulty comes from the fact that we cannot use the indices of the coupled
 Indeed, in our example, $b^i$ contains two elements only so we cannot reach $b_3$ by using directly the index 3.
 We need to map the indices given by the set of coupling descriptors to indices that can be used to address the various matrices.
 In our example, 1 is mapped to 1 ($b'^i_1 = b_1$), and 3 is mapped to 2 ($b'^i_2 = b_3$); therefore saying that ports 1 and 3 are coupled is equivalent to saying that indices 1 and 2 need to be permuted.
-Algorithm~\cref{algo:port_to_index} converts a port identifier to an index usable to address $S'^{ii}$.
+\Cref{algo:port_to_index} converts a port identifier to an index usable to address $S'^{ii}$.
 \begin{algorithm}
     \caption{PortToIndex}
     \label{algo:port_to_index}
@@ -748,7 +748,7 @@ Algorithm~\cref{algo:port_to_index} converts a port identifier to an index usabl
     \end{algorithmic}
 \end{algorithm}
 
-We can now construct the permutation matrix $P$ with algorithm~\cref{algo:couple_inputs_to_outputs}.
+We can now construct the permutation matrix $P$ with \cref{algo:couple_inputs_to_outputs}.
 \begin{algorithm}
     \caption{CoupleInputsToOutputs}
     \label{algo:couple_inputs_to_outputs}
@@ -772,17 +772,17 @@ We can now construct the permutation matrix $P$ with algorithm~\cref{algo:couple
     \end{algorithmic}
 \end{algorithm}
 
-If we apply algorithm~\cref{algo:couple_inputs_to_outputs} to our example, then there is only one value for \textit{coupling}: $\lbrace 3, 1\rbrace$.
+If we apply \cref{algo:couple_inputs_to_outputs} to our example, then there is only one value for \textit{coupling}: $\lbrace 3, 1\rbrace$.
 Therefore, \textit{couplingArray}=[3, 1], \textit{portA}=3, \textit{portB}=1.
 The two calls to PortToIndex take \textit{inside}=$\lbrace 3, 1\rbrace$ and make a sorted array from it, \textit{insorted}=[1, 3].
 The position of \textit{portA} in that sorted array is 2, that of \textit{portB} is 1, so \textit{indexA}=2 and \textit{indexB}=1.
 The matrix $P$ is filled with zeros, except for the elements $P_{1, 2}$ and $P_{2, 1}$ that equal 1, matching \cref{eq:p_example}.
 
-Algorithm~\cref{algo:solve_couplings} combines algorithms~%
-\cref{algo:find_inside},
-\cref{algo:find_outside},
-\cref{algo:separate_inside_outside} and
-\cref{algo:couple_inputs_to_outputs}
+\Cref{algo:solve_couplings} combines algorithms~%
+\ref{algo:find_inside},
+\ref{algo:find_outside},
+\ref{algo:separate_inside_outside} and
+\ref{algo:couple_inputs_to_outputs}
 to produce $P$ and $Q$ from the set of coupling descriptors and the total number of ports.
 \begin{algorithm}
     \caption{SolveCouplings}
@@ -813,7 +813,7 @@ The developer is free to choose any method.
 I suggest however something along the line of a LU decomposition.
 Indeed, that LU decomposition can be computed once, its result stored, and then used several times to solve the same system for different values of $a'^o$ and $c'^i$.
 Big systems may benefit from using sparse matrices.
-Algorithm~\cref{algo:solve_networks} separates the scattering matrix of the whole system into its four regions and facorizes $(I - S'^{ii})$.
+\Cref{algo:solve_networks} separates the scattering matrix of the whole system into its four regions and facorizes $(I - S'^{ii})$.
 \begin{algorithm}
     \caption{SolveNetworks}
     \label{algo:solve_networks}
@@ -841,7 +841,7 @@ Algorithm~\cref{algo:solve_networks} separates the scattering matrix of the whol
 \end{algorithm}
 
 Finally, the last step consists in applying the inputs to the system.
-This is described by algorithm~\cref{algo:solve_inputs}.
+This is described by \cref{algo:solve_inputs}.
 \begin{algorithm}
     \caption{SolveInputs}
     \label{algo:solve_inputs}
@@ -860,10 +860,10 @@ This is described by algorithm~\cref{algo:solve_inputs}.
     \end{algorithmic}
 \end{algorithm}
 
-The last algorithm, algorithm~\cref{algo:solve_system} puts all the pieces together.
+\Cref{algo:solve_system} puts all the pieces together.
 This is an example.
 In a real application, where we need to loop over frequencies and apply different inputs for each frequency, we would call SolveCouplings once for the whole system, then SolveNetworks for each set of parameters (such as the frequency), then call SolveInputs for each source of radiation.
-This is illustrated by algorithm~\cref{algo:solve_system_realistic}.
+This is illustrated by \cref{algo:solve_system_realistic}.
 \begin{algorithm}
     \caption{SolveSystem}
     \label{algo:solve_system}
