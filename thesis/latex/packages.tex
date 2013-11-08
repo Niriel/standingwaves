@@ -11,18 +11,10 @@
 % first load float, then hyperref, then algorithm.
 % Putting float here solves the TOC links to the algorithms, otherwise they'd all point
 % to page 1.
+% Also, putting float-algo-hyper creates a massive amount of warnings for pretty much
+% every algo command like \State.
 \usepackage{float}
-% This does not seem to be true.  I am now loading algorithm first and not loading float.
-% Somehow this is working anyway.  I do not know what changed.
-% I did delete ALL temporary files before compiling.  LaTeX magic.
 
-% According to
-% http://tex.stackexchange.com/questions/113719/cleveref-fails-to-reference-algorithms
-% Algorithm must be loaded before hyperref.
-\usepackage[chapter]{algorithm}
-    % To float algorithms.
-\usepackage{algpseudocode}
-    % For pseudocode.
 
 \usepackage{makeidx}
     % Needed to build the index.
@@ -90,7 +82,7 @@
 \usepackage{varioref}
     % For fancier references that also tell the page number.
 
-\usepackage{hyperref}
+\usepackage[plainpages=false]{hyperref}
     % Required direct pdf output, therefore all figures should be pdf too.
     % This creates hyperlinks all over the place to jump to figures, references,
     % chapters and all.
@@ -99,6 +91,14 @@
     % Should make the typesetting of cross references more consistent.
     % Note that I needed to install a recent version of this package, the one I had
     % was too old to handle algorithms properly.
+
+% According to
+% http://tex.stackexchange.com/questions/113719/cleveref-fails-to-reference-algorithms
+% Algorithm must be loaded before hyperref.  Well, it is not true.
+\usepackage[chapter]{algorithm}
+    % To float algorithms.
+\usepackage{algpseudocode}
+    % For pseudocode.
 
 \newcommand{\decibel}{dB}
 \newcommand{\equaldef}{\stackrel{\text{\tiny def}}{=}}

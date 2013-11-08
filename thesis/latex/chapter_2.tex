@@ -132,7 +132,7 @@ Instead, we can express all the fields in a common global Cartesian reference fr
 \end{equation}
 These Jones matrices can be combined with rotation matrices (built from Euler angles or quaternions) in order to represent networks in any orientation in space.
 
-\paragraph{Rotating Jones matrices.}
+\subsubsection{Rotating Jones matrices.}
 \begin{equation}
     J' = R J R^{-1}
     \label{eq:jones_rotation_using_inverse}
@@ -157,7 +157,7 @@ then we get~\cref{eq:jones_rotation_using_transpose} which has the advantage of 
 \subsection{Solving a system}
 
 %-----------------------------------------------------------------------------
-\paragraph{Theory.}
+\subsubsection{Theory}
 
 We call $S$ the scattering matrix of the entire system.
 \begin{equation*}
@@ -210,7 +210,7 @@ $a^i$,~$b^i$ and~$b^o$ are unknown.
 $b^o$ is the result we are looking for.
 $b^i$ and~$a^i$ are nice to have as they allow us to see what is happening inside the system.
 
-\subparagraph{Solving the internal transmissions and reflections.}
+\paragraph{Solving the internal transmissions and reflections.}
 How are~$a^i$ and~$b^i$ related?
 \Cref{eq:coupled_inputs_outputs} indicates that each element of $a^i$ is equal to an element of $b^i$, therefore $a^i$ can be obtain by reordering $b^i$ and vice-versa.
 \index{permutation matrix}In other words, there exists a permutation matrix~$P$ such that
@@ -323,7 +323,7 @@ Note that for the implementation, we may want to avoid inverting the matrix.
 Indeed, inverting matrices is costly and numerically unstable \todo{citation needed}.
 Even though \cref{eq:compute_bi_invert} is mathematically correct, we would rather solve $b^i$ in \cref{eq:compute_bi_solve}.
 
-\subparagraph{Solving the output of the system.}
+\paragraph{Solving the output of the system.}
 Once we know the internal reflections of the system ($b^i$ as a function of itself), getting its output is trival.
 The second step is to compute~$b^o$ from~$a^o$ and~$b^i$.
 We do that by taking $b^o$ from \cref{eq:s_outside_inside} and eliminating $a^i$ with \cref{eq:relation_ai_bi}.
@@ -335,7 +335,7 @@ We do that by taking $b^o$ from \cref{eq:s_outside_inside} and eliminating $a^i$
 These two steps solve the system: from the inputs~$a^o$ we can compute the outputs~$b^o$ of the whole system.
 This method also tells gives us $a^i$ and $b^i$ which are two equivalent ways of looking at what is happening inside the system.
 
-\subparagraph{Internal sources}
+\paragraph{Internal sources.}
 The method described above does not allow us to account for sources inside the system.
 Such sources may nevertheless exist.
 For example, the local oscillator of HIFI is located outside the cryostat (\cref{fig:internal_sources_windows}).
@@ -400,7 +400,7 @@ Once $b_i$ is known, we inject its value into the expression of $b^o$.
 Equations~\cref{eq:compute_bi_ci_solve} and~\cref{eq:compute_bo_bi_co} give us the response $b$ of the system $(S, P)$ to the inputs $a$ and $c$.
 
 %-----------------------------------------------------------------------------
-\subparagraph{Solving for each source independantly.}
+\paragraph{Solving for each source independantly.}
 When solving a system with multiple sources, it may be tempting to set all the inputs at the same time.
 That is, filling $a^o$ and $c$, then computing $b$.
 This is, in most cases, a mistake.
@@ -412,7 +412,7 @@ In the case of HIFI, the radiation for the local oscillator, the cryostat window
 Then, like is the case for any incoherent signals, the results must be converted from amplitude to power then added together.
 
 %-----------------------------------------------------------------------------
-\paragraph{Implementation.}
+\subsubsection{Implementation}
 Although the mathematics are quite simple, the implementation requires careful book keeping of the many indices of the many matrices.
 
 \begin{itemize}
