@@ -1,6 +1,10 @@
-In this chapter, I present a solver and prove that it works, at least qualitatively, by using typical networks.
-
-ALL THEORY
+\section{Principle}
+Our method is inspired from laser and circuit theory: we deal with discrete inputs and outputs rather than, for example, a spatial description of the fields.
+A system like the Focal Plane Unit of HIFI comprises a few dozens of optical elements~\cite{jackson2002hifi}, referred in the literature as ``networks''~\cite{siegman1986lasers}: wire grid polarizers, roof-top mirrors, horns, attenuators, free space, all having one or more input and output.
+All these networks interact together two by two since there exists at least one optical path between each pair or networks.
+The number of interactions in the system increases faster than the square of the number of networks.
+One way to solve a system's reaction to a set of input would be to propagate the inputs from network to network, back and forth, until the fields appear to converge to a steady state.
+Instead, we propose a method to that directly provides the steady state.
 
 %#############################################################################
 \section{Solver}
@@ -18,17 +22,136 @@ This is going to work unless higher modes can come back to the fundamental mode,
 
 
 
+
+
+%=============================================================================
+\subsection{Scattering matrices}
+Scattering matrices \cite{siegman1986lasers} model the transfer of power or field from one side (port) of a network to another (\cref{fig:scattering_matrix_notations}).
+
+\Cref{eq:scattering_matrix} presents the scattering matrix $S$ that models the relation between a vector of inputs $a$ and a vector of outputs $b$ for a $n$-ports network.
+The diagonal contains the reflections terms and the rest contains the transmissions.
+\begin{align}
+    b &= S a
+    &
+    \begin{pmatrix}
+        b_1\\
+        b_2\\
+        \vdots\\
+        b_n
+    \end{pmatrix}
+    &=
+    \begin{pmatrix}
+        S_{1, 1} & S_{1, 2} & \cdots & S_{1, n} \\
+        S_{2, 1} & S_{2, 2} & \cdots & S_{2, n} \\
+        \vdots   & \vdots   & \ddots & \vdots   \\
+        S_{n, 1} & S_{n, 2} & \cdots & S_{n, n}
+    \end{pmatrix}
+    \begin{pmatrix}
+        a_1\\
+        a_2\\
+        \vdots\\
+        a_n
+    \end{pmatrix}
+    \label{eq:scattering_matrix}
+\end{align}
+
+\begin{figure}[hbtp]
+    \centering
+    \input{\MyGraphicsPath scattering_matrix_notations.pdf_tex}
+    \caption{A 4-ports network showing 4 inputs $a_i$ and four outputs $b_i$.  For example, this network could be a wire grid polarizer or a semi-transparent mirror, both acting as beam splitters.}%
+    \label{fig:scattering_matrix_notations}
+\end{figure}
+
+
 %=============================================================================
 \subsection{Jones calculus in 3D}
 
-Rotating Jones matrices.
+Jones matrices model the transfer of amplitude and phase from one polarization to another \cite{hecht2002optics}.
+In~\cref{eq:jones_matrix_short}, the polarized input field $e_i$ is related to the polarized output field~$e_o$ by the Jones matrix $J$.
+$e_i$ and $e_o$ are called ``Jones vectors''.
 \begin{equation}
-    J' = A J A^{-1}
-    \label{eq:jones_rotation}
+    % Small form.
+    e_o = J e_i
+    \label{eq:jones_matrix_short}
+\end{equation}
+The components of the Jones vectors are phasors: complex numbers that encode the amplitude and phase of the field along different axes.
+The components of the Jones matrices are also complex numbers, these encode changes in amplitude and phase.
+
+\Cref{eq:jones_matrix_2d} presents the traditional form of Jones vectors and matrices.
+\begin{equation}
+    % Jones matrix in 2D.
+    \begin{pmatrix}
+        e_{o, h}\\
+        e_{o, v}
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        J_{h, h}   &   J_{h, v} \\
+        J_{v, h}   &   J_{v, v}
+    \end{pmatrix}
+    \begin{pmatrix}
+        e_{i, h}\\
+        e_{i, v}
+    \end{pmatrix}
+    \label{eq:jones_matrix_2d}
+\end{equation}
+The field is seen as the superposition of a horizontal and a vertical component, both linearly polarized.
+The phase difference between these components determines the handedness and the ellipticity of the polarization of the field.
+Although very useful for many applications, these Jones matrices and vectors have limitations.
+
+First, the field is always expressed in a local reference frame: the horizontal and vertical directions are valid for one beam only and may change after any reflection or refraction.
+Therefore, to completely describe a field, the Jones vector is not enough since one needs to keep track of the orientation of its reference frame with three angles, a quaternion or a rotation matrix.
+
+Second, the horizontal and vertical directions are normal to each other and to the direction of propagation.
+This limits us to modeling either transverse electric or transverse magnetic waves depending on whether the Jones vector represents the electric or the magnetic field;
+this cannot model hybrid waves, in which both the electric and the magnetic field can have a component along the direction of propagation.
+Therefore, this cannot model propagation in a birefringent material.
+One way to accommodate this is to relax the constraint of orthogonality of the reference frame, allowing for the horizontal and vertical directions to have a component along the direction of propagation.
+If we do this, then the full description of the field gets even more complicated as we need to carry along, not just the orientation of its reference frame, but the full description of that non-Cartesian reference frame.
+
+Instead, we can express all the fields in a common global Cartesian reference frame, essentially extending Jones calculus from two to three dimensions, as illustrated in~\cref{eq:jones_matrix_3d}.
+\begin{equation}
+    % Jones matrix in 3D.
+    \begin{pmatrix}
+        e_{o, x}\\
+        e_{o, y}\\
+        e_{o, z}
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        J_{x, x}   &   J_{x, y}   &   J_{x, z} \\
+        J_{y, x}   &   J_{y, y}   &   J_{y, z} \\
+        J_{z, x}   &   J_{z, y}   &   J_{z, z}
+    \end{pmatrix}
+    \begin{pmatrix}
+        e_{i, x}\\
+        e_{i, y}\\
+        e_{i, z}
+    \end{pmatrix}
+    \label{eq:jones_matrix_3d}
+\end{equation}
+These Jones matrices can be combined with rotation matrices (built from Euler angles or quaternions) in order to represent networks in any orientation in space.
+
+\paragraph{Rotating Jones matrices.}
+\begin{equation}
+    J' = R J R^{-1}
+    \label{eq:jones_rotation_using_inverse}
+\end{equation}
+\Cref{eq:jones_rotation_using_inverse} is correct, however it may not be the most practical to implement.
+Indeed, inverting matrices is an expensive and unstable operation for a computer to perform%
+\todo{citation needed}.
+When we remember that the inverse of a rotation matrix is also its transpose%
+\todo{citation needed},
+then we get~\cref{eq:jones_rotation_using_transpose} which has the advantage of being computationally cheap and stable.
+\begin{equation}
+    J' = R J R\transp
+    \label{eq:jones_rotation_using_transpose}
 \end{equation}
 
 %=============================================================================
-\subsection{Scattering matrices of Jones matrices}
+\subsection{Combining scattering and Jones matrices}
+
+
 
 %=============================================================================
 \subsection{Solving a system}
@@ -53,7 +176,7 @@ S contains information about all the ports in the system: the ports that are ope
 Here, $n$ is the number of ports of $S$, equal to the sum of the number of ports of all the networks constituting the system.
 
 Some of the networks constituting the system are coupled by one port.
-If two networks G and H are coupled by their port $g$ and $h$, then the output of $g$ is the input of $h$ and the output of $h$ is the input of $g$, as illustrated by Equation~\eqref{eq:coupled_inputs_outputs}.
+If two networks G and H are coupled by their port $g$ and $h$, then the output of $g$ is the input of $h$ and the output of $h$ is the input of $g$, as illustrated by \cref{eq:coupled_inputs_outputs}.
 \begin{equation}
     \left\lbrace
     \begin{aligned}
@@ -89,7 +212,7 @@ $b^i$ and~$a^i$ are nice to have as they allow us to see what is happening insid
 
 \subparagraph{Solving the internal transmissions and reflections.}
 How are~$a^i$ and~$b^i$ related?
-Equation~\eqref{eq:coupled_inputs_outputs} indicates that each element of $a^i$ is equal to an element of $b^i$, therefore $a^i$ can be obtain by reordering $b^i$ and vice-versa.
+\Cref{eq:coupled_inputs_outputs} indicates that each element of $a^i$ is equal to an element of $b^i$, therefore $a^i$ can be obtain by reordering $b^i$ and vice-versa.
 \index{permutation matrix}In other words, there exists a permutation matrix~$P$ such that
 \begin{equation}
     a^i = P b^i \text{.} \label{eq:relation_ai_bi}
@@ -106,21 +229,21 @@ To get $b_o$, the first step is to compute~$b_i$ from~$a_o$.
 \end{subequations}
 where~$I$ is the identity matrix with a dimension equal to that of~$S^{ii}P$.
 
-Can we go from~\eqref{eq:compute_bi_solve} to~\eqref{eq:compute_bi_invert}?
+Can we go from~\cref{eq:compute_bi_solve} to~\cref{eq:compute_bi_invert}?
 The matrix~$I - S^{ii}P$ has an inverse if and only if it is not singular.
 A matrix is singular if and only if its determinant equals~0.
-Can the determinant of~$I - S^{ii}P$ equal~0 (equation~\eqref{eq:det_i_minus_siip})?
+Can the determinant of~$I - S^{ii}P$ equal~0 (\cref{eq:det_i_minus_siip})?
 \begin{equation}
     \det(I - S^{ii}P) = 0 \label{eq:det_i_minus_siip}
 \end{equation}
-\index{eigenvalue}Equation~\eqref{eq:det_i_minus_siip} has the shape of an eigenvalue problem;
-equation~\eqref{eq:eigenvalue_typical} defines the eigenvalues~$\lambda$ of a matrix~$A$.
+\index{eigenvalue}\Cref{eq:det_i_minus_siip} has the shape of an eigenvalue problem;
+\cref{eq:eigenvalue_typical} defines the eigenvalues~$\lambda$ of a matrix~$A$.
 \begin{equation}
     \det(A - \lambda I) = 0 \label{eq:eigenvalue_typical}
 \end{equation}
 In our case, $\lambda=1$ and $A=S^{ii}P$.
 However, the sign is not the same: $I-A \neq A-I$.
-Fortunately, the determinant has the following property~\eqref{eq:determinant_scalar_multiplication}:
+Fortunately, the determinant has the following property~\cref{eq:determinant_scalar_multiplication}:
 \begin{equation}
     \det(c A) = c^n \det(A) \label{eq:determinant_scalar_multiplication}
 \end{equation}
@@ -135,7 +258,7 @@ Therefore,
 \end{subequations}
 We do not need to worry about the parity of~$n$.
 Indeed, if $x=0$ then $(-1)^n x = 0$ as well.
-This means that for our eigenvalue problem, the sign does not matter, as summarized by equation~\eqref{eq:determinant_sign_does_not_matter}.
+This means that for our eigenvalue problem, the sign does not matter, as summarized by \cref{eq:determinant_sign_does_not_matter}.
 \begin{equation}
     \det(I - S^{ii}P) = 0
     \quad
@@ -148,11 +271,11 @@ This means that for our eigenvalue problem, the sign does not matter, as summari
 Saying $\det(S^{ii}P - I) = 0$ is equivalent to saying that there exist non-zero vectors $v$, called ``eigenvectors'', such that $v = S^{ii}Pv$.
 The following argument, based on physical considerations, will demonstrate that there are no such vectors.
 
-$b^i$ is what $S^{ii}P$ is applied to in equation~\eqref{eq:compute_bi}, therefore we are looking for vectors $b^i$ satisfying
+$b^i$ is what $S^{ii}P$ is applied to in \cref{eq:compute_bi}, therefore we are looking for vectors $b^i$ satisfying
 \begin{equation}
     b^i = S^{ii}P b^i \text{.} \label{eq:bi_eigenvector}
 \end{equation}
-The two equations~\eqref{eq:bi_eigenvector} and ~\eqref{eq:compute_bi_bi}, taken together, 
+The two equations~\cref{eq:bi_eigenvector} and ~\cref{eq:compute_bi_bi}, taken together, 
 lead to the following interesting equality:
 \begin{equation}
     \left\lbrace
@@ -173,7 +296,7 @@ For the rest of this demonstration, let us assume that the system is not blind, 
 What would $b^i = S^{ii}P b^i$ mean?
 
 $b^i$ is the list of all the outputs of the inside part of the system, fed back as input to that same system.
-What equation~\eqref{eq:bi_eigenvector} means is that there exists some fields that are unaffected by the system; if such a field would enter the system, it would be trapped inside the system, looping through $S^{ii}P$ forever.
+What \cref{eq:bi_eigenvector} means is that there exists some fields that are unaffected by the system; if such a field would enter the system, it would be trapped inside the system, looping through $S^{ii}P$ forever.
 If $S^{ii}P$ has an eigenvector, then our system is totally lossless (for some fields) and can store any amount of energy forever.
 We know that all our networks have losses; even the propagation in free space has losses in the form of the beam diffracting slowly and becoming wider than its target, essentially leaking energy.
 Without using active components (external energy source, amplifiers), the best we can do is to aim for very low losses, which would produce very high-Q cavities but not perpetual storages.
@@ -182,7 +305,7 @@ Therefore $S^{ii}P$ has no eigenvalues.
 Therefore 1 is not an eigenvalue.
 Therefore $\det(I-S^{ii}P) \neq 0$.
 Therefore $I-S^{ii}P$ has an inverse.
-Therefore equation~\eqref{eq:compute_bi_invert} is correct, and the system can be solved.
+Therefore \cref{eq:compute_bi_invert} is correct, and the system can be solved.
 
 It can be interesting to draw a parallel between our problem and the convergence of an infinite series.
 Indeed, an infinite series of ratio $q$ converges if $\vert q \vert < 1$:
@@ -198,12 +321,12 @@ If there are losses, then $|q|<1$ and that series converges to $(1-q)^{-1}$ or, 
 
 Note that for the implementation, we may want to avoid inverting the matrix.
 Indeed, inverting matrices is costly and numerically unstable \todo{citation needed}.
-Even though equation~\eqref{eq:compute_bi_invert} is mathematically correct, we would rather solve $b^i$ in equation~\eqref{eq:compute_bi_solve}.
+Even though \cref{eq:compute_bi_invert} is mathematically correct, we would rather solve $b^i$ in \cref{eq:compute_bi_solve}.
 
 \subparagraph{Solving the output of the system.}
 Once we know the internal reflections of the system ($b^i$ as a function of itself), getting its output is trival.
 The second step is to compute~$b^o$ from~$a^o$ and~$b^i$.
-We do that by taking $b^o$ from equation~\eqref{eq:s_outside_inside} and eliminating $a^i$ with equation~\eqref{eq:relation_ai_bi}.
+We do that by taking $b^o$ from \cref{eq:s_outside_inside} and eliminating $a^i$ with \cref{eq:relation_ai_bi}.
 \begin{align}
     b^o &= S^{oo}a^o + S^{oi}a^i \notag \\
     b^o &= S^{oo}a^o + S^{oi}Pb^i \label{eq:compute_bo}
@@ -213,7 +336,80 @@ These two steps solve the system: from the inputs~$a^o$ we can compute the outpu
 This method also tells gives us $a^i$ and $b^i$ which are two equivalent ways of looking at what is happening inside the system.
 
 \subparagraph{Internal sources}
+The method described above does not allow us to account for sources inside the system.
+Such sources may nevertheless exist.
+For example, the local oscillator of HIFI is located outside the cryostat (\cref{fig:internal_sources_windows}).
+Therefore, the local oscillator is warmer, radiating heat.
+With the current state of our model, we can make this local oscillator power an external source.
+However, the windows that physically separate the cryostat from the outside world are also relatively warm, and they also act as sources of radiation.
 
+\begin{figure}[hbtp]
+    \centering
+    \missingfigure{Cryostat windows radiating power.}
+    \caption{\label{fig:internal_sources_windows} The cryostat windows are warm enough to emit a significant power.}
+\end{figure}
+
+Let us assume that every port radiates a constant flux, as described by \cref{eq:internal_sources}.
+The output $b_i$ of a port is a linear combination of the inputs $a_j$, plus a constant $c_i$.
+\begin{equation}
+    b = S a + c
+    \label{eq:internal_sources}
+\end{equation}
+The separation into inside and outside ports is straight forward, as indicated by~\cref{eq:internal_sources_io}.
+\begin{equation}
+    \begin{pmatrix}
+        b^o\\
+        b^i\\
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        S^{oo} & S^{oi} \\
+        S^{io} & S^{ii}
+    \end{pmatrix}
+    \begin{pmatrix}
+        a^o\\
+        a^i\\
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        c^o\\
+        c^i\\
+    \end{pmatrix}
+    \label{eq:internal_sources_io}
+\end{equation}
+Like previously, we solve for the internal transmissions and reflections.
+\begin{subequations}
+    \begin{align}
+        b^i &= S^{io} a^o + S^{ii} a^i + c^i \label{eq:compute_bi_ai_ci}\\
+        b^i &= S^{io} a^o + S^{ii} Pb^i + c^i \label{eq:compute_bi_bi_ci}\\
+        (I - S^{ii} P) b^i &= S^{io} a^o + c^i \label{eq:compute_bi_ci_solve}
+    \end{align}
+    \label{eq:compute_bi_ci}
+\end{subequations}
+\Cref{eq:compute_bi_ci_solve} is very similar to~\cref{eq:compute_bi_solve} and is as easy to solve for~$b^i$.
+The previous discussion regarding the invertibility of $(I - S^{ii} P)$, through the meaning of~\cref{eq:bi_eigenvector}, still applies here.
+
+Once $b_i$ is known, we inject its value into the expression of $b^o$.
+\begin{subequations}
+    \begin{align}
+        b^o &= S^{oo} a^o + S^{oi} a^i + c^o \label{eq:compute_bo_ai_co}\\
+        b^o &= S^{oo} a^o + S^{oi} Pb^i + c^o \label{eq:compute_bo_bi_co}
+    \end{align}
+    \label{eq:compute_bo_co}
+\end{subequations}
+Equations~\cref{eq:compute_bi_ci_solve} and~\cref{eq:compute_bo_bi_co} give us the response $b$ of the system $(S, P)$ to the inputs $a$ and $c$.
+
+%-----------------------------------------------------------------------------
+\subparagraph{Solving for each source independantly.}
+When solving a system with multiple sources, it may be tempting to set all the inputs at the same time.
+That is, filling $a^o$ and $c$, then computing $b$.
+This is, in most cases, a mistake.
+If two inputs are set at the same time, then they act as if they are phase-locked to each other, and it introduces interferences that cannot be produced with either input source off.
+Unless the sources are actually phase-locked to each other, the proper way of calculating the response of the system is to solve it for each source individually.
+
+In the case of HIFI, the radiation for the local oscillator, the cryostat windows, the black bodies and the sky must be solved separately.
+
+Then, like is the case for any incoherent signals, the results must be converted from amplitude to power then added together.
 
 %-----------------------------------------------------------------------------
 \paragraph{Implementation.}
@@ -237,8 +433,36 @@ The port~$j$ of the network~$i$ corresponds to the port~$k$ of the whole system,
 \end{equation}
 
 With that information, it is trivial to fill the scattering matrix of the whole system, $S$, with values from the scattering matrices from each network $S_i$.
+This is what algorithm~\cref{algo:gather_networks} does.
+\begin{algorithm}
+    \caption{GatherNetworks}
+    \label{algo:gather_networks}
+    \begin{algorithmic}
+        \Require{$N$} \Comment{Number of networks.}
+        \Require{$(S_1, S_2, \ldots, S_N)$} \Comment{Scattering matrices of each network.}
+        \Function{GatherNetworks}{$N$, $(S_1, S_2, \ldots, S_N)$}
+        \State{}\Comment{Count the total number of ports.}
+        \State {$n \gets 0$}
+        \For{$i=1$ to $n$}
+            \State{$n \gets n + $\Call{Size}{$S_i$}} \Comment{size = nb rows = nb columns: square matrices.}   
+        \EndFor
+        \State{}\Comment{Create the $n$-ports system scattering matrix.}
+        \State{$S \gets n$--by--$n$ matrix filled with 0}
+        \State{}\Comment{Fill its diagonal with the network scattering matrices.}
+        \State{$\textit{start} \gets 1$} \Comment{Fill from row 1 column 1.}
+        \For{$i=1$ to $n$}
+            \State{$n_i \gets $\Call{Size}{$S_i$}}
+            \State{$\textit{stop} \gets \textit{start} + n_i - 1$}
+            \State{$S_{\textit{start}:\textit{stop}, \textit{start}:\textit{stop}} \gets S_i$}
+            \Comment{Copy $S_i$ into $S$.}
+            \State{$\textit{start} \gets \textit{start} + n_i$}
+        \EndFor
+        \\ \Return{$S$}
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
 $S$ contains mostly zeros, except for blocks on its diagonal containing copies of each~$S_i$.
-For example, Equation~\eqref{eq:block_scattering} shows what $S$ looks like for a system containing two networks $S_1$ and $S_2$.
+For example, \cref{eq:block_scattering} shows what $S$ looks like for a system containing two networks $S_1$ and $S_2$.
 \begin{equation}
     S =
     \begin{pmatrix}
@@ -262,30 +486,32 @@ For example, Equation~\eqref{eq:block_scattering} shows what $S$ looks like for 
     \end{pmatrix}
     \label{eq:block_scattering}
 \end{equation}
+
 Note that the number of zeros increases with~$N^2$ while the number of non-zeros elements around the diagonal increases with~$N$.
 This remark has no importance from a purely mathematical point of view but is very important for the implementation of the solving algorithm.
 \index{sparse matrix}Indeed, matrices that contain many zeros are called ``sparse matrices'' and many algorithms exist that have been optimized for dealing with them.
-If we use such an optimized algorithm, then the matrix inversion that appears in Equation~\eqref{eq:compute_bi_invert} will execute in $O(N)$ instead of $O(N^2)$ (using the ``big O notation'').
+If we use such an optimized algorithm, then the matrix inversion that appears in \cref{eq:compute_bi_invert} will execute in $O(N)$ instead of $O(N^2)$ (using the ``big O notation'').
 
-Unless we are lucky, the system scattering matrix $S$ (that we build from the network scattering matrices $S_i$) is not organized into inside and outside sectors like shown on Equation~\eqref{eq:s_outside_inside}.
+Unless we are lucky, the system scattering matrix $S$ (that we build from the network scattering matrices $S_i$) is not organized into inside and outside sectors like shown on \cref{eq:s_outside_inside}.
 \index{permutation matrix}However, there exists a permutation matrix~$Q$ such as
 \begin{gather}
     \left\lbrace
     \begin{aligned}
         S' &= Q S Q^{-1} \\
         a' &= Q a \\
-        b' &= Q b
+        b' &= Q b \\
+        c' &= Q c
     \end{aligned}
     \right.
     \label{eq:permute_s}
     \\
-    b = S a \quad \Longleftrightarrow \quad b' = S' a' \label{eq:permute_s_equiv}
+    b = S a + c\quad \Longleftrightarrow \quad b' = S' a' +c'\label{eq:permute_s_equiv}
 \end{gather}
-with $S'$ having the form of Equation~\eqref{eq:s_outside_inside}.
+with $S'$ having the form of \cref{eq:s_outside_inside}.
 
-The permutation matrix $Q$ must not be confused with the permutation matrix $P$ from equation~\eqref{eq:relation_ai_bi}, they are distinct, and both are needed.
+The permutation matrix $Q$ must not be confused with the permutation matrix $P$ from \cref{eq:relation_ai_bi}, they are distinct, and both are needed.
 $Q$~separates the inside ports from the outside ports, while $P$~describes how the inside ports are coupled.
-Once the permutation matrix~$Q$ is known, we can solve the problem for~$S'$ and get~$b'$, from which we can retrieve~$b$ (Equation \eqref{eq:permute_s_equiv}).
+Once the permutation matrix~$Q$ is known, we can solve the problem for~$S'$ and get~$b'$, from which we can retrieve~$b$~\cref{eq:permute_s_equiv}.
 
 Permutation matrices permute the order of rows and columns of matrices.
 They contain one and only one 1 per row and per column, all the other elements are 0.
@@ -317,19 +543,21 @@ is not because the port identifier~2 appears more than once.
 
 There are many possible permutation matrices $Q$: all that is required for $Q$ is to separate the inside ports from the outside ports, there is no constraint on the order of the ports beyond that.
 To ensure the reproducibility of our algorithm, we want to choose one specific $Q$, the one for which the inside and outside port identifiers are in ascending order.
-This is what the algorithm~\ref{algo:separate_inside_outside} provides.
-Algorithm~\ref{algo:separate_inside_outside} uses the outputs of algorithms~\ref{algo:find_inside} and~\ref{algo:find_outside}.
+This is what the algorithm~\cref{algo:separate_inside_outside} provides.
+Algorithm~\cref{algo:separate_inside_outside} uses the outputs of algorithms~\cref{algo:find_inside} and~\cref{algo:find_outside}.
 
 \begin{algorithm}
     \caption{FindInside}
     \label{algo:find_inside}
     \begin{algorithmic}
-        \REQUIRE {\textit{couplings}} \COMMENT{a valid set of coupling descriptors}
-        \STATE {\textit{inside} $\leftarrow \emptyset$}
-        \FORALL{\textit{coupling} $\in$ \textit{couplings}}
-            \STATE {\textit{inside} $\leftarrow$ \textit{inside} $\cup$ \textit{coupling}}
-        \ENDFOR
-        \RETURN {\textit{inside}} \COMMENT{a set containing all the coupled ports}
+        \Require {\textit{couplings}} \Comment{a valid set of coupling descriptors}
+        \Function{FindInside}{\textit{couplings}}
+        \State {\textit{inside} $\gets \emptyset$}
+        \ForAll{\textit{coupling} $\in$ \textit{couplings}}
+            \State {\textit{inside} $\gets$ \textit{inside} $\cup$ \textit{coupling}}
+        \EndFor
+        \\ \Return {\textit{inside}} \Comment{a set containing all the coupled ports}
+        \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
@@ -337,11 +565,13 @@ Algorithm~\ref{algo:separate_inside_outside} uses the outputs of algorithms~\ref
     \caption{FindOutside}
     \label{algo:find_outside}
     \begin{algorithmic}
-        \REQUIRE {\textit{inside}} \COMMENT{a set containing all the coupled ports}
-        \REQUIRE {$n$} \COMMENT{number of ports in the system}
-        \STATE{\textit{allports} $\leftarrow \lbrace 1, 2, 3, \dots, n \rbrace$}
-        \STATE{\textit{outside} $\leftarrow$ \textit{allports} $\setminus$ \textit{inside}}
-        \RETURN {\textit{outside}} \COMMENT{a set containing all the non-coupled ports}
+        \Require {\textit{inside}} \Comment{a set containing all the coupled ports}
+        \Require {$n$} \Comment{number of ports in the system}
+        \Function{FindOutside}{\textit{inside}, $n$}
+        \State{\textit{allports} $\gets \lbrace 1, 2, 3, \dots, n \rbrace$}
+        \State{\textit{outside} $\gets$ \textit{allports} $\setminus$ \textit{inside}}
+        \\ \Return {\textit{outside}} \Comment{a set containing all the non-coupled ports}
+        \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
@@ -349,38 +579,40 @@ Algorithm~\ref{algo:separate_inside_outside} uses the outputs of algorithms~\ref
     \caption{SeparateInsideOutside}
     \label{algo:separate_inside_outside}
     \begin{algorithmic}
-        \REQUIRE {\textit{inside}} \COMMENT{a set containing all the coupled ports}
-        \REQUIRE {\textit{outside}} \COMMENT{a set containing all the non-coupled ports}
-        \REQUIRE {$n$} \COMMENT{number of ports in the system}
-        \STATE{\textit{insorted} $\leftarrow$ sort(array(\textit{inside}))}
-        \STATE{\textit{outsorted} $\leftarrow$ sort(array(\textit{outside}))}
-        \STATE {$Q \leftarrow$ $n$--by--$n$ matrix filled with 0}
-        \FOR {$i = 1$ to length(\textit{outsorted})}
-            \STATE{$Q_{i, \textit{outsorted}[i]} \leftarrow$ 1}
-        \ENDFOR
-        \FOR {$i$ = 1 to length(\textit{insorted})}
-            \STATE{$Q$[$i$ + length(\textit{outsorted}), \textit{insorted}$[i]$] $\leftarrow$ 1}
-        \ENDFOR
-        \RETURN {$Q$} \COMMENT{Permutation matrix that separates inside/outside ports}
+        \Require {\textit{inside}} \Comment{a set containing all the coupled ports}
+        \Require {\textit{outside}} \Comment{a set containing all the non-coupled ports}
+        \Require {$n$} \Comment{number of ports in the system}
+        \Function{SeparateInsideOutside}{\textit{inside}, \textit{outside}, $n$}
+        \State{\textit{insorted} $\gets$ \Call{Sort}{\textit{inside}}}
+        \State{\textit{outsorted} $\gets$ \Call{Sort}{\textit{outside}}}
+        \State {$Q \gets$ $n$--by--$n$ matrix filled with 0}
+        \For {$i = 1$ to \Call{Length}{\textit{outsorted}}}
+            \State{$Q_{i, \textit{outsorted}[i]} \gets$ 1}
+        \EndFor
+        \For {$i$ = 1 to \Call{Length}{\textit{insorted}}}
+            \State{$Q_{i + \Call{Length}{\textit{outsorted}}, \textit{insorted}[i]}$ $\gets$ 1}
+        \EndFor
+        \\ \Return {$Q$} \Comment{Permutation matrix that separates inside/outside ports}
+        \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
 Example: A system with $n=4$ ports has its ports 1 and 3 coupled together.
-Algorithm~\ref{algo:separate_inside_outside_example} shows how to compute $Q$ from a set of coupling descriptors.
+Algorithm~\cref{algo:separate_inside_outside_example} shows how to compute $Q$ from a set of coupling descriptors.
 The ``Ensure'' statements are assertions, propositions that must be true if the algorithm is working properly.
 
 \begin{algorithm}[H]
     \caption{SeparateInsideOutside, example}
     \label{algo:separate_inside_outside_example}
     \begin{algorithmic}
-        \STATE {couplings $\leftarrow \lbrace \lbrace 3, 1 \rbrace \rbrace$}
-        \STATE {$n \leftarrow 4$}
-        \STATE {inside $\leftarrow$ FindInside(couplings)}
-        \ENSURE {inside = $\lbrace 3, 1 \rbrace$} \COMMENT {Order does not matter for set equality.}
-        \STATE {outside $\leftarrow $ FindOutside(inside, $n$)}
-        \ENSURE {outside $= \lbrace 2, 4 \rbrace$}
-        \STATE {$Q \leftarrow$ SeparateInsideOutside(inside, outside, $n$)}
-        \ENSURE {
+        \State {\textit{couplings} $\gets \lbrace \lbrace 3, 1 \rbrace \rbrace$}
+        \State {$n \gets 4$}
+        \State {\textit{inside} $\gets$ \Call{FindInside}{\textit{couplings}}}
+        \Ensure {\textit{inside} = $\lbrace 3, 1 \rbrace$} \Comment {Order does not matter for set equality.}
+        \State {\textit{outside} $\gets $ \Call{FindOutside}{\textit{inside}, $n$}}
+        \Ensure {\textit{outside} $= \lbrace 2, 4 \rbrace$}
+        \State {$Q \gets$ \Call{SeparateInsideOutside}{\textit{inside}, \textit{outside}, $n$}}
+        \Ensure {
         $
         Q = \begin{pmatrix}
             0 & 1 & 0 & 0\\
@@ -392,8 +624,8 @@ The ``Ensure'' statements are assertions, propositions that must be true if the 
         }
     \end{algorithmic}
 \end{algorithm}
-Let us apply the permutation matrix $Q$ produced in the example algorithm~\ref{algo:separate_inside_outside_example} to a vector~$a$ and a scattering matrix~$S$, following equation~\eqref{eq:permute_s}.
-The results are given in equations~\eqref{eq:q_a_aprime} and~\eqref{eq:q_s_qtranspose_sprime}.
+Let us apply the permutation matrix $Q$ produced in the example algorithm~\cref{algo:separate_inside_outside_example} to a vector~$a$ and a scattering matrix~$S$, following \cref{eq:permute_s}.
+The results are given in equations~\cref{eq:q_a_aprime} and~\cref{eq:q_s_qtranspose_sprime}.
 \begin{equation}
     Q a
     =
@@ -428,7 +660,7 @@ The results are given in equations~\eqref{eq:q_a_aprime} and~\eqref{eq:q_s_qtran
     \label{eq:q_s_qtranspose_sprime}
 \end{equation}
 The next step, separating $a'$ in two and $S'$ in four, is trivial to implement.
-Equation~\eqref{eq:q_s_qtranspose_sprime_decomposed} shows a decomposition of the matrix $S'$ from equation~\eqref{eq:q_s_qtranspose_sprime} into inside and outside submatrices.
+\Cref{eq:q_s_qtranspose_sprime_decomposed} shows a decomposition of the matrix $S'$ from \cref{eq:q_s_qtranspose_sprime} into inside and outside submatrices.
 \begin{equation}
     \begin{aligned}
     S'^{oo}
@@ -461,10 +693,10 @@ Equation~\eqref{eq:q_s_qtranspose_sprime_decomposed} shows a decomposition of th
     \end{aligned}
     \label{eq:q_s_qtranspose_sprime_decomposed}
 \end{equation}
-Our algorithm successfully reorganized our data in a way compatible with equation~\eqref{eq:s_outside_inside}.
+Our algorithm successfully reorganized our data in a way compatible with \cref{eq:s_outside_inside}.
 
-We now wish to construct the permutation matrix~$P$ that appears in equation~\eqref{eq:relation_ai_bi}.
-Applied to our example, this corresponds to equation~\eqref{eq:relation_ai_bi_example}.
+We now wish to construct the permutation matrix~$P$ that appears in \cref{eq:relation_ai_bi}.
+Applied to our example, this corresponds to \cref{eq:relation_ai_bi_example}.
 \begin{equation}
     \begin{pmatrix}
         a_1 \\ a_3
@@ -476,7 +708,7 @@ Applied to our example, this corresponds to equation~\eqref{eq:relation_ai_bi_ex
     \end{pmatrix}
     \label{eq:relation_ai_bi_example}
 \end{equation}
-In our example, the ports 1 and 3 are coupled, therefore $a_1 = b_3$ and $a_3 = b_1$, which leads to equation~\eqref{eq:relation_bi_bi_example}.
+In our example, the ports 1 and 3 are coupled, therefore $a_1 = b_3$ and $a_3 = b_1$, which leads to \cref{eq:relation_bi_bi_example}.
 \begin{equation}
     \begin{pmatrix}
         b_3 \\ b_1
@@ -488,7 +720,7 @@ In our example, the ports 1 and 3 are coupled, therefore $a_1 = b_3$ and $a_3 = 
     \end{pmatrix}
     \label{eq:relation_bi_bi_example}
 \end{equation}
-It is obvious that the correct value for $P$ is that of equation~\eqref{eq:p_example}, but we need an algorithm to compute~$P$ for us in the general case.
+It is obvious that the correct value for $P$ is that of \cref{eq:p_example}, but we need an algorithm to compute~$P$ for us in the general case.
 \begin{equation}
     P =
     \begin{pmatrix}
@@ -501,59 +733,189 @@ One difficulty comes from the fact that we cannot use the indices of the coupled
 Indeed, in our example, $b^i$ contains two elements only so we cannot reach $b_3$ by using directly the index 3.
 We need to map the indices given by the set of coupling descriptors to indices that can be used to address the various matrices.
 In our example, 1 is mapped to 1 ($b'^i_1 = b_1$), and 3 is mapped to 2 ($b'^i_2 = b_3$); therefore saying that ports 1 and 3 are coupled is equivalent to saying that indices 1 and 2 need to be permuted.
-Algorithm~\ref{algo:port_to_index} converts a port identifier to an index usable to address $S'^{ii}$.
+Algorithm~\cref{algo:port_to_index} converts a port identifier to an index usable to address $S'^{ii}$.
 \begin{algorithm}
     \caption{PortToIndex}
     \label{algo:port_to_index}
     \begin{algorithmic}
-        \REQUIRE{\textit{port}} \COMMENT{The port identifier for which we want the index.}
-        \REQUIRE{\textit{inside}} \COMMENT{Set of all the inside port identifiers.}
-        \STATE{\textit{insorted} $\leftarrow$ sort(array(\textit{inside}))}
-        \STATE{\textit{index} $\leftarrow$ position of \textit{port} in \textit{insorted}}
-        \RETURN{\textit{index}}
+        \Require{\textit{port}} \Comment{The port identifier for which we want the index.}
+        \Require{\textit{inside}} \Comment{Set of all the inside port identifiers.}
+        \Function{PortToIndex}{\textit{port}, \textit{inside}}
+        \State{\textit{insorted} $\gets$ \Call{Sort}{\textit{inside}}}
+        \State{\textit{index} $\gets$ position of \textit{port} in \textit{insorted}}
+        \\ \Return{\textit{index}}
+        \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
-We can now construct the permutation matrix $P$ with algorithm~\ref{algo:couple_inputs_to_outputs}.
+We can now construct the permutation matrix $P$ with algorithm~\cref{algo:couple_inputs_to_outputs}.
 \begin{algorithm}
     \caption{CoupleInputsToOutputs}
     \label{algo:couple_inputs_to_outputs}
     \begin{algorithmic}
-        \REQUIRE{\textit{couplings}}
-        \STATE {\textit{inside} $\leftarrow$ FindInside(\textit{couplings})}
-        \STATE {$m \leftarrow$ cardinal(\textit{inside})}
-        \STATE {$P \leftarrow$ $m$--by--$m$ matrix filled zith 0}
-        \FORALL {\textit{coupling} $\in$ \textit{couplings}}
-            \STATE {\textit{couplingArray} $\leftarrow$ array(\textit{coupling})}
-            \STATE {\textit{portA} $\leftarrow$ \textit{couplingArray}[1]}
-            \STATE {\textit{portB} $\leftarrow$ \textit{couplingArray}[2]}
-            \STATE {\textit{indexA} $\leftarrow$ PortToIndex(\textit{portA}, \textit{inside})}
-            \STATE {\textit{indexB} $\leftarrow$ PortToIndex(\textit{portB}, \textit{inside})}
-            \STATE {$P_{\textit{indexA}, \textit{indexB}} \leftarrow$ 1}
-            \STATE {$P_{\textit{indexB}, \textit{indexA}} \leftarrow$ 1}
-        \ENDFOR
-        \RETURN {$P$}
+        \Require{\textit{couplings}} \Comment{Set of coupling descriptors.}
+        \Function{CoupleInputsToOutputs}{\textit{couplings}}
+        \State {\textit{inside} $\gets$ FindInside(\textit{couplings})}
+        \State {$m \gets$ \Call{cardinal}{\textit{inside}}}
+        \State {$P \gets$ $m$--by--$m$ matrix filled zith 0}
+        \ForAll {\textit{coupling} $\in$ \textit{couplings}}
+            \State {\textit{couplingArray} $\gets$ \Call{SetToArray}{\textit{coupling}}}
+            \State {\textit{portA} $\gets$ \textit{couplingArray}[1]}
+            \State {\textit{portB} $\gets$ \textit{couplingArray}[2]}
+            \State {\textit{indexA} $\gets$ \Call{PortToIndex}{\textit{portA}, \textit{inside}}}
+            \State {\textit{indexB} $\gets$ \Call{PortToIndex}{\textit{portB}, \textit{inside}}}
+            \State {$P_{\textit{indexA}, \textit{indexB}} \gets$ 1}
+            \State {$P_{\textit{indexB}, \textit{indexA}} \gets$ 1}
+        \EndFor
+        \\ \Return {$P$}
+        \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
-If we apply algorithm~\ref{algo:couple_inputs_to_outputs} to our example, then there is only one value for \textit{coupling}: $\lbrace 1, 3\rbrace$.
-Therefore, \textit{couplingArray}=[1, 3], \textit{portA}=1, \textit{portB}=3.
-The two calls to PortToIndex take \textit{inside}=$\lbrace 1, 3\rbrace$ and make a sorted array from it, \textit{insorted}=[1, 3].
-The position of \textit{portA} in that sorted array is 1, that of \textit{portB} is 2, so \textit{indexA}=1 and \textit{indexB}=2.
-The matrix $P$ is filled with zeros, except for the elements $P_{1, 2}$ and $P_{2, 1}$ that equal 1, matching equation~\eqref{eq:p_example}.
+If we apply algorithm~\cref{algo:couple_inputs_to_outputs} to our example, then there is only one value for \textit{coupling}: $\lbrace 3, 1\rbrace$.
+Therefore, \textit{couplingArray}=[3, 1], \textit{portA}=3, \textit{portB}=1.
+The two calls to PortToIndex take \textit{inside}=$\lbrace 3, 1\rbrace$ and make a sorted array from it, \textit{insorted}=[1, 3].
+The position of \textit{portA} in that sorted array is 2, that of \textit{portB} is 1, so \textit{indexA}=2 and \textit{indexB}=1.
+The matrix $P$ is filled with zeros, except for the elements $P_{1, 2}$ and $P_{2, 1}$ that equal 1, matching \cref{eq:p_example}.
 
-We have now everything we need to solve equation~\eqref{eq:compute_bi_solve}, which I reproduce here (equation~\eqref{eq:compute_bi_solve_prime}) using the \textit{prime} version of the variables resulting from the permutations involving~$Q$.
+Algorithm~\cref{algo:solve_couplings} combines algorithms~%
+\cref{algo:find_inside},
+\cref{algo:find_outside},
+\cref{algo:separate_inside_outside} and
+\cref{algo:couple_inputs_to_outputs}
+to produce $P$ and $Q$ from the set of coupling descriptors and the total number of ports.
+\begin{algorithm}
+    \caption{SolveCouplings}
+    \label{algo:solve_couplings}
+    \begin{algorithmic}
+        \Require{\textit{couplings}} \Comment{Set of coupling descriptors.}
+        \Require{$n$} \Comment{Number of ports in the whole system.}
+        \Function{SolveCouplings}{\textit{couplings}, $n$}
+        \State{$\textit{inside} \gets \Call{FindInside}{\textit{couplings}}$}
+        \State{$\textit{outside} \gets \Call{FindOutside}{\textit{inside}, n}$}
+        \State{$Q \gets \Call{SeparateInsideOutside}{\textit{inside}, \textit{outside}, n}$}
+        \State{$P \gets \Call{CoupleInputsToOutputs}{\textit{couplings}}$}
+        \State{$n^o \gets \Call{Cardinal}{\textit{outside}}$} \Comment{Number of outside ports.}
+        \\ \Return $P, Q, n^o$
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+We have now everything we need to solve \cref{eq:compute_bi_ci_solve}, which I reproduce here (\cref{eq:compute_bi_solve_prime}) using the \textit{prime} version of the variables resulting from the permutations involving~$Q$.
 \begin{equation}
-    (I - S'^{ii})b'^i = S'^{io}a'o \label{eq:compute_bi_solve_prime}
+    (I - S'^{ii})b'^i = S'^{io}a'^o + c'^i \label{eq:compute_bi_solve_prime}
 \end{equation}
-In equation~\eqref{eq:compute_bi_solve_prime}, everything is known except~$b'^i$.
+In \cref{eq:compute_bi_solve_prime}, everything is known except~$b'^i$.
 We wish to solve this equation for~$b'^i$.
 This is a very common problem for which many numerical packages offer solutions.
 Solving systems of linear equations is also decribed at length in the chapter 2 of Numerical Recipes \cite{Press:2007:NRE:1403886}.
 The developer is free to choose any method.
 I suggest however something along the line of a LU decomposition.
-Indeed, that LU decomposition can be computed once, its result stored, and then used several times to solve the same system for different values of $a'^o$.
+Indeed, that LU decomposition can be computed once, its result stored, and then used several times to solve the same system for different values of $a'^o$ and $c'^i$.
 Big systems may benefit from using sparse matrices.
+Algorithm~\cref{algo:solve_networks} separates the scattering matrix of the whole system into its four regions and facorizes $(I - S'^{ii})$.
+\begin{algorithm}
+    \caption{SolveNetworks}
+    \label{algo:solve_networks}
+    \begin{algorithmic}
+        \Require{\textit{networks}} \Comment{List of scattering matrices of each network}
+        \Require{$P$} \Comment{Permutation matrix connecting inside inputs to outputs.}
+        \Require{$Q$} \Comment{Permutation matrix separating inside from outside ports.}
+        \Require{$n^o$} \Comment{Number of outside ports.}
+        \Function{SolveNetworks}{$\textit{networks}, P, Q, n^o$}
+        \State{$N \gets \Call{Length}{\textit{networks}}$} \Comment{Number of networks.}
+        \State{$S \gets \Call{GatherNetworks}{N, \textit{networks}}$}
+        \State{$S' \gets Q S Q\transp$} \Comment{Outside ports are now at the beginning.}
+        \State{}\Comment{Split the system scattering matrix into its four inside/outside regions.}
+        \State{$n \gets \Call{Size}{S'}$}
+        \State{$S'^{oo} \gets S'_{1:n^o, 1:n^o}$}
+        \State{$S'^{oi} \gets S'_{1:n^o, n^o+1:n}$}
+        \State{$S'^{io} \gets S'_{n^o+1:n, 1:n^o}$}
+        \State{$S'^{ii} \gets S'_{n^o+1:n, n^o+1:n}$}
+        \State{} \Comment{Part of the solving that is independant from the inputs.}
+        \State{$I \gets \text{Identity matrix of size } S'^{ii} P$}
+        \State{$\textit{LUdata} = \Call{LUdecompose}{I - S'^{ii} P}$}
+        \\ \Return{$S'^{oo}$, $S'^{oi}$, $S'^{io}$, \textit{LUdata}}
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+Finally, the last step consists in applying the inputs to the system.
+This is described by algorithm~\cref{algo:solve_inputs}.
+\begin{algorithm}
+    \caption{SolveInputs}
+    \label{algo:solve_inputs}
+    \begin{algorithmic}
+        \Require{$a'^o$} \Comment{Inputs entering the system.}
+        \Require{$c'^o$} \Comment{Constant radiation from outside ports.}
+        \Require{$c'^i$} \Comment{Constant radiation from inside ports.}
+        \Require{$S'^{oo}, S'^{oi}, S'^{io}$}
+        \Require{\textit{LUdata}} \Comment{Some factorization of $I - S'^{ii} P$.}
+        \Function{SolveInputs}{$a'^o, c'^o, c'^i, S'^{oo}, S'^{oi}, S'^{io}, \textit{LUdata}$}
+        \State{$b'^i = \Call{LUsolve}{\textit{LUdata}, S'^{io} a'^o + c'^i}$} \Comment{\Cref{eq:compute_bi_ci_solve}}
+        \State{$b'^o = S'^{oo} a'^o + S'^{oi} P b'^i + c'^o$} \Comment{\Cref{eq:compute_bo_bi_co}}
+        \State{$b' = \Call{Concatenate}{b'^o, b'^i}$}
+        \\ \Return{$b'$}
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+The last algorithm, algorithm~\cref{algo:solve_system} puts all the pieces together.
+This is an example.
+In a real application, where we need to loop over frequencies and apply different inputs for each frequency, we would call SolveCouplings once for the whole system, then SolveNetworks for each set of parameters (such as the frequency), then call SolveInputs for each source of radiation.
+This is illustrated by algorithm~\cref{algo:solve_system_realistic}.
+\begin{algorithm}
+    \caption{SolveSystem}
+    \label{algo:solve_system}
+    \begin{algorithmic}
+        \Require{\textit{couplings}} \Comment{Set of coupling descriptors.}
+        \Require{\textit{networks}} \Comment{Scattering matrix of each network.}
+        \Require{$n$} \Comment{Number of ports in the system.}
+        \Require{$a$} \Comment{Inputs to the system.}
+        \Require{$c$} \Comment{Constant radiation from internal sources.}
+        \Function{SolveSystem}{$\textit{couplings}, \textit{networks}, n, a, c$}
+        \State{$P, Q, n^o \gets \Call{SolveCouplings}{\textit{couplings}, n}$}
+        \State{$S'^{oo}, S'^{oi}, S'^{ii}, \textit{LUdata} \gets \Call{SolveNetworks}{\textit{networks}, P, Q, n^o}$}
+        \State{$c' \gets Q c$}
+        \State{$c'^o \gets c'_{1:n^o}$}
+        \State{$c'^i \gets c'_{n^o+1:n}$}
+        \State{$a' \gets Qa$}
+        \State{$a'^o \gets a'_{1:n^o}$} \Comment{There is no use for $a'^i$ since it is defined by $b$.}
+        \State{$b' \gets \Call{SolveInputs}{a'^o, c'^o, c'^i, S'^{oo}, S'^{oi}, S'^{ii}, \textit{LUdata}}$}
+        \State {$b \gets Q\transp b'$}
+        \\ \Return {$b$}
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{SolveSystemRealistic}
+    \label{algo:solve_system_realistic}
+    \begin{algorithmic}
+        \Require{\textit{couplings}} \Comment{Set of coupling descriptors.}
+        \Require{$n$} \Comment{Number of ports in the system.}
+        \Require{\textit{networkparamset}}
+        \Require{\textit{sourcesconfiguration}} \Comment{List of values for $a$ and $c$.}
+        \Function{SolveSystemRealistic}{\textit{couplings}, $n$, \textit{networkparamset}, \textit{sourcesconfiguration}}
+        \State{$P, Q, n^o \gets \Call{SolveCouplings}{\textit{couplings}, n}$}
+        \ForAll{$\textit{networkparamset} \in \textit{networkparamsets}$}
+            \State{$\textit{networks} \gets \Call{ComputeNetworks}{\textit{networkparamset}}$}
+            \State{$S'^{oo}, S'^{oi}, S'^{ii}, \textit{LUdata} \gets \Call{SolveNetworks}{\textit{networks}, P, Q, n^o}$}
+            \ForAll{$a, c \in \textit{sourcesconfiguration}$}
+                \State{$c' \gets Q c$}
+                \State{$c'^o \gets c'_{1:n^o}$}
+                \State{$c'^i \gets c'_{n^o+1:n}$}
+                \State{$a' \gets Qa$}
+                \State{$a'^o \gets a'_{1:n^o}$} \Comment{There is no use for $a'^i$ since it is defined by $b$.}
+                \State{$b' \gets \Call{SolveInputs}{a'^o, c'^o, c'^i, S'^{oo}, S'^{oi}, S'^{ii}, \textit{LUdata}}$}
+                \State {$b \gets Q\transp b'$}
+                \State{Store $b$ somewhere}
+            \EndFor
+        \EndFor
+    \\ \Return {One $b$ for each network param set and source configuration.}
+    \EndFunction
+    \end{algorithmic}
+\end{algorithm}
 
 
 
@@ -585,10 +947,10 @@ $n$ can be complex.
     \missingfigure{Propagation in a homogeneous medium.}
     \caption{\label{fig:net_distance} Propagation in a homogeneous medium.}
 \end{figure}
-Figure \ref{fig:net_distance} shows two points $z_1$ and $z_2$ along the path of a plane wave traveling through a medium of index $n$.
+\Cref{fig:net_distance} shows two points $z_1$ and $z_2$ along the path of a plane wave traveling through a medium of index $n$.
 The line joining the two points is parallel to the direction of propagation of the wave.
 The two points are separated by a distance $d$.
-Then, at any time, the electric fields at the two points are linked by equation~\eqref{eq:net_distance}.
+Then, at any time, the electric fields at the two points are linked by \cref{eq:net_distance}.
 \begin{equation}
     e(z_2) = e(z_1) \exp
     \left(
@@ -597,7 +959,7 @@ Then, at any time, the electric fields at the two points are linked by equation~
     \label{eq:net_distance}
 \end{equation}
 
-The argument of the exponential can be separated into a real and an imaginary part as shown with equation~\eqref{eq:absorption_phase}.
+The argument of the exponential can be separated into a real and an imaginary part as shown with \cref{eq:absorption_phase}.
 \begin{gather}
     \begin{aligned}
         - i 2\pi d n f / c_0
@@ -617,7 +979,7 @@ leading to a very strong absorption of the wave in metals.
 The minus sign for the phase comes from the fact that the wave reaches $z_1$ before it reaches $z_2$: the field in $z_2$ is late relatively to the field in $z_1$.
 Note that $\Re(n) f / c_0 = 1 / \lambda$, with $\lambda$ the wavelength of the wave in the medium.
 
-A distance of homogeneous isotropic propagation medium constitutes a two-ports network (equation~\eqref{eq:s_2_ports}).
+A distance of homogeneous isotropic propagation medium constitutes a two-ports network (\cref{eq:s_2_ports}).
 \begin{equation}
     S =
     \begin{pmatrix}
@@ -663,13 +1025,13 @@ The amount of reflection and transmission depends on the refractive indices on t
 One particular case is the case where both indices are equal; in this case the interface does not really exist and has no effect on the wave: no reflection and full transmission.
 
 When the direction of propagation is normal to the surface, we are in a case of normal incidence.
-In case of normal incidence, the interface is a two-ports network and its scattering matrix has the shape of equation~\eqref{eq:s_2_ports}.
+In case of normal incidence, the interface is a two-ports network and its scattering matrix has the shape of \cref{eq:s_2_ports}.
 
-Equations~\eqref{eq:fresnel_normal} are the Fresnel equations~\eqref{eq:fresnel_oblique} rewritten for the case of normal incidence.
+\Crefrange{eq:fresnel_normal_r}{eq:fresnel_normal_t} are the Fresnel equations \eqref{eq:fresnel_rp}~to~\eqref{eq:fresnel_ts} rewritten for the case of normal incidence.
 \begin{subequations}
     \begin{align}
-        r &= \frac{n_i - n_t}{n_i + n_t} \label{eq:fresnel_r}\\
-        t &= \frac{2 n_i}{n_i + n_t} \label{eq:fresnel_t}
+        r &= \frac{n_i - n_t}{n_i + n_t} \label{eq:fresnel_normal_r}\\
+        t &= \frac{2 n_i}{n_i + n_t} \label{eq:fresnel_normal_t}
     \end{align}
     \label{eq:fresnel_normal}
 \end{subequations}
@@ -677,9 +1039,11 @@ The $i$ and $t$ subscripts stand for ``incident'' and ``transmitted''.
 The two materials, ``material 1'' and ``material 2'', have for refraction indices $n_1$ and $n_2$.
 When when going from material 1 to material 2, $n_i = n_1$ and $n_t = n_2$.
 When when going from material 2 to material 1, $n_i = n_2$ and $n_t = n_1$.
-Therefore, the four elements of the scattering matrix are given by equation~\eqref{eq:s_interface_normal} in which $I_3$ is the 3--by--3 identity matrix.
+Therefore, the four elements of the scattering matrix are given by \cref{eq:s_interface_normal} in which $I_3$ is the 3--by--3 identity matrix.
 \begin{subequations}
     \begin{align}
+        I_3 &= \begin{pmatrix} 1&0&0\\0&1&0\\0&0&1 \end{pmatrix}
+        \\
         S_{1, 1} &= \frac{n_1 - n_2}{n_1 + n_2} I_3
         \\
         S_{2, 2} &= \frac{n_2 - n_1}{n_2 + n_1} I_3
@@ -707,7 +1071,7 @@ In case of normal incidence, the plane-of-incidence is undefined.
     \caption{\label{fig:net_interface_oblique}Interface at oblique incidence.}
 \end{figure}
 
-\index{Fresnel equations}Equations~\eqref{eq:fresnel_oblique} are the Fresnel equations corresponding to the field directions described in figure \ref{fig:fresnel_directions} for linear homogeneous isotropic dielectric materials.
+\index{Fresnel equations}\Crefrange{eq:fresnel_rp}{eq:fresnel_ts} are the Fresnel equations corresponding to the field directions described in figure \cref{fig:fresnel_directions} for linear homogeneous isotropic dielectric materials.
 \begin{subequations}
     \begin{align}
         r_\parallel & =
@@ -728,7 +1092,7 @@ In case of normal incidence, the plane-of-incidence is undefined.
     \end{align}
     \label{eq:fresnel_oblique}
 \end{subequations}
-Equation~\eqref{eq:fresnel_rp} differs from that given by Hecht in \cite{hecht2002optics}.
+\Cref{eq:fresnel_rp} differs from that given by Hecht in~\cite{hecht2002optics}.
 This comes from a different convention for the direction of the reflected field.
 Our convention for the direction of the parallel reflected field makes the parallel and perpendicular results consistent when the angle of incidence is zero.
 
@@ -759,35 +1123,35 @@ Our convention for the direction of the parallel reflected field makes the paral
     }
 \end{figure}
 
-Before we can apply the reflection and transmission coefficients given in~\eqref{eq:fresnel_oblique}, we need to decompose the incident field into a parallel and a perpendicular component.
+Before we can apply the reflection and transmission coefficients given in~\cref{eq:fresnel_oblique}, we need to decompose the incident field into a parallel and a perpendicular component.
 The incident field can be decomposed into a component that is parallel to the plane-of-incidence and one that is perpendicular to it.
 
 We need notations.
 I call $k$ the direction of propagation, $n$ the normal to the interface, and $u$ the normal to the plane-of-incidence (because $p$ and $i$ are already taken).
 
-We get $e_\perp$ by projecting $e$ on the unit vector $u$ according to equation~\eqref{eq:paraperp_1}.
+We get $e_\perp$ by projecting $e$ on the unit vector $u$ according to \cref{eq:paraperp_1}.
 \begin{equation}
     e_\perp = u \times (u \cdot e) \label{eq:paraperp_1}
 \end{equation}
-In equation~\eqref{eq:paraperp_1}, $u \cdot e$~represents the inner product (dot product) of~$u$ by~$e$ and the symbol~``$\times$'' refers to the multiplication of a matrix (here~$u$) by a scalar (here~$u \cdot e$).
+In \cref{eq:paraperp_1}, $u \cdot e$~represents the inner product (dot product) of~$u$ by~$e$ and the symbol~``$\times$'' refers to the multiplication of a matrix (here~$u$) by a scalar (here~$u \cdot e$).
 We wish to replace that scalar multiplication with a matrix multiplication.
-To do that, we replace the scalar~$u \cdot e$ by the 1--by--1 matrix~$[u \cdot e]$ containing that scalar as shown in equation~\eqref{eq:paraperp_2}.
+To do that, we replace the scalar~$u \cdot e$ by the 1--by--1 matrix~$[u \cdot e]$ containing that scalar as shown in \cref{eq:paraperp_2}.
 We do not use any symbol for the matrix multiplication, we simply juxtapose the matrices.
 \begin{equation}
     e_\perp = u [u \cdot e] \label{eq:paraperp_2}
 \end{equation}
 The dimensions match: $u$~is a 3--by--1 matrix and $[u \cdot e]$~is a 1--by--1 matrix, resulting in~$e_\perp$ being a 3--by--1 matrix.
-For the next step, we note that the inner product $u \cdot e$ is related to the outer product $u\transp e$ by equation~\eqref{eq:paraperp_3}.
+For the next step, we note that the inner product $u \cdot e$ is related to the outer product $u\transp e$ by \cref{eq:paraperp_3}.
 \begin{equation}
     [u \cdot e] = u\transp e \label{eq:paraperp_3}
 \end{equation}
-Injecting equation~\eqref{eq:paraperp_3} into equation~\eqref{eq:paraperp_2} gives equation~\eqref{eq:paraperp_4}.
+Injecting \cref{eq:paraperp_3} into \cref{eq:paraperp_2} gives \cref{eq:paraperp_4}.
 \begin{equation}
     e_\perp = u \left( u\transp e \right) \label{eq:paraperp_4}
 \end{equation}
-By associativity of the matrix multiplication we can transform equation~\eqref{eq:paraperp_4} into equation~\eqref{eq:para_perp_decomposition_field}.
+By associativity of the matrix multiplication we can transform \cref{eq:paraperp_4} into \cref{eq:para_perp_decomposition_field}.
 Then, by identification, we can find our decomposition matrices.
-In equation~\eqref{eq:para_perp_decomposition_matrix}, the matrices~$M_\perp$ and~$M_\parallel$ decompose a vector~$e$ into its perpendicular and parallel components~$e_\perp$ and~$e_\parallel$ on which we can apply the Fresnel equations~\eqref{eq:fresnel_oblique}.
+In \cref{eq:para_perp_decomposition_matrix}, the matrices~$M_\perp$ and~$M_\parallel$ decompose a vector~$e$ into its perpendicular and parallel components~$e_\perp$ and~$e_\parallel$ on which we can apply the Fresnel equations~\eqref{eq:fresnel_oblique}.
 \begin{gather}
     \begin{aligned}
         e_\perp &= \left(u u\transp \right) e
@@ -815,30 +1179,30 @@ The order will matter in the next part when we consider the geometry of the syst
 
 We are now able to calculate the reflected and transmitted fields of an incident plane wave on an interface at oblique incidence.
 However, the results are in a reference frame local to the reflected or transmitted wave, not a global reference frame shared by the three waves.
-Figure~\ref{fig:fresnel_rotations} shows how the reflected and transmitted reference frames are obtained by rotating the incident reference frame around~$u$, the normal to the plane-of-incidence.
+\Cref{fig:fresnel_rotations} shows how the reflected and transmitted reference frames are obtained by rotating the incident reference frame around~$u$, the normal to the plane-of-incidence.
 \begin{figure}[hbtp]
     \centering
     \missingfigure{Fresnel rotations.}
     \caption{\label{fig:fresnel_rotations}Fresnel rotations.}
 \end{figure}
 
-The angle-of-incidence, noted $\theta_i$, is defined in equation~\eqref{eq:angle_of_incidence_definition} as the angle between the incident direction of propagation~$k_i$ and the normal to the surface~$n$.
+The angle-of-incidence, noted $\theta_i$, is defined in \cref{eq:angle_of_incidence_definition} as the angle between the incident direction of propagation~$k_i$ and the normal to the surface~$n$.
 \begin{equation}
     \theta_i \equiv \widehat{n k_i} \pmod{2\pi}
     \label{eq:angle_of_incidence_definition}
 \end{equation}
-Equation~\eqref{eq:dot_product_cos} shows a relation between the dot-product of two vectors and the angle between them.
+\Cref{eq:dot_product_cos} shows a relation between the dot-product of two vectors and the angle between them.
 \begin{equation}
     v \cdot w = \norm{v} \norm{w} \cos \widehat{vw}
     \label{eq:dot_product_cos}
 \end{equation}
-The dot-product~$v \cdot w$ can also be calculated by summing the component-wise product of $v$ and $w$ (equation~\eqref{eq:dot_product_elementwise}, which is a method that does not require knowing~$\widehat{vw}$.
+The dot-product~$v \cdot w$ can also be calculated by summing the component-wise product of $v$ and $w$ (\cref{eq:dot_product_elementwise}, which is a method that does not require knowing~$\widehat{vw}$.
 \begin{equation}
     v \cdot w = \sum_i v_i w_i
     \label{eq:dot_product_elementwise}
 \end{equation}
-Equations~\eqref{eq:dot_product_cos} and~\eqref{eq:dot_product_elementwise} form a system from which we can extract the angle~$\widehat{uv}$.
-Its solution is given in equation~\eqref{eq:angle_from_dot_product}, provided that the angle is between 0 and $\pi$.
+\Cref{eq:dot_product_cos} and~\cref{eq:dot_product_elementwise} form a system from which we can extract the angle~$\widehat{uv}$.
+Its solution is given in \cref{eq:angle_from_dot_product}, provided that the angle is between 0 and $\pi$.
 This is due to a limitation of the range of the $\arccos$ function.
 \begin{equation}
     \left\lbrace
@@ -860,13 +1224,13 @@ This is due to a limitation of the range of the $\arccos$ function.
 The limitation~$\widehat{vw} \in [0, \pi]$ does not impede us.
 Indeed, $\theta_i \in ]0, \pi/2[$.
 \begin{itemize}
-    \item 0 is excluded because this corresponds to the case of normal incidence which results in a two-ports network and not a four-ports network.  We have treated this particular case in section~\vref{sec:interface_at_normal_incidence}.
+    \item 0 is excluded because this corresponds to the case of normal incidence which results in a two-ports network and not a four-ports network.  We have treated this particular case in \vref{sec:interface_at_normal_incidence}.
     \item $\pi/2$ is excluded because this corresponds to a direction of propagation parallel to the surface, the wave would therefore never hit the interface.
     \item Angles between $\pi/2$ and $\pi$ are excluded because the incident wave would be coming from the wrong side of the interface.
     \item Angles between 0 and $-\pi$ are excluded because the rotation axis~$u$ adapts its direction to make sure that the angle from $n$ to $k_i$ is always positive from the point of view of~$u$.
     \item The other angles fall into the previous categories because of the modulo~$2\pi$.
 \end{itemize}
-It is therefore safe to apply equation~\eqref{eq:angle_from_dot_product} to retreive~$\theta_i$ from $n$ and $k_i$.
+It is therefore safe to apply \cref{eq:angle_from_dot_product} to retreive~$\theta_i$ from $n$ and $k_i$.
 
 The vectors~$n$ and $k_1$ and the refractive incides $n_a$ and $n_b$ are sufficient to determine the geometry of the whole network.
 In other words, the orientation of one port constrains that of the three other ports.
@@ -896,7 +1260,7 @@ Once again, the limited range of~$\theta_b$ does not impede us.
 
 Upon reflection and refraction, the direction of the electric field rotates around $u$.
 Since there is no connection between the port 1 and the port 4, and between the port 2 and the port 3, we are interested in eight angles only: $\theta_{1 \rightarrow 2}$, $\theta_{1 \rightarrow 3}$, $\theta_{2 \rightarrow 1}$, $\theta_{2 \rightarrow 4}$, $\theta_{3 \rightarrow 1}$, $\theta_{3 \rightarrow 4}$, $\theta_{4 \rightarrow 2}$ and $\theta_{4 \rightarrow 3}$.
-The values for these angles are listed in equations~\eqref{eq:interface_rotations}.
+The values for these angles are listed in equations~\cref{eq:interface_rotations}.
 \begin{equation}
     \begin{aligned}
         \theta_{1 \rightarrow 2} &= \pi - 2\theta_a
@@ -917,10 +1281,10 @@ The values for these angles are listed in equations~\eqref{eq:interface_rotation
     \end{aligned}
     \label{eq:interface_rotations}
 \end{equation}
-To each angle $\theta$ of equation~\eqref{eq:interface_rotations} corresponds a rotation matrix $R$.
+To each angle $\theta$ of \cref{eq:interface_rotations} corresponds a rotation matrix $R$.
 From an implementation point of view, computing the matrix corresponding to a rotation around an axis (here $u$) may be best done using a quaternion.
 We do not need to enter into details, the two following steps are all we need to create the rotation matrix we want.
-First, we construct the quaternion corresponding to a rotation of~$\theta$ around a vector $u=(u_x, u_y, y_z)$ with equation~\eqref{eq:quaternion_rotation_around_axis}.
+First, we construct the quaternion corresponding to a rotation of~$\theta$ around a vector $u=(u_x, u_y, y_z)$ with \cref{eq:quaternion_rotation_around_axis}.
 \begin{equation}
     \begin{aligned}
         q &= w + xi + yj + zk
@@ -932,7 +1296,7 @@ First, we construct the quaternion corresponding to a rotation of~$\theta$ aroun
     \end{aligned}
     \label{eq:quaternion_rotation_around_axis}
 \end{equation}
-Then we convert that quaternion into a rotation matrix with equation~\eqref{eq:quaternion_to_rotation_matrix}.
+Then we convert that quaternion into a rotation matrix with \cref{eq:quaternion_to_rotation_matrix}.
 \begin{equation}
     R =
     \begin{pmatrix}
@@ -944,9 +1308,9 @@ Then we convert that quaternion into a rotation matrix with equation~\eqref{eq:q
 \end{equation}
 
 We can finally put it all together.
-Equation~\eqref{eq:interface_S} lists all the elements of the scattering matrix of an interface at normal indicence.
-The matrices $R$ are rotation matrices produced by~\eqref{eq:quaternion_to_rotation_matrix} for each angle~\eqref{eq:interface_rotations}.
-The matrices $M_\parallel$ and $M_\perp$ are defined in~\eqref{eq:para_perp_decomposition_matrix} and decompose the fields into their parallel and perpendicular components.
+\Cref{eq:interface_S} lists all the elements of the scattering matrix of an interface at normal indicence.
+The matrices $R$ are rotation matrices produced by~\cref{eq:quaternion_to_rotation_matrix} for each angle~\eqref{eq:interface_rotations}.
+The matrices $M_\parallel$ and $M_\perp$ are defined in~\cref{eq:para_perp_decomposition_matrix} and decompose the fields into their parallel and perpendicular components.
 The various~$r$ and~$t$ refer to the Fresnel equations~\eqref{eq:fresnel_oblique}; the subscript~$a$ denoting incidence on the A side of the interface, and~$b$ to the B side of the interface.
 \begin{equation}
     \begin{gathered}
@@ -1005,7 +1369,7 @@ However, for this network to find its place in a system, we also need to compute
     \missingfigure{fig:interface propagation rotation}
     \caption{\label{fig:interface_propagation_rotation}interface propagation rotation}
 \end{figure}
-Equations~\eqref{eq:interface_propagation_rotation} lists the rotations matrices that transform~$k_1$ into $k_2$, $k_3$ and $k_4$, represented in figure~\ref{fig:interface_propagation_rotation}.
+Equations~\eqref{eq:interface_propagation_rotation} list the rotations matrices that transform~$k_1$ into $k_2$, $k_3$ and $k_4$, represented in \cref{fig:interface_propagation_rotation}.
 \begin{equation}
     \begin{aligned}
         k_2 &= R^{1 \rightarrow 2} k_1 \\
@@ -1014,9 +1378,9 @@ Equations~\eqref{eq:interface_propagation_rotation} lists the rotations matrices
     \end{aligned}
     \label{eq:interface_propagation_rotation}
 \end{equation}
-We already know~$R^{1 \rightarrow 2}$ and~$R^{1 \rightarrow 3}$ (see equations~\eqref{eq:interface_rotations}) but we do not have~$R^{1 \rightarrow 4}$ yet.
-The angle~$\theta_{1 \rightarrow 4}$ is easy to determine with figure~\ref{fig:interface_propagation_rotation} and is given by equation~\eqref{eq:interface_rotation_1_to_4}.
-We can use~\eqref{eq:quaternion_rotation_around_axis} and~\eqref{eq:quaternion_to_rotation_matrix} to derive~$R^{1 \rightarrow 4}$ from~$\theta_{1 \rightarrow 4}$.
+We already know~$R^{1 \rightarrow 2}$ and~$R^{1 \rightarrow 3}$ (see \cref{eq:interface_rotations}) but we do not have~$R^{1 \rightarrow 4}$ yet.
+The angle~$\theta_{1 \rightarrow 4}$ is easy to determine with \cref{fig:interface_propagation_rotation} and is given by \cref{eq:interface_rotation_1_to_4}.
+We can use~\cref{eq:quaternion_rotation_around_axis} and~\cref{eq:quaternion_to_rotation_matrix} to derive~$R^{1 \rightarrow 4}$ from~$\theta_{1 \rightarrow 4}$.
 \begin{equation}
     \theta_{1 \rightarrow 4} = -\theta_a - \theta_b
     \label{eq:interface_rotation_1_to_4}
@@ -1147,7 +1511,7 @@ so that we can write
     e_i
 \end{equation}
 for the reflection $R$ and a similar equation for the transmission $e_t = T e_i$.
-I start with $R_x$ defined in equation~\eqref{eq:houde_Rx} to get $R_{xx}$, $R_{xy}$ and $R_{xz}$.
+I start with $R_x$ defined in \cref{eq:houde_Rx} to get $R_{xx}$, $R_{xy}$ and $R_{xz}$.
 \begin{align*}
     e_{rx} &= R^x E_0
     \\
@@ -1727,7 +2091,7 @@ This reflection and transmission matrix are Jones matrices.
 They must find their place inside the scattering matrix.
 But before, we must apply rotation matrices to them in order to account for the arbitrary orientation of the grid.
 Indeed, these Jones matrices are valid for grid lying in the $(x, y)$ plane, with the wires along $x$.
-Doing this follows the usual method for rotating Jones matrices described by equation~\eqref{eq:jones_rotation}.
+Doing this follows the usual method for rotating Jones matrices described by \cref{eq:jones_rotation_using_transpose}.
 
 %#############################################################################
 

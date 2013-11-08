@@ -2,10 +2,27 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 
-\usepackage{hyperref}
-    % Required direct pdf output, therefore all figures should be pdf too.
-    % This creates hyperlinks all over the place to jump to figures, references,
-    % chapters and all.
+\usepackage{amsmath}
+    % Brings the align environment for lining up equations on the =.
+
+% According to
+% http://tex.stackexchange.com/questions/96350/problem-with-algorithmic-and-hyperref
+% if I want to have hyperref working with algorithm, I must
+% first load float, then hyperref, then algorithm.
+% Putting float here solves the TOC links to the algorithms, otherwise they'd all point
+% to page 1.
+\usepackage{float}
+% This does not seem to be true.  I am now loading algorithm first and not loading float.
+% Somehow this is working anyway.  I do not know what changed.
+% I did delete ALL temporary files before compiling.  LaTeX magic.
+
+% According to
+% http://tex.stackexchange.com/questions/113719/cleveref-fails-to-reference-algorithms
+% Algorithm must be loaded before hyperref.
+\usepackage[chapter]{algorithm}
+    % To float algorithms.
+\usepackage{algpseudocode}
+    % For pseudocode.
 
 \usepackage{makeidx}
     % Needed to build the index.
@@ -14,9 +31,6 @@
     % Brings \begin{appendices}.
     % toc option creates an "appendices" entry in the table of content.
     % page option creates a page before the first appendix chapter.
-
-\usepackage{amsmath}
-    % Brings the align environment for lining up equations on the =.
 
 \usepackage{amssymb}
     % For the number set symbols.
@@ -58,14 +72,6 @@
 
 \usepackage{stmaryrd}
     % For the llbracket and rrbracket to denote integer intervals.
-
-\usepackage{algorithmic}
-    % For pseudocode.
-\usepackage[chapter]{algorithm}
-    % To float algorithms.
-
-\usepackage{varioref}
-    % For fancier references that also tell the page number.
     
 \usepackage{todonotes}
     % Big post-its, handy while writing.
@@ -73,6 +79,24 @@
 \usepackage[]{biblatex}
     % Fantastic bibliography manager that I'll use just for its
     % \citetitle command.
+
+% As a rule of thumb, hyperref goes last.  Only a few packages go after.
+% cleveref is a well known one.  bookmark is another one.
+
+% According to
+% http://tex.stackexchange.com/questions/53191/impact-of-hyperref-when-varioref-and-cleveref-are-used/53193#53193
+% one must first load varioref, then hyperref, then cleveref.
+% Failure to do so results in lots of hyperrefs warnings and links that do not point to the right place.
+\usepackage{varioref}
+    % For fancier references that also tell the page number.
+
+\usepackage{hyperref}
+    % Required direct pdf output, therefore all figures should be pdf too.
+    % This creates hyperlinks all over the place to jump to figures, references,
+    % chapters and all.
+    
+\usepackage{cleveref}
+    % Should make the typesetting of cross references more consistent.
 
 \newcommand{\decibel}{dB}
 \newcommand{\equaldef}{\stackrel{\text{\tiny def}}{=}}

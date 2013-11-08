@@ -53,6 +53,3 @@
 # Apparently my latex pipeline spits out some xml, go figure.
 *.xml
 
-# The pdfs are my end product, I don't push those since I push their code.
-# ------------------------------------------------------------------------
-*.pdf

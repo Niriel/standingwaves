@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="429.29999"
+   height="265.5"
+   id="svg2993"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="two_identical_films.svg">
+  <defs
+     id="defs2995">
+    <marker
+       inkscape:stockid="Arrow1Mstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mstart"
+       style="overflow:visible">
+      <path
+         id="path3788"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.4) translate(10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Mend"
+       style="overflow:visible;">
+      <path
+         id="path3791"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.4) rotate(180) translate(10,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffb4ff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.8"
+     inkscape:cx="175.72243"
+     inkscape:cy="125.83141"
+     inkscape:document-units="cm"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     units="in"
+     inkscape:window-width="1280"
+     inkscape:window-height="994"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3001"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       units="mm"
+       spacingx="1mm"
+       spacingy="1mm" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata2998">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Bertrand Delforge</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-nc/3.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-nc/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:prohibits
+           rdf:resource="http://creativecommons.org/ns#CommercialUse" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="White background"
+     style="display:none"
+     transform="translate(0,88.335)"
+     sodipodi:insensitive="true">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline"
+       id="Background"
+       width="429.29999"
+       height="265.5"
+       x="0"
+       y="-88.334656"
+       inkscape:label="#background">
+      <desc
+         id="desc3813">Without a white background wide enough to encompass the drawing and the rendered LaTeX text, the export as eps+latex fails when text appears outside the drawing.</desc>
+      <title
+         id="title3811">White background</title>
+    </rect>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Help text"
+     style="display:none"
+     transform="translate(0,88.335)"
+     sodipodi:insensitive="true">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
+       x="230.31496"
+       y="35.432716"
+       id="text4575"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4577"
+         x="230.31496"
+         y="35.432716">There is a white background on its own layer.</tspan><tspan
+         sodipodi:role="line"
+         x="230.31496"
+         y="50.432716"
+         id="tspan4579">Shift+Ctrl+L to see the list of layers.</tspan><tspan
+         sodipodi:role="line"
+         x="230.31496"
+         y="65.432716"
+         id="tspan4581">Do not forget to resize the background before saving as eps+latex.</tspan><tspan
+         sodipodi:role="line"
+         x="230.31496"
+         y="80.432716"
+         id="tspan4583">Also, hide this text :D.</tspan></text>
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-786.862)"
+     style="display:inline">
+    <rect
+       style="fill:#b3b3b3;fill-opacity:1;stroke:none"
+       id="rect4100"
+       width="35.433067"
+       height="177.16534"
+       x="106.29921"
+       y="839.76355" />
+    <rect
+       style="fill:#b3b3b3;fill-opacity:1;stroke:none"
+       id="rect4102"
+       width="35.433109"
+       height="177.16534"
+       x="283.46457"
+       y="839.76361" />
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-start:url(#Arrow1Mstart);marker-end:url(#Arrow1Mend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 109.84252,899.9998 28.34646,0"
+       id="path4110"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-start:url(#Arrow1Mstart);marker-end:url(#Arrow1Mend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 287.00787,899.9998 28.34646,0"
+       id="path4112"
+       inkscape:connector-curvature="0" />
+    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1.77165353;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;marker-start:url(#Arrow1Mstart);marker-end:url(#Arrow1Mend);visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 127.55906,875.19665 170.07874,0"
+       id="path4114"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
+       x="124.01575"
+       y="892.91321"
+       id="text5740"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5742"
+         x="124.01575"
+         y="892.91321">$h_1$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
+       x="301.18109"
+       y="892.91321"
+       id="text5744"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5746"
+         x="301.18109"
+         y="892.91321">$h_2$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
+       x="212.59842"
+       y="868.11005"
+       id="text5748"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5750"
+         x="212.59842"
+         y="868.11005">$d$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
+       x="212.59842"
+       y="928.34625"
+       id="text5752"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5754"
+         x="212.59842"
+         y="928.34625">$n_0$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
+       x="124.24876"
+       y="141.75632"
+       id="text5756"
+       sodipodi:linespacing="125%"
+       transform="translate(0,786.862)"><tspan
+         sodipodi:role="line"
+         id="tspan5758"
+         x="124.24876"
+         y="141.75632">$n_1$</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
+       x="301.18109"
+       y="928.34625"
+       id="text5756-9"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5758-0"
+         x="301.18109"
+         y="928.34625">$n_2$</tspan></text>
+    <rect
+       style="fill:#800000;fill-opacity:1;stroke:none"
+       id="rect5800"
+       width="134.64568"
+       height="7.0866141"
+       x="145.27559"
+       y="977.95258" />
+    <rect
+       style="fill:#800000;fill-opacity:1;stroke:none"
+       id="rect5802"
+       width="170.07874"
+       height="7.0866141"
+       x="109.84252"
+       y="169.8307"
+       transform="translate(0,786.862)" />
+    <rect
+       style="fill:#800000;fill-opacity:1;stroke:none"
+       id="rect5804"
+       width="170.07874"
+       height="7.0866141"
+       x="145.27559"
+       y="988.58246" />
+    <rect
+       style="fill:#800000;fill-opacity:1;stroke:none"
+       id="rect5806"
+       width="205.51181"
+       height="7.0866141"
+       x="109.84252"
+       y="967.32263" />
+    <rect
+       style="fill:#800000;fill-opacity:1;stroke:none"
+       id="rect5808"
+       width="28.34647"
+       height="7.0866141"
+       x="287.00787"
+       y="999.2124" />
+    <rect
+       style="fill:#800000;fill-opacity:1;stroke:none;display:inline"
+       id="rect5808-8"
+       width="28.34647"
+       height="7.0866141"
+       x="109.84252"
+       y="946.06281" />
+  </g>
+</svg>
