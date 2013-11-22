@@ -25,6 +25,250 @@ This is going to work unless higher modes can come back to the fundamental mode,
 
 
 %=============================================================================
+\subsection{Phasors}
+\index{phasor}
+\Cref{eq:e_z_t_real} is an expression of the amplitude of the electric field of a plane wave propagating along an axis~$\vect{z}$.
+\begin{equation}
+   e(z, t) = E \cos(kz - \omega t + \varphi)
+   \label{eq:e_z_t_real}
+\end{equation}
+$t$ is the time coordinate and~$z$ the space coordinate.
+$\omega$,~$k$ are constant related to the frequency and the propagation medium.
+$\varphi$ is related to initial conditions and the choice of reference frame.
+$E$ is the amplitude of the electric field given for example in volts per meter or newtons per coulomb.
+It is illustrated \cref{fig:plane_wave_propagation} as a function of~$z$ for a few values of~$t$.
+\begin{figure}[hbp]
+    \centering
+    \includegraphics{plane_wave_propagation}
+    \caption {\label{fig:plane_wave_propagation}Electric field amplitude of a wave of frequency \SI{500}{\giga\hertz} and amplitude \SI{1}{\volt\per\meter} propagating in vacuum (refractive index 1).}
+\end{figure}
+
+\subsubsection{Polar complex notation.}
+It is easier to go on by using polar complex notations.
+Euler's formula, given in \cref{eq:euler_formula}, relates the trigonometric function $\cos$ to a complex exponential.
+\begin{equation}    
+    \exp(j\theta) = \cos(\theta) + j\sin(\theta) \label{eq:euler_formula}
+\end{equation}
+In~\cref{eq:euler_formula}, $j$ represents the imaginary unit such that $j^2=-1$.
+If we rewrite the expression of~$e$ as complex in polar coordinates, we have \cref{eq:e_z_t_complex}.
+\begin{align}
+   \hat{e}(z, t) &= E \exp(j(kz - \omega t + \varphi))
+   \label{eq:e_z_t_complex}
+   \\
+   e(z, t) &= \Re(\hat{e}(z, t))
+   \label{eq:e_z_t_real_complex}
+\end{align}
+The hat above the $e$ signals that $\hat{e}$ is the complex equivalent to $e$.
+As shown by \cref{eq:e_z_t_real_complex}, $e$ and $\hat{e}$ do not have the same value (one is real, the other is complex);
+however, both describe the same physical phenomenon.
+
+By applying the exponentiation identity \cref{eq:exponentiation_identity_plus},
+\cref{eq:e_z_t_complex} can also be written as \cref{eq:e_z_t_complex_factorized}.
+\begin{equation}
+    \exp(a+b) = \exp(a) \exp(b)
+    \label{eq:exponentiation_identity_plus}
+\end{equation}
+\begin{equation}
+    \hat{e}(z, t)
+    =
+    E \exp(jkz) \exp(-j\omega t) \exp(j\varphi)
+    \label{eq:e_z_t_complex_factorized}
+\end{equation}
+
+In the rest of this book, we will only ever use the polar complex notation, unless stated otherwise.
+To simplify the notations, we will not place a hat symbol above the complex equivalent to real quantities.
+
+\subsubsection{No need to carry the time.}
+Linear networks do not modify the frequency~$f$ of the waves that propagate through them.
+Since~$\omega = 2 \pi f$, $\omega$ is constant in the entire system.
+At any instant $t$, the value of $t$ is a constant.
+\Crefrange{eq:factor_out_omegat_0}{eq:factor_out_omegat_4} show that if $f$ is a linear function, then the time-dependant factor $\exp(j\omega t)$ is actually a constant that we can safely ignore.
+\begin{align}
+    e'(z, t)
+    &=
+    f(e(z, t))
+    \label{eq:factor_out_omegat_0}
+    \\
+    E' \exp(j(k'z - \omega t + \varphi'))
+    &=
+    f\Big(
+        E \exp(j(kz - \omega t + \varphi))
+    \Big)
+    \label{eq:factor_out_omegat_1}
+    \\
+    E' \exp(j(k'z + \varphi'))\exp(-j \omega t)
+    &=
+    f\Big(
+        E \exp(j(kz + \varphi)) \exp(-j \omega t)
+    \Big)
+    \label{eq:factor_out_omegat_2}
+    \\
+    E' \exp(j(k'z + \varphi'))
+    \,\cancel{
+        \exp(-j \omega t)
+    }
+    &=
+    f\Big(
+        E \exp(j(kz + \varphi))
+    \Big)
+    \,\cancel{
+        \exp(-j \omega t)
+    }
+    \label{eq:factor_out_omegat_3}
+    \\
+    E' \exp(j(k'z + \varphi'))
+    &=
+    f\Big(
+        E \exp(j(kz + \varphi))
+    \Big)
+    \label{eq:factor_out_omegat_4}
+\end{align}
+It is therefore useless to carry the term~$\omega t$ in our equations.
+
+\subsubsection{No need to carry the initial phase.}
+The initial phase~$\varphi_0$ is given for the arbitrary point~$(z, t) = (0, 0)$.
+Any phase $\varphi$ can be expressed as a deviation from the initial phase $\varphi_0$ as illustrated by \cref{eq:factor_out_phi0}.
+\begin{equation}
+    \varphi = \varphi_0 + \Delta \varphi
+    \label{eq:factor_out_phi0}
+\end{equation}
+Like~$\omega$, $\varphi_0$ is constant throughout the whole system.
+\Crefrange{eq:factor_out_phi0_0}{eq:factor_out_phi0_3} show that we can use that fact to safely ignore the absolute phase and work with relative phases only.
+\begin{align}
+    E' \exp(j(k'z + \varphi'))
+    &=
+    f\Big(
+        E \exp(j(kz + \varphi))
+    \Big)
+    \label{eq:factor_out_phi0_0}
+    \\
+    E' \exp(j(k'z + \varphi_0+\Delta\varphi'))
+    &=
+    f\Big(
+        E \exp(j(kz + \varphi_0+\Delta\varphi))
+    \Big)
+    \label{eq:factor_out_phi0_1}
+    \\
+    E' \exp(j(k'z +\Delta\varphi'))
+    \,\cancel{
+        \exp(j\varphi_0)
+    }
+    &=
+    f\Big(
+        E \exp(j(kz+\Delta\varphi))
+    \Big)
+    \,\cancel{\exp(j \varphi_0)}
+    \label{eq:factor_out_phi0_2}
+    \\
+    E' \exp(j(k'z+\Delta\varphi'))
+    &=
+    f\Big(
+        E \exp(j(kz+\Delta\varphi))
+    \Big)
+    \label{eq:factor_out_phi0_3}
+\end{align}
+
+\subsubsection{No need to carry the space.}
+We are hardly ever interested in knowing the field at every location in space.
+We concern ourselves mainly with a few and specific locations.
+Typical locations include the surfaces of optical elements, such as mirrors, lenses, grids, horns, and the beginning and end of a propagation medium.
+
+Each propagation medium has its own value for~$k$ and has a fixed pathlength~$\Delta z$.
+Therefore, such a medium induces a constant phase shift of~$\Delta\phi = k\Delta z$ to the wave that propagates through it.
+
+It is not important to know that the wave exits a propagation medium at~$z=z_0 + \Delta z$;
+what matters is that the phase of the wave has changed by~$\Delta\phi$.
+The effect matters more than the cause.
+Like for $\varphi_0$, there is no use in keeping the absolute $kz_0$ around.
+Instead we introduce a phase constant~$\Delta\phi$ for each position that interests us, as shown by \crefrange{eq:factor_out_kz0_0}{eq:factor_out_kz0_4}.
+\begin{align}
+    E' \exp(j(kz'+\Delta\varphi'))
+    &=
+    f\Big(
+        E \exp(j(kz+\Delta\varphi))
+    \Big)
+    \label{eq:factor_out_kz0_0}
+    \\
+    E' \exp(j(k(z_0 + \Delta z')+\Delta\varphi'))
+    &=
+    f\Big(
+        E \exp(j(k(z_0 + \Delta z)+\Delta\varphi))
+    \Big)
+    \label{eq:factor_out_kz0_1}
+    \\
+    E' \exp(j(k\Delta z'+\Delta\varphi')) \,\cancel{\exp(jkz_0)}
+    &=
+    f\Big(
+        E \exp(j(k\Delta z+\Delta\varphi))
+    \Big)
+    \,\cancel{\exp(jkz_0)}
+    \label{eq:factor_out_kz0_2}
+    \\
+    E' \exp(j(k\Delta z'+\Delta\varphi'))
+    &=
+    f\Big(
+        E \exp(j(k\Delta z+\Delta\varphi))
+    \Big)
+    \label{eq:factor_out_kz0_3}
+    \\
+    E' \exp(j(\Delta\phi'+\Delta\varphi'))
+    &=
+    f\Big(
+        E \exp(j(\Delta\phi+\Delta\varphi))
+    \Big)
+    \label{eq:factor_out_kz0_4}
+\end{align}
+
+\Cref{eq:factor_out_kz0_4} exhibits two terms of phase.
+\begin{itemize}
+    \item $\Delta\phi$ models the phase difference due to the propagation in a medium.
+    \item $\Delta\varphi$ models the phase difference due to any other type of optical element.
+\end{itemize}
+This divide is arbitrary.
+If we consider that a propagation medium is an optical element like mirrors or grids are, then we need only to keep $\Delta\varphi$ (\cref{eq:factor_out_phi}).
+\begin{equation}
+    E' \exp(j\Delta\varphi') = f\Big( E \exp(j\Delta\varphi) \Big)
+    \label{eq:factor_out_phi}
+\end{equation}
+
+\subsubsection{No need to carry the exact amplitude.}
+Our networks are all linear, which makes our system linear.
+The output of a linear system being proportional to its input, we do not need to keep track of the exact input.
+All that matters is that we can compute the coefficient of proportionality.
+With \cref{eq:factor_out_E0}, we express any amplitude $E$ relatively to a reference amplitude $E_0 \ne 0$ with a proportionality factor $\epsilon$.
+\begin{equation}
+    E = \epsilon E_0 \label{eq:factor_out_E0}
+\end{equation}
+Using \cref{eq:factor_out_E0} in \cref{eq:factor_out_phi} allows us to simplify by $E_0$ (\crefrange{eq:factor_out_E0_0}{eq:factor_out_E0_1}).
+\begin{align}
+    \epsilon' \,\cancel{E_0} \exp(j\Delta\varphi')
+    &=
+    f\Big(
+        \epsilon \,\cancel{E_0} \exp(j\Delta\varphi)
+    \Big)
+    \label{eq:factor_out_E0_0}
+    \\
+    \epsilon' \exp(j\Delta\varphi')
+    &=
+    f\Big(
+        \epsilon \exp(j\Delta\varphi)
+    \Big)
+    \label{eq:factor_out_E0_1}
+\end{align}
+
+
+
+%-------------------------------------------------------------------------------
+\subsubsection{Introducing phasors.}
+With \cref{eq:factor_out_E0_1}, we are left with only two quantities:
+\begin{itemize}
+    \item a coefficient of proportionality between the amplitude at the output of a system and that at its input,
+    \item a phase difference between the output and the input.
+\end{itemize}
+
+\todo[inline]{continue}
+
+%=============================================================================
 \subsection{Scattering matrices}
 Scattering matrices \cite{siegman1986lasers} model the transfer of power or field from one side (port) of a network to another (\cref{fig:scattering_matrix_notations}).
 
@@ -133,6 +377,7 @@ Instead, we can express all the fields in a common global Cartesian reference fr
 These Jones matrices can be combined with rotation matrices (built from Euler angles or quaternions) in order to represent networks in any orientation in space.
 
 \subsubsection{Rotating Jones matrices.}
+\label{sec:rotating_jones_matrices}
 \begin{equation}
     J' = R J R^{-1}
     \label{eq:jones_rotation_using_inverse}
@@ -147,6 +392,16 @@ then we get~\cref{eq:jones_rotation_using_transpose} which has the advantage of 
     J' = R J R\transp
     \label{eq:jones_rotation_using_transpose}
 \end{equation}
+
+Rotating the identity matrix has an interesting property shown by \cref{eq:jones_rotation_identity}.
+\begin{equation}
+    I' = R I R^{-1}
+       = R R^{-1}
+       = I
+    \label{eq:jones_rotation_identity}
+\end{equation}
+If a Jones matrix is proportional to an identity matrix, then it is not modified by rotation.
+We will use that property to save some computation, for example when propagating through homogeneous isotropic materials (\vref{sec:generic_networks_distance}).
 
 %=============================================================================
 \subsection{Combining scattering and Jones matrices}
@@ -308,7 +563,7 @@ Therefore $I-S^{ii}P$ has an inverse.
 Therefore \cref{eq:compute_bi_invert} is correct, and the system can be solved.
 
 It can be interesting to draw a parallel between our problem and the convergence of an infinite series.
-Indeed, an infinite series of ratio $q$ converges if $\vert q \vert < 1$:
+Indeed, the sum of an infinite series of ratio $q$ converges if $\abs{q} < 1$:
 \begin{equation}
     \sum_{i=0}^\infty q^i = \frac{1}{1-q} = (1-q)^{-1}
 \end{equation}
@@ -328,12 +583,12 @@ Once we know the internal reflections of the system ($b^i$ as a function of itse
 The second step is to compute~$b^o$ from~$a^o$ and~$b^i$.
 We do that by taking $b^o$ from \cref{eq:s_outside_inside} and eliminating $a^i$ with \cref{eq:relation_ai_bi}.
 \begin{align}
-    b^o &= S^{oo}a^o + S^{oi}a^i \notag \\
+    b^o &= S^{oo}a^o + S^{oi}a^i \\
     b^o &= S^{oo}a^o + S^{oi}Pb^i \label{eq:compute_bo}
 \end{align}
 
 These two steps solve the system: from the inputs~$a^o$ we can compute the outputs~$b^o$ of the whole system.
-This method also tells gives us $a^i$ and $b^i$ which are two equivalent ways of looking at what is happening inside the system.
+This method also tells gives us $a^i$ and $b^i$ which are two equivalent ways of looking at what is happening inside the system (they are permutations of each other).
 
 \paragraph{Internal sources.}
 The method described above does not allow us to account for sources inside the system.
@@ -349,13 +604,13 @@ However, the windows that physically separate the cryostat from the outside worl
     \caption{\label{fig:internal_sources_windows} The cryostat windows are warm enough to emit a significant power.}
 \end{figure}
 
-Let us assume that every port radiates a constant flux, as described by \cref{eq:internal_sources}.
+Let us assume that every port radiates a constant flux described by \cref{eq:internal_sources}.
 The output $b_i$ of a port is a linear combination of the inputs $a_j$, plus a constant $c_i$.
 \begin{equation}
     b = S a + c
     \label{eq:internal_sources}
 \end{equation}
-The separation into inside and outside ports is straight forward, as indicated by~\cref{eq:internal_sources_io}.
+The separation into inside and outside ports is straight forward, as~\cref{eq:internal_sources_io} indicates.
 \begin{equation}
     \begin{pmatrix}
         b^o\\
@@ -397,7 +652,7 @@ Once $b_i$ is known, we inject its value into the expression of $b^o$.
     \end{align}
     \label{eq:compute_bo_co}
 \end{subequations}
-Equations~\cref{eq:compute_bi_ci_solve} and~\cref{eq:compute_bo_bi_co} give us the response $b$ of the system $(S, P)$ to the inputs $a$ and $c$.
+Equations~\eqref{eq:compute_bi_ci_solve} and~\eqref{eq:compute_bo_bi_co} give us the response $b$ of the system $(S, P)$ to the inputs $a$ and $c$.
 
 %-----------------------------------------------------------------------------
 \paragraph{Solving for each source independantly.}
@@ -753,9 +1008,9 @@ We can now construct the permutation matrix $P$ with \cref{algo:couple_inputs_to
     \caption{CoupleInputsToOutputs}
     \label{algo:couple_inputs_to_outputs}
     \begin{algorithmic}
+        \Require{\textit{inside}} \Comment{Set containing all the coupled ports.}
         \Require{\textit{couplings}} \Comment{Set of coupling descriptors.}
         \Function{CoupleInputsToOutputs}{\textit{couplings}}
-        \State {\textit{inside} $\gets$ FindInside(\textit{couplings})}
         \State {$m \gets$ \Call{cardinal}{\textit{inside}}}
         \State {$P \gets$ $m$--by--$m$ matrix filled zith 0}
         \ForAll {\textit{coupling} $\in$ \textit{couplings}}
@@ -818,11 +1073,11 @@ Big systems may benefit from using sparse matrices.
     \caption{SolveNetworks}
     \label{algo:solve_networks}
     \begin{algorithmic}
-        \Require{\textit{networks}} \Comment{List of scattering matrices of each network}
         \Require{$P$} \Comment{Permutation matrix connecting inside inputs to outputs.}
         \Require{$Q$} \Comment{Permutation matrix separating inside from outside ports.}
         \Require{$n^o$} \Comment{Number of outside ports.}
-        \Function{SolveNetworks}{$\textit{networks}, P, Q, n^o$}
+        \Require{\textit{networks}} \Comment{List of scattering matrices of each network}
+        \Function{SolveNetworks}{$P, Q, n^o, \textit{networks}$}
         \State{$N \gets \Call{Length}{\textit{networks}}$} \Comment{Number of networks.}
         \State{$S \gets \Call{GatherNetworks}{N, \textit{networks}}$}
         \State{$S' \gets Q S Q\transp$} \Comment{Outside ports are now at the beginning.}
@@ -846,12 +1101,13 @@ This is described by \cref{algo:solve_inputs}.
     \caption{SolveInputs}
     \label{algo:solve_inputs}
     \begin{algorithmic}
+        \Require{$P$} \Comment{Permutation matrix connecting inside inputs to outputs.}
+        \Require{$S'^{oo}, S'^{oi}, S'^{io}$}
+        \Require{\textit{LUdata}} \Comment{Some factorization of $I - S'^{ii} P$.}
         \Require{$a'^o$} \Comment{Inputs entering the system.}
         \Require{$c'^o$} \Comment{Constant radiation from outside ports.}
         \Require{$c'^i$} \Comment{Constant radiation from inside ports.}
-        \Require{$S'^{oo}, S'^{oi}, S'^{io}$}
-        \Require{\textit{LUdata}} \Comment{Some factorization of $I - S'^{ii} P$.}
-        \Function{SolveInputs}{$a'^o, c'^o, c'^i, S'^{oo}, S'^{oi}, S'^{io}, \textit{LUdata}$}
+        \Function{SolveInputs}{$S'^{oo}, S'^{oi}, S'^{io}, \textit{LUdata}, a'^o, c'^o, c'^i$}
         \State{$b'^i = \Call{LUsolve}{\textit{LUdata}, S'^{io} a'^o + c'^i}$} \Comment{\Cref{eq:compute_bi_ci_solve}}
         \State{$b'^o = S'^{oo} a'^o + S'^{oi} P b'^i + c'^o$} \Comment{\Cref{eq:compute_bo_bi_co}}
         \State{$b' = \Call{Concatenate}{b'^o, b'^i}$}
@@ -939,8 +1195,9 @@ So, in the end, it's a list of scattering matrices.  It would be nice to augment
 %=============================================================================
 
 \subsection{Distance}
+\label{sec:generic_networks_distance}
 Let us assume an homogeneous isotropic propagation medium with an refractive index $n$.
-$n$ can be complex.
+$n$ can be complex, the imaginary part models the absorption.
 
 \begin{figure}[hbtp]
     \centering
@@ -989,30 +1246,38 @@ A distance of homogeneous isotropic propagation medium constitutes a two-ports n
     \label{eq:s_2_ports}
 \end{equation}
 There are no reflections on the ports (reflections occur at interfaces between materials of different refractive indices, we shall study these later).
+The transmission is the same both ways, and because of the isotropy, all three components of the field are affected in the same way.
 \begin{equation}
-    S_{1, 1} = S_{2, 2} =
+    \begin{aligned}
+    S_{1, 1} = S_{2, 2} &=
     \begin{pmatrix}
         0 & 0 & 0 \\
         0 & 0 & 0 \\
         0 & 0 & 0
     \end{pmatrix}
-\end{equation}
-The transmission is the same both ways, and because of the isotropy, all three components of the field are affected in the same way.
-\begin{equation}
-    S_{1, 2} = S_{1, 2} =
+    \\ 
+    S_{1, 2} = S_{1, 2} &=
     \exp(- i 2\pi d n f / c_0)
     \begin{pmatrix}
         1 & 0 & 0 \\
         0 & 1 & 0 \\
         0 & 0 & 1
     \end{pmatrix}
+    \end{aligned}
+    \label{eq:scattering_distance}
 \end{equation}
+The input and output waves propagates in the $z$ direction, therefore their electric and magnetic fields are contained in the $(x, y)$ plane and have no $z$ component.
+This means that the content of the third column of the scattering matrix of \cref{eq:scattering_distance} does not matter as it is always multiplied by~0.
+Since these values are arbitrary, let us use convenient ones.
+We choose to fill the last column with zeros and place a~1 on the diagonal. 
+This has an advantage: we do not need to multiply by rotation matrices when the system rotates, as we demonstrated with \vref{eq:jones_rotation_identity}.
+This is less work to do for the computer and this optimization has no drawback.
 
 
 %=============================================================================
 
 \subsection{Interface at normal incidence}
-\label{sec:interface_at_normal_incidence}
+\label{sec:generic_networks_interface_at_normal_incidence}
 
 \begin{figure}[hbtp]
     \centering
@@ -1224,7 +1489,7 @@ This is due to a limitation of the range of the $\arccos$ function.
 The limitation~$\widehat{vw} \in [0, \pi]$ does not impede us.
 Indeed, $\theta_i \in ]0, \pi/2[$.
 \begin{itemize}
-    \item 0 is excluded because this corresponds to the case of normal incidence which results in a two-ports network and not a four-ports network.  We have treated this particular case in \vref{sec:interface_at_normal_incidence}.
+    \item 0 is excluded because this corresponds to the case of normal incidence which results in a two-ports network and not a four-ports network.  We have treated this particular case in \vref{sec:generic_networks_interface_at_normal_incidence}.
     \item $\pi/2$ is excluded because this corresponds to a direction of propagation parallel to the surface, the wave would therefore never hit the interface.
     \item Angles between $\pi/2$ and $\pi$ are excluded because the incident wave would be coming from the wrong side of the interface.
     \item Angles between 0 and $-\pi$ are excluded because the rotation axis~$u$ adapts its direction to make sure that the angle from $n$ to $k_i$ is always positive from the point of view of~$u$.
@@ -1369,15 +1634,15 @@ However, for this network to find its place in a system, we also need to compute
     \missingfigure{fig:interface propagation rotation}
     \caption{\label{fig:interface_propagation_rotation}interface propagation rotation}
 \end{figure}
-Equations~\eqref{eq:interface_propagation_rotation} list the rotations matrices that transform~$k_1$ into $k_2$, $k_3$ and $k_4$, represented in \cref{fig:interface_propagation_rotation}.
-\begin{equation}
-    \begin{aligned}
-        k_2 &= R^{1 \rightarrow 2} k_1 \\
-        k_3 &= R^{1 \rightarrow 3} k_1 \\
-        k_4 &= R^{1 \rightarrow 4} k_1 \\
-    \end{aligned}
-    \label{eq:interface_propagation_rotation}
-\end{equation}
+Equations~\crefrange{eq:interface_propagation_rotation_k2}{eq:interface_propagation_rotation_k2} list the rotations matrices that transform~$k_1$ into $k_2$, $k_3$ and $k_4$, represented in \cref{fig:interface_propagation_rotation}.
+\begin{subequations}
+    \begin{align}
+        k_2 &= R^{1 \rightarrow 2} k_1 \label{eq:interface_propagation_rotation_k2} \\
+        k_3 &= R^{1 \rightarrow 3} k_1 \label{eq:interface_propagation_rotation_k3} \\
+        k_4 &= R^{1 \rightarrow 4} k_1 \label{eq:interface_propagation_rotation_k4}
+    \end{align}
+    \label{eq:interface_propagation_rotation_ki}
+\end{subequations}
 We already know~$R^{1 \rightarrow 2}$ and~$R^{1 \rightarrow 3}$ (see \cref{eq:interface_rotations}) but we do not have~$R^{1 \rightarrow 4}$ yet.
 The angle~$\theta_{1 \rightarrow 4}$ is easy to determine with \cref{fig:interface_propagation_rotation} and is given by \cref{eq:interface_rotation_1_to_4}.
 We can use~\cref{eq:quaternion_rotation_around_axis} and~\cref{eq:quaternion_to_rotation_matrix} to derive~$R^{1 \rightarrow 4}$ from~$\theta_{1 \rightarrow 4}$.
@@ -1395,6 +1660,142 @@ The thin film can be seen as its own network, or as two interfaces separated by 
 
 Here, we treat the thin film as its own network.
 This is convenient because the direction of propagation after the film is identical to that before the film.  The person using this network does not have to worry about what happens between the interfaces which is dealt with automatically.
+
+\subsubsection{Thin film at normal incidence}
+
+Two interfaces separate three regions of space of refractive indices~$n_1$, $n_2$ and~$n_3$ (in most cases, $n_1=n_3$).
+Each interface of the film reflects and transmits radiation according to the Fresnel equations for normal incidence~\eqref{eq:fresnel_normal}.
+\Cref{fig:thin_film_normal} defines the notations for the reflection and transmission coeffients between the three regions of space.
+The propagation between the two interfaces introduces a factor $a$.
+\Cref{fig:thin_film_normal_collapsed} is what results of our modeling effort: a single network with two reflections and two transmissions.
+
+\begin{figure}[hbtp]
+    \centering
+    \input{\MyGraphicsPath thin_film_normal.pdf_tex}
+    \caption{Thin film at normal incidence.}
+    \label{fig:thin_film_normal}
+\end{figure}
+\begin{figure}[hbtp]
+    \centering
+    \input{\MyGraphicsPath thin_film_normal_collapsed.pdf_tex}
+    \caption{Thin film at normal incidence, collapsed.}
+    \label{fig:thin_film_normal_collapsed}
+\end{figure}
+
+\Crefrange{eq:thin_film_normal_0}{eq:thin_film_normal_2} walk us through the derivation of~$r_{1, 3}$, the reflection coefficient of the thin film seen from the region of refractive index~$n_1$.
+\begin{align}
+    r_{1,3}
+    &= r_{1,2} + t_{1,2}
+        \left(
+            a r_{2,3} a +
+            a r_{2,3} a r_{2,1} a r_{2,3} a +
+            \cdots
+        \right)
+       t_{2,1}
+    \label{eq:thin_film_normal_0}
+    \\
+    r_{1, 3}
+    &=
+    r_{1, 2} + t_{1, 2} t_{2, 1} a^2r_{2, 3}
+        \sum_{i=0}^{\infty} (a^2r_{2,1}r_{2,3})
+    \label{eq:thin_film_normal_1}
+    \\
+    r_{1, 3}
+    &=
+    r_{1, 2} + t_{1, 2} t_{2, 1} a^2 r_{2, 3}
+    \frac{1}{1 - a^2 r_{2, 1} r_{2, 3}}
+    \label{eq:thin_film_normal_2}
+\end{align}
+Likewise, we can derive $r_{3, 1}$, $t_{1, 3}$ and $t_{3, 1}$.
+They are given by~\crefrange{eq:thin_film_normal_r31}{eq:thin_film_normal_t31},
+with~\cref{eq:thin_film_normal_r13} being a mere reminder of~\cref{eq:thin_film_normal_2}.
+\begin{subequations}
+    \begin{align}
+        r_{1, 3}
+        &=
+        r_{1, 2} + t_{1, 2} t_{2, 1} a^2 r_{2, 3}
+        \frac{1}{1 - a^2 r_{2, 1} r_{2, 3}}
+        \label{eq:thin_film_normal_r13}
+        \\
+        r_{3, 1}
+        &=
+        r_{3, 2} + t_{3, 2} t_{2, 3} a^2 r_{2, 1}
+        \frac{1}{1 - a^2 r_{2, 3} r_{2, 1}}
+        \label{eq:thin_film_normal_r31}
+        \\
+        t_{1, 3}
+        &=
+        t_{1,2} t_{2,3} a \frac{1}{1 - a^2 r_{2, 3} r_{2, 1}}
+        \label{eq:thin_film_normal_t13}
+        \\
+        t_{3, 1}
+        &=
+        t_{3,2} t_{2,1} a \frac{1}{1 - a^2 r_{2, 1} r_{2, 3}}
+        \label{eq:thin_film_normal_t31}
+    \end{align}
+\end{subequations}
+The parameters $r_{1, 2}$, $t_{1, 2}$, $r_{3, 2}$, $t_{3, 2}$, $r_{2, 1}$, $t_{2, 1}$,
+$r_{2, 3}$ and $t_{2, 3}$ are determined by the Fresnel equations for normal incidence~\eqref{eq:fresnel_normal}.
+The parameter $a$ is determined by $\exp(-i 2 \pi d n f / c_0)$ according to~\cref{eq:net_distance}.
+Note that in these four equations, the fraction is the same;
+it is sufficient to compute its value once only.
+
+
+
+There is one more factor to apply: a compensation for the space taken by the film.
+As illustrated in~\cref{fig:thin_film_normal_compensation},
+the film has a thickness $d_2$ and
+its center is located at distances $d_1$ and $d_3$ from other reference points.
+The actual length of the medium 1 is not $d_1$ but $d_1 - d_2/2$.
+Likewise, the wave travels a distance $d_3 - d_2/2$ in the medium 3.
+\begin{figure}[hbtp]
+    \centering
+    \input{\MyGraphicsPath thin_film_normal_compensation.pdf_tex}
+    \caption{Thin film at normal incidence, space compensation.}
+    \label{fig:thin_film_normal_compensation}
+\end{figure}
+One way of accounting for this without changing any other network is to add some negative space on each side of the film.
+Let $a_1$ and $a_3$ be the effect of these negative spaces.
+\Crefrange{eq:negative_space_3}{eq:negative_space_3} apply~\cref{eq:net_distance} to the refractive indices $n_1$ and $n_3$ for the negative distance $-d_2/2$.
+\begin{subequations}
+    \begin{align}
+        a_1 &= \exp \Big(-i 2 \pi (-d_2/2) n_1 f / c_0 \Big) \label{eq:negative_space_1}
+        \\
+        a_3 &= \exp \Big(-i 2 \pi (-d_2/2) n_3 f / c_0 \Big) \label{eq:negative_space_3}
+    \end{align}
+    \label{eq:negative_space}
+\end{subequations}
+The reflection on the left side crosses the negative space $a_1$ twice, therefore $r_{1, 3}$ must be multiplied by $a_1^2$.
+Likewise, $r_{3, 1}$ must be multiplied by $a_3^2$.
+Both transmissions $t_{1, 3}$ and $t_{3, 1}$ go through $a_1$ and $a_3$, therefore they must be multiplied by $a_1 a_3$.
+This is summarized with~\crefrange{eq:thin_film_normal_compensated_r13}{eq:thin_film_normal_compensated_t31}.
+\begin{subequations}
+    \begin{align}
+        r'_{1, 3} &= a_1^2   \, r_{1, 3} \label{eq:thin_film_normal_compensated_r13} \\
+        r'_{3, 1} &= a_3^2   \, r_{3, 1} \label{eq:thin_film_normal_compensated_r31} \\
+        t'_{1, 3} &= a_1 a_3 \, t_{1, 3} \label{eq:thin_film_normal_compensated_t13} \\
+        t'_{3, 1} &= a_1 a_3 \, t_{3, 1} \label{eq:thin_film_normal_compensated_t31}
+    \end{align}
+    \label{eq:thin_film_normal_compensated}
+\end{subequations}
+
+From there, building the scattering matrix of the thin film is straightforward.
+If we name $I_3$ the 3--by--3 identity matrix,
+then the Jones matrices ~\crefrange{eq:thin_film_normal_s11}{eq:thin_film_normal_s22}
+are the elements of the scattering matrix.
+\begin{subequations}
+    \begin{align}
+        S_{1, 1} &= r'_{1, 3} I_3 \label{eq:thin_film_normal_s11} \\
+        S_{1, 2} &= t'_{3, 1} I_3 \label{eq:thin_film_normal_s12} \\
+        S_{2, 1} &= t'_{1, 3} I_3 \label{eq:thin_film_normal_s21} \\
+        S_{2, 2} &= r'_{3, 1} I_3 \label{eq:thin_film_normal_s22}
+    \end{align}
+    \label{eq:thin_film_normal_sij}
+\end{subequations}
+If necessary, each of these Jones matrices can be adapted to account for the orientation of the thin film;
+see~\vref{sec:rotating_jones_matrices}.
+
+\subsubsection{Thin film at oblique incidence}
 
 Then, we run simulations to show that it performs exactly like the combination of three elementary networks.
 
@@ -2093,16 +2494,142 @@ But before, we must apply rotation matrices to them in order to account for the 
 Indeed, these Jones matrices are valid for grid lying in the $(x, y)$ plane, with the wires along $x$.
 Doing this follows the usual method for rotating Jones matrices described by \cref{eq:jones_rotation_using_transpose}.
 
+
+
+
+
 %#############################################################################
 
 \section{Simple systems}
+\label{sec:simple_systems}
 
 The idea is to show that it works and makes sense.
 
+
+
+%=============================================================================
+
 \subsection{The simplest cavity}
-I must illustrate the most simple cavity.  I show it creates a standing wave pattern, I show its FFT, prove it's consistent with the length of the cavity and its refractive index.
+\label{sec:the_simplest_cavity}
+
+\Cref{fig:simple_cavity_principle} illustrates how three networks can represent a simple cavity: two interfaces separated by some space.
+The three networks all have two ports numbered according to \cref{fig:simple_cavity_principle}.
+Ports 2 and 3 are coupled, and so are ports 4 and 5.
+Ports 1 and 6 are open to the outside world.
+
+\begin{figure}[hbtp]
+    \centering
+    \input{\MyGraphicsPath simple_cavity_principle.pdf_tex}
+    \caption{Simple cavity, principle.}
+    \caption*{
+        Two reflective surfaces facing each other form a cavity.
+        Here, the surfaces are defined by the interfaces (vertical dotted lines)
+        between regions of space of different refractive indices $n_1$ and $n_2$.
+        According to the Fresnel equations~\eqref{eq:fresnel_normal}, these interfaces
+        reflect and transmit part of the incident radiation (black arrows).
+        As a result, a standing wave is formed inside the cavity.
+        That standing wave is the superposition of an infinity of traveling waves
+        interfering with each other.
+        We can model such a system with three two-ports networks:
+        one for each interface and one for the space between them.
+        The numbers 1 to~6 are our arbitrary labels for the ports.
+    }
+    \label{fig:simple_cavity_principle}
+\end{figure}
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{simple_cavity_direct}
+    \caption{Simple cavity, model result.}
+    \caption*{
+        The blue curve, on top, corresponds to the power coupling of port~6,
+        that is the transmission through the cavity.
+        The red curve, on the bottom, corresponds to the power coupling of port~1,
+        that is the reflection on the cavity.
+    }
+    \label{fig:simple_cavity_direct}
+\end{figure}
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{simple_cavity_fft}
+    \caption{Simple cavity, Fourier transform of the model result.}
+    \caption*{
+        The transmitted (blue) and reflected (red) wave show the same amount of modulation
+        introduced by the cavity.
+        The fundamental is at a period $F=c/2d$ with $c$ the speed of light in the cavity
+        and $d$ the length of the cavity.
+        An harmonic shows at $F=c/4d$,
+        proving that the modulation is not perfectly sinusoidal.
+        This spectrum was obtained by running the model for 4001 frequencies
+        over a~\SI{64}{\giga\hertz} range,
+        multiplying the result by a hanning window and taking a fast Fourier transform.
+    }
+    \label{fig:simple_cavity_fft}
+\end{figure}
+
+\Cref{fig:simple_cavity_direct} presents the result of the model for the following parameters:
+\begin{itemize}
+    \item refractive index $n_1=1.5$,
+    \item refractive index $n_2=1.0$,
+    \item distance between the interfaces $d=\SI{0.5}{\meter}$,
+    \item frequency $f$ from \SIrange{500}{504}{\giga\hertz}.
+\end{itemize}
+The scattering matrices of the interfaces are derived from~\vref{eq:s_interface_normal} using $n_1$ and $n_2$.
+The scattering matrix of the space between the interfaces is derived from~\vref{eq:scattering_distance} using $d$, $n_1$ and $f$.
+
+
+
+%-----------------------------------------------------------------------------
+
+\subsubsection{Periodicity}
+According to \cref{eq:cavity_period}, we expect a periodicity of $F=c/2d$ where $c=n c_0$ is the speed of light in the cavity and $d$ the length of the cavity.
+With $c_0\approx \SI{2.998e8}{\meter\per\second}$, $n=1$ and $d=\SI{0.5}{\meter}$, we get $F \approx \SI{299.8}{\mega\hertz}$.
+
+Our model agrees with our expectation, as shown by the fourrier transform in~\cref{fig:simple_cavity_fft}.
+
+
+
+%-----------------------------------------------------------------------------
+
+\subsubsection{Energy conservation}
+Examination of the results displayed in~\cref{fig:simple_cavity_direct} reveals that energy is neither created nor destroyed.
+The power is always positive, and the sum of the transmitted (blue) and reflected (red) power always equal 1 within numerical noise.
+The power that is not transmitted through the cavity is reflected back to the source.
+
+
+
+%=============================================================================
 
 \subsection{Thin film beam splitter}
+
+A thin dielectric film can be used as a beam splitter, as illustrated in~\cref{fig:beam_splitter_principle}.
+\begin{figure}[hbtp]
+    \centering
+    \input{\MyGraphicsPath beam_splitter_principle.pdf_tex}
+    \caption{Beam splitter, principle.}
+    \label{fig:beam_splitter_principle}
+\end{figure}
+
+We can model a thin film using the principle described in \cref{sec:the_simplest_cavity}.
+In the case of a film, the two interfaces are separated by a few micrometers only.
+We also need to take into account the \SI{45}{\degree} angle of incidence.
+
+%-----------------------------------------------------------------------------
+
+\subsubsection{Modeling the thin film}
+
+Let us model a thin film of biaxially-oriented polyethylene terephthalate or ``boPET'', more comonly known under trade-mame ``Mylar''.
+The table entry for ``PETP'' in the article of \citeauthor{lamb1996miscellaneous}~\cite{lamb1996miscellaneous} suggests that we choose 1.83 for the refractive index of the film at~\SI{500}{\giga\hertz}.
+This 1.83 corresponds to the real part~$n$ of the refractive index~$\hat{n}=n-ik$.
+The imaginary part~$k$ is given by the ``$\tan \delta$'' column of the table and
+the equation (6) of that article, which links $\tan \delta$ to $k$: $\tan \delta = 2k/n$.
+Therefore, $k = n \tan \delta / 2$.
+With $n=1.83$ and $\tan \delta = 0.020$, we have $k=0.018$.
+The complex refractive index of our thin film is $1.83-0.018i$.
+
+
+
+
+
 Then I introduce a thin film beam splitter (that's already a heterodyne telescope when we think of it).  I show that it adds a slope to the previous pattern.  I show that it's actually a very slow standing wave, the period of which is consistent with infinite reflections inside the thin film.  The FFT should show that there are two picks close to the cavity-period: they are due to the fact that there are now two cavities: one using reflection on the near side, one on the far side of the beam splitter.
 
 All of this makes sense, we are confident that the model does its job properly.
