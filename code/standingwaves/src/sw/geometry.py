@@ -144,6 +144,11 @@ def FresnelNormal(ni, nt):
     den = ni + nt
     r = (ni - nt) / den
     t = (2 * ni) / den
+    # Note: r**2 + t**2 is not 1.  That does not mean that energy is not
+    # conserved.  It is.  Thing is, with a change of refractive index
+    # comes a change in impedance.  Energy is ExB, and if something is
+    # missing in E then it gets in B.  Fresnel here deals with E only.
+    # Keep the impedence in mind when computing power.
     return r, t
 
 def ComputeAngleBetween(v1, v2):
