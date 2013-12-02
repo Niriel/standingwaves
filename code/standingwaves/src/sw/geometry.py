@@ -73,11 +73,12 @@ class TaitBryan(object):
         return universe.dot(self.rotR(r)).dot(universe.T)
 
 def Snell(ni, nt, anglei):
+    # Also works for negative angles.
     # ni si = nt st
     # st = si ni / nt
     # t = arcsin(si ni / nt)
     if TAU / 4 < anglei % TAU < 3 * TAU / 4:
-        warnings.warn("Snell: Angle-of-incidence greater than pi/2.")
+        warnings.warn(u"Snell: Angle-of-incidence greater than pi/2.")
         return np.nan
     # The following arcsin may return nan if its argument is out of -1..1. It
     # will also raise a warning.  This is why I do the same with the check
@@ -85,7 +86,13 @@ def Snell(ni, nt, anglei):
     # rather than crash: they're trying to have total functions.  I may consider
     # trigger a crash if a flag is raised to help with debugging, but by default
     # I stick to numpy's behavior.
-    return np.arcsin(np.sin(anglei) * ni.real / nt.real)
+    sin = np.sin(anglei) * ni.real / nt.real
+    if sin < -1 or sin > 1:
+        crit = np.arcsin(nt / ni)
+        msg = u"Snell: angle=%f\u00B0 > critical=%f\u00B0" % (np.degrees(anglei), np.degrees(crit))
+        warnings.warn(msg)
+        print msg
+    return np.arcsin(sin)
 
 def FresnelOblique(ni, nt, anglei):
     """
@@ -148,13 +155,36 @@ def FresnelNormal(ni, nt):
     # conserved.  It is.  Thing is, with a change of refractive index
     # comes a change in impedance.  Energy is ExB, and if something is
     # missing in E then it gets in B.  Fresnel here deals with E only.
-    # Keep the impedence in mind when computing power.
+    # Keep the impedance in mind when computing power.
     return r, t
 
 def ComputeAngleBetween(v1, v2):
     # This uses the dumb fact that V1.V2 = ||V1|| ||V2|| cos(V1, V2).
     cos = v1.dot(v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
     return np.arccos(cos)
+
+def ComputeSignedAngleBetween(u, r, v):
+    """Return the angle around u to go from a reference r to a vector v.
+
+    Returns an angle in ]-pi/2 , pi/2].
+
+    Determining the sign of a rotation angle requires a definition for that
+    sign. This is the role of the vector u.  u is the rotation axis, and it
+    carries with it the orientation of the rotation.  Positive angles correspond
+    to a direct (counter clockwise) rotation, negative angles to a retrograde
+    (clockwise) rotation.
+
+    The order of r and v matters.  r is the reference.  The angle starts there.
+    v is the destination, the angle ends there.  Swap these two vectors and the
+    sign of the result switches.
+
+    """
+    a = ComputeAngleBetween(r, v)
+    n = np.cross(r, v)
+    if n.dot(u) < 0:
+        # Strictly negative so that I do not flip the sign of 180 degrees.
+        return -a
+    return a
 
 def ComputeIncidencePlaneNormal(surface_normal, propagation_direction):
     """Define the plane of incidence.
@@ -215,7 +245,7 @@ def MakeParaPerpDecompositionMatrices(plane_normal):
     if I just write down both expressions they give the same result.
 
     """
-    n = plane_normal.reshape(1, 3)  # Switch to 2D otherwise numpy gives scalar result.
+    n = plane_normal.reshape(3, 1)  # Switch to 2D column otherwise numpy gives scalar result.
     S = n.dot(n.T)
     P = np.identity(3) - S
     return P, S
