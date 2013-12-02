@@ -10,6 +10,8 @@ import random
 import numpy as np
 import geometry as geo
 
+TAU = np.pi * 2
+
 class TestRotXYZ(unittest.TestCase):
     def testZero(self):
         """Rotation by an angle of 0 has no effect."""
@@ -180,8 +182,13 @@ class TestSnell(unittest.TestCase):
     def testTotalReflection(self):
         self.assertTrue(np.isnan(geo.Snell(10, 1, geo.TAU / 3)))
     def testStupidAngle(self):
+        # Angle on the wrong side of the surface.
         self.assertTrue(np.isnan(geo.Snell(1, 1, 2 * geo.TAU / 3)))
         self.assertTrue(np.isnan(geo.Snell(1, 1, 2 * -geo.TAU / 3)))
+    def testNegativeAngles(self):
+        ai = np.radians(-30)
+        at = geo.Snell(1, 1.2, ai)
+        self.assertTrue(at < 0)
     def testNoChange(self):
         randomizer = random.Random()
         randomizer.seed(0)
@@ -298,6 +305,40 @@ class TestQuaternion(unittest.TestCase):
                 vr = Re.dot(v)  # Matrix multiplication.
                 vq = geo.QuatRotate(q, v)  # Quaternion Hamilton product.
                 self.assertTrue(np.allclose(vr, vq))
+
+class TestComputeSignedAngleBetween(unittest.TestCase):
+    def testHealthy(self):
+        u = np.array([0, 0, 1])
+        r = np.array([1, 0, 0])
+        v0 = np.array([1, 0, 0])
+        v1 = np.array([0, 1, 0])
+        v2 = np.array([-1, 0, 0])
+        v3 = np.array([0, -1, 0])
+        a0 = geo.ComputeSignedAngleBetween(u, r, v0)
+        a1 = geo.ComputeSignedAngleBetween(u, r, v1)
+        a2 = geo.ComputeSignedAngleBetween(u, r, v2)
+        a3 = geo.ComputeSignedAngleBetween(u, r, v3)
+        self.assertAlmostEqual(a0, 0)
+        self.assertAlmostEqual(a1, TAU / 4)
+        self.assertAlmostEqual(a2, TAU / 2)  # Defaults at +, good to know.
+        self.assertAlmostEqual(a3, -TAU / 4)
+        a0 = geo.ComputeSignedAngleBetween(u, v0, r)
+        a1 = geo.ComputeSignedAngleBetween(u, v1, r)
+        a2 = geo.ComputeSignedAngleBetween(u, v2, r)
+        a3 = geo.ComputeSignedAngleBetween(u, v3, r)
+        self.assertAlmostEqual(a0, 0)
+        self.assertAlmostEqual(a1, -TAU / 4)
+        self.assertAlmostEqual(a2, TAU / 2)
+        self.assertAlmostEqual(a3, TAU / 4)
+        u = -u
+        a0 = geo.ComputeSignedAngleBetween(u, r, v0)
+        a1 = geo.ComputeSignedAngleBetween(u, r, v1)
+        a2 = geo.ComputeSignedAngleBetween(u, r, v2)
+        a3 = geo.ComputeSignedAngleBetween(u, r, v3)
+        self.assertAlmostEqual(a0, 0)
+        self.assertAlmostEqual(a1, -TAU / 4)
+        self.assertAlmostEqual(a2, TAU / 2)
+        self.assertAlmostEqual(a3, TAU / 4)
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']
