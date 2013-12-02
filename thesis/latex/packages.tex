@@ -53,14 +53,17 @@
     % figures but formats the text like \caption does.  It also lets me
     % use line breaks in the caption, and even bullet/enumerated lists.
 
-\usepackage{color}
-    % For rendering text is eps_tex files produced by InkScape, even
-    % if the text is black.
+\usepackage[table]{xcolor}
+    % xcolor gives color.
+    % The 'table' parameter loads another package that lets me set
+    % alternating colors for the rows of a table.
 
 \usepackage{booktabs}
     % For professional-looking tables.
     % Brings the \toprule, \midrule and \bottomrule.
     % Remember not to use vertical rules in tables: they look cheap.
+
+\usepackage{tabularx}
 
 \usepackage{stmaryrd}
     % For the llbracket and rrbracket to denote integer intervals.
@@ -102,7 +105,8 @@
 
 \newcommand{\decibel}{dB}
 \newcommand{\equaldef}{\stackrel{\text{\tiny def}}{=}}
-\newcommand{\transp}{^T}
+\newcommand{\transp}{^\top}
 \newcommand{\norm}[1]{\left\| #1 \right\|}
 \newcommand{\abs}[1]{\left| #1 \right|}
 \newcommand{\vect}[1]{\textbf{#1}}
+\newcommand{\vangle}[2]{\left(#1, #2\right)}  % Angle between vectors.
