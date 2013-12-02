@@ -22,34 +22,78 @@ This is going to work unless higher modes can come back to the fundamental mode,
 
 
 
-
-
 %=============================================================================
-\subsection{Phasors}
-\index{phasor}
-\Cref{eq:e_z_t_real} is an expression of the amplitude of the electric field of a plane wave propagating along an axis~$\vect{z}$.
-\begin{equation}
-   e(z, t) = E \cos(kz - \omega t + \varphi)
-   \label{eq:e_z_t_real}
-\end{equation}
-$t$ is the time coordinate and~$z$ the space coordinate.
-$\omega$,~$k$ are constant related to the frequency and the propagation medium.
-$\varphi$ is related to initial conditions and the choice of reference frame.
-$E$ is the amplitude of the electric field given for example in volts per meter or newtons per coulomb.
-It is illustrated \cref{fig:plane_wave_propagation} as a function of~$z$ for a few values of~$t$.
+\subsection{Conventions and definitions}
+\Cref{eq:e_z_t_real_minus} and \cref{eq:e_z_t_real_plus} are two equivalent expressions of the amplitude of the electric field of a plane wave propagating along an axis~$\vect{z}$.
+These two expressions are equivalent because the $\cos$ function is even.
+Choosing one or the other is a matter of convention.
+\begin{subequations}
+    \begin{align}
+       e(z, t) &= E \cos( kz - \omega t + \varphi)   \label{eq:e_z_t_real_minus} \\
+       e(z, t) &= E \cos(-kz + \omega t - \varphi)   \label{eq:e_z_t_real_plus}
+    \end{align}
+    \label{eq:e_z_t_real}
+\end{subequations}
+\Cref{eq:e_z_t_real} is illustrated \cref{fig:plane_wave_propagation} as a function of~$z$ for a few values of~$t$.
 \begin{figure}[hbp]
     \centering
     \includegraphics{plane_wave_propagation}
     \caption {\label{fig:plane_wave_propagation}Electric field amplitude of a wave of frequency \SI{500}{\giga\hertz} and amplitude \SI{1}{\volt\per\meter} propagating in vacuum (refractive index 1).}
 \end{figure}
 
+In \cref{eq:e_z_t_real}, $t$ is the time coordinate and~$z$ the space coordinate.
+$\varphi$ is related to initial conditions and the choice of reference frame.
+$E$ is the amplitude of the electric field.
+It has the dimension of an electric potential per unit length.
+It is given for example in volts per meter or newtons per coulomb.
+
+\begin{table}
+    \centering
+    \caption{herp derp}
+    \label{tab:definitions_simple}
+    \rowcolors{2}{gray!25}{white}
+    \begin{tabularx}{\textwidth}{l l X}
+        \toprule
+        \hiderowcolors
+        notation & definition & name \\
+        \showrowcolors
+        \midrule
+        $\omega$      &  $2 \pi f$   &  angular frequency \\
+        $k$           &  $2 \pi / \lambda$   &   wave number or angular frequency\\
+        $\lambda$     &  $c/f$  &  wavelength \\
+        $c$           &  $c_0/n$  &  phase velocity \\
+        $c_0$         &  $=\SI{299792458}{\meter\per\second}$  &  speed of light in vacuum \\
+        $n$           &  $\sqrt{\epsilon_r \mu_r}$  &  refractive index \\
+        $\epsilon_r$  &  $\epsilon / \epsilon_0$  &  relative permittivity or electric constant\\
+        $\mu_r$       &  $\mu / \mu_0$  &  relative permeability or magnetic constant\\
+        $\epsilon$    & & absolute permittivity \\
+        $\mu$         & & absolute permeability \\
+        $\epsilon_0$  & $\approx \SI{8.854187817e-12}{\farad\per\meter}$  &  absolute permittivity of vacuum \\
+        $\mu_0$       & $\approx \SI{1.2566370614e-6}{\henry\per\meter}$  &  absolute permeability of vacuum \\
+        $\eta$        & $\sqrt{\mu / \epsilon}$  &  intrinsic impedance \\
+        $\eta_0$      & $\sqrt{\mu_0 / \epsilon_0}$  &  intrinsic impedance of free space \\
+        $Z$           & $E / H$  & wave impedance \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+For plane waves in homogeneous materials, $Z=\eta$.
+
+All the parameters introduced above are real numbers.
+It is possible to add more parameters, such as the electric conductivity of a material.
+Such parameters account for attenuation, phase delays, etc.
+However, these are more easily dealt with when using complex numbers.
+In \cref{sec:polar_complex_notation}, we will go over these parameters again and explore the effects of giving them an imaginary part.
+
+
+
 \subsubsection{Polar complex notation.}
-It is easier to go on by using polar complex notations.
+\label{sec:polar_complex_notation}
 Euler's formula, given in \cref{eq:euler_formula}, relates the trigonometric function $\cos$ to a complex exponential.
 \begin{equation}    
     \exp(j\theta) = \cos(\theta) + j\sin(\theta) \label{eq:euler_formula}
 \end{equation}
-In~\cref{eq:euler_formula}, $j$ represents the imaginary unit such that $j^2=-1$.
+In \cref{eq:euler_formula}, $j$ represents the imaginary unit such that $j^2=-1$.
 If we rewrite the expression of~$e$ as complex in polar coordinates, we have \cref{eq:e_z_t_complex}.
 \begin{align}
    \hat{e}(z, t) &= E \exp(j(kz - \omega t + \varphi))
@@ -61,6 +105,11 @@ If we rewrite the expression of~$e$ as complex in polar coordinates, we have \cr
 The hat above the $e$ signals that $\hat{e}$ is the complex equivalent to $e$.
 As shown by \cref{eq:e_z_t_real_complex}, $e$ and $\hat{e}$ do not have the same value (one is real, the other is complex);
 however, both describe the same physical phenomenon.
+
+
+%=============================================================================
+\subsection{Phasors}
+\index{phasor}
 
 By applying the exponentiation identity \cref{eq:exponentiation_identity_plus},
 \cref{eq:e_z_t_complex} can also be written as \cref{eq:e_z_t_complex_factorized}.
@@ -239,7 +288,7 @@ With \cref{eq:factor_out_E0}, we express any amplitude $E$ relatively to a refer
 \begin{equation}
     E = \epsilon E_0 \label{eq:factor_out_E0}
 \end{equation}
-Using \cref{eq:factor_out_E0} in \cref{eq:factor_out_phi} allows us to simplify by $E_0$ (\crefrange{eq:factor_out_E0_0}{eq:factor_out_E0_1}).
+Using \cref{eq:factor_out_E0} in \cref{eq:factor_out_phi} allows us to simplify by $E_0$ (equations \eqref{eq:factor_out_E0_0} and \eqref{eq:factor_out_E0_1}).
 \begin{align}
     \epsilon' \,\cancel{E_0} \exp(j\Delta\varphi')
     &=
@@ -311,7 +360,7 @@ The diagonal contains the reflections terms and the rest contains the transmissi
 \subsection{Jones calculus in 3D}
 
 Jones matrices model the transfer of amplitude and phase from one polarization to another \cite{hecht2002optics}.
-In~\cref{eq:jones_matrix_short}, the polarized input field $e_i$ is related to the polarized output field~$e_o$ by the Jones matrix $J$.
+In \cref{eq:jones_matrix_short}, the polarized input field $e_i$ is related to the polarized output field~$e_o$ by the Jones matrix $J$.
 $e_i$ and $e_o$ are called ``Jones vectors''.
 \begin{equation}
     % Small form.
@@ -353,7 +402,7 @@ Therefore, this cannot model propagation in a birefringent material.
 One way to accommodate this is to relax the constraint of orthogonality of the reference frame, allowing for the horizontal and vertical directions to have a component along the direction of propagation.
 If we do this, then the full description of the field gets even more complicated as we need to carry along, not just the orientation of its reference frame, but the full description of that non-Cartesian reference frame.
 
-Instead, we can express all the fields in a common global Cartesian reference frame, essentially extending Jones calculus from two to three dimensions, as illustrated in~\cref{eq:jones_matrix_3d}.
+Instead, we can express all the fields in a common global Cartesian reference frame, essentially extending Jones calculus from two to three dimensions, as illustrated in \cref{eq:jones_matrix_3d}.
 \begin{equation}
     % Jones matrix in 3D.
     \begin{pmatrix}
@@ -387,13 +436,13 @@ Indeed, inverting matrices is an expensive and unstable operation for a computer
 \todo{citation needed}.
 When we remember that the inverse of a rotation matrix is also its transpose%
 \todo{citation needed},
-then we get~\cref{eq:jones_rotation_using_transpose} which has the advantage of being computationally cheap and stable.
+then we get \cref{eq:jones_rotation_using_transpose} which has the advantage of being computationally cheap and stable.
 \begin{equation}
     J' = R J R\transp
     \label{eq:jones_rotation_using_transpose}
 \end{equation}
 
-Rotating the identity matrix has an interesting property shown by \cref{eq:jones_rotation_identity}.
+Rotating the identity matrix has an interesting property shown by~\eqref{eq:jones_rotation_identity}.
 \begin{equation}
     I' = R I R^{-1}
        = R R^{-1}
@@ -484,7 +533,7 @@ To get $b_o$, the first step is to compute~$b_i$ from~$a_o$.
 \end{subequations}
 where~$I$ is the identity matrix with a dimension equal to that of~$S^{ii}P$.
 
-Can we go from~\cref{eq:compute_bi_solve} to~\cref{eq:compute_bi_invert}?
+Can we go from \cref{eq:compute_bi_solve} to \cref{eq:compute_bi_invert}?
 The matrix~$I - S^{ii}P$ has an inverse if and only if it is not singular.
 A matrix is singular if and only if its determinant equals~0.
 Can the determinant of~$I - S^{ii}P$ equal~0 (\cref{eq:det_i_minus_siip})?
@@ -498,7 +547,7 @@ Can the determinant of~$I - S^{ii}P$ equal~0 (\cref{eq:det_i_minus_siip})?
 \end{equation}
 In our case, $\lambda=1$ and $A=S^{ii}P$.
 However, the sign is not the same: $I-A \neq A-I$.
-Fortunately, the determinant has the following property~\cref{eq:determinant_scalar_multiplication}:
+Fortunately, the determinant has the following property \cref{eq:determinant_scalar_multiplication}:
 \begin{equation}
     \det(c A) = c^n \det(A) \label{eq:determinant_scalar_multiplication}
 \end{equation}
@@ -530,7 +579,7 @@ $b^i$ is what $S^{ii}P$ is applied to in \cref{eq:compute_bi}, therefore we are 
 \begin{equation}
     b^i = S^{ii}P b^i \text{.} \label{eq:bi_eigenvector}
 \end{equation}
-The two equations~\cref{eq:bi_eigenvector} and ~\cref{eq:compute_bi_bi}, taken together, 
+The two equations \cref{eq:bi_eigenvector} and  \cref{eq:compute_bi_bi}, taken together, 
 lead to the following interesting equality:
 \begin{equation}
     \left\lbrace
@@ -562,7 +611,7 @@ Therefore $\det(I-S^{ii}P) \neq 0$.
 Therefore $I-S^{ii}P$ has an inverse.
 Therefore \cref{eq:compute_bi_invert} is correct, and the system can be solved.
 
-It can be interesting to draw a parallel between our problem and the convergence of an infinite series.
+It can be interesting to draw a parallel between our problem and the convergence of an infinite geometric series.
 Indeed, the sum of an infinite series of ratio $q$ converges if $\abs{q} < 1$:
 \begin{equation}
     \sum_{i=0}^\infty q^i = \frac{1}{1-q} = (1-q)^{-1}
@@ -610,7 +659,7 @@ The output $b_i$ of a port is a linear combination of the inputs $a_j$, plus a c
     b = S a + c
     \label{eq:internal_sources}
 \end{equation}
-The separation into inside and outside ports is straight forward, as~\cref{eq:internal_sources_io} indicates.
+The separation into inside and outside ports is straight forward, as \cref{eq:internal_sources_io} indicates.
 \begin{equation}
     \begin{pmatrix}
         b^o\\
@@ -641,8 +690,8 @@ Like previously, we solve for the internal transmissions and reflections.
     \end{align}
     \label{eq:compute_bi_ci}
 \end{subequations}
-\Cref{eq:compute_bi_ci_solve} is very similar to~\cref{eq:compute_bi_solve} and is as easy to solve for~$b^i$.
-The previous discussion regarding the invertibility of $(I - S^{ii} P)$, through the meaning of~\cref{eq:bi_eigenvector}, still applies here.
+\Cref{eq:compute_bi_ci_solve} is very similar to \cref{eq:compute_bi_solve} and is as easy to solve for~$b^i$.
+The previous discussion regarding the invertibility of $(I - S^{ii} P)$, through the meaning of \cref{eq:bi_eigenvector}, still applies here.
 
 Once $b_i$ is known, we inject its value into the expression of $b^o$.
 \begin{subequations}
@@ -653,6 +702,33 @@ Once $b_i$ is known, we inject its value into the expression of $b^o$.
     \label{eq:compute_bo_co}
 \end{subequations}
 Equations~\eqref{eq:compute_bi_ci_solve} and~\eqref{eq:compute_bo_bi_co} give us the response $b$ of the system $(S, P)$ to the inputs $a$ and $c$.
+
+%-----------------------------------------------------------------------------
+\paragraph{Field and power}
+The Poynting vector represents the directional energy flux density of an electromagnetic field.
+It has the dimension of a rate of energy transfer per unit area
+and is expressed in watts per square meter (\si{\watt\per\meter\squared}) in the international unit system.
+It is noted~$\vect{S}$ and is related to the electric and magnetic fields~$\vect{E}$ and~$\vect{H}$ by~\eqref{eq:poynting_vector}.
+Bold letters represent vectors.
+\begin{equation}
+    \vect{S} = \vect{E} \times \vect{H} \label{eq:poynting_vector}
+\end{equation}
+
+$\vect{E}$ and $\vect{H}$ are related to the electric and magnetic phasors $E$ and $H$ and unit vectors $\vect{u}_E$ and $\vect{u}_H$.
+\begin{align}
+    \abs{\vect{E}} &= E \exp(-i\omega t) \vect{u}_E\\
+    \abs{\vect{H}} &= H \exp(-i\omega t) \vect{u}_H
+\end{align}
+    
+
+When dealing with complex numbers, we must carefully define what we mean by ``power''.
+\citetitle{IEEE2002dictionary} \cite{IEEE2002dictionary} \todo{dl and check}defines the following terms:
+\begin{description}
+    \item[complex power] $S = P + iQ$,
+    \item[active/real power] $P \in \mathbb{R} = \Re(S)$,
+    \item[reactive power] $Q \in \mathbb{R} = \Im(S)$,
+    \item[apparent power] $\abs{S} = \sqrt{P^2 + Q^2}$.
+\end{description}
 
 %-----------------------------------------------------------------------------
 \paragraph{Solving for each source independantly.}
@@ -766,7 +842,7 @@ with $S'$ having the form of \cref{eq:s_outside_inside}.
 
 The permutation matrix $Q$ must not be confused with the permutation matrix $P$ from \cref{eq:relation_ai_bi}, they are distinct, and both are needed.
 $Q$~separates the inside ports from the outside ports, while $P$~describes how the inside ports are coupled.
-Once the permutation matrix~$Q$ is known, we can solve the problem for~$S'$ and get~$b'$, from which we can retrieve~$b$~\cref{eq:permute_s_equiv}.
+Once the permutation matrix~$Q$ is known, we can solve the problem for~$S'$ and get~$b'$, from which we can retrieve~$b$ \cref{eq:permute_s_equiv}.
 
 Permutation matrices permute the order of rows and columns of matrices.
 They contain one and only one 1 per row and per column, all the other elements are 0.
@@ -948,9 +1024,9 @@ The next step, separating $a'$ in two and $S'$ in four, is trivial to implement.
     \end{aligned}
     \label{eq:q_s_qtranspose_sprime_decomposed}
 \end{equation}
-Our algorithm successfully reorganized our data in a way compatible with \cref{eq:s_outside_inside}.
+Our algorithm successfully reorganized our data in a way that is compatible with \cref{eq:s_outside_inside}.
 
-We now wish to construct the permutation matrix~$P$ that appears in \cref{eq:relation_ai_bi}.
+We now wish to construct the permutation matrix~$P$ from \cref{eq:relation_ai_bi}.
 Applied to our example, this corresponds to \cref{eq:relation_ai_bi_example}.
 \begin{equation}
     \begin{pmatrix}
@@ -1180,6 +1256,7 @@ This is illustrated by \cref{algo:solve_system_realistic}.
 %#############################################################################
 
 \section{Generic networks}
+\label{sec:generic_networks}
 
 Scattering matrix of typical networks, with parameters.
 
@@ -1323,6 +1400,7 @@ Therefore, the four elements of the scattering matrix are given by \cref{eq:s_in
 %=============================================================================
 
 \subsection{Interface at oblique incidence}
+\label{sec:interface_at_oblique_incidence}
 Interfaces at oblique incidence are more complex to model than interfaces at normal incidence because they need more parameters to describe.
 In addition to the two refractive indices, we need the direction of propagation and the orientation of the interface in space.
 This is required because the reflection and transmission on an oblique interface depend on the polarization of the wave seen by the surface.
@@ -1332,10 +1410,225 @@ The plane-of-incidence is the plane that contains both the direction of propagat
 In case of normal incidence, the plane-of-incidence is undefined.
 \begin{figure}[hbtp]
     \centering
-    \missingfigure{Interface at oblique incidence}
+    \missingfigure{Interface at oblique incidence.  Shows incidence plane and angles.}
     \caption{\label{fig:net_interface_oblique}Interface at oblique incidence.}
 \end{figure}
 
+\subsubsection{Geometry}
+
+\begin{figure}[hbtp]
+    \centering
+    \input{\MyGraphicsPath fresnel_reference_frames.pdf_tex}
+    \caption{\label{fig:fresnel_directions}Field directions chosen to express the Fresnel equations.}
+    \caption*{
+        $n$ is normal to the interface, $u$ is normal to the plane of incidence.
+        The vectors~$p_i$ indicate the direction of the field parallel to the plane-of-incidence (plane of the page) for each port.  The vectors~$s_i$ do the same for the perpendicular direction.
+    }
+\end{figure}
+
+\paragraph{Plane of incidence.}
+Before we can apply the reflection and transmission coefficients given in \cref{eq:fresnel_oblique}, we need to decompose the incident field into a parallel and a perpendicular component.
+The incident field can be decomposed into a component that is parallel to the plane-of-incidence and one that is perpendicular to it.
+
+We need notations.
+I call $\vect{k}$ the direction of propagation, $\vect{n}$ the normal to the interface, and $\vect{u}$ the normal to the plane-of-incidence.
+
+Since $\vect{u}$ is normal to the plane-of-incidence, and since the plane-of-incidence contains $\vect{n}$ and $\vect{k}$, then $\vect{u}$ is normal to both $\vect{n}$ and $\vect{k}$.
+In other words, $\vect{u}$ is collinear to the outer product (cross-product) of $\vect{n}$ and $\vect{k}$.
+\todo{zero denominator}
+We know that the cross-product is antisymetric
+($\vect{n} \times \vect{k} = \mathord{-} \vect{k} \times \vect{n}$)
+but in our case the order does not matter;
+indeed, the sign cancels itself out in $\vect{u} \vect{u}\transp$ as we will see later.
+\begin{equation}
+    \vect{u} = \frac{1}{\norm{\vect{n} \times \vect{k}}} (\vect{n} \times \vect{k})  \label{eq:normal_to_plane_of_incidence}
+\end{equation}
+The order will matter in the next part when we consider the geometry of the system. \todo{What?}
+
+We get $\vect{ê}_\perp$ by projecting $\vect{ê}$ on the unit vector $\vect{u}$ according to \cref{eq:paraperp_1}.
+\begin{equation}
+    \vect{ê}_\perp = \vect{u} \times (\vect{u} \cdot \vect{ê}) \label{eq:paraperp_1}
+\end{equation}
+In \cref{eq:paraperp_1}, $\vect{u} \cdot \vect{ê}$ represents the inner product (dot product) of~$\vect{u}$ by~$\vect{ê}$ and the symbol~``$\times$'' refers to the multiplication of a matrix (here~$\vect{u}$) by a scalar (here~$\vect{u} \cdot \vect{ê}$).
+We wish to replace that scalar multiplication with a matrix multiplication.
+To do that, we replace the scalar~$\vect{u} \cdot \vect{ê}$ by the 1--by--1 matrix~$[\vect{u} \cdot \vect{ê}]$ containing that scalar as shown in \cref{eq:paraperp_2}.
+We do not use any symbol for the matrix multiplication, we simply juxtapose the matrices.
+\begin{equation}
+    \vect{ê}_\perp = \vect{u} [\vect{u} \cdot \vect{ê}] \label{eq:paraperp_2}
+\end{equation}
+The dimensions match: $\vect{u}$~is a 3--by--1 matrix and $[\vect{u} \cdot \vect{ê}]$~is a 1--by--1 matrix, resulting in~$\vect{ê}_\perp$ being a 3--by--1 matrix.
+For the next step, we note that the inner product $\vect{u} \cdot \vect{ê}$ is related to the outer product $\vect{u}\transp \vect{ê}$ by \cref{eq:paraperp_3}.
+\begin{equation}
+    [\vect{u} \cdot \vect{ê}] = \vect{u}\transp \vect{ê} \label{eq:paraperp_3}
+\end{equation}
+Injecting \cref{eq:paraperp_3} into \cref{eq:paraperp_2} gives \cref{eq:paraperp_4}.
+\begin{equation}
+    \vect{ê}_\perp = \vect{u} \left( \vect{u}\transp \vect{ê} \right) \label{eq:paraperp_4}
+\end{equation}
+By associativity of the matrix multiplication we can transform \cref{eq:paraperp_4} into \cref{eq:para_perp_decomposition_field}.
+Then, by identification, we can find our decomposition matrices.
+In \cref{eq:para_perp_decomposition_matrix}, the matrices~$M_\perp$ and~$M_\parallel$ decompose a vector~$\vect{ê}$ into its perpendicular and parallel components~$\vect{ê}_\perp$ and~$\vect{ê}_\parallel$ on which we can apply the Fresnel equations~\eqref{eq:fresnel_oblique}.
+\begin{subequations}
+    \begin{align}
+        \vect{ê}_\perp &= \left(\vect{u} \vect{u}\transp \right) \vect{ê}
+        \\
+        \vect{ê}_\parallel &= \vect{ê} - \vect{ê}_\perp
+    \end{align}
+    \label{eq:para_perp_decomposition_field}
+\end{subequations}
+\begin{subequations}
+    \begin{align}
+        M_\perp &= \vect{u} \vect{u}\transp   \\
+        M_\parallel & = I - M_\perp
+    \end{align}
+    \label{eq:para_perp_decomposition_matrix}
+\end{subequations}
+
+
+\paragraph{Angle of incidence.}
+\todo{not true after cut and paste}
+We are now able to calculate the reflected and transmitted fields of an incident plane wave on an interface at oblique incidence.
+However, the results are in a reference frame local to the reflected or transmitted wave, not a global reference frame shared by the three waves.
+
+The angle-of-incidence, noted $\theta_i$, is defined in \cref{eq:angle_of_incidence_definition} as the angle between the incident direction of propagation~$\vect{k}_i$ and the normal to the surface~$\vect{n}$.
+\begin{equation}
+    \theta_i \equiv \vangle{\vect{n}}{\vect{k}_i} \pmod{2\pi}
+    \label{eq:angle_of_incidence_definition}
+\end{equation}
+\Cref{eq:dot_product_cos} shows a relation between the dot-product of two vectors and the angle between them.
+\begin{equation}
+    \vect{v} \cdot \vect{w} = \norm{\vect{v}} \norm{\vect{w}} \cos \vangle{\vect{v}}{\vect{w}}
+    \label{eq:dot_product_cos}
+\end{equation}
+The dot-product~$\vect{v} \cdot \vect{w}$ can also be calculated by summing the component-wise product of $\vect{v}$ and $\vect{w}$ (\cref{eq:dot_product_elementwise}, which is a method that does not require knowing~$\vangle{\vect{v}}{\vect{w}}$.
+\begin{equation}
+    \vect{v} \cdot \vect{w} = \sum_i v_i w_i
+    \label{eq:dot_product_elementwise}
+\end{equation}
+\Cref{eq:dot_product_cos} and \cref{eq:dot_product_elementwise} form a system from which we can extract the angle~$\vangle{\vect{v}}{\vect{w}}$.
+Its solution is given in \cref{eq:angle_from_dot_product}, provided that the angle is between 0 and $\pi$.
+\todo{Negative angles, use external rotation axis and cross product}
+This is due to a limitation of the range of the $\arccos$ function.
+\begin{equation}
+    \left\lbrace
+        \begin{aligned}
+            \vangle{\vect{v}}{\vect{w}} &\in [0, \pi]
+            \\
+            \vangle{\vect{v}}{\vect{w}} &= \arccos
+            \left(
+                \frac{
+                    \sum_i v_i w_i
+                }{
+                    \norm{v} \norm{w}
+                }
+            \right)
+        \end{aligned}
+    \right.
+    \label{eq:angle_from_dot_product}
+\end{equation}
+The limitation~$\vangle{\vect{v}}{\vect{w}} \in [0, \pi]$ does not impede us.
+Indeed, $\theta_i \in ]0, \pi/2[$.
+\begin{itemize}
+    \item 0 is excluded because this corresponds to the case of normal incidence which results in a two-ports network and not a four-ports network.  We have treated this particular case in \vref{sec:generic_networks_interface_at_normal_incidence}.
+    \item $\pi/2$ is excluded because this corresponds to a direction of propagation parallel to the surface, the wave would therefore never hit the interface.
+    \item Angles between $\pi/2$ and $\pi$ are excluded because the incident wave would be coming from the wrong side of the interface.
+    \item Angles between 0 and $-\pi$ are excluded because the rotation axis~$\vect{u}$ adapts its direction to make sure that the angle from $\vect{n}$ to $\vect{k}_i$ is always positive from the point of view of~$\vect{u}$.
+    \item The other angles fall into the previous categories because of the modulo~$2\pi$.
+\end{itemize}
+It is therefore safe to apply \cref{eq:angle_from_dot_product} to retreive~$\theta_i$ from $\vect{n}$ and $\vect{k}_i$.
+
+
+
+\paragraph{Angles of reflection and transmission.}
+The vectors~$\vect{n}$ and $\vect{k}_1$ and the refractive incides $n_a$ and $n_b$ are sufficient to determine the geometry of the whole network.
+In other words, the orientation of one port constrains that of the three other ports.
+\Cref{fig:fresnel_rotations} shows how the reflected and transmitted reference frames are obtained by rotating the incident reference frame around~$\vect{u}$, the normal to the plane-of-incidence.
+\begin{figure}[hbtp]
+    \centering
+    \missingfigure{Fresnel rotations.}
+    \caption{\label{fig:fresnel_rotations}Fresnel rotations.}
+\end{figure}
+Because each port can be seen as an incident, reflected or transmitted port, I shall stop using the notation $\theta_i$, $\theta_r$ and $\theta_t$;
+instead, I shall use $\theta_a$ and $\theta_b$.
+$\theta_a$ refers to the angle between the direction of propagation and the normal to the interface on the A side of the interface;
+likewise, $\theta_b$ refers to the corresponding angle on the B side.
+\index{Snell's law}The angles~$\theta_a$ and~$\theta_b$ are related to the refractive incides~$n_a$ and~$n_b$ of the propagation media A and B by Snell's Law~\eqref{eq:snell}.
+\begin{gather}
+    \Re(n_a) \sin \theta_a = \Re(n_b) \sin \theta_b
+    \label{eq:snell}
+    \\
+    \left\lbrace
+        \begin{aligned}
+            \theta_b &\in [-\pi/2, \pi/2]
+            \\
+            \theta_b &= \arcsin
+            \left(
+                \frac{\Re(n_a)}{\Re(n_b)}
+                \sin \theta_a
+            \right)
+        \end{aligned}
+    \right.
+    \label{eq:snell_thetab}
+\end{gather}
+Once again, the limited range of~$\theta_b$ does not impede us.
+
+Upon reflection and refraction, the direction of the electric field rotates around $u$.
+Since there is no connection between the port 1 and the port 4, and between the port 2 and the port 3, we are interested in eight angles only:
+$\theta_{2 \leftarrow 1}$, $\theta_{3 \leftarrow 1}$,
+$\theta_{1 \leftarrow 2}$, $\theta_{4 \leftarrow 2}$,
+$\theta_{1 \leftarrow 3}$, $\theta_{4 \leftarrow 3}$,
+$\theta_{2 \leftarrow 4}$ and $\theta_{3 \leftarrow 4}$.
+The values for these angles are listed in equations \cref{eq:interface_rotations}.
+\begin{equation}
+    \begin{aligned}
+        \theta_{2 \leftarrow 1} &= \pi - 2\theta_a
+        &
+        \theta_{1 \leftarrow 2} &= -\pi + 2\theta_a
+        \\
+        \theta_{4 \leftarrow 3} &= \pi - 2\theta_b
+        &
+        \theta_{3 \leftarrow 4} &= -\pi + 2\theta_b
+        \\
+        \theta_{3 \leftarrow 1} &= \theta_b - \theta_a
+        &
+        \theta_{1 \leftarrow 3} &= \theta_a - \theta_b
+        \\
+        \theta_{4 \leftarrow 2} &= \theta_a - \theta_b
+        &
+        \theta_{2 \leftarrow 4} &= \theta_b - \theta_a
+    \end{aligned}
+    \label{eq:interface_rotations}
+\end{equation}
+To each angle $\theta$ of \cref{eq:interface_rotations} corresponds a rotation matrix $R$.
+Computing the matrix corresponding to a rotation around an axis (here $u$) may be best done using a quaternion.
+We do not need to enter into details, the two following steps are all we need to create the rotation matrix we want.
+First, we construct the quaternion corresponding to a rotation of~$\theta$ around a vector $u=(u_x, u_y, y_z)$ with
+\todo{citation needed}
+\cref{eq:quaternion_rotation_around_axis}.
+\begin{equation}
+    \begin{aligned}
+        q &= w + xi + yj + zk
+        \\
+        q &= \cos \frac{\theta}{2}
+           + u_x \sin \frac{\theta}{2} i
+           + u_y \sin \frac{\theta}{2} j
+           + u_z \sin \frac{\theta}{2} k
+    \end{aligned}
+    \label{eq:quaternion_rotation_around_axis}
+\end{equation}
+Then we convert that quaternion into a rotation matrix with \todo{citation needed} \cref{eq:quaternion_to_rotation_matrix}.
+\begin{equation}
+    R =
+    \begin{pmatrix}
+        1 - 2y^2 - 2z^2   &   2xy - 2zw         &   2xz + 2yw \\
+        2xy + 2zw         &   1 - 2x^2 - 2z^2   &   2yz - 2xw \\
+        2xz - 2yw         &   2yz + 2xw         &   1 - 2x^2 - 2y^2
+    \end{pmatrix}
+    \label{eq:quaternion_to_rotation_matrix}
+\end{equation}
+
+
+\subsubsection{Reflection and transmission coefficients}
 \index{Fresnel equations}\Crefrange{eq:fresnel_rp}{eq:fresnel_ts} are the Fresnel equations corresponding to the field directions described in figure \cref{fig:fresnel_directions} for linear homogeneous isotropic dielectric materials.
 \begin{subequations}
     \begin{align}
@@ -1378,244 +1671,82 @@ Our convention for the direction of the parallel reflected field makes the paral
 % but not in his para case.  So if I fix this, I get a minus sign for
 % $r_para$.
 
+\paragraph{Exit propagation directions}
+However, for this network to find its place in a system, we also need to compute the directions of propagations $k_2$, $k_3$ and $k_4$: these may be required by other networks.
+
 \begin{figure}[hbtp]
     \centering
-    \input{\MyGraphicsPath fresnel_reference_frames.pdf_tex}
-    \caption{\label{fig:fresnel_directions}Field directions chosen to express the Fresnel equations.}
-    \caption*{
-        $n$ is normal to the interface, $u$ is normal to the plane of incidence.
-        The vectors~$p_i$ indicate the direction of the field parallel to the plane-of-incidence (plane of the page) for each port.  The vectors~$s_i$ do the same for the perpendicular direction.
-    }
+    \missingfigure{fig:interface propagation rotation}
+    \caption{\label{fig:interface_propagation_rotation}interface propagation rotation}
 \end{figure}
+Equations \crefrange{eq:interface_propagation_rotation_k2}{eq:interface_propagation_rotation_k4} list the rotations matrices that transform~$k_1$ into $k_2$, $k_3$ and $k_4$, represented in \cref{fig:interface_propagation_rotation}.
+\begin{subequations}
+    \begin{align}
+        k_2 &= R^{1 \rightarrow 2} k_1 \label{eq:interface_propagation_rotation_k2} \\
+        k_3 &= R^{1 \rightarrow 3} k_1 \label{eq:interface_propagation_rotation_k3} \\
+        k_4 &= R^{1 \rightarrow 4} k_1 \label{eq:interface_propagation_rotation_k4}
+    \end{align}
+    \label{eq:interface_propagation_rotation_ki}
+\end{subequations}
+We already know~$R^{1 \rightarrow 2}$ and~$R^{1 \rightarrow 3}$ (see \cref{eq:interface_rotations}) but we do not have~$R^{1 \rightarrow 4}$ yet.
+The angle~$\theta_{1 \rightarrow 4}$ is easy to determine with \cref{fig:interface_propagation_rotation} and is given by \cref{eq:interface_rotation_1_to_4}.
+We can use \cref{eq:quaternion_rotation_around_axis} and \cref{eq:quaternion_to_rotation_matrix} to derive~$R^{1 \rightarrow 4}$ from~$\theta_{1 \rightarrow 4}$.
+\begin{equation}
+    \theta_{1 \rightarrow 4} = -\theta_a - \theta_b
+    \label{eq:interface_rotation_1_to_4}
+\end{equation}
+With that final step, we can now connect the network to other networks since we can provide them with their own~$k_1$.
 
-Before we can apply the reflection and transmission coefficients given in~\cref{eq:fresnel_oblique}, we need to decompose the incident field into a parallel and a perpendicular component.
-The incident field can be decomposed into a component that is parallel to the plane-of-incidence and one that is perpendicular to it.
 
-We need notations.
-I call $k$ the direction of propagation, $n$ the normal to the interface, and $u$ the normal to the plane-of-incidence (because $p$ and $i$ are already taken).
+\paragraph{Energy conservation}
+Normalization of the cross section.
 
-We get $e_\perp$ by projecting $e$ on the unit vector $u$ according to \cref{eq:paraperp_1}.
-\begin{equation}
-    e_\perp = u \times (u \cdot e) \label{eq:paraperp_1}
-\end{equation}
-In \cref{eq:paraperp_1}, $u \cdot e$~represents the inner product (dot product) of~$u$ by~$e$ and the symbol~``$\times$'' refers to the multiplication of a matrix (here~$u$) by a scalar (here~$u \cdot e$).
-We wish to replace that scalar multiplication with a matrix multiplication.
-To do that, we replace the scalar~$u \cdot e$ by the 1--by--1 matrix~$[u \cdot e]$ containing that scalar as shown in \cref{eq:paraperp_2}.
-We do not use any symbol for the matrix multiplication, we simply juxtapose the matrices.
-\begin{equation}
-    e_\perp = u [u \cdot e] \label{eq:paraperp_2}
-\end{equation}
-The dimensions match: $u$~is a 3--by--1 matrix and $[u \cdot e]$~is a 1--by--1 matrix, resulting in~$e_\perp$ being a 3--by--1 matrix.
-For the next step, we note that the inner product $u \cdot e$ is related to the outer product $u\transp e$ by \cref{eq:paraperp_3}.
-\begin{equation}
-    [u \cdot e] = u\transp e \label{eq:paraperp_3}
-\end{equation}
-Injecting \cref{eq:paraperp_3} into \cref{eq:paraperp_2} gives \cref{eq:paraperp_4}.
-\begin{equation}
-    e_\perp = u \left( u\transp e \right) \label{eq:paraperp_4}
-\end{equation}
-By associativity of the matrix multiplication we can transform \cref{eq:paraperp_4} into \cref{eq:para_perp_decomposition_field}.
-Then, by identification, we can find our decomposition matrices.
-In \cref{eq:para_perp_decomposition_matrix}, the matrices~$M_\perp$ and~$M_\parallel$ decompose a vector~$e$ into its perpendicular and parallel components~$e_\perp$ and~$e_\parallel$ on which we can apply the Fresnel equations~\eqref{eq:fresnel_oblique}.
-\begin{gather}
-    \begin{aligned}
-        e_\perp &= \left(u u\transp \right) e
-        \\
-        e_\parallel &= e - e_\perp
-    \end{aligned}
-    \label{eq:para_perp_decomposition_field}
-    \\
-    \begin{aligned}
-        M_\perp &= u u\transp   \\
-        M_\parallel & = I - M_\perp
-    \end{aligned}
-    \label{eq:para_perp_decomposition_matrix}
-\end{gather}
 
-One more step is required: we need to compute $u$ from $n$ and $k$.
-This step is very straightforward.
-Since $u$ is normal to the plane-of-incidence, and since the plane-of-incidence contains $n$ and $k$, then $u$ is normal to both $n$ and $k$.
-In other words, $u$ is collinear to the cross product of $n$ and $k$.
-We know that the cross-product is antisymetric but in our case the order does not matter; indeed, the sign cancels itself out in $u u^T$.
-\begin{equation}
-    u = \frac{1}{\norm{n \times k}} n \times k
-\end{equation}
-The order will matter in the next part when we consider the geometry of the system.
-
-We are now able to calculate the reflected and transmitted fields of an incident plane wave on an interface at oblique incidence.
-However, the results are in a reference frame local to the reflected or transmitted wave, not a global reference frame shared by the three waves.
-\Cref{fig:fresnel_rotations} shows how the reflected and transmitted reference frames are obtained by rotating the incident reference frame around~$u$, the normal to the plane-of-incidence.
-\begin{figure}[hbtp]
-    \centering
-    \missingfigure{Fresnel rotations.}
-    \caption{\label{fig:fresnel_rotations}Fresnel rotations.}
-\end{figure}
-
-The angle-of-incidence, noted $\theta_i$, is defined in \cref{eq:angle_of_incidence_definition} as the angle between the incident direction of propagation~$k_i$ and the normal to the surface~$n$.
-\begin{equation}
-    \theta_i \equiv \widehat{n k_i} \pmod{2\pi}
-    \label{eq:angle_of_incidence_definition}
-\end{equation}
-\Cref{eq:dot_product_cos} shows a relation between the dot-product of two vectors and the angle between them.
-\begin{equation}
-    v \cdot w = \norm{v} \norm{w} \cos \widehat{vw}
-    \label{eq:dot_product_cos}
-\end{equation}
-The dot-product~$v \cdot w$ can also be calculated by summing the component-wise product of $v$ and $w$ (\cref{eq:dot_product_elementwise}, which is a method that does not require knowing~$\widehat{vw}$.
-\begin{equation}
-    v \cdot w = \sum_i v_i w_i
-    \label{eq:dot_product_elementwise}
-\end{equation}
-\Cref{eq:dot_product_cos} and~\cref{eq:dot_product_elementwise} form a system from which we can extract the angle~$\widehat{uv}$.
-Its solution is given in \cref{eq:angle_from_dot_product}, provided that the angle is between 0 and $\pi$.
-This is due to a limitation of the range of the $\arccos$ function.
-\begin{equation}
-    \left\lbrace
-        \begin{aligned}
-            \widehat{vw} &\in [0, \pi]
-            \\
-            \widehat{vw} &= \arccos
-            \left(
-                \frac{
-                    \sum_i v_i w_i
-                }{
-                    \norm{v} \norm{w}
-                }
-            \right)
-        \end{aligned}
-    \right.
-    \label{eq:angle_from_dot_product}
-\end{equation}
-The limitation~$\widehat{vw} \in [0, \pi]$ does not impede us.
-Indeed, $\theta_i \in ]0, \pi/2[$.
-\begin{itemize}
-    \item 0 is excluded because this corresponds to the case of normal incidence which results in a two-ports network and not a four-ports network.  We have treated this particular case in \vref{sec:generic_networks_interface_at_normal_incidence}.
-    \item $\pi/2$ is excluded because this corresponds to a direction of propagation parallel to the surface, the wave would therefore never hit the interface.
-    \item Angles between $\pi/2$ and $\pi$ are excluded because the incident wave would be coming from the wrong side of the interface.
-    \item Angles between 0 and $-\pi$ are excluded because the rotation axis~$u$ adapts its direction to make sure that the angle from $n$ to $k_i$ is always positive from the point of view of~$u$.
-    \item The other angles fall into the previous categories because of the modulo~$2\pi$.
-\end{itemize}
-It is therefore safe to apply \cref{eq:angle_from_dot_product} to retreive~$\theta_i$ from $n$ and $k_i$.
-
-The vectors~$n$ and $k_1$ and the refractive incides $n_a$ and $n_b$ are sufficient to determine the geometry of the whole network.
-In other words, the orientation of one port constrains that of the three other ports.
-Because each port can be seen as an incident, reflected or transmitted port, I shall stop using the notation $\theta_i$, $\theta_r$ and $\theta_t$;
-instead, I shall use $\theta_a$ and $\theta_b$.
-$\theta_a$ refers to the angle between the direction of propagation and the normal to the interface on the A side of the interface;
-likewise, $\theta_b$ refers to the corresponding angle on the B side.
-\index{Snell's law}The angles~$\theta_a$ and~$\theta_b$ are related to the refractive incides~$n_a$ and~$n_b$ of the propagation media A and B by Snell's Law~\eqref{eq:snell}.
-\begin{gather}
-    \Re(n_a) \sin \theta_a = \Re(n_b) \sin \theta_b
-    \label{eq:snell}
-    \\
-    \left\lbrace
-        \begin{aligned}
-            \theta_b &\in [-\pi/2, \pi/2]
-            \\
-            \theta_b &= \arcsin
-            \left(
-                \frac{\Re(n_a)}{\Re(n_b)}
-                \sin \theta_a
-            \right)
-        \end{aligned}
-    \right.
-    \label{eq:snell_thetab}
-\end{gather}
-Once again, the limited range of~$\theta_b$ does not impede us.
-
-Upon reflection and refraction, the direction of the electric field rotates around $u$.
-Since there is no connection between the port 1 and the port 4, and between the port 2 and the port 3, we are interested in eight angles only: $\theta_{1 \rightarrow 2}$, $\theta_{1 \rightarrow 3}$, $\theta_{2 \rightarrow 1}$, $\theta_{2 \rightarrow 4}$, $\theta_{3 \rightarrow 1}$, $\theta_{3 \rightarrow 4}$, $\theta_{4 \rightarrow 2}$ and $\theta_{4 \rightarrow 3}$.
-The values for these angles are listed in equations~\cref{eq:interface_rotations}.
-\begin{equation}
-    \begin{aligned}
-        \theta_{1 \rightarrow 2} &= \pi - 2\theta_a
-        &
-        \theta_{2 \rightarrow 1} &= -\pi + 2\theta_a
-        \\
-        \theta_{3 \rightarrow 4} &= \pi - 2\theta_b
-        &
-        \theta_{4 \rightarrow 3} &= -\pi + 2\theta_b
-        \\
-        \theta_{1 \rightarrow 3} &= \theta_b - \theta_a
-        &
-        \theta_{3 \rightarrow 1} &= \theta_a - \theta_b
-        \\
-        \theta_{2 \rightarrow 4} &= \theta_a - \theta_b
-        &
-        \theta_{4 \rightarrow 2} &= \theta_b - \theta_a
-    \end{aligned}
-    \label{eq:interface_rotations}
-\end{equation}
-To each angle $\theta$ of \cref{eq:interface_rotations} corresponds a rotation matrix $R$.
-From an implementation point of view, computing the matrix corresponding to a rotation around an axis (here $u$) may be best done using a quaternion.
-We do not need to enter into details, the two following steps are all we need to create the rotation matrix we want.
-First, we construct the quaternion corresponding to a rotation of~$\theta$ around a vector $u=(u_x, u_y, y_z)$ with \cref{eq:quaternion_rotation_around_axis}.
-\begin{equation}
-    \begin{aligned}
-        q &= w + xi + yj + zk
-        \\
-        q &= \cos \frac{\theta}{2}
-           + u_x \sin \frac{\theta}{2} i
-           + u_y \sin \frac{\theta}{2} j
-           + u_z \sin \frac{\theta}{2} k
-    \end{aligned}
-    \label{eq:quaternion_rotation_around_axis}
-\end{equation}
-Then we convert that quaternion into a rotation matrix with \cref{eq:quaternion_to_rotation_matrix}.
-\begin{equation}
-    R =
-    \begin{pmatrix}
-        1 - 2y^2 - 2z^2   &   2xy - 2zw         &   2xz + 2yw \\
-        2xy + 2zw         &   1 - 2x^2 - 2z^2   &   2yz - 2xw \\
-        2xz - 2yw         &   2yz + 2xw         &   1 - 2x^2 - 2y^2
-    \end{pmatrix}
-    \label{eq:quaternion_to_rotation_matrix}
-\end{equation}
-
+\subsubsection{Scattering matrix}
 We can finally put it all together.
 \Cref{eq:interface_S} lists all the elements of the scattering matrix of an interface at normal indicence.
-The matrices $R$ are rotation matrices produced by~\cref{eq:quaternion_to_rotation_matrix} for each angle~\eqref{eq:interface_rotations}.
-The matrices $M_\parallel$ and $M_\perp$ are defined in~\cref{eq:para_perp_decomposition_matrix} and decompose the fields into their parallel and perpendicular components.
+The matrices $R$ are rotation matrices produced by \cref{eq:quaternion_to_rotation_matrix} for each angle~\eqref{eq:interface_rotations}.
+The matrices $M_\parallel$ and $M_\perp$ are defined in \cref{eq:para_perp_decomposition_matrix} and decompose the fields into their parallel and perpendicular components.
 The various~$r$ and~$t$ refer to the Fresnel equations~\eqref{eq:fresnel_oblique}; the subscript~$a$ denoting incidence on the A side of the interface, and~$b$ to the B side of the interface.
 \begin{equation}
     \begin{gathered}
     \begin{aligned}
-        S_{1, 2} &= R^{2 \rightarrow 1} \left(
+        S_{1, 2} &= R^{1 \leftarrow 2} \left(
             r_{\parallel a} M_\parallel +
             r_{\perp a} M_\perp
         \right)
         &
-        S_{2, 1} &= R^{1 \rightarrow 2} \left(
+        S_{2, 1} &= R^{2 \leftarrow 1} \left(
             r_{\parallel a} M_\parallel +
             r_{\perp a} M_\perp
         \right)
         \\
-        S_{1, 3} &= R^{3 \rightarrow 1} \left(
+        S_{1, 3} &= R^{1 \leftarrow 3} \left(
             t_{\parallel b} M_\parallel +
             t_{\perp b} M_\perp
         \right)
         &
-        S_{3, 1} &= R^{1 \rightarrow 3} \left(
+        S_{3, 1} &= R^{3 \leftarrow 1} \left(
             t_{\parallel a} M_\parallel +
             t_{\perp a} M_\perp
         \right)
         \\
-        S_{2, 4} &= R^{4 \rightarrow 2} \left(
+        S_{2, 4} &= R^{2 \leftarrow 4} \left(
             t_{\parallel b} M_\parallel +
             t_{\perp b} M_\perp
         \right)
         &
-        S_{4, 2} &= R^{2 \rightarrow 4} \left(
+        S_{4, 2} &= R^{4 \leftarrow 2} \left(
             t_{\parallel a} M_\parallel +
             t_{\perp a} M_\perp
         \right)
         \\
-        S_{3, 4} &= R^{4 \rightarrow 3} \left(
+        S_{3, 4} &= R^{3 \leftarrow 4} \left(
             r_{\parallel b} M_\parallel +
             r_{\perp b} M_\perp
         \right)
         &
-        S_{4, 3} &= R^{3 \rightarrow 4} \left(
+        S_{4, 3} &= R^{4 \leftarrow 3} \left(
             r_{\parallel b} M_\parallel +
             r_{\perp b} M_\perp
         \right)
@@ -1627,41 +1758,25 @@ The various~$r$ and~$t$ refer to the Fresnel equations~\eqref{eq:fresnel_oblique
     \label{eq:interface_S}
 \end{equation}
 This concludes our work on the scattering matrix of the interface between two linear homogeneous isotropic media.
-However, for this network to find its place in a system, we also need to compute the directions of propagations $k_2$, $k_3$ and $k_4$: these may be required by other networks.
+
+
+\subsubsection{Verification}
+
 
 \begin{figure}[hbtp]
     \centering
-    \missingfigure{fig:interface propagation rotation}
-    \caption{\label{fig:interface_propagation_rotation}interface propagation rotation}
+    \includegraphics{interface_oblique_verification}
+    \caption{Interface oblique, verification}
+    \label{fig:interface_oblique_verification}
 \end{figure}
-Equations~\crefrange{eq:interface_propagation_rotation_k2}{eq:interface_propagation_rotation_k2} list the rotations matrices that transform~$k_1$ into $k_2$, $k_3$ and $k_4$, represented in \cref{fig:interface_propagation_rotation}.
-\begin{subequations}
-    \begin{align}
-        k_2 &= R^{1 \rightarrow 2} k_1 \label{eq:interface_propagation_rotation_k2} \\
-        k_3 &= R^{1 \rightarrow 3} k_1 \label{eq:interface_propagation_rotation_k3} \\
-        k_4 &= R^{1 \rightarrow 4} k_1 \label{eq:interface_propagation_rotation_k4}
-    \end{align}
-    \label{eq:interface_propagation_rotation_ki}
-\end{subequations}
-We already know~$R^{1 \rightarrow 2}$ and~$R^{1 \rightarrow 3}$ (see \cref{eq:interface_rotations}) but we do not have~$R^{1 \rightarrow 4}$ yet.
-The angle~$\theta_{1 \rightarrow 4}$ is easy to determine with \cref{fig:interface_propagation_rotation} and is given by \cref{eq:interface_rotation_1_to_4}.
-We can use~\cref{eq:quaternion_rotation_around_axis} and~\cref{eq:quaternion_to_rotation_matrix} to derive~$R^{1 \rightarrow 4}$ from~$\theta_{1 \rightarrow 4}$.
-\begin{equation}
-    \theta_{1 \rightarrow 4} = -\theta_a - \theta_b
-    \label{eq:interface_rotation_1_to_4}
-\end{equation}
-With that final step, we can now connect the network to other networks since we can provide them with their own~$k_1$.
-
 
 
 %=============================================================================
-\subsection{Thin film}
-The thin film can be seen as its own network, or as two interfaces separated by a given distance.  Both should yield the same result.
+\subsection{Thin film at normal incidence}
+\label{sec:thin_film_at_normal_incidence}
 
-Here, we treat the thin film as its own network.
-This is convenient because the direction of propagation after the film is identical to that before the film.  The person using this network does not have to worry about what happens between the interfaces which is dealt with automatically.
-
-\subsubsection{Thin film at normal incidence}
+%-----------------------------------------------------------------------------
+\subsubsection{Scattering matrix}
 
 Two interfaces separate three regions of space of refractive indices~$n_1$, $n_2$ and~$n_3$ (in most cases, $n_1=n_3$).
 Each interface of the film reflects and transmits radiation according to the Fresnel equations for normal incidence~\eqref{eq:fresnel_normal}.
@@ -1707,8 +1822,8 @@ The propagation between the two interfaces introduces a factor $a$.
     \label{eq:thin_film_normal_2}
 \end{align}
 Likewise, we can derive $r_{3, 1}$, $t_{1, 3}$ and $t_{3, 1}$.
-They are given by~\crefrange{eq:thin_film_normal_r31}{eq:thin_film_normal_t31},
-with~\cref{eq:thin_film_normal_r13} being a mere reminder of~\cref{eq:thin_film_normal_2}.
+They are given by \crefrange{eq:thin_film_normal_r31}{eq:thin_film_normal_t31},
+with \cref{eq:thin_film_normal_r13} being a mere reminder of \cref{eq:thin_film_normal_2}.
 \begin{subequations}
     \begin{align}
         r_{1, 3}
@@ -1736,14 +1851,14 @@ with~\cref{eq:thin_film_normal_r13} being a mere reminder of~\cref{eq:thin_film_
 \end{subequations}
 The parameters $r_{1, 2}$, $t_{1, 2}$, $r_{3, 2}$, $t_{3, 2}$, $r_{2, 1}$, $t_{2, 1}$,
 $r_{2, 3}$ and $t_{2, 3}$ are determined by the Fresnel equations for normal incidence~\eqref{eq:fresnel_normal}.
-The parameter $a$ is determined by $\exp(-i 2 \pi d n f / c_0)$ according to~\cref{eq:net_distance}.
+The parameter $a$ is determined by $\exp(-i 2 \pi d n f / c_0)$ according to \cref{eq:net_distance}.
 Note that in these four equations, the fraction is the same;
 it is sufficient to compute its value once only.
 
 
 
 There is one more factor to apply: a compensation for the space taken by the film.
-As illustrated in~\cref{fig:thin_film_normal_compensation},
+As illustrated in \cref{fig:thin_film_normal_compensation},
 the film has a thickness $d_2$ and
 its center is located at distances $d_1$ and $d_3$ from other reference points.
 The actual length of the medium 1 is not $d_1$ but $d_1 - d_2/2$.
@@ -1756,7 +1871,7 @@ Likewise, the wave travels a distance $d_3 - d_2/2$ in the medium 3.
 \end{figure}
 One way of accounting for this without changing any other network is to add some negative space on each side of the film.
 Let $a_1$ and $a_3$ be the effect of these negative spaces.
-\Crefrange{eq:negative_space_3}{eq:negative_space_3} apply~\cref{eq:net_distance} to the refractive indices $n_1$ and $n_3$ for the negative distance $-d_2/2$.
+\Crefrange{eq:negative_space_3}{eq:negative_space_3} apply \cref{eq:net_distance} to the refractive indices $n_1$ and $n_3$ for the negative distance $-d_2/2$.
 \begin{subequations}
     \begin{align}
         a_1 &= \exp \Big(-i 2 \pi (-d_2/2) n_1 f / c_0 \Big) \label{eq:negative_space_1}
@@ -1768,7 +1883,7 @@ Let $a_1$ and $a_3$ be the effect of these negative spaces.
 The reflection on the left side crosses the negative space $a_1$ twice, therefore $r_{1, 3}$ must be multiplied by $a_1^2$.
 Likewise, $r_{3, 1}$ must be multiplied by $a_3^2$.
 Both transmissions $t_{1, 3}$ and $t_{3, 1}$ go through $a_1$ and $a_3$, therefore they must be multiplied by $a_1 a_3$.
-This is summarized with~\crefrange{eq:thin_film_normal_compensated_r13}{eq:thin_film_normal_compensated_t31}.
+This is summarized with \crefrange{eq:thin_film_normal_compensated_r13}{eq:thin_film_normal_compensated_t31}.
 \begin{subequations}
     \begin{align}
         r'_{1, 3} &= a_1^2   \, r_{1, 3} \label{eq:thin_film_normal_compensated_r13} \\
@@ -1781,7 +1896,7 @@ This is summarized with~\crefrange{eq:thin_film_normal_compensated_r13}{eq:thin_
 
 From there, building the scattering matrix of the thin film is straightforward.
 If we name $I_3$ the 3--by--3 identity matrix,
-then the Jones matrices ~\crefrange{eq:thin_film_normal_s11}{eq:thin_film_normal_s22}
+then the Jones matrices  \crefrange{eq:thin_film_normal_s11}{eq:thin_film_normal_s22}
 are the elements of the scattering matrix.
 \begin{subequations}
     \begin{align}
@@ -1795,10 +1910,239 @@ are the elements of the scattering matrix.
 If necessary, each of these Jones matrices can be adapted to account for the orientation of the thin film;
 see~\vref{sec:rotating_jones_matrices}.
 
-\subsubsection{Thin film at oblique incidence}
+%-----------------------------------------------------------------------------
+\subsubsection{Verification}
+We have derived a model that treats a thin film as a single two-ports network.
+It should yield the same results as a system of three networks
+(interface--space--interface).
+In this section, we verify this numerically.
 
-Then, we run simulations to show that it performs exactly like the combination of three elementary networks.
+\Cref{fig:thin_film_normal_verification_principle} defines the distances and refractive indices used in this section.
+It also illustrates the two systems that we wish to compare:
+\begin{itemize}
+    \item one system made of three networks (two spaces, one thin film), that we call ``thin film model'';
+    \item one system made of five networks (three spaces and two interfaces), that we call ``interfaces model''.
+\end{itemize}
+\begin{figure}[hbtp]
+    \centering
+    \input{\MyGraphicsPath thin_film_normal_verification_principle.pdf_tex}
+    \caption{Thin film at normal incidence, verification, principle.}
+    \label{fig:thin_film_normal_verification_principle}
+\end{figure}
 
+\Cref{fig:thin_film_normal_verification} presents the result of both models for
+$n_1=1.00$, $n_2=1.75$, $n_3=1.50$,
+$d_1=\SI{1}{\meter}$, $d_2=\SI{10}{\micro\meter}$ and $d_3=\SI{1}{\meter}$.
+The source is on the leftmost port.
+The ``Reflected'' plot corresponds to the output of that leftmost port.
+The ``Transmitted'' plot corresponds to the output of the rightmost port.
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{thin_film_normal_verification.pdf}
+    \caption{Thin film at normal incidence, verification.}
+    \label{fig:thin_film_normal_verification}
+\end{figure}
+
+Both models agree within numerical noise.
+The advantage of the thin film model over the other is that a thin film is represented by a single network.
+This is easier for the programmer and faster for the computer.
+
+The curvature of the power coupling displayed in \cref{fig:thin_film_normal_verification} comes from standing waves inside the thin film.
+\Cref{eq:cavity_period} predicts a period of $F = c_0 / (2 n_2 d_2) \approx \SI{9993}{\tera\hertz}$.
+Thin cavities (here \SI{10}{\micro\meter}) create standing wave patterns with very large periods.
+
+
+
+%=============================================================================
+\subsection{Thin film at oblique incidence}
+
+A thin film at oblique incidence forms a four-ports network.
+\Cref{fig:thin_film_oblique} defines the geometry and the port-numbering that we use.
+\begin{figure}[hbtp]
+    \centering
+    \missingfigure{Thin film oblique}
+    \caption{Thin film at oblique incidence}
+    \label{fig:thin_film_oblique}
+\end{figure}
+
+When deriving the scattering matrix of a thin film at normal incidence in \cref{sec:thin_film_at_normal_incidence}, we allowed for three refractive indices: one for the film itself and one for each propagation medium on each side of the film.
+This was a generalization that came at barely no cost because the geometry was simple.
+In the case of a thin film at oblique incidence, we assume that the propagation medium on each side of the thin film has the same refractive index.
+This is, after all, the most common case;
+for example, a beam splitter placed in vacuum has vacuum on both sides.
+If that constraint is too strong, it is always possible to model that thin film with three networks by using two interfaces and a distance (see sections~\ref{sec:generic_networks_distance} and \ref{sec:interface_at_oblique_incidence}).
+
+%-----------------------------------------------------------------------------
+\subsubsection{Geometry}
+\label{sec:thin_film_geometry}
+We need to determine the angle of incidence, the parallel and perpendicular decomposition matrices and the various rotation matrices.
+
+It is assumed that we know the orientation of the thin film via its normal $n$ and the direction of propagation $k_1$ of the wave incident to the port 1.
+
+From $n$ and $k_1$, we can apply \cref{eq:angle_from_dot_product} to compute the angle of incidence~$\theta_a$.
+We get the refracted angle~$\theta_b$ from $\theta_a$ with \cref{eq:snell_thetab}.
+
+We use \cref{eq:normal_to_plane_of_incidence} to retreive the normal to the plane of incidence $u$.
+
+From the normal $u$ to the plane of incidence
+and \cref{eq:para_perp_decomposition_matrix},
+we determine the parallel and perpendicular projection matrices,
+$M_\parallel$ and $M_\perp$.
+
+From $u$ and
+equations~\eqref{eq:quaternion_rotation_around_axis}
+and \eqref{eq:quaternion_to_rotation_matrix}, we can compute the rotation matrices to apply to the Jones matrices and the direction of propagation.
+The angles that we need are listed in \cref{eq:thin_film_angles}.
+\begin{equation}
+    \begin{aligned}
+        \theta_{1 \leftarrow 2} &= 2 \theta_a
+        &
+        \theta_{2 \leftarrow 1} &= -2 \theta_a
+        \\
+        \theta_{3 \leftarrow 4} &= 2 \theta_a
+        &
+        \theta_{4 \leftarrow 3} &= -2 \theta_a
+        \\
+        \theta_{4 \leftarrow 1} &= -2 \theta_a
+    \end{aligned}
+    \label{eq:thin_film_angles}
+\end{equation}
+These angles $\theta_{i \leftarrow j}$ have corresponding rotation matrices $R^{i \leftarrow j}$.
+We can already determine the directions of propagation of the waves exiting the thin film with \cref{eq:thin_film_propagation_rotation_ki}.
+\begin{subequations}
+    \begin{align}
+        k_2 &= -R^{2 \leftarrow 1} k_1
+        \label{eq:thin_film_propagation_rotation_k2}\\
+        k_3 &= k_1
+        \label{eq:thin_film_propagation_rotation_k3}\\
+        k_4 &= R^{4 \leftarrow 1} k_1
+        \label{eq:thin_film_propagation_rotation_k4}
+    \end{align}
+    \label{eq:thin_film_propagation_rotation_ki}
+\end{subequations}
+
+%-----------------------------------------------------------------------------
+\subsubsection{Reflection and transmission coefficients}
+In the previous section (\cref{sec:thin_film_geometry}) we have determined the decomposition and rotation matrices that are needed to compute the reflection and refraction coefficients of a thin film at oblique incidence.
+We also have the angle of incidence and the refracted angle.
+
+We want to apply the Fresnel equations for oblique incidence \eqref{eq:fresnel_oblique} twice:
+once for entering the thin film, and once for leaving it.
+\begin{itemize}
+    \item 
+$r_{\parallel a}$, $r_{\perp a}$, $t_{\parallel a}$ and $t_{\perp a}$ correspond to entering the film.
+They are derived from \cref{eq:fresnel_oblique} with
+$\theta_i = \theta_a$, $\theta_t = \theta_b$,
+$n_i = n_a$ and $n_t = n_b$.
+    \item
+$r_{\parallel b}$, $r_{\perp b}$, $t_{\parallel b}$ and $t_{\perp b}$ correspond to exiting the film.
+They are derived from \cref{eq:fresnel_oblique} with
+$\theta_i = \theta_b$, $\theta_t = \theta_a$,
+$n_i = n_b$ and $n_t = n_a$.
+\end{itemize}
+
+The pathlength $l_b$ inside the film is not equal to the thickness $d$ of the thin film because $\theta_b \ne 0$, as described by \cref{eq:thin_film_oblique_pathlength}.
+\begin{equation}
+    l_b = \frac{d}{\cos \theta_b}
+    \label{eq:thin_film_oblique_pathlength}
+\end{equation}
+To this distance $l_b$ corresponds a gain $a_b$ that we derive from \cref{eq:net_distance}.
+Its expression is given for $l_b$ in \cref{eq:thin_film_distance}.
+\begin{equation}
+    a_b = \exp(-2i \pi l_b n_b f / c_0)
+    \label{eq:thin_film_distance}
+\end{equation}
+This pathlength $l_b$ must be compensated for.
+Indeed, the pathlength $l_b$ inside the film replaces a pathlength $l_a$ in the material $n_a$.
+\begin{equation}
+    l_a = \frac{d}{\cos \theta_a}
+    \label{eq:thin_film_oblique_pathlength_compensation}
+\end{equation}
+\begin{equation}
+    a_a = \exp(-2i \pi (-l_a) n_a f / c_0)
+    \label{eq:thin_film_distance_compensation}
+\end{equation}
+
+What follows is similar to what we did for the thin film at normal incidence.
+One difference is that do it twice, one for the parallel parameters and one for the perpendicular parameters.
+Another difference is that we have two and not three refractive indices, which gives a few simplifications.
+\begin{subequations}
+    \begin{align}
+        t_\parallel
+        &=
+        a_a \,
+        t_{\parallel a} \, t_{\parallel b} \, a_b
+        \frac{1}{
+            1 - (r_{\parallel b} \, a_b)^2
+        }
+        \\
+        t_\perp
+        &=
+        a_a \,
+        t_{\perp a} \, t_{\perp b} \, a_b
+        \frac{1}{
+            1 - (r_{\perp b} \, a_b)^2
+        }
+        \\
+        r_\parallel
+        &=
+        a_a \,
+        r_{\parallel a} + r_{\parallel b} \, a_b \, t_\parallel
+        \\
+        r_\perp
+        &=
+        a_a \,
+        r_{\perp a} + r_{\perp b} \, a_b \, t_\perp
+    \end{align}
+\end{subequations}
+
+\subsubsection{Scattering matrix}
+Because we use one refractive index only outside the film, the transmitted waves are not rotated.
+\begin{equation}
+    S_{1, 3} =
+    S_{2, 4} =
+    S_{3, 1} =
+    S_{4, 2} =
+    t_\parallel M_\parallel
+    +
+    t_\perp M_\perp
+    \label{eq:thin_film_s_t}
+\end{equation}
+
+The reflections, however, require some rotations.
+\begin{subequations}
+    \begin{align}
+        S_{1, 2} = R^{1 \leftarrow 2} (r_\parallel M_\parallel + r_\perp M_\perp) \\
+        S_{2, 1} = R^{2 \leftarrow 1} (r_\parallel M_\parallel + r_\perp M_\perp) \\
+        S_{3, 4} = R^{3 \leftarrow 4} (r_\parallel M_\parallel + r_\perp M_\perp) \\
+        S_{4, 3} = R^{4 \leftarrow 3} (r_\parallel M_\parallel + r_\perp M_\perp)
+    \end{align}
+    \label{eq:thin_film_s_r}
+\end{subequations}
+
+Finally, many paths are forbidden.
+\begin{equation}
+    S_{1, 1} = S_{1, 4} = S_{2, 2} = S_{2, 3} =
+    S_{3, 2} = S_{3, 3} = S_{4, 1} = S_{4, 4} = 
+    \begin{pmatrix}
+        0&0&0\\0&0&0\\0&0&0
+    \end{pmatrix}
+    \label{eq:thin_film_s_zero}
+\end{equation}
+
+\Crefrange{eq:thin_film_s_t}{eq:thin_film_s_zero} define the scattering parameters of the 4--by--4 scattering matrix of a thin film at oblique incidence.
+
+
+\subsubsection{Verification}
+Our model for a thin film at normal incidence should provide exactly the same result as two interfaces and a distance.
+The goal of the thin film model is to provide convenience, not introduce new physics.
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{thin_film_oblique_verification}
+    \caption{Thin film oblique, verification}
+    \label{fig:thin_film_oblique_verification}
+\end{figure}
 
 %=============================================================================
 \subsection{Wire grid polarizer}
@@ -2581,17 +2925,17 @@ The scattering matrix of the space between the interfaces is derived from~\vref{
 %-----------------------------------------------------------------------------
 
 \subsubsection{Periodicity}
-According to \cref{eq:cavity_period}, we expect a periodicity of $F=c/2d$ where $c=n c_0$ is the speed of light in the cavity and $d$ the length of the cavity.
+According to \cref{eq:cavity_period}, we expect a periodicity of $F=c/2d$ where $c=c_0/n$ is the speed of light in the cavity and $d$ the length of the cavity.
 With $c_0\approx \SI{2.998e8}{\meter\per\second}$, $n=1$ and $d=\SI{0.5}{\meter}$, we get $F \approx \SI{299.8}{\mega\hertz}$.
 
-Our model agrees with our expectation, as shown by the fourrier transform in~\cref{fig:simple_cavity_fft}.
+Our model agrees with our expectation, as shown by the fourrier transform in \cref{fig:simple_cavity_fft}.
 
 
 
 %-----------------------------------------------------------------------------
 
 \subsubsection{Energy conservation}
-Examination of the results displayed in~\cref{fig:simple_cavity_direct} reveals that energy is neither created nor destroyed.
+Examination of the results displayed in \cref{fig:simple_cavity_direct} reveals that energy is neither created nor destroyed.
 The power is always positive, and the sum of the transmitted (blue) and reflected (red) power always equal 1 within numerical noise.
 The power that is not transmitted through the cavity is reflected back to the source.
 
@@ -2601,7 +2945,7 @@ The power that is not transmitted through the cavity is reflected back to the so
 
 \subsection{Thin film beam splitter}
 
-A thin dielectric film can be used as a beam splitter, as illustrated in~\cref{fig:beam_splitter_principle}.
+A thin dielectric film can be used as a beam splitter, as illustrated in \cref{fig:beam_splitter_principle}.
 \begin{figure}[hbtp]
     \centering
     \input{\MyGraphicsPath beam_splitter_principle.pdf_tex}
