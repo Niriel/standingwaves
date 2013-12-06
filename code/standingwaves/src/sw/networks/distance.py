@@ -9,7 +9,7 @@ import gain
 TAU = 2 * np.pi
 
 def ComputeSpaceGain(n, length, frequency):
-    k0 = -TAU * frequency / scipy.constants.speed_of_light  # In vacuum.
+    k0 = TAU * frequency / scipy.constants.speed_of_light  # In vacuum.
     k = k0 * n  # In the medium.  Handles n complex.
     return np.exp(1j * k * length)
 
