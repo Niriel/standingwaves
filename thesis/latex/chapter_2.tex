@@ -29,8 +29,8 @@ These two expressions are equivalent because the $\cos$ function is even.
 Choosing one or the other is a matter of convention.
 \begin{subequations}
     \begin{align}
-       e(z, t) &= E \cos( kz - \omega t + \varphi)   \label{eq:e_z_t_real_minus} \\
-       e(z, t) &= E \cos(-kz + \omega t - \varphi)   \label{eq:e_z_t_real_plus}
+       E(z, t) &= E_0 \cos( kz - \omega t + \varphi)   \label{eq:e_z_t_real_minus} \\
+       E(z, t) &= E_0 \cos(-kz + \omega t - \varphi)   \label{eq:e_z_t_real_plus}
     \end{align}
     \label{eq:e_z_t_real}
 \end{subequations}
@@ -43,13 +43,14 @@ Choosing one or the other is a matter of convention.
 
 In \cref{eq:e_z_t_real}, $t$ is the time coordinate and~$z$ the space coordinate.
 $\varphi$ is related to initial conditions and the choice of reference frame.
-$E$ is the amplitude of the electric field.
+$E_0$ is the amplitude of the electric field.
 It has the dimension of an electric potential per unit length.
 It is given for example in volts per meter or newtons per coulomb.
 
 \begin{table}
     \centering
-    \caption{herp derp}
+    \caption{Notations and definitions of electromagnetic constants and parameters}
+    \caption*{All the entries in this table are real numbers.}
     \label{tab:definitions_simple}
     \rowcolors{2}{gray!25}{white}
     \begin{tabularx}{\textwidth}{l l X}
@@ -66,8 +67,8 @@ It is given for example in volts per meter or newtons per coulomb.
         $n$           &  $\sqrt{\epsilon_r \mu_r}$  &  refractive index \\
         $\epsilon_r$  &  $\epsilon / \epsilon_0$  &  relative permittivity or electric constant\\
         $\mu_r$       &  $\mu / \mu_0$  &  relative permeability or magnetic constant\\
-        $\epsilon$    & & absolute permittivity \\
-        $\mu$         & & absolute permeability \\
+        $\epsilon$    & measured material property & absolute permittivity \\
+        $\mu$         & measured material property & absolute permeability \\
         $\epsilon_0$  & $\approx \SI{8.854187817e-12}{\farad\per\meter}$  &  absolute permittivity of vacuum \\
         $\mu_0$       & $\approx \SI{1.2566370614e-6}{\henry\per\meter}$  &  absolute permeability of vacuum \\
         $\eta$        & $\sqrt{\mu / \epsilon}$  &  intrinsic impedance \\
@@ -77,249 +78,132 @@ It is given for example in volts per meter or newtons per coulomb.
     \end{tabularx}
 \end{table}
 
-For plane waves in homogeneous materials, $Z=\eta$.
-
-All the parameters introduced above are real numbers.
+\Cref{tab:definitions_simple} summarizes the relations between various parameters used to describe a wave and its propagation medium.
+For plane waves in homogeneous materials, $Z=\eta$.  \todo{citation needed}
+All the parameters introduced in this table are real numbers.
 It is possible to add more parameters, such as the electric conductivity of a material.
 Such parameters account for attenuation, phase delays, etc.
 However, these are more easily dealt with when using complex numbers.
 In \cref{sec:polar_complex_notation}, we will go over these parameters again and explore the effects of giving them an imaginary part.
 
 
-
-\subsubsection{Polar complex notation.}
+%=============================================================================
+\subsection{Polar complex notation}
 \label{sec:polar_complex_notation}
 Euler's formula, given in \cref{eq:euler_formula}, relates the trigonometric function $\cos$ to a complex exponential.
 \begin{equation}    
-    \exp(j\theta) = \cos(\theta) + j\sin(\theta) \label{eq:euler_formula}
+    \exp(i\theta) = \cos(\theta) + i\sin(\theta) \label{eq:euler_formula}
 \end{equation}
-In \cref{eq:euler_formula}, $j$ represents the imaginary unit such that $j^2=-1$.
-If we rewrite the expression of~$e$ as complex in polar coordinates, we have \cref{eq:e_z_t_complex}.
+In \cref{eq:euler_formula}, $i$ represents the imaginary unit such that $i^2=-1$.
+If we rewrite the expression of~$E$ given in \cref{eq:e_z_t_real_minus} as a complex in polar coordinates, we have \cref{eq:e_z_t_complex_minus}.
 \begin{align}
-   \hat{e}(z, t) &= E \exp(j(kz - \omega t + \varphi))
-   \label{eq:e_z_t_complex}
+   \hat{E}(z, t) &= E_0 \exp(i(kz - \omega t + \varphi))
+   \label{eq:e_z_t_complex_minus}
    \\
-   e(z, t) &= \Re(\hat{e}(z, t))
-   \label{eq:e_z_t_real_complex}
+   E(z, t) &= \Re(\hat{E}(z, t))
+   \label{eq:e_z_t_real_complex_minus}
 \end{align}
-The hat above the $e$ signals that $\hat{e}$ is the complex equivalent to $e$.
-As shown by \cref{eq:e_z_t_real_complex}, $e$ and $\hat{e}$ do not have the same value (one is real, the other is complex);
+The hat above the $E$ signals that $\hat{E}$ is the complex equivalent of $E$.
+As shown by \cref{eq:e_z_t_real_complex_minus}, $E$ and $\hat{E}$ do not have the same value (one is real, the other is complex);
 however, both describe the same physical phenomenon.
+
+\todo[inline]{Meaning of complex frequencies, wave numbers, refractive indices, etc.}
 
 
 %=============================================================================
 \subsection{Phasors}
 \index{phasor}
 
-By applying the exponentiation identity \cref{eq:exponentiation_identity_plus},
-\cref{eq:e_z_t_complex} can also be written as \cref{eq:e_z_t_complex_factorized}.
+\subsubsection{Introducing phasors}
+By applying the exponentiation identity \cref{eq:exponentiation_identity},
+\cref{eq:e_z_t_complex_minus} can also be written as \cref{eq:e_z_t_complex_factorized}.
 \begin{equation}
     \exp(a+b) = \exp(a) \exp(b)
-    \label{eq:exponentiation_identity_plus}
+    \label{eq:exponentiation_identity}
 \end{equation}
 \begin{equation}
-    \hat{e}(z, t)
+    \hat{E}(z, t)
     =
-    E \exp(jkz) \exp(-j\omega t) \exp(j\varphi)
+    E_0 \exp(ikz) \exp(-i\omega t) \exp({i \varphi})
     \label{eq:e_z_t_complex_factorized}
 \end{equation}
+In \cref{eq:e_z_t_complex_factorized}, the expression of the wave is separated into four independant factors.
+This is possible because the amplitude $E_0$, the wavenumber $k$, the angular frequency $\omega$ and the phase $\varphi$ are time-invariant.
+The time-invariance of $\omega$ and $k$ is guaranteed by the linearity hypothesis, while that of $E_0$ and $\varphi$ is guaranteed by the coherency hypothesis.
 
-In the rest of this book, we will only ever use the polar complex notation, unless stated otherwise.
-To simplify the notations, we will not place a hat symbol above the complex equivalent to real quantities.
-
-\subsubsection{No need to carry the time.}
-Linear networks do not modify the frequency~$f$ of the waves that propagate through them.
-Since~$\omega = 2 \pi f$, $\omega$ is constant in the entire system.
-At any instant $t$, the value of $t$ is a constant.
-\Crefrange{eq:factor_out_omegat_0}{eq:factor_out_omegat_4} show that if $f$ is a linear function, then the time-dependant factor $\exp(j\omega t)$ is actually a constant that we can safely ignore.
+The time factor $\exp({-i \omega t})$ is common to all the waves present in the system.
+Because of that, we can factor it out as shown in equations~\ref{eq:factor_time_out} and \ref{eq:phasor}.
+In these equations, $\hat{E}(z)$ is a ``phasor representation'' of the sinusoidal function $E(z, t)$, with the time factored out and considered implicit.
 \begin{align}
-    e'(z, t)
-    &=
-    f(e(z, t))
-    \label{eq:factor_out_omegat_0}
+    \hat{E}(z, t) &= \hat{E}(z) \exp(-i\omega t) \label{eq:factor_time_out}
     \\
-    E' \exp(j(k'z - \omega t + \varphi'))
-    &=
-    f\Big(
-        E \exp(j(kz - \omega t + \varphi))
-    \Big)
-    \label{eq:factor_out_omegat_1}
-    \\
-    E' \exp(j(k'z + \varphi'))\exp(-j \omega t)
-    &=
-    f\Big(
-        E \exp(j(kz + \varphi)) \exp(-j \omega t)
-    \Big)
-    \label{eq:factor_out_omegat_2}
-    \\
-    E' \exp(j(k'z + \varphi'))
-    \,\cancel{
-        \exp(-j \omega t)
-    }
-    &=
-    f\Big(
-        E \exp(j(kz + \varphi))
-    \Big)
-    \,\cancel{
-        \exp(-j \omega t)
-    }
-    \label{eq:factor_out_omegat_3}
-    \\
-    E' \exp(j(k'z + \varphi'))
-    &=
-    f\Big(
-        E \exp(j(kz + \varphi))
-    \Big)
-    \label{eq:factor_out_omegat_4}
+    \hat{E}(z) &= E_0 \exp(i(kz+\varphi)) \label{eq:phasor}
 \end{align}
-It is therefore useless to carry the term~$\omega t$ in our equations.
 
-\subsubsection{No need to carry the initial phase.}
-The initial phase~$\varphi_0$ is given for the arbitrary point~$(z, t) = (0, 0)$.
-Any phase $\varphi$ can be expressed as a deviation from the initial phase $\varphi_0$ as illustrated by \cref{eq:factor_out_phi0}.
+The term ``phasor'' is a portmanteau of ``phase vector'', indicating that $\hat{E}(z)$ can be visualized as a vector on the complex plane, and that $\hat{E}(z, t)$ makes that vector rotate with time.
+
+\subsubsection{Convention}
+We have shown with equations~\ref{eq:e_z_t_real_minus} and \ref{eq:e_z_t_real_plus} that there are two conventions for representing the same physical phenomenon.
+Either the space factor or the time factor takes a negative sign, and that decision is a priori arbitrary.
+
+The choice of convention influences the definition of our phasors.
+We have to choose between
+\cref{eq:phasor_minus} and \cref{eq:phasor_plus}.
+\begin{subequations}
+    \begin{align}
+        \text{Either }
+        \hat{E}(z) &= E_0 \exp(i(kz+\varphi))
+        \label{eq:phasor_minus}
+        \\
+        \text{or }
+        \hat{E}(z) &= E_0 \exp(i(-kz-\varphi))
+        \text{.}
+         \label{eq:phasor_plus}
+    \end{align}    
+\end{subequations}
+
+For simplicity, we choose \cref{eq:phasor_minus}.
+Indeed, it does not carry a negative sign.
+The negative sign is factored out in the time-factor $\exp{-i \omega t}$.
+
+
+\subsubsection{Discrete space}
+In our optical systems, we are hardly ever interested in the value of the phasor at any point.
+For example, when modeling the effect of a dielectric interface on a wave, we need only to know the value of the phasor at the location of the interface.
+If there are two interfaces, then there are two points of interest.
+This means that we do not keep the explicit dependency on $z$ in our computations but work with discrete values of $z$ as illustrated by \cref{eq:phasor_no_z}.
 \begin{equation}
-    \varphi = \varphi_0 + \Delta \varphi
-    \label{eq:factor_out_phi0}
+    \begin{aligned}
+        \hat{E}_0 &= E_0 \exp(i(k_0 z_0 + \varphi_0))
+        \\
+        \hat{E}_1 &= E_1 \exp(i(k_1 z_1 + \varphi_1))
+    \end{aligned}
+    \label{eq:phasor_no_z}
 \end{equation}
-Like~$\omega$, $\varphi_0$ is constant throughout the whole system.
-\Crefrange{eq:factor_out_phi0_0}{eq:factor_out_phi0_3} show that we can use that fact to safely ignore the absolute phase and work with relative phases only.
-\begin{align}
-    E' \exp(j(k'z + \varphi'))
-    &=
-    f\Big(
-        E \exp(j(kz + \varphi))
-    \Big)
-    \label{eq:factor_out_phi0_0}
-    \\
-    E' \exp(j(k'z + \varphi_0+\Delta\varphi'))
-    &=
-    f\Big(
-        E \exp(j(kz + \varphi_0+\Delta\varphi))
-    \Big)
-    \label{eq:factor_out_phi0_1}
-    \\
-    E' \exp(j(k'z +\Delta\varphi'))
-    \,\cancel{
-        \exp(j\varphi_0)
-    }
-    &=
-    f\Big(
-        E \exp(j(kz+\Delta\varphi))
-    \Big)
-    \,\cancel{\exp(j \varphi_0)}
-    \label{eq:factor_out_phi0_2}
-    \\
-    E' \exp(j(k'z+\Delta\varphi'))
-    &=
-    f\Big(
-        E \exp(j(kz+\Delta\varphi))
-    \Big)
-    \label{eq:factor_out_phi0_3}
-\end{align}
+In \cref{eq:phasor_no_z}, the phasors $\hat{E}_n$ do not depend on a space coordinate because they are defined for a specific location.
+This is the type of phasors that we will be using in the rest of our chapter.
 
-\subsubsection{No need to carry the space.}
-We are hardly ever interested in knowing the field at every location in space.
-We concern ourselves mainly with a few and specific locations.
-Typical locations include the surfaces of optical elements, such as mirrors, lenses, grids, horns, and the beginning and end of a propagation medium.
+\subsubsection{Phasor algebra}
+Phasors can be added together to produce a new phasor.
+Physically, this corresponds to adding together the electric fields of different waves.
+This is by adding phasors that we model interferences.
 
-Each propagation medium has its own value for~$k$ and has a fixed pathlength~$\Delta z$.
-Therefore, such a medium induces a constant phase shift of~$\Delta\phi = k\Delta z$ to the wave that propagates through it.
+A phasor can be multiplied by a scalar to produce a new phasor.
+The scalar can be a complex number, but that does not make this scalar a phasor. 
+The real part of the scalar models the gain or absorption, while the imaginary part models the phase shift.
+The scalar multiplication models the effect of an optical element on a wave.
 
-It is not important to know that the wave exits a propagation medium at~$z=z_0 + \Delta z$;
-what matters is that the phase of the wave has changed by~$\Delta\phi$.
-The effect matters more than the cause.
-Like for $\varphi_0$, there is no use in keeping the absolute $kz_0$ around.
-Instead we introduce a phase constant~$\Delta\phi$ for each position that interests us, as shown by \crefrange{eq:factor_out_kz0_0}{eq:factor_out_kz0_4}.
-\begin{align}
-    E' \exp(j(kz'+\Delta\varphi'))
-    &=
-    f\Big(
-        E \exp(j(kz+\Delta\varphi))
-    \Big)
-    \label{eq:factor_out_kz0_0}
-    \\
-    E' \exp(j(k(z_0 + \Delta z')+\Delta\varphi'))
-    &=
-    f\Big(
-        E \exp(j(k(z_0 + \Delta z)+\Delta\varphi))
-    \Big)
-    \label{eq:factor_out_kz0_1}
-    \\
-    E' \exp(j(k\Delta z'+\Delta\varphi')) \,\cancel{\exp(jkz_0)}
-    &=
-    f\Big(
-        E \exp(j(k\Delta z+\Delta\varphi))
-    \Big)
-    \,\cancel{\exp(jkz_0)}
-    \label{eq:factor_out_kz0_2}
-    \\
-    E' \exp(j(k\Delta z'+\Delta\varphi'))
-    &=
-    f\Big(
-        E \exp(j(k\Delta z+\Delta\varphi))
-    \Big)
-    \label{eq:factor_out_kz0_3}
-    \\
-    E' \exp(j(\Delta\phi'+\Delta\varphi'))
-    &=
-    f\Big(
-        E \exp(j(\Delta\phi+\Delta\varphi))
-    \Big)
-    \label{eq:factor_out_kz0_4}
-\end{align}
+Phasors cannot be multiplied together.
+In algebraic terms, phasors form a vector space, not a ring.
+The product of two phasors would represent the product of two sinusoids which is a non-linear operation that introduce new frequencies.
+Since phasors can represent systems with one frequency only, the result of multiplying two phasors is not a phasor.
+This means that computing the power transported by a wave is more subtle than just squaring the phasor, which we will study in \vref{sec:jones_vectors_and_power}.
 
-\Cref{eq:factor_out_kz0_4} exhibits two terms of phase.
-\begin{itemize}
-    \item $\Delta\phi$ models the phase difference due to the propagation in a medium.
-    \item $\Delta\varphi$ models the phase difference due to any other type of optical element.
-\end{itemize}
-This divide is arbitrary.
-If we consider that a propagation medium is an optical element like mirrors or grids are, then we need only to keep $\Delta\varphi$ (\cref{eq:factor_out_phi}).
-\begin{equation}
-    E' \exp(j\Delta\varphi') = f\Big( E \exp(j\Delta\varphi) \Big)
-    \label{eq:factor_out_phi}
-\end{equation}
-
-\subsubsection{No need to carry the exact amplitude.}
-Our networks are all linear, which makes our system linear.
-The output of a linear system being proportional to its input, we do not need to keep track of the exact input.
-All that matters is that we can compute the coefficient of proportionality.
-With \cref{eq:factor_out_E0}, we express any amplitude $E$ relatively to a reference amplitude $E_0 \ne 0$ with a proportionality factor $\epsilon$.
-\begin{equation}
-    E = \epsilon E_0 \label{eq:factor_out_E0}
-\end{equation}
-Using \cref{eq:factor_out_E0} in \cref{eq:factor_out_phi} allows us to simplify by $E_0$ (equations \eqref{eq:factor_out_E0_0} and \eqref{eq:factor_out_E0_1}).
-\begin{align}
-    \epsilon' \,\cancel{E_0} \exp(j\Delta\varphi')
-    &=
-    f\Big(
-        \epsilon \,\cancel{E_0} \exp(j\Delta\varphi)
-    \Big)
-    \label{eq:factor_out_E0_0}
-    \\
-    \epsilon' \exp(j\Delta\varphi')
-    &=
-    f\Big(
-        \epsilon \exp(j\Delta\varphi)
-    \Big)
-    \label{eq:factor_out_E0_1}
-\end{align}
-
-
-
-%-------------------------------------------------------------------------------
-\subsubsection{Introducing phasors.}
-With \cref{eq:factor_out_E0_1}, we are left with only two quantities:
-\begin{itemize}
-    \item a coefficient of proportionality between the amplitude at the output of a system and that at its input,
-    \item a phase difference between the output and the input.
-\end{itemize}
-
-\todo[inline]{continue}
 
 %=============================================================================
 \subsection{Scattering matrices}
 Scattering matrices \cite{siegman1986lasers} model the transfer of power or field from one side (port) of a network to another (\cref{fig:scattering_matrix_notations}).
+In coherent systems, they operate on phasors and therefore manipulate the field, not the power.
 
 \Cref{eq:scattering_matrix} presents the scattering matrix $S$ that models the relation between a vector of inputs $a$ and a vector of outputs $b$ for a $n$-ports network.
 The diagonal contains the reflections terms and the rest contains the transmissions.
@@ -355,27 +239,36 @@ The diagonal contains the reflections terms and the rest contains the transmissi
     \label{fig:scattering_matrix_notations}
 \end{figure}
 
+In the general case, scattering matrices cannot be multiplied together.
+The scattering matrix of a system of two networks is not the product of the scattering matrices of the individual networks.
+We will explore this further in \cref{sec:solving_a_system}.
+
+Scattering matrices are firstly designed to model discrete physical optical elements such as interfaces, distances, horns, grids, etc.
+It is possible to extend their use to an entire system made of several networks as long as it provides outputs that are linear combinations of inputs.
+We will also explore this further in \cref{sec:solving_a_system}.
 
 %=============================================================================
 \subsection{Jones calculus in 3D}
 
+%-----------------------------------------------------------------------------
+\subsubsection{Traditional Jones calculus}
 Jones matrices model the transfer of amplitude and phase from one polarization to another \cite{hecht2002optics}.
-In \cref{eq:jones_matrix_short}, the polarized input field $e_i$ is related to the polarized output field~$e_o$ by the Jones matrix $J$.
-$e_i$ and $e_o$ are called ``Jones vectors''.
+In \cref{eq:jones_matrix_short}, the polarized input field $\vect{\^E}_i$ is related to the polarized output field~$\vect{\^E}_o$ by the Jones matrix $J$.
+$\vect{\^E}_i$ and $\vect{\^E}_o$ are called ``Jones vectors''.
 \begin{equation}
     % Small form.
-    e_o = J e_i
+    \vect{\^E}_o = J \vect{\^E}_i
     \label{eq:jones_matrix_short}
 \end{equation}
 The components of the Jones vectors are phasors: complex numbers that encode the amplitude and phase of the field along different axes.
-The components of the Jones matrices are also complex numbers, these encode changes in amplitude and phase.
+The components of the Jones matrices are als numbers, these encode changes in amplitude and phase.
 
 \Cref{eq:jones_matrix_2d} presents the traditional form of Jones vectors and matrices.
 \begin{equation}
     % Jones matrix in 2D.
     \begin{pmatrix}
-        e_{o, h}\\
-        e_{o, v}
+        \hat{E}_{o, h}\\
+        \hat{E}_{o, v}
     \end{pmatrix}
     =
     \begin{pmatrix}
@@ -383,15 +276,17 @@ The components of the Jones matrices are also complex numbers, these encode chan
         J_{v, h}   &   J_{v, v}
     \end{pmatrix}
     \begin{pmatrix}
-        e_{i, h}\\
-        e_{i, v}
+        \hat{E}_{i, h}\\
+        \hat{E}_{i, v}
     \end{pmatrix}
     \label{eq:jones_matrix_2d}
 \end{equation}
 The field is seen as the superposition of a horizontal and a vertical component, both linearly polarized.
 The phase difference between these components determines the handedness and the ellipticity of the polarization of the field.
-Although very useful for many applications, these Jones matrices and vectors have limitations.
 
+%-----------------------------------------------------------------------------
+\subsubsection{Extension to three dimensions}
+Although very useful for many applications, the traditional Jones matrices and vectors have limitations.
 First, the field is always expressed in a local reference frame: the horizontal and vertical directions are valid for one beam only and may change after any reflection or refraction.
 Therefore, to completely describe a field, the Jones vector is not enough since one needs to keep track of the orientation of its reference frame with three angles, a quaternion or a rotation matrix.
 
@@ -406,9 +301,9 @@ Instead, we can express all the fields in a common global Cartesian reference fr
 \begin{equation}
     % Jones matrix in 3D.
     \begin{pmatrix}
-        e_{o, x}\\
-        e_{o, y}\\
-        e_{o, z}
+        \hat{E}_{o, x}\\
+        \hat{E}_{o, y}\\
+        \hat{E}_{o, z}
     \end{pmatrix}
     =
     \begin{pmatrix}
@@ -417,16 +312,20 @@ Instead, we can express all the fields in a common global Cartesian reference fr
         J_{z, x}   &   J_{z, y}   &   J_{z, z}
     \end{pmatrix}
     \begin{pmatrix}
-        e_{i, x}\\
-        e_{i, y}\\
-        e_{i, z}
+        \hat{E}_{i, x}\\
+        \hat{E}_{i, y}\\
+        \hat{E}_{i, z}
     \end{pmatrix}
     \label{eq:jones_matrix_3d}
 \end{equation}
 These Jones matrices can be combined with rotation matrices (built from Euler angles or quaternions) in order to represent networks in any orientation in space.
 
-\subsubsection{Rotating Jones matrices.}
+%-----------------------------------------------------------------------------
+\subsubsection{Rotating Jones matrices}
 \label{sec:rotating_jones_matrices}
+If $R$ is a 3--by--3 rotation matrix and $J$ the Jones matrix of a network at rest,
+then \cref{eq:jones_rotation_using_inverse} gives the Jones matrix $J'$ corresponding to that network rotated by $R$.
+
 \begin{equation}
     J' = R J R^{-1}
     \label{eq:jones_rotation_using_inverse}
@@ -453,17 +352,356 @@ If a Jones matrix is proportional to an identity matrix, then it is not modified
 We will use that property to save some computation, for example when propagating through homogeneous isotropic materials (\vref{sec:generic_networks_distance}).
 
 %=============================================================================
+\subsection{Jones vectors and power}
+\label{sec:jones_vectors_and_power}
+When dealing with complex numbers, we must carefully define what we mean by ``power''.
+\citetitle{IEEE2002dictionary} \cite{IEEE2002dictionary} \todo{dl and check}defines the following terms and SI units:
+\begin{description}
+    \item[complex power]\quad%
+    $\hat{S} = P + iQ$\quad%
+    in \si{\volt\ampere} (volt-ampere),
+    \item[active/real power]\quad%
+    $P \in \mathbb{R} = \Re(\hat{S})$\quad%
+    in \si{\watt} (watt),
+    \item[reactive power]\quad%
+    $Q \in \mathbb{R} = \Im(\hat{S})$\quad%
+    in \si{var} (volt-ampere-reactive),
+    \item[apparent power]\quad%
+    $\abs{\hat{S}} = \sqrt{P^2 + Q^2}$\quad%
+    in \si{\volt\ampere} (volt-ampere).
+\end{description}
+In our case, we deal with power densities: instead of watt, we use watt per square meter.
+We can define ``complex power density'', ``active power density'', ``reactive power density'' and ``apparent power density'' by taking the correspondant absolute powers from the list above and normalizing them by a unit surface area.
+For simplicity, we keep the same notations.
+
+Considering that the electric field is given in volt per meter and the magnetic field in ampere per meter, their product yields a quantity that has the dimension of a power density.
+It is tempting to write $\hat{S}=\hat{E}\hat{H}$ with $\hat{E}$ and $\hat{H}$ phasors;
+however this is incorrect for two reasons:
+\begin{enumerate}
+    \item each phasor represents a sinusoidal signal, and the product of two sinusoids is a non-linear operation that introduces new frequencies,
+    \item our electric and magnetic fields are three dimensional, they are Jones vectors.
+\end{enumerate}
+
+\index{Poynting vector}The ``Poynting vector'' represents the directional energy flux density of an electromagnetic wave, typically expressed in \si{\watt\per\meter\squared}.
+Traditionally noted~$\vect{S}$, it is defined by \cref{eq:poynting_vector}.
+This vector takes care of the fact that the electric and magnetic fields ($\vect{E}$ and $\vect{H}$) are three dimensional vectors.
+However, as indicated by the absence of hat symbols, the components of $\vect{E}$, $\vect{H}$ and $\vect{S}$ are real numbers, not complex numbers.
+This means that we cannot use phasors directly in this equation.
+The letter~$\vect{S}$ here must not be confused with the~$\hat{S}$ above which corresponds to a complex power.
+Actually, since the Poynting vector deals with real values, it has more affinities with the active power density $P$\todo{Oh yeah?}.
+\begin{equation}
+    \vect{S} = \vect{E} \times \vect{H} \label{eq:poynting_vector}
+\end{equation}
+The definition of this Poynting vector holds even for anisotropic propagation media for which $\vect{E}$, $\vect{H}$ and the wave vector $\vect{k}$ may not be normal to each other.
+Since the Poynting vector is defined by a cross product, it is by definition normal to the electric and magnetic field, even if that direction differs from $\vect{k}$.
+
+Since the active power is a priori the most interesting (sources emit real power, and detectors detect real power), let us compute the Poynting vector from $\vect{\^E}$ and $\vect{\^H}$, both three dimentional vectors with phasors components.
+
+In order to avoid non-linearities, the first thing to do is to express the electric and magnetic field with their time factor.
+This is shown in \cref{eq:e_h_time}, where the components of $\vect{\^E}(t)$ and $\vect{\^H}(t)$ are not phasors anymore but complex amplitudes.
+They are no more representations of sinusoidal functions, they are specific values of these functions.
+\begin{subequations}
+    \begin{align}
+        \vect{\^E}(t) = \vect{\^E} \exp(-i \omega t) \\
+        \vect{\^H}(t) = \vect{\^H} \exp(-i \omega t)
+    \end{align}
+    \label{eq:e_h_time}
+\end{subequations}
+
+The second step is to take their real values.
+This is what we do with \crefrange{eq:e_time_real_0}{eq:e_time_real_2} for the electric field.
+The same equations can be applied to the magnetic field.
+These equations are applied on the three components of the vectors independently.
+\begin{subequations}
+\begin{align}
+    \vect{E}(t) &= \Re
+    \bigg(
+        \Big(
+            \Re(\vect{\^E}) + i \Im(\vect{\^E})
+        \Big)
+        \Big(
+            \cos(- \omega t) + i \sin(- \omega t)
+        \Big)
+    \bigg)
+    \label{eq:e_time_real_0}
+    \\
+    \vect{E}(t) &= \Re(\vect{\^E}) \cos(- \omega t)
+            -
+            \Im(\vect{\^E}) \sin(- \omega t)
+    \label{eq:e_time_real_1}
+    \\
+    \vect{E}(t) &= \Re(\vect{\^E}) \cos(\omega t)
+            +
+            \Im(\vect{\^E}) \sin(\omega t)
+    \label{eq:e_time_real_2}
+\end{align}
+    \label{eq:e_time_real}
+\end{subequations}
+
+The third step is to compute the cross product of $\vect{E}(t)$ and $\vect{H}(t)$ to get the Poynting vector $\vect{S}(t)$.
+For brevity, let us pose $c=\cos(\omega t)$, $s=\sin(\omega t)$,
+$\vect{E}_r = \Re(\vect{\^E})$, $\vect{E}_i = \Im(\vect{\^E})$,
+$\vect{H}_r = \Re(\vect{\^H})$ and $\vect{H}_i = \Im(\vect{\^H})$.
+The Poynting vector is then given by \cref{eq:e_cross_h}.
+\begin{equation}
+    \vect{S}(t)
+    =
+    \begin{pmatrix}
+         (E_{iy} s + E_{ry} c) (H_{iz} s + H_{rz} c) -
+         (E_{iz} s + E_{rz} c) (H_{iy} s + H_{ry} c)
+         \\
+         (E_{iz} s + E_{rz} c) (H_{ix} s + H_{rx} c) -
+         (E_{ix} s + E_{rx} c) (H_{iz} s + H_{rz} c)
+         \\
+         (E_{ix} s + E_{rx} c) (H_{iy} s + H_{ry} c) -
+         (E_{iy} s + E_{ry} c) (H_{ix} s + H_{rx} c)
+    \end{pmatrix}
+    \label{eq:e_cross_h}
+\end{equation}
+Expanding the components yields many $\cos(\omega t)^2$, $\sin(\omega t)^2$ and $\cos(\omega t)\sin(\omega t)$.
+
+The Poynting vector is a instantaneous quantity; it is defined for a specific instant $t$.
+It is possible to define a time-averaged Poynting vector $\vect{\=S}$ with \cref{eq:pointing_average}.
+\begin{equation}
+    \vect{\=S} = \frac{1}{T}
+    \int_0^T \! \vect{S}(t)\, \mathrm{d}t
+    \label{eq:pointing_average}
+\end{equation}
+In \cref{eq:pointing_average}, $T$ is the period of the signal defined by $T=1/f$ and $f=\omega/2\pi$.
+The time-average of the $\sin^2$, $\cos^2$ and $\sin\cos$ functions found in the Poynting vectors are given by \crefrange{eq:trig_average_ss}{eq:trig_average_sc}.
+\begin{subequations}
+    \begin{align}
+        \frac{1}{T} &\int_0^{T} \! \sin(\omega t)^2 \, \mathrm{d}t = \frac{1}{2}
+        \label{eq:trig_average_ss}
+        \\
+        \frac{1}{T} &\int_0^{T} \! \cos(\omega t)^2 \, \mathrm{d}t = \frac{1}{2}
+        \label{eq:trig_average_cc}
+        \\
+        \frac{1}{T} &\int_0^{T} \! \sin(\omega t)\cos(\omega t) \, \mathrm{d}t = 0
+        \label{eq:trig_average_sc}
+    \end{align}
+    \label{eq:trig_average}
+\end{subequations}
+Using this, the time-averaged Poynting vector $\vect{\=S}$ is easy to derive from \cref{eq:e_cross_h}.
+\Crefrange{eq:poynting_average_detail_0}{eq:poynting_average_detail_3} detail that process.
+\begin{subequations}
+\begin{align}
+    \vect{\=S}
+    &= \frac{1}{2}
+    \begin{pmatrix}
+        (E_{iy}H_{iz} + E_{ry}H_{rz}) -
+        (E_{iz}H_{iy} + E_{rz}H_{ry})
+        \\
+        (E_{iz}H_{ix} + E_{rz}H_{rx}) -
+        (E_{ix}H_{iz} + E_{rx}H_{rz})
+        \\
+        (E_{ix}H_{iy} + E_{rx}H_{ry}) -
+        (E_{iy}H_{ix} + E_{ry}H_{rx})
+    \end{pmatrix}
+    \label{eq:poynting_average_detail_0}
+    \\
+    &= \frac{1}{2}
+    \begin{pmatrix}
+        (E_{iy}H_{iz} - E_{iz}H_{iy}) + 
+        (E_{ry}H_{rz} - E_{rz}H_{ry})
+        \\
+        (E_{iz}H_{ix} - E_{ix}H_{iz}) + 
+        (E_{rz}H_{rx} - E_{rx}H_{rz})
+        \\
+        (E_{ix}H_{iy} - E_{iy}H_{ix}) +
+        (E_{rx}H_{ry} - E_{ry}H_{rx})
+    \end{pmatrix}
+    \label{eq:poynting_average_detail_1}
+    \\
+    &= \frac{1}{2}
+    \left[
+    \begin{pmatrix}
+        E_{iy}H_{iz} - E_{iz}H_{iy} \\
+        E_{iz}H_{ix} - E_{ix}H_{iz} \\
+        E_{ix}H_{iy} - E_{iy}H_{ix} 
+    \end{pmatrix}
+    +
+    \begin{pmatrix}
+        E_{ry}H_{rz} - E_{rz}H_{ry} \\
+        E_{rz}H_{rx} - E_{rx}H_{rz} \\
+        E_{rx}H_{ry} - E_{ry}H_{rx}        
+    \end{pmatrix}
+    \right]
+    \label{eq:poynting_average_detail_2}
+    \\
+    &= \frac{1}{2}
+    \left[
+        \vect{E}_i \times \vect{H}_i
+    +
+        \vect{E}_r \times \vect{H}_r
+    \right]
+    \label{eq:poynting_average_detail_3}
+\end{align}
+\end{subequations}
+We remember that $\vect{E}_i$ is a short hand notation for the imaginary part of the electric Jones vector $\vect{\^E}$, etc.
+This means that the time-averaged Poynting vector $\vect{\=S}$ can be calculated directly from the Jones vectors $\vect{\^E}$ and $\vect{\^H}$, as shown in \cref{eq:poynting_from_phasors}.
+\begin{equation}
+    \vect{\=S} = \frac{1}{2}
+    \left(
+        \Re(\vect{\^E}) \times \Re(\vect{\^H}) + 
+        \Im(\vect{\^E}) \times \Im(\vect{\^H})
+    \right)
+    \label{eq:poynting_from_phasors}
+\end{equation}
+\Cref{eq:poynting_from_phasors} gives the real averaged power density of a wave described by its electric and magnetic Jones vectors.
+If $\vect{\^H}$ is unknown, it can be retreived from the electric field with Ohm's law \eqref{eq:ohm_law} using the wave impedance $\hat{Z}$.
+\begin{equation}
+    \vect{\^E} = \hat{Z} \vect{\^H} \label{eq:ohm_law}
+\end{equation}
+This is how we compute the power of a wave described by its Jones vector~$\vect{\^E}$.
+
+%=============================================================================
 \subsection{Combining scattering and Jones matrices}
+We repeat here the definition of a scattering matrix given by \vref{eq:scattering_matrix}.
+\begin{align*}
+    b &= S a
+    &
+    \begin{pmatrix}
+        b_1\\
+        b_2\\
+        \vdots\\
+        b_n
+    \end{pmatrix}
+    &=
+    \begin{pmatrix}
+        S_{1, 1} & S_{1, 2} & \cdots & S_{1, n} \\
+        S_{2, 1} & S_{2, 2} & \cdots & S_{2, n} \\
+        \vdots   & \vdots   & \ddots & \vdots   \\
+        S_{n, 1} & S_{n, 2} & \cdots & S_{n, n}
+    \end{pmatrix}
+    \begin{pmatrix}
+        a_1\\
+        a_2\\
+        \vdots\\
+        a_n
+    \end{pmatrix}
+\end{align*}
 
+Each port of an optical network receives and emits a polarized wave.
+Since Jones vectors describe polarized waves, it is natural to model each input and output with a Jones vector.
+This makes $a$ and $b$ vectors of Jones vectors.
+As a consequence, each element $S_{i, j}$ of the scattering matrix S is a Jones matrix.
+We are dealing with vectors of vectors and matrices of matrices, as shown by \cref{eq:matrix_of_matrices} for a 2-ports network.
 
+\begin{equation}
+    \begin{gathered}
+    \begin{pmatrix}
+        \begin{pmatrix}
+            \hat{b}_{1, x} \\ \hat{b}_{1, y} \\ \hat{b}_{1, z}
+        \end{pmatrix}
+        \\
+        \begin{pmatrix}
+            \hat{b}_{2, x} \\ \hat{b}_{2, y} \\ \hat{b}_{2, z}
+        \end{pmatrix}
+    \end{pmatrix}
+    =
+    S
+    \begin{pmatrix}
+        \begin{pmatrix}
+            \hat{a}_{1, x} \\ \hat{a}_{1, y} \\ \hat{a}_{1, z}
+        \end{pmatrix}
+        \\
+        \begin{pmatrix}
+            \hat{a}_{2, x} \\ \hat{a}_{2, y} \\ \hat{a}_{2, z}
+        \end{pmatrix}
+    \end{pmatrix}
+    \\
+    S =
+    \begin{pmatrix}
+        \begin{pmatrix}
+            S_{1, 1, x, x} & S_{1, 1, x, y} & S_{1, 1, x, z} \\
+            S_{1, 1, y, x} & S_{1, 1, y, y} & S_{1, 1, y, z} \\
+            S_{1, 1, z, x} & S_{1, 1, z, y} & S_{1, 1, z, z} \\
+        \end{pmatrix}
+        &
+        \begin{pmatrix}
+            S_{1, 2, x, x} & S_{1, 2, x, y} & S_{1, 2, x, z} \\
+            S_{1, 2, y, x} & S_{1, 2, y, y} & S_{1, 2, y, z} \\
+            S_{1, 2, z, x} & S_{1, 2, z, y} & S_{1, 2, z, z} \\
+        \end{pmatrix}
+        \\
+        \begin{pmatrix}
+            S_{2, 1, x, x} & S_{2, 1, x, y} & S_{2, 1, x, z} \\
+            S_{2, 1, y, x} & S_{2, 1, y, y} & S_{2, 1, y, z} \\
+            S_{2, 1, z, x} & S_{2, 1, z, y} & S_{2, 1, z, z} \\
+        \end{pmatrix}
+        &
+        \begin{pmatrix}
+            S_{2, 2, x, x} & S_{2, 2, x, y} & S_{2, 2, x, z} \\
+            S_{2, 2, y, x} & S_{2, 2, y, y} & S_{2, 2, y, z} \\
+            S_{2, 2, z, x} & S_{2, 2, z, y} & S_{2, 2, z, z} \\
+        \end{pmatrix}
+    \end{pmatrix}
+    \end{gathered}
+    \label{eq:matrix_of_matrices}
+\end{equation}
+
+Although matrices of matrices are compabible with simple algebraic operations (the product above follows the usual rule for multiplying matrices), we prefer to interpret them as more conventional ``block matrices''.
+Block matrices are described by \citeauthor{eves2012elementary} in \citetitle{eves2012elementary} \cite{eves2012elementary}.
+They are conventional matrices, in the sense that they hold scalars, but they are subdivided in regions, or ``blocks''.
+Mathematically, \cref{eq:matrix_of_matrices} is equivalent to \cref{eq:matrix_flattenned}.
+\begin{equation}
+    \begin{pmatrix}
+        \hat{b}_{1, x} \\ \hat{b}_{1, y} \\ \hat{b}_{1, z}
+        \\
+        \hat{b}_{2, x} \\ \hat{b}_{2, y} \\ \hat{b}_{2, z}
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        S_{1, 1, x, x} & S_{1, 1, x, y} & S_{1, 1, x, z}   &   S_{1, 2, x, x} & S_{1, 2, x, y} & S_{1, 2, x, z} \\
+        S_{1, 1, y, x} & S_{1, 1, y, y} & S_{1, 1, y, z}   &   S_{1, 2, y, x} & S_{1, 2, y, y} & S_{1, 2, y, z} \\
+        S_{1, 1, z, x} & S_{1, 1, z, y} & S_{1, 1, z, z}   &   S_{1, 2, z, x} & S_{1, 2, z, y} & S_{1, 2, z, z} \\
+        S_{2, 1, x, x} & S_{2, 1, x, y} & S_{2, 1, x, z}   &   S_{2, 2, x, x} & S_{2, 2, x, y} & S_{2, 2, x, z} \\
+        S_{2, 1, y, x} & S_{2, 1, y, y} & S_{2, 1, y, z}   &   S_{2, 2, y, x} & S_{2, 2, y, y} & S_{2, 2, y, z} \\
+        S_{2, 1, z, x} & S_{2, 1, z, y} & S_{2, 1, z, z}   &   S_{2, 2, z, x} & S_{2, 2, z, y} & S_{2, 2, z, z}
+    \end{pmatrix}
+    \begin{pmatrix}
+        \hat{a}_{1, x} \\ \hat{a}_{1, y} \\ \hat{a}_{1, z}
+        \\
+        \hat{a}_{2, x} \\ \hat{a}_{2, y} \\ \hat{a}_{2, z}
+    \end{pmatrix}
+    \label{eq:matrix_flattenned}
+\end{equation}
+
+This equivalence means that we can see each polarization of each port as a full-fledged port, and that the same physical phenomenon could be modeled with a 6-ports network described by \cref{eq:matrix_totally_flattenned}.
+\begin{equation}
+    \begin{pmatrix}
+        \hat{b}'_1 \\ \hat{b}'_2 \\ \hat{b}'_3 \\ \hat{b}'_{4} \\ \hat{b}'_{5} \\ \hat{b}'_{6}
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        S'_{1, 1} & S'_{1, 2} & S'_{1, 3} & S'_{1, 4} & S'_{1, 5} & S'_{1, 6} \\
+        S'_{2, 1} & S'_{2, 2} & S'_{2, 3} & S'_{2, 4} & S'_{2, 5} & S'_{2, 6} \\
+        S'_{3, 1} & S'_{3, 2} & S'_{3, 3} & S'_{3, 4} & S'_{3, 5} & S'_{3, 6} \\
+        S'_{4, 1} & S'_{4, 2} & S'_{4, 3} & S'_{4, 4} & S'_{4, 5} & S'_{4, 6} \\
+        S'_{5, 1} & S'_{5, 2} & S'_{5, 3} & S'_{5, 4} & S'_{5, 5} & S'_{5, 6} \\
+        S'_{6, 1} & S'_{6, 2} & S'_{6, 3} & S'_{6, 4} & S'_{6, 5} & S'_{6, 6}
+    \end{pmatrix}
+    \begin{pmatrix}
+        \hat{a}'_1 \\ \hat{a}'_2 \\ \hat{a}'_3 \\ \hat{a}'_{4} \\ \hat{a}'_{5} \\ \hat{a}'_{6}
+    \end{pmatrix}
+    \label{eq:matrix_totally_flattenned}
+\end{equation}
+Although the term is not canon, we call non-block matrices ``flat'' matrices.
+They are flat in the sense that they are two dimensional, while block matrices have four indices and are therefore four-dimensional.
+In this book, we will switch between block matrices and flat matrices at our convenience.
+\todo{Is there actually a term for flat matrices?}
+
+\todo{Could tensors help here?}
 
 %=============================================================================
 \subsection{Solving a system}
+\label{sec:solving_a_system}
 
 %-----------------------------------------------------------------------------
 \subsubsection{Theory}
 
-We call $S$ the scattering matrix of the entire system.
+We call $S$ the flat scattering matrix of the entire system.
 \begin{equation*}
     S =
     \begin{pmatrix}
@@ -476,23 +714,24 @@ We call $S$ the scattering matrix of the entire system.
 \begin{equation*}
     b = Sa
 \end{equation*}
-S contains information about all the ports in the system: the ports that are open to the outside world, but also the ports hidden within the system because the networks are coupled to each other.
+$S$ contains information about all the ports in the system: the ports that are open to the outside world, but also the ports hidden within the system because the networks are coupled to each other.
 Here, $n$ is the number of ports of $S$, equal to the sum of the number of ports of all the networks constituting the system.
 
 Some of the networks constituting the system are coupled by one port.
-If two networks G and H are coupled by their port $g$ and $h$, then the output of $g$ is the input of $h$ and the output of $h$ is the input of $g$, as illustrated by \cref{eq:coupled_inputs_outputs}.
+If two networks G and H are coupled by their port $g$ and $h$, then the output phasor of $g$ is the input phasor of $h$ and the output phasor of $h$ is the input phasor of $g$, as illustrated by \cref{eq:coupled_inputs_outputs}.
 \begin{equation}
     \left\lbrace
     \begin{aligned}
-        b_h &= a_g \\
-        b_g &= a_h
+        \hat{b}_h &= \hat{a}_g \\
+        \hat{b}_g &= \hat{a}_h
     \end{aligned}
     \right.
     \label{eq:coupled_inputs_outputs}
 \end{equation}
 
 Ports that are coupled are called ``inside port'', those that are not coupled are called ``outside port''.
-If we note~$a^o$ the inputs from the outside world,~$b^o$ the outputs to the outside world,~$a^i$ the inputs inside the system and~$b^i$ the outputs outside the system, then we can reorder the rows and columns of the vectors~$a$,~$b$ and the matrix~$S$ to put together the inside ports and the outside ports: 
+If we note~$a^o$ the inputs from the outside world,~$b^o$ the outputs to the outside world,~$a^i$ the inputs inside the system and~$b^i$ the outputs inside the system, then we can reorder the rows and columns of the vectors~$a$,~$b$ and the matrix~$S$ to put together the inside ports and the outside ports.
+This is illustrated by \cref{eq:s_outside_inside} with block matrices separating the inside and outside ports.
 \begin{equation}
     \binom{b^o}{b^i} =
     \begin{pmatrix}
@@ -509,7 +748,7 @@ The four regions of~$S$ have the following physical meaning:
     \item[$S^{ii}$:] from inside to inside: transmissions and reflections internal to the system.
     \item[$S^{oi}$:] from inside to outside: signal that leaves the system.
 \end{description}
-Only~$a^o$ is known: this corresponds to the input to the system and we control it.
+Of $a$ and $b$, only~$a^o$ is known: this corresponds to the input to the system and we control it.
 $a^i$,~$b^i$ and~$b^o$ are unknown.
 $b^o$ is the result we are looking for.
 $b^i$ and~$a^i$ are nice to have as they allow us to see what is happening inside the system.
@@ -522,7 +761,7 @@ How are~$a^i$ and~$b^i$ related?
     a^i = P b^i \text{.} \label{eq:relation_ai_bi}
 \end{equation}
 
-To get $b_o$, the first step is to compute~$b_i$ from~$a_o$.
+To get $b^o$, the first step is to compute~$b^i$ from~$a^o$.
 \begin{subequations}
     \begin{align}
         b^i &= S^{io}a^o + S^{ii}a^i \label{eq:compute_bi_ai} \\
@@ -596,7 +835,7 @@ lead to the following interesting equality:
 The only way for $S^{io}a^o$ to equal 0 for any value of $a^o$ is for $S^{io}$ to contain only zeros.
 In other words, the system is totally blind: no energy from the outside world ($a^o$) ever enters the system.
 Blind systems cannot be solved by our method but this is not a problem since there is no point in trying to build them in the first place.
-For the rest of this demonstration, let us assume that the system is not blind, $S^{io}\neq 0$, but that instead we merely set $a^o$ to 0; let us also assume $b^i \neq 0$ (we somehow managed to inject energy inside the system before it got blind).
+For the rest of this demonstration, let us assume that the system is not blind, $S^{io}\neq 0$, but that instead we merely set $a^o$ to 0; let us also assume $b^i \neq 0$ (we somehow managed to inject energy inside the system before switching off the source $a^o$).
 What would $b^i = S^{ii}P b^i$ mean?
 
 $b^i$ is the list of all the outputs of the inside part of the system, fed back as input to that same system.
@@ -617,11 +856,11 @@ Indeed, the sum of an infinite series of ratio $q$ converges if $\abs{q} < 1$:
     \sum_{i=0}^\infty q^i = \frac{1}{1-q} = (1-q)^{-1}
 \end{equation}
 The ressemblance with $(I - S^{ii}P)^{-1}$ is not due to chance.
-Our system acts like a cavity, maybe a very complex cavity but a cavity nontheless.
+Our system acts like a cavity, maybe a very complex cavity but a cavity nonetheless.
 Therefore we can think about it as a simple cavity delimited by two semi-transparent mirrors.
 The signal trapped inside the cavity is reflected an infinite amount of times, each double-reflection attenuates the signal by a factor $q=S^{ii}P$.
 As a result, the signal inside the cavity is the signal that enters the cavity multiplied by $1+q+q^2+q^3+\dots$ up to infinity.
-If there are losses, then $|q|<1$ and that series converges to $(1-q)^{-1}$ or, considering we are working with matrices, $I - S^{ii}P$.
+If there are losses, then $|q|<1$ and that series converges to $(1-q)^{-1}$ or, considering we are working with matrices, $(I - S^{ii}P)^{-1}$.
 
 Note that for the implementation, we may want to avoid inverting the matrix.
 Indeed, inverting matrices is costly and numerically unstable \todo{citation needed}.
@@ -702,33 +941,6 @@ Once $b_i$ is known, we inject its value into the expression of $b^o$.
     \label{eq:compute_bo_co}
 \end{subequations}
 Equations~\eqref{eq:compute_bi_ci_solve} and~\eqref{eq:compute_bo_bi_co} give us the response $b$ of the system $(S, P)$ to the inputs $a$ and $c$.
-
-%-----------------------------------------------------------------------------
-\paragraph{Field and power}
-The Poynting vector represents the directional energy flux density of an electromagnetic field.
-It has the dimension of a rate of energy transfer per unit area
-and is expressed in watts per square meter (\si{\watt\per\meter\squared}) in the international unit system.
-It is noted~$\vect{S}$ and is related to the electric and magnetic fields~$\vect{E}$ and~$\vect{H}$ by~\eqref{eq:poynting_vector}.
-Bold letters represent vectors.
-\begin{equation}
-    \vect{S} = \vect{E} \times \vect{H} \label{eq:poynting_vector}
-\end{equation}
-
-$\vect{E}$ and $\vect{H}$ are related to the electric and magnetic phasors $E$ and $H$ and unit vectors $\vect{u}_E$ and $\vect{u}_H$.
-\begin{align}
-    \abs{\vect{E}} &= E \exp(-i\omega t) \vect{u}_E\\
-    \abs{\vect{H}} &= H \exp(-i\omega t) \vect{u}_H
-\end{align}
-    
-
-When dealing with complex numbers, we must carefully define what we mean by ``power''.
-\citetitle{IEEE2002dictionary} \cite{IEEE2002dictionary} \todo{dl and check}defines the following terms:
-\begin{description}
-    \item[complex power] $S = P + iQ$,
-    \item[active/real power] $P \in \mathbb{R} = \Re(S)$,
-    \item[reactive power] $Q \in \mathbb{R} = \Im(S)$,
-    \item[apparent power] $\abs{S} = \sqrt{P^2 + Q^2}$.
-\end{description}
 
 %-----------------------------------------------------------------------------
 \paragraph{Solving for each source independantly.}
@@ -1273,45 +1485,44 @@ So, in the end, it's a list of scattering matrices.  It would be nice to augment
 
 \subsection{Distance}
 \label{sec:generic_networks_distance}
-Let us assume an homogeneous isotropic propagation medium with an refractive index $n$.
-$n$ can be complex, the imaginary part models the absorption.
+Let us assume an homogeneous isotropic propagation medium with a complex refractive index $\hat{n}$.
 
 \begin{figure}[hbtp]
     \centering
     \missingfigure{Propagation in a homogeneous medium.}
     \caption{\label{fig:net_distance} Propagation in a homogeneous medium.}
 \end{figure}
-\Cref{fig:net_distance} shows two points $z_1$ and $z_2$ along the path of a plane wave traveling through a medium of index $n$.
-The line joining the two points is parallel to the direction of propagation of the wave.
+\Cref{fig:net_distance} shows two points $z_0$ and $z_1$ along the path of a plane wave traveling through a medium of index $n$.
+The wave propagates from $z_0$ to $z_1$.
 The two points are separated by a distance $d$.
-Then, at any time, the electric fields at the two points are linked by \cref{eq:net_distance}.
+Then the phasors at the two points are linked by \cref{eq:net_distance}.
 \begin{equation}
-    e(z_2) = e(z_1) \exp
-    \left(
-        - i 2\pi d n f / c_0
-    \right)
+    \hat{E}(z_1) = \hat{E}(z_0) \exp(i\hat{k}d)
     \label{eq:net_distance}
+\end{equation}
+The complex wavenumber $\hat{k}$ relates to the complex refractive index $\hat{n}$ with \cref{eq:k_n}.
+\begin{equation}
+    \hat{k} = 2\pi \hat{n} f / c_0 \label{eq:k_n}
 \end{equation}
 
 The argument of the exponential can be separated into a real and an imaginary part as shown with \cref{eq:absorption_phase}.
 \begin{gather}
     \begin{aligned}
-        - i 2\pi d n f / c_0
-        &= - i 2\pi d \left(\Re(n) + i\Im(n)\right) f / c_0 \\
-        &= 2\pi d f / c_0 \left(\Im(n) - i\Re(n) \right) \\
+        i 2\pi d \hat{n} f / c_0
+        &= i 2\pi d \left(\Re(\hat{n}) + i\Im(\hat{n})\right) f / c_0 \\
+        &= 2\pi d f / c_0 \left(-\Im(\hat{n}) + i\Re(\hat{n}) \right) \\
         &= a + i \phi
     \end{aligned}
     \label{eq:absorption_phase}
     \\
     \begin{aligned}
-        a &= 2\pi d \Im(n) f / c_0   &   \phi &= -2\pi d \Re(n) f / c_0
+        a &= 2\pi d \Im(\hat{n}) f / c_0   &   \phi &= 2\pi d \Re(\hat{n}) f / c_0
     \end{aligned}
 \end{gather}
 The real part~$a$ constitutes an absorption factor while the imaginary part~$\phi$ constitutes a phase factor.
 The imaginary part of the refractive index is small for dielectric and big for metals,
 leading to a very strong absorption of the wave in metals.
-The minus sign for the phase comes from the fact that the wave reaches $z_1$ before it reaches $z_2$: the field in $z_2$ is late relatively to the field in $z_1$.
-Note that $\Re(n) f / c_0 = 1 / \lambda$, with $\lambda$ the wavelength of the wave in the medium.
+Note that $\Re(\hat{n}) f / c_0 = 1 / \lambda$, with $\lambda$ the wavelength of the wave in the medium.
 
 A distance of homogeneous isotropic propagation medium constitutes a two-ports network (\cref{eq:s_2_ports}).
 \begin{equation}
@@ -1334,7 +1545,7 @@ The transmission is the same both ways, and because of the isotropy, all three c
     \end{pmatrix}
     \\ 
     S_{1, 2} = S_{1, 2} &=
-    \exp(- i 2\pi d n f / c_0)
+    \exp(i \hat{k} d)
     \begin{pmatrix}
         1 & 0 & 0 \\
         0 & 1 & 0 \\
@@ -1421,8 +1632,16 @@ In case of normal incidence, the plane-of-incidence is undefined.
     \input{\MyGraphicsPath fresnel_reference_frames.pdf_tex}
     \caption{\label{fig:fresnel_directions}Field directions chosen to express the Fresnel equations.}
     \caption*{
-        $n$ is normal to the interface, $u$ is normal to the plane of incidence.
-        The vectors~$p_i$ indicate the direction of the field parallel to the plane-of-incidence (plane of the page) for each port.  The vectors~$s_i$ do the same for the perpendicular direction.
+        $\vect{n}$ is normal to the interface,
+        $\vect{u}$ is normal to the plane of incidence.
+        The vectors~$\vect{p}_i$ indicate the direction of the field parallel to the plane-of-incidence (plane of the page) for each port.
+        The vectors~$\vect{s}_i$ do the same for the perpendicular direction (direction of $\vect{u}$).
+        % Note: I used p and s for a reason.  Do not replace it
+        % with e\perp and e\parallel.  p and s are unit vectors
+        % forming a reference frame.  It is possible for e_para
+        % to point in the -p direction if its phase allows it.
+        % In short: do not mix physical quantities and their
+        % reference frame.
     }
 \end{figure}
 
@@ -1434,7 +1653,7 @@ We need notations.
 I call $\vect{k}$ the direction of propagation, $\vect{n}$ the normal to the interface, and $\vect{u}$ the normal to the plane-of-incidence.
 
 Since $\vect{u}$ is normal to the plane-of-incidence, and since the plane-of-incidence contains $\vect{n}$ and $\vect{k}$, then $\vect{u}$ is normal to both $\vect{n}$ and $\vect{k}$.
-In other words, $\vect{u}$ is collinear to the outer product (cross-product) of $\vect{n}$ and $\vect{k}$.
+In other words, $\vect{u}$ is collinear to the cross product of $\vect{n}$ and $\vect{k}$.
 \todo{zero denominator}
 We know that the cross-product is antisymetric
 ($\vect{n} \times \vect{k} = \mathord{-} \vect{k} \times \vect{n}$)
@@ -1445,34 +1664,34 @@ indeed, the sign cancels itself out in $\vect{u} \vect{u}\transp$ as we will see
 \end{equation}
 The order will matter in the next part when we consider the geometry of the system. \todo{What?}
 
-We get $\vect{ê}_\perp$ by projecting $\vect{ê}$ on the unit vector $\vect{u}$ according to \cref{eq:paraperp_1}.
+We get $\vect{\^e}_\perp$ by projecting $\vect{\^e}$ on the unit vector $\vect{u}$ according to \cref{eq:paraperp_1}.
 \begin{equation}
-    \vect{ê}_\perp = \vect{u} \times (\vect{u} \cdot \vect{ê}) \label{eq:paraperp_1}
+    \vect{\^e}_\perp = \vect{u} \times (\vect{u} \cdot \vect{\^e}) \label{eq:paraperp_1}
 \end{equation}
-In \cref{eq:paraperp_1}, $\vect{u} \cdot \vect{ê}$ represents the inner product (dot product) of~$\vect{u}$ by~$\vect{ê}$ and the symbol~``$\times$'' refers to the multiplication of a matrix (here~$\vect{u}$) by a scalar (here~$\vect{u} \cdot \vect{ê}$).
+In \cref{eq:paraperp_1}, $\vect{u} \cdot \vect{\^e}$ represents the scalar product (dot product) of~$\vect{u}$ by~$\vect{\^e}$ and the symbol~``$\times$'' refers to the multiplication of a matrix (here~$\vect{u}$) by a scalar (here~$\vect{u} \cdot \vect{\^e}$).
 We wish to replace that scalar multiplication with a matrix multiplication.
-To do that, we replace the scalar~$\vect{u} \cdot \vect{ê}$ by the 1--by--1 matrix~$[\vect{u} \cdot \vect{ê}]$ containing that scalar as shown in \cref{eq:paraperp_2}.
+To do that, we replace the scalar~$\vect{u} \cdot \vect{\^e}$ by the 1--by--1 matrix~$[\vect{u} \cdot \vect{\^e}]$ containing that scalar as shown in \cref{eq:paraperp_2}.
 We do not use any symbol for the matrix multiplication, we simply juxtapose the matrices.
 \begin{equation}
-    \vect{ê}_\perp = \vect{u} [\vect{u} \cdot \vect{ê}] \label{eq:paraperp_2}
+    \vect{\^e}_\perp = \vect{u} [\vect{u} \cdot \vect{\^e}] \label{eq:paraperp_2}
 \end{equation}
-The dimensions match: $\vect{u}$~is a 3--by--1 matrix and $[\vect{u} \cdot \vect{ê}]$~is a 1--by--1 matrix, resulting in~$\vect{ê}_\perp$ being a 3--by--1 matrix.
-For the next step, we note that the inner product $\vect{u} \cdot \vect{ê}$ is related to the outer product $\vect{u}\transp \vect{ê}$ by \cref{eq:paraperp_3}.
+The dimensions match: $\vect{u}$~is a 3--by--1 matrix and $[\vect{u} \cdot \vect{\^e}]$~is a 1--by--1 matrix, resulting in~$\vect{\^e}_\perp$ being a 3--by--1 matrix.
+For the next step, we note that the scalar product $\vect{u} \cdot \vect{\^e}$ is related to the matrix product $\vect{u}\transp \vect{\^e}$ by \cref{eq:paraperp_3} where $\vect{u}\transp$ denotes the matrix transpose of $\vect{u}$.
 \begin{equation}
-    [\vect{u} \cdot \vect{ê}] = \vect{u}\transp \vect{ê} \label{eq:paraperp_3}
+    [\vect{u} \cdot \vect{\^e}] = \vect{u}\transp \vect{\^e} \label{eq:paraperp_3}
 \end{equation}
 Injecting \cref{eq:paraperp_3} into \cref{eq:paraperp_2} gives \cref{eq:paraperp_4}.
 \begin{equation}
-    \vect{ê}_\perp = \vect{u} \left( \vect{u}\transp \vect{ê} \right) \label{eq:paraperp_4}
+    \vect{\^e}_\perp = \vect{u} \left( \vect{u}\transp \vect{\^e} \right) \label{eq:paraperp_4}
 \end{equation}
 By associativity of the matrix multiplication we can transform \cref{eq:paraperp_4} into \cref{eq:para_perp_decomposition_field}.
 Then, by identification, we can find our decomposition matrices.
-In \cref{eq:para_perp_decomposition_matrix}, the matrices~$M_\perp$ and~$M_\parallel$ decompose a vector~$\vect{ê}$ into its perpendicular and parallel components~$\vect{ê}_\perp$ and~$\vect{ê}_\parallel$ on which we can apply the Fresnel equations~\eqref{eq:fresnel_oblique}.
+In \cref{eq:para_perp_decomposition_matrix}, the matrices~$M_\perp$ and~$M_\parallel$ decompose a vector~$\vect{\^e}$ into its perpendicular and parallel components~$\vect{\^e}_\perp$ and~$\vect{\^e}_\parallel$ on which we can apply the Fresnel equations~\eqref{eq:fresnel_oblique}.
 \begin{subequations}
     \begin{align}
-        \vect{ê}_\perp &= \left(\vect{u} \vect{u}\transp \right) \vect{ê}
+        \vect{\^e}_\perp &= \left(\vect{u} \vect{u}\transp \right) \vect{\^e}
         \\
-        \vect{ê}_\parallel &= \vect{ê} - \vect{ê}_\perp
+        \vect{\^e}_\parallel &= \vect{\^e} - \vect{\^e}_\perp
     \end{align}
     \label{eq:para_perp_decomposition_field}
 \end{subequations}
@@ -1545,16 +1764,16 @@ In other words, the orientation of one port constrains that of the three other p
 \Cref{fig:fresnel_rotations} shows how the reflected and transmitted reference frames are obtained by rotating the incident reference frame around~$\vect{u}$, the normal to the plane-of-incidence.
 \begin{figure}[hbtp]
     \centering
-    \missingfigure{Fresnel rotations.}
-    \caption{\label{fig:fresnel_rotations}Fresnel rotations.}
+    \missingfigure{Snell rotations.}
+    \caption{\label{fig:snell_rotations}Snell rotations.}
 \end{figure}
 Because each port can be seen as an incident, reflected or transmitted port, I shall stop using the notation $\theta_i$, $\theta_r$ and $\theta_t$;
 instead, I shall use $\theta_a$ and $\theta_b$.
 $\theta_a$ refers to the angle between the direction of propagation and the normal to the interface on the A side of the interface;
 likewise, $\theta_b$ refers to the corresponding angle on the B side.
-\index{Snell's law}The angles~$\theta_a$ and~$\theta_b$ are related to the refractive incides~$n_a$ and~$n_b$ of the propagation media A and B by Snell's Law~\eqref{eq:snell}.
+\index{Snell's law}The angles~$\theta_a$ and~$\theta_b$ are related to the refractive incides~$\hat{n}_a$ and~$\hat{n}_b$ of the propagation media A and B by Snell's Law~\eqref{eq:snell}.
 \begin{gather}
-    \Re(n_a) \sin \theta_a = \Re(n_b) \sin \theta_b
+    \Re(\hat{n}_a) \sin \theta_a = \Re(\hat{n}_b) \sin \theta_b
     \label{eq:snell}
     \\
     \left\lbrace
@@ -1563,7 +1782,7 @@ likewise, $\theta_b$ refers to the corresponding angle on the B side.
             \\
             \theta_b &= \arcsin
             \left(
-                \frac{\Re(n_a)}{\Re(n_b)}
+                \frac{\Re(\hat{n}_a)}{\Re(\hat{n}_b)}
                 \sin \theta_a
             \right)
         \end{aligned}
@@ -1581,13 +1800,13 @@ $\theta_{2 \leftarrow 4}$ and $\theta_{3 \leftarrow 4}$.
 The values for these angles are listed in equations \cref{eq:interface_rotations}.
 \begin{equation}
     \begin{aligned}
-        \theta_{2 \leftarrow 1} &= \pi - 2\theta_a
+        \theta_{2 \leftarrow 1} &= -2\theta_a
         &
-        \theta_{1 \leftarrow 2} &= -\pi + 2\theta_a
+        \theta_{1 \leftarrow 2} &= 2\theta_a
         \\
-        \theta_{4 \leftarrow 3} &= \pi - 2\theta_b
+        \theta_{4 \leftarrow 3} &= -2\theta_b
         &
-        \theta_{3 \leftarrow 4} &= -\pi + 2\theta_b
+        \theta_{3 \leftarrow 4} &= 2\theta_b
         \\
         \theta_{3 \leftarrow 1} &= \theta_b - \theta_a
         &
@@ -1599,10 +1818,10 @@ The values for these angles are listed in equations \cref{eq:interface_rotations
     \end{aligned}
     \label{eq:interface_rotations}
 \end{equation}
-To each angle $\theta$ of \cref{eq:interface_rotations} corresponds a rotation matrix $R$.
-Computing the matrix corresponding to a rotation around an axis (here $u$) may be best done using a quaternion.
+To each angle $\theta_{i \leftarrow j}$ of \cref{eq:interface_rotations} corresponds a rotation matrix $R_{i \leftarrow j}$.
+Computing the matrix corresponding to a rotation around an axis (here $u$) can be done using a quaternion.
 We do not need to enter into details, the two following steps are all we need to create the rotation matrix we want.
-First, we construct the quaternion corresponding to a rotation of~$\theta$ around a vector $u=(u_x, u_y, y_z)$ with
+First, we construct the quaternion $q$ corresponding to a rotation of~$\theta$ around a vector $u=(u_x, u_y, y_z)$ with
 \todo{citation needed}
 \cref{eq:quaternion_rotation_around_axis}.
 \begin{equation}
