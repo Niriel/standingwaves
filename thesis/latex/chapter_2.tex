@@ -253,11 +253,11 @@ We will also explore this further in \cref{sec:solving_a_system}.
 %-----------------------------------------------------------------------------
 \subsubsection{Traditional Jones calculus}
 Jones matrices model the transfer of amplitude and phase from one polarization to another \cite{hecht2002optics}.
-In \cref{eq:jones_matrix_short}, the polarized input field $\vect{\^E}_i$ is related to the polarized output field~$\vect{\^E}_o$ by the Jones matrix $J$.
-$\vect{\^E}_i$ and $\vect{\^E}_o$ are called ``Jones vectors''.
+In \cref{eq:jones_matrix_short}, the polarized input field $\vect{\hat{E}}_i$ is related to the polarized output field~$\vect{\hat{E}}_o$ by the Jones matrix $J$.
+$\vect{\hat{E}}_i$ and $\vect{\hat{E}}_o$ are called ``Jones vectors''.
 \begin{equation}
     % Small form.
-    \vect{\^E}_o = J \vect{\^E}_i
+    \vect{\hat{E}}_o = J \vect{\hat{E}}_i
     \label{eq:jones_matrix_short}
 \end{equation}
 The components of the Jones vectors are phasors: complex numbers that encode the amplitude and phase of the field along different axes.
@@ -351,6 +351,8 @@ Rotating the identity matrix has an interesting property shown by~\eqref{eq:jone
 If a Jones matrix is proportional to an identity matrix, then it is not modified by rotation.
 We will use that property to save some computation, for example when propagating through homogeneous isotropic materials (\vref{sec:generic_networks_distance}).
 
+
+
 %=============================================================================
 \subsection{Jones vectors and power}
 \label{sec:jones_vectors_and_power}
@@ -395,15 +397,15 @@ Actually, since the Poynting vector deals with real values, it has more affiniti
 The definition of this Poynting vector holds even for anisotropic propagation media for which $\vect{E}$, $\vect{H}$ and the wave vector $\vect{k}$ may not be normal to each other.
 Since the Poynting vector is defined by a cross product, it is by definition normal to the electric and magnetic field, even if that direction differs from $\vect{k}$.
 
-Since the active power is a priori the most interesting (sources emit real power, and detectors detect real power), let us compute the Poynting vector from $\vect{\^E}$ and $\vect{\^H}$, both three dimentional vectors with phasors components.
+Since the active power is a priori the most interesting (sources emit real power, and detectors detect real power), let us compute the Poynting vector from $\vect{\hat{E}}$ and $\vect{\hat{H}}$, both three dimentional vectors with phasors components.
 
 In order to avoid non-linearities, the first thing to do is to express the electric and magnetic field with their time factor.
-This is shown in \cref{eq:e_h_time}, where the components of $\vect{\^E}(t)$ and $\vect{\^H}(t)$ are not phasors anymore but complex amplitudes.
+This is shown in \cref{eq:e_h_time}, where the components of $\vect{\hat{E}}(t)$ and $\vect{\hat{H}}(t)$ are not phasors anymore but complex amplitudes.
 They are no more representations of sinusoidal functions, they are specific values of these functions.
 \begin{subequations}
     \begin{align}
-        \vect{\^E}(t) = \vect{\^E} \exp(-i \omega t) \\
-        \vect{\^H}(t) = \vect{\^H} \exp(-i \omega t)
+        \vect{\hat{E}}(t) = \vect{\hat{E}} \exp(-i \omega t) \\
+        \vect{\hat{H}}(t) = \vect{\hat{H}} \exp(-i \omega t)
     \end{align}
     \label{eq:e_h_time}
 \end{subequations}
@@ -417,7 +419,7 @@ These equations are applied on the three components of the vectors independently
     \vect{E}(t) &= \Re
     \bigg(
         \Big(
-            \Re(\vect{\^E}) + i \Im(\vect{\^E})
+            \Re(\vect{\hat{E}}) + i \Im(\vect{\hat{E}})
         \Big)
         \Big(
             \cos(- \omega t) + i \sin(- \omega t)
@@ -425,14 +427,14 @@ These equations are applied on the three components of the vectors independently
     \bigg)
     \label{eq:e_time_real_0}
     \\
-    \vect{E}(t) &= \Re(\vect{\^E}) \cos(- \omega t)
+    \vect{E}(t) &= \Re(\vect{\hat{E}}) \cos(- \omega t)
             -
-            \Im(\vect{\^E}) \sin(- \omega t)
+            \Im(\vect{\hat{E}}) \sin(- \omega t)
     \label{eq:e_time_real_1}
     \\
-    \vect{E}(t) &= \Re(\vect{\^E}) \cos(\omega t)
+    \vect{E}(t) &= \Re(\vect{\hat{E}}) \cos(\omega t)
             +
-            \Im(\vect{\^E}) \sin(\omega t)
+            \Im(\vect{\hat{E}}) \sin(\omega t)
     \label{eq:e_time_real_2}
 \end{align}
     \label{eq:e_time_real}
@@ -440,8 +442,8 @@ These equations are applied on the three components of the vectors independently
 
 The third step is to compute the cross product of $\vect{E}(t)$ and $\vect{H}(t)$ to get the Poynting vector $\vect{S}(t)$.
 For brevity, let us pose $c=\cos(\omega t)$, $s=\sin(\omega t)$,
-$\vect{E}_r = \Re(\vect{\^E})$, $\vect{E}_i = \Im(\vect{\^E})$,
-$\vect{H}_r = \Re(\vect{\^H})$ and $\vect{H}_i = \Im(\vect{\^H})$.
+$\vect{E}_r = \Re(\vect{\hat{E}})$, $\vect{E}_i = \Im(\vect{\hat{E}})$,
+$\vect{H}_r = \Re(\vect{\hat{H}})$ and $\vect{H}_i = \Im(\vect{\hat{H}})$.
 The Poynting vector is then given by \cref{eq:e_cross_h}.
 \begin{equation}
     \vect{S}(t)
@@ -461,9 +463,9 @@ The Poynting vector is then given by \cref{eq:e_cross_h}.
 Expanding the components yields many $\cos(\omega t)^2$, $\sin(\omega t)^2$ and $\cos(\omega t)\sin(\omega t)$.
 
 The Poynting vector is a instantaneous quantity; it is defined for a specific instant $t$.
-It is possible to define a time-averaged Poynting vector $\vect{\=S}$ with \cref{eq:pointing_average}.
+It is possible to define a time-averaged Poynting vector $\vect{\bar{S}}$ with \cref{eq:pointing_average}.
 \begin{equation}
-    \vect{\=S} = \frac{1}{T}
+    \vect{\bar{S}} = \frac{1}{T}
     \int_0^T \! \vect{S}(t)\, \mathrm{d}t
     \label{eq:pointing_average}
 \end{equation}
@@ -482,11 +484,11 @@ The time-average of the $\sin^2$, $\cos^2$ and $\sin\cos$ functions found in the
     \end{align}
     \label{eq:trig_average}
 \end{subequations}
-Using this, the time-averaged Poynting vector $\vect{\=S}$ is easy to derive from \cref{eq:e_cross_h}.
+Using this, the time-averaged Poynting vector $\vect{\bar{S}}$ is easy to derive from \cref{eq:e_cross_h}.
 \Crefrange{eq:poynting_average_detail_0}{eq:poynting_average_detail_3} detail that process.
 \begin{subequations}
 \begin{align}
-    \vect{\=S}
+    \vect{\bar{S}}
     &= \frac{1}{2}
     \begin{pmatrix}
         (E_{iy}H_{iz} + E_{ry}H_{rz}) -
@@ -538,22 +540,25 @@ Using this, the time-averaged Poynting vector $\vect{\=S}$ is easy to derive fro
     \label{eq:poynting_average_detail_3}
 \end{align}
 \end{subequations}
-We remember that $\vect{E}_i$ is a short hand notation for the imaginary part of the electric Jones vector $\vect{\^E}$, etc.
-This means that the time-averaged Poynting vector $\vect{\=S}$ can be calculated directly from the Jones vectors $\vect{\^E}$ and $\vect{\^H}$, as shown in \cref{eq:poynting_from_phasors}.
+We remember that $\vect{E}_i$ is a short hand notation for the imaginary part of the electric Jones vector $\vect{\hat{E}}$, etc.
+This means that the time-averaged Poynting vector $\vect{\bar{S}}$ can be calculated directly from the Jones vectors $\vect{\hat{E}}$ and $\vect{\hat{H}}$, as shown in \cref{eq:poynting_from_phasors}.
 \begin{equation}
-    \vect{\=S} = \frac{1}{2}
+    \vect{\bar{S}} = \frac{1}{2}
     \left(
-        \Re(\vect{\^E}) \times \Re(\vect{\^H}) + 
-        \Im(\vect{\^E}) \times \Im(\vect{\^H})
+        \Re(\vect{\hat{E}}) \times \Re(\vect{\hat{H}}) + 
+        \Im(\vect{\hat{E}}) \times \Im(\vect{\hat{H}})
     \right)
     \label{eq:poynting_from_phasors}
 \end{equation}
 \Cref{eq:poynting_from_phasors} gives the real averaged power density of a wave described by its electric and magnetic Jones vectors.
-If $\vect{\^H}$ is unknown, it can be retreived from the electric field with Ohm's law \eqref{eq:ohm_law} using the wave impedance $\hat{Z}$.
+If $\vect{\hat{H}}$ is unknown, it can be retreived from the electric field with Ohm's law \eqref{eq:ohm_law} using the wave impedance matrix $\hat{Z}$.
+In homogeneous isotropic materials, the impedance matrix equals the scalar impedance multiplied by the matrix of a $+\pi/2$ rotation around~$\vect{k}$.
 \begin{equation}
-    \vect{\^E} = \hat{Z} \vect{\^H} \label{eq:ohm_law}
+    \vect{\hat{E}} = \hat{Z} \vect{\hat{H}} \label{eq:ohm_law}
 \end{equation}
-This is how we compute the power of a wave described by its Jones vector~$\vect{\^E}$.
+This is how we compute the power of a wave described by its Jones vector~$\vect{\hat{E}}$.
+
+
 
 %=============================================================================
 \subsection{Combining scattering and Jones matrices}
@@ -1664,34 +1669,34 @@ indeed, the sign cancels itself out in $\vect{u} \vect{u}\transp$ as we will see
 \end{equation}
 The order will matter in the next part when we consider the geometry of the system. \todo{What?}
 
-We get $\vect{\^e}_\perp$ by projecting $\vect{\^e}$ on the unit vector $\vect{u}$ according to \cref{eq:paraperp_1}.
+We get $\vect{\hat{E}}_\perp$ by projecting $\vect{\hat{E}}$ on the unit vector $\vect{u}$ according to \cref{eq:paraperp_1}.
 \begin{equation}
-    \vect{\^e}_\perp = \vect{u} \times (\vect{u} \cdot \vect{\^e}) \label{eq:paraperp_1}
+    \vect{\hat{E}}_\perp = \vect{u} \times (\vect{u} \cdot \vect{\hat{E}}) \label{eq:paraperp_1}
 \end{equation}
-In \cref{eq:paraperp_1}, $\vect{u} \cdot \vect{\^e}$ represents the scalar product (dot product) of~$\vect{u}$ by~$\vect{\^e}$ and the symbol~``$\times$'' refers to the multiplication of a matrix (here~$\vect{u}$) by a scalar (here~$\vect{u} \cdot \vect{\^e}$).
+In \cref{eq:paraperp_1}, $\vect{u} \cdot \vect{\hat{E}}$ represents the scalar product (dot product) of~$\vect{u}$ by~$\vect{\hat{E}}$ and the symbol~``$\times$'' refers to the multiplication of a matrix (here~$\vect{u}$) by a scalar (here~$\vect{u} \cdot \vect{\hat{E}}$).
 We wish to replace that scalar multiplication with a matrix multiplication.
-To do that, we replace the scalar~$\vect{u} \cdot \vect{\^e}$ by the 1--by--1 matrix~$[\vect{u} \cdot \vect{\^e}]$ containing that scalar as shown in \cref{eq:paraperp_2}.
+To do that, we replace the scalar~$\vect{u} \cdot \vect{\hat{E}}$ by the 1--by--1 matrix~$[\vect{u} \cdot \vect{\hat{E}}]$ containing that scalar as shown in \cref{eq:paraperp_2}.
 We do not use any symbol for the matrix multiplication, we simply juxtapose the matrices.
 \begin{equation}
-    \vect{\^e}_\perp = \vect{u} [\vect{u} \cdot \vect{\^e}] \label{eq:paraperp_2}
+    \vect{\hat{E}}_\perp = \vect{u} [\vect{u} \cdot \vect{\hat{E}}] \label{eq:paraperp_2}
 \end{equation}
-The dimensions match: $\vect{u}$~is a 3--by--1 matrix and $[\vect{u} \cdot \vect{\^e}]$~is a 1--by--1 matrix, resulting in~$\vect{\^e}_\perp$ being a 3--by--1 matrix.
-For the next step, we note that the scalar product $\vect{u} \cdot \vect{\^e}$ is related to the matrix product $\vect{u}\transp \vect{\^e}$ by \cref{eq:paraperp_3} where $\vect{u}\transp$ denotes the matrix transpose of $\vect{u}$.
+The dimensions match: $\vect{u}$~is a 3--by--1 matrix and $[\vect{u} \cdot \vect{\hat{E}}]$~is a 1--by--1 matrix, resulting in~$\vect{\hat{E}}_\perp$ being a 3--by--1 matrix.
+For the next step, we note that the scalar product $\vect{u} \cdot \vect{\hat{E}}$ is related to the matrix product $\vect{u}\transp \vect{\hat{E}}$ by \cref{eq:paraperp_3} where $\vect{u}\transp$ denotes the matrix transpose of $\vect{u}$.
 \begin{equation}
-    [\vect{u} \cdot \vect{\^e}] = \vect{u}\transp \vect{\^e} \label{eq:paraperp_3}
+    [\vect{u} \cdot \vect{\hat{E}}] = \vect{u}\transp \vect{\hat{E}} \label{eq:paraperp_3}
 \end{equation}
 Injecting \cref{eq:paraperp_3} into \cref{eq:paraperp_2} gives \cref{eq:paraperp_4}.
 \begin{equation}
-    \vect{\^e}_\perp = \vect{u} \left( \vect{u}\transp \vect{\^e} \right) \label{eq:paraperp_4}
+    \vect{\hat{E}}_\perp = \vect{u} \left( \vect{u}\transp \vect{\hat{E}} \right) \label{eq:paraperp_4}
 \end{equation}
 By associativity of the matrix multiplication we can transform \cref{eq:paraperp_4} into \cref{eq:para_perp_decomposition_field}.
 Then, by identification, we can find our decomposition matrices.
-In \cref{eq:para_perp_decomposition_matrix}, the matrices~$M_\perp$ and~$M_\parallel$ decompose a vector~$\vect{\^e}$ into its perpendicular and parallel components~$\vect{\^e}_\perp$ and~$\vect{\^e}_\parallel$ on which we can apply the Fresnel equations~\eqref{eq:fresnel_oblique}.
+In \cref{eq:para_perp_decomposition_matrix}, the matrices~$M_\perp$ and~$M_\parallel$ decompose a vector~$\vect{\hat{E}}$ into its perpendicular and parallel components~$\vect{\hat{E}}_\perp$ and~$\vect{\hat{E}}_\parallel$ on which we can apply the Fresnel equations~\eqref{eq:fresnel_oblique}.
 \begin{subequations}
     \begin{align}
-        \vect{\^e}_\perp &= \left(\vect{u} \vect{u}\transp \right) \vect{\^e}
+        \vect{\hat{E}}_\perp &= \left(\vect{u} \vect{u}\transp \right) \vect{\hat{E}}
         \\
-        \vect{\^e}_\parallel &= \vect{\^e} - \vect{\^e}_\perp
+        \vect{\hat{E}}_\parallel &= \vect{\hat{E}} - \vect{\hat{E}}_\perp
     \end{align}
     \label{eq:para_perp_decomposition_field}
 \end{subequations}
