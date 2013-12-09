@@ -734,6 +734,9 @@ If two networks G and H are coupled by their port $g$ and $h$, then the output p
     \label{eq:coupled_inputs_outputs}
 \end{equation}
 
+In the rest of this section, the components of vectors and matrices are are implicitely complex.
+In order to lighten the notations, we will not place the hat symbol which we usually use for complex numbers.
+
 Ports that are coupled are called ``inside port'', those that are not coupled are called ``outside port''.
 If we note~$a^o$ the inputs from the outside world,~$b^o$ the outputs to the outside world,~$a^i$ the inputs inside the system and~$b^i$ the outputs inside the system, then we can reorder the rows and columns of the vectors~$a$,~$b$ and the matrix~$S$ to put together the inside ports and the outside ports.
 This is illustrated by \cref{eq:s_outside_inside} with block matrices separating the inside and outside ports.
@@ -829,7 +832,7 @@ lead to the following interesting equality:
     \left\lbrace
         \begin{aligned}
             b^i &= S^{ii}P b^i \\
-            b^i &= S^{io}a^0 + S^{ii}P b^i
+            b^i &= S^{io}a^o + S^{ii}P b^i
         \end{aligned}
     \right.
     \quad
@@ -952,12 +955,14 @@ Equations~\eqref{eq:compute_bi_ci_solve} and~\eqref{eq:compute_bo_bi_co} give us
 When solving a system with multiple sources, it may be tempting to set all the inputs at the same time.
 That is, filling $a^o$ and $c$, then computing $b$.
 This is, in most cases, a mistake.
-If two inputs are set at the same time, then they act as if they are phase-locked to each other, and it introduces interferences that cannot be produced with either input source off.
+If two inputs are set at the same time, then they act as if they are phase-locked to each other, which introduces interferences that cannot be produced with either input source off.
 Unless the sources are actually phase-locked to each other, the proper way of calculating the response of the system is to solve it for each source individually.
 
 In the case of HIFI, the radiation for the local oscillator, the cryostat windows, the black bodies and the sky must be solved separately.
 
-Then, like is the case for any incoherent signals, the results must be converted from amplitude to power then added together.
+Like is the case for any incoherent signals,
+the results must be converted from amplitude to power (see \cref{sec:jones_vectors_and_power})
+then added together.
 
 %-----------------------------------------------------------------------------
 \subsubsection{Implementation}
@@ -1483,6 +1488,8 @@ For the grid I use Houde \cite{houde_2001} because there is nothing simpler, but
 Grids being VERY complex to model, I might spend a lot of time and space on that one.
 
 So, in the end, it's a list of scattering matrices.  It would be nice to augment each system with plots showing the effect of each parameter.
+
+\todo{Explain the rest reference frame that I use.}
 
 
 
@@ -2358,8 +2365,14 @@ Finally, many paths are forbidden.
 
 
 \subsubsection{Verification}
-Our model for a thin film at normal incidence should provide exactly the same result as two interfaces and a distance.
+Our model for a thin film at oblique incidence should provide exactly the same result as two interfaces and a distance.
 The goal of the thin film model is to provide convenience, not introduce new physics.
+\Cref{fig:thin_film_oblique_verification} illustrates a comparison between these two ways of modeling a thin film.
+The angle of incidence is~\SI{45}{\degree}.
+The film is~\SI{10}{\micro\meter} thick.
+The refractive indices are 1.0 outside the film and 1.5 in the film.
+The thickness of the film creates a cavity and therefore a standing wave.
+This standing wave is responsable for the frequency-dependance of the reflected and transmitted power seen on \cref{fig:thin_film_oblique_verification}.
 
 \begin{figure}[hbtp]
     \centering
@@ -2368,8 +2381,23 @@ The goal of the thin film model is to provide convenience, not introduce new phy
     \label{fig:thin_film_oblique_verification}
 \end{figure}
 
+The top row shows the transmitted power, the middle row shows the reflected power, and the bottom row shows the sum of the two.
+That last row shows that energy is conserved: the power that is not transmitted is reflected.
+
+The left column shows the transmitted, reflected and total power coupling for the perpendicular polarization.
+The right column corresponds to the parallel polarization.
+Note that the vertical-axes differ for the two polarizations: the standing wave has an effect about ten times stronger on the perpendicular polarization.
+
+Finally, each plot shows two overlapped curves.
+The red curve corresponds to the model derived in this section with which the thin film is seen as a single network.
+The blue curve corresponds to a model made of two interfaces and a distance.
+As expected, both agree within numerical noise.
+
+
+
 %=============================================================================
 \subsection{Wire grid polarizer}
+\todo{Check k omega convention}
 In their paper from \citeyear{houde_2001} \citetitle{houde_2001}, \textcite{houde_2001} present a set of equations that approximate the electric field at any point near a wire grid polarizer.
 The incident wave is assumed plane, the surrounding propagation medium is assumed homogeneous and isotropic, and the wires are assumed to be free floating (no dielectric substrate) and to have a cylindrical section.
 
