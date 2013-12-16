@@ -99,7 +99,7 @@ def SolveCouplings(couplings, n):
 def SolveNetworks(P, Q, no, networks):
     S = GatherNetworks(networks)
     if Q.shape != S.shape:
-        raise ValueError("Declared number of ports does not match the sum of the ports of each network.")
+        raise ValueError("Declared number of ports (%i) does not match the sum of the ports of each network (%i)." % (Q.shape[0], P.shape[0]))
     S1 = Q.dot(S).dot(Q.T)
     S1oo, S1oi, S1io, S1ii = SeparateMatrixRegions(S1, no)
     S1iiP = S1ii.dot(P)
