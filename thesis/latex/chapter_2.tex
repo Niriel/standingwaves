@@ -3383,10 +3383,43 @@ Therefore, when the slope goes up for one, it goes down for the other,
 and they compensate quite well.
 Some other values for the LO frequency or film thickness can allow the thin film cavity to leave a more obvious signature on the folded spectrum.
 
-This figure reveals that the V polarization also exhibit a standing wave pattern, as we mentionned earlier.
+This figure reveals that the V polarization is also affected by standing wave, as we mentionned earlier.
 It is much weaker in V than in H because the thin film is more transparent for V.
 This means that the V-polarized light is more likely to exit the cavity either toward the sky or toward the open port on the right, both perfect aborbers.
 This standing wave pattern has a period of \SI{150}{\mega\hertz}, which is expected of the LO--mixer cavity.
+
+\subsubsection{Sideband ratio}
+Standing waves change the coupling of the mixer to the signal.
+This coupling is a priori different in the lower and upper sideband.
+Therefore, each channel of a folded spectrum is a priori imbalanced, giving more weight to either sideband.
+
+In the HIFI consortium, we agreed on the following definition~\eqref{eq:sideband_ratio} of the sideband ratio as a metric for the imbalance between the two sidebands.
+A perfectly balanced system has a sideband ratio of 0.5.
+If the sideband ratio is greater than 0.5, then the channel is USB-dominated.
+If it is lower than 0.5, the channel is LSB-dominated.
+\begin{equation}
+    \text{sideband ratio} =
+    \frac{
+        \text{USB power coupling}
+    }{
+        \text{LSB power coupling} + \text{USB power coupling}
+    }
+    \label{eq:sideband_ratio}
+\end{equation}
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{thin_film_beam_splitter_sbr}
+    \caption{Thin film beam splitter, sideband ratio}
+    \label{fig:thin_film_beam_splitter_sbr}
+\end{figure}
+\Cref{fig:thin_film_beam_splitter_sbr} shows the sideband ratio for the LO and the sky for both polarizations.
+The slope comes from very slow modulation due to the cavity inside the thin film.
+Note that it is clearly visible here, even on the sky, while it was hardly noticeable on the folded spectrum of \cref{fig:thin_film_beam_splitter_folded}.
+A flat continuum does not guarantee a flat sideband ratio.
+
+With this system, the standard deviation of the sideband ratio for is \SI{2.6}{\percent} for H and \SI{0.3}{\percent} for V.
+This is the error that we can expect when measuring a thin emission line on a perfectly flat continuum after an infinitely long integration time: the line can fall anywhere between a peak and a crest of this standing wave pattern.
 
 \subsubsection{The many LO--mixer cavities}
 
@@ -3415,12 +3448,11 @@ $B = c / 2d$ with $d=\SI{10}{\micro\meter}$ and $c=c_0$ yields $B \approx \SI{15
 If we reverse the calculation, $d=c/2B$ for $B=\SI{4}{\giga\hertz}$ gives $d \approx \SI{37}{mm}$: our FFT can distinguish cavities that differ by more than \SI{4}{\centi\meter}.
 This limitation affects only the FFT as a tool used for visualizing our data; our model has no such limitation.
 
-\Cref{fig:thin_film_beam_splitter_folded_fft_hr} shows the FFT of the same system for a bandwidth of~\SI{32}{\giga\hertz}, a film thickness of~\SI{1}{\centi\meter}, and no imaginary part in the refractive index of the mylar (otherwise the absorption would hide the result).
-As expected, once the system is modified to meet the expectations of the FFT, then the FFT does show the many peaks around~\SI{150}{\mega\hertz}, which prove that our model takes into account the infinity of LO--mixer cavities.
-
 \begin{figure}[hbtp]
     \centering
     \includegraphics{thin_film_beam_splitter_folded_fft_hr}
     \caption{Thin film beam splitter, folded, fft, high resolution}
     \label{fig:thin_film_beam_splitter_folded_fft_hr}
 \end{figure}
+\Cref{fig:thin_film_beam_splitter_folded_fft_hr} shows the FFT of the same system for a bandwidth of~\SI{32}{\giga\hertz}, a film thickness of~\SI{1}{\centi\meter}, and no imaginary part in the refractive index of the mylar (otherwise the absorption would hide the result).
+Once the system is modified to meet the expectations of the FFT, then the FFT does show the expected many peaks around~\SI{150}{\mega\hertz}, which prove that our model takes into account the infinity of LO--mixer cavities.
