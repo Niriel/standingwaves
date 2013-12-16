@@ -699,9 +699,15 @@ In this book, we will switch between block matrices and flat matrices at our con
 
 \todo{Could tensors help here?}
 
+
+
+
+
 %=============================================================================
 \subsection{Solving a system}
 \label{sec:solving_a_system}
+
+
 
 %-----------------------------------------------------------------------------
 \subsubsection{Theory}
@@ -886,6 +892,8 @@ We do that by taking $b^o$ from \cref{eq:s_outside_inside} and eliminating $a^i$
 These two steps solve the system: from the inputs~$a^o$ we can compute the outputs~$b^o$ of the whole system.
 This method also tells gives us $a^i$ and $b^i$ which are two equivalent ways of looking at what is happening inside the system (they are permutations of each other).
 
+
+
 \paragraph{Internal sources.}
 The method described above does not allow us to account for sources inside the system.
 Such sources may nevertheless exist.
@@ -950,8 +958,10 @@ Once $b_i$ is known, we inject its value into the expression of $b^o$.
 \end{subequations}
 Equations~\eqref{eq:compute_bi_ci_solve} and~\eqref{eq:compute_bo_bi_co} give us the response $b$ of the system $(S, P)$ to the inputs $a$ and $c$.
 
+
 %-----------------------------------------------------------------------------
 \paragraph{Solving for each source independantly.}
+\label{solving_for_each_source_independantly}
 When solving a system with multiple sources, it may be tempting to set all the inputs at the same time.
 That is, filling $a^o$ and $c$, then computing $b$.
 This is, in most cases, a mistake.
@@ -963,6 +973,7 @@ In the case of HIFI, the radiation for the local oscillator, the cryostat window
 Like is the case for any incoherent signals,
 the results must be converted from amplitude to power (see \cref{sec:jones_vectors_and_power})
 then added together.
+
 
 %-----------------------------------------------------------------------------
 \subsubsection{Implementation}
@@ -2186,6 +2197,7 @@ Thin cavities (here \SI{10}{\micro\meter}) create standing wave patterns with ve
 
 %=============================================================================
 \subsection{Thin film at oblique incidence}
+\label{sec:thin_film_at_oblique_incidence}
 
 A thin film at oblique incidence forms a four-ports network.
 \Cref{fig:thin_film_oblique} defines the geometry and the port-numbering that we use.
@@ -2381,7 +2393,7 @@ This standing wave is responsable for the frequency-dependance of the reflected 
     \label{fig:thin_film_oblique_verification}
 \end{figure}
 
-The top row shows the transmitted power, the middle row shows the reflected power, and the bottom row shows the sum of the two.
+The top row of \cref{fig:thin_film_oblique_verification} shows the transmitted power, the middle row shows the reflected power, and the bottom row shows the sum of the two.
 That last row shows that energy is conserved: the power that is not transmitted is reflected.
 
 The left column shows the transmitted, reflected and total power coupling for the perpendicular polarization.
@@ -2391,7 +2403,10 @@ Note that the vertical-axes differ for the two polarizations: the standing wave 
 Finally, each plot shows two overlapped curves.
 The red curve corresponds to the model derived in this section with which the thin film is seen as a single network.
 The blue curve corresponds to a model made of two interfaces and a distance.
-As expected, both agree within numerical noise.
+
+As expected, both models agree within numerical noise.
+This agreement does not only happen in power, but also in field.
+The phasor predicted by both methods agree within $10^{-10}$: the magnitude of the difference of the phasors is smaller than $10^{-10}$ for frequencies of the order of \SI{1}{\tera\hertz}.  \todo{Should I put a pic?}
 
 
 
@@ -3205,27 +3220,144 @@ A thin dielectric film can be used as a beam splitter, as illustrated in \cref{f
     \label{fig:beam_splitter_principle}
 \end{figure}
 
-We can model a thin film using the principle described in \cref{sec:the_simplest_cavity}.
-In the case of a film, the two interfaces are separated by a few micrometers only.
-We also need to take into account the \SI{45}{\degree} angle of incidence.
+This setup is one of the simplest way to inject LO and sky signal together on a mixer.
+What we have here is a heterodyne telescope.
+The very transparent thin film couples most of the sky signal to the mixer, while coupling almost none of the local oscillator noise.
+Unfortunately, the thin film is also transparent to the LO signal (narrow line at the LO frequency) required to pump the mixer, so the LO signal must be very strong.
+This design wastes most of the LO power but has the advantage of being simple.
+HIFI uses a similar approach for its bands 1, 2 and 3 (with wire grid polarizers instead of thin films though).
 
 %-----------------------------------------------------------------------------
 
-\subsubsection{Modeling the thin film}
+\subsubsection{Modeling the networks}
+
+We can model a thin film using the principle described in \cref{sec:thin_film_at_oblique_incidence}.
 
 Let us model a thin film of biaxially-oriented polyethylene terephthalate or ``boPET'', more comonly known under trade-mame ``Mylar''.
 The table entry for ``PETP'' in the article of \citeauthor{lamb1996miscellaneous}~\cite{lamb1996miscellaneous} suggests that we choose 1.83 for the refractive index of the film at~\SI{500}{\giga\hertz}.
-This 1.83 corresponds to the real part~$n$ of the refractive index~$\hat{n}=n-ik$.
+Using the notations of the article,
+this 1.83 corresponds to the real part~$n$ of the refractive index~$\hat{n}=n-ik$.
 The imaginary part~$k$ is given by the ``$\tan \delta$'' column of the table and
 the equation (6) of that article, which links $\tan \delta$ to $k$: $\tan \delta = 2k/n$.
 Therefore, $k = n \tan \delta / 2$.
 With $n=1.83$ and $\tan \delta = 0.020$, we have $k=0.018$.
-The complex refractive index of our thin film is $1.83-0.018i$.
+\todo{Explain that in the complex section.}
+The phasor convention used in this book implies a sign flip: a positive imaginary part creates absorption.
+The complex refractive index of our thin film is $1.83+0.018i$.
 
+% I know that the imaginary part of the refractive index corresponds to an absorption/gain.  The plus or minus sign probably depends on the convention chosen for k and omega.
+% I have
+% E = E_0 exp(ikz)
+% k = \tau / \lambda
+% \lambda = c / f
+% c = c_0 / n
+% k = \tau f n / c_0 = K n
+% n = nr + i ni
+% exp(iKnz) = exp(i K nr z - K ni z) = exp(iKnrz) exp(-Kniz)
+% The greater ni, the stronger the attenuation.
+% Therefore, I must keep ni positive.
 
+To model the local oscillator and the mixer, I use networks that reflect \SI{10}{\percent} and transmit \SI{90}{\percent} of the incoming signal.
+This is a very simplified model for a mixer or a local oscillator, but it does take into account their principle characteristic from a standing wave point of view: they reflect.
 
+The two absorbers do not need any modeling, it is sufficient to leave the two corresponding ports of the thin film open.
 
+%-----------------------------------------------------------------------------
 
-Then I introduce a thin film beam splitter (that's already a heterodyne telescope when we think of it).  I show that it adds a slope to the previous pattern.  I show that it's actually a very slow standing wave, the period of which is consistent with infinite reflections inside the thin film.  The FFT should show that there are two picks close to the cavity-period: they are due to the fact that there are now two cavities: one using reflection on the near side, one on the far side of the beam splitter.
+\subsubsection{Simulation}
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{thin_film_beam_splitter_detailed}
+    \caption{Thin film beam splitter, detailed}
+    \label{fig:thin_film_beam_splitter_detailed}
+\end{figure}
+In the lower and upper side bands, the mixer receives power from two sources: the astronomical signal from the sky and the noise of the local oscillator.
+In the case of HIFI, the local oscillator noise is typically two orders of magnitude stronger than the astronomical signal.
+We arbitrarily set the power density from the sky at \SI{1}{\watt\per\meter\squared} and that of the local oscillator to \SI{100}{\watt\per\meter\squared}.
+Since these two sources are not phase locked, we solve the system for each of them independantly.
+The result is given on \cref{fig:thin_film_beam_splitter_detailed}.
 
-All of this makes sense, we are confident that the model does its job properly.
+We notice that the power of both the local oscillator signal and the sky signal have the same order of magnitude when hitting the mixer.
+This is due to the fact that the thin film is mostly transparent, hardly reflective.
+Because the sky is seen in transmission, its power is still very close to its emitted value of \SI{1}{\watt\per\meter\squared}, we couple most of the sky.
+And because the local oscillator is seen in reflection, we couple only a small fraction of it (\SI{0.5}{\percent} or \SI{3.5}{\percent} depending on the polarization).
+This increases the signal-to-noise ratio to an acceptable level.
+
+The figure also illustrates that this beam splitter transmits V more than it transmits H.
+As a result, V shows more sky power and less LO power.
+It is in the interest of the astronomer to reject the horizontal polarization.
+This can be done with a wire-grid polarizer or by using rectangular horns.
+
+When examined closely, the H curves show some fast oscillations.
+The V curves are also affected, as the next figure will show.
+These oscillations are due to the cavity formed by the mixer and the local oscillator.
+That cavity consists of $d=\SI{1}{\meter}$ or vacuum, which results in a period of $c_0 / 2d \approx \SI{150}{MHz}$.
+
+The red curves show a slope.
+The higher the frequency, the more LO power the mixer sees.
+This slope is actually a portion of a very slow standing wave pattern.
+It corresponds to the cavity formed by the two interfaces of the thin film itself.
+With a speed of light of $c_0 / 1.83$ and a thickness of \SI{10}{\micro\meter}, we expect a standing wave pattern with a period of about \SI{8}{\tera\hertz}.
+Calculating the real period involves knowing the pathlength of the beam inside the film, which requires some trigonometry, but the order remains at several terahertz.
+
+In a real system, we would not have access to all the details of \cref{fig:thin_film_beam_splitter_detailed}.
+Indeed, for a given frequency, we receive the sum of the LO and sky power without being able to tell them apart.
+Furthermore, mixers fold spectra, which adds the lower and upper side bands together.
+Finally, the polarizations become undistinguishable.
+In \cref{fig:thin_film_beam_splitter_folded}, we have summed the two sources and folded the spectra; however we kept the polarization intact.
+These summations were done in power and not in field, because the LSB, USB, LO and sky power are not phase locked to each other: each signal is coherent with itself only, not with the others.
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{thin_film_beam_splitter_folded}
+    \caption{Thin film beam splitter, folded}
+    \label{fig:thin_film_beam_splitter_folded}
+\end{figure}
+
+The slope due to the cavity inside the thin film seems to have disappeared.
+This is expected: the lower sideband is flipped before being added to the upper sideband.
+Therefore, when the slope goes up for one, it goes down for the other,
+and they compensate quite well.
+Some other values for the LO frequency or film thickness can allow the thin film cavity to leave a more obvious signature on the folded spectrum.
+
+This figure reveals that the V polarization also exhibit a standing wave pattern, as we mentionned earlier.
+It is much weaker in V than in H because the thin film is more transparent for V.
+This means that the V-polarized light is more likely to exit the cavity either toward the sky or toward the open port on the right, both perfect aborbers.
+This standing wave pattern has a period of \SI{150}{\mega\hertz}, which is expected of the LO--mixer cavity.
+
+\subsubsection{The many LO--mixer cavities}
+
+\Cref{fig:thin_film_beam_splitter_folded_fft} shows
+the fast Fourier Transform of \cref{fig:thin_film_beam_splitter_folded} (using a Hanning window).
+It peaks at the expected~\SI{150}{\mega\hertz} and shows a very weak harmonic at~\SI{75}{\mega\hertz}.
+The harmonics are very weak because the cavity is of very low quality: the film is very transparent and the light leaves the cavity quickly.
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{thin_film_beam_splitter_folded_fft}
+    \caption{Thin film beam splitter, folded, fft}
+    \label{fig:thin_film_beam_splitter_folded_fft}
+\end{figure}
+
+The astute reader may be wondering why we are observing only two cavities (LO--mixer and inside thin film) instead of an infinity.
+Indeed, there is no such thing as \textit{the} LO--mixer cavity, there are an infinity of them.
+The shortest one is the one corresponding to a single reflection on the near side of the thin film.
+Then, another possible path involves entering the thin film, being reflected by the far side, traversing the film again, and being transmitted toward the detector.
+A third path involves two round-trips inside the film, and a fourth path involves three round-trips, etc.
+Why don't these many cavities show up as as many peaks on the FFT?
+The answer is simple: our FFT does not have enough resolution.
+
+Our bandpass $B$ of \SI{4}{\giga\hertz} does not allow to resolve a variation of \SI{10}{\micro\meter} in a cavity.
+$B = c / 2d$ with $d=\SI{10}{\micro\meter}$ and $c=c_0$ yields $B \approx \SI{15}{\tera\hertz}$, which is way beyond our \SI{4}{\giga\hertz}.
+If we reverse the calculation, $d=c/2B$ for $B=\SI{4}{\giga\hertz}$ gives $d \approx \SI{37}{mm}$: our FFT can distinguish cavities that differ by more than \SI{4}{\centi\meter}.
+This limitation affects only the FFT as a tool used for visualizing our data; our model has no such limitation.
+
+\Cref{fig:thin_film_beam_splitter_folded_fft_hr} shows the FFT of the same system for a bandwidth of~\SI{32}{\giga\hertz}, a film thickness of~\SI{1}{\centi\meter}, and no imaginary part in the refractive index of the mylar (otherwise the absorption would hide the result).
+As expected, once the system is modified to meet the expectations of the FFT, then the FFT does show the many peaks around~\SI{150}{\mega\hertz}, which prove that our model takes into account the infinity of LO--mixer cavities.
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{thin_film_beam_splitter_folded_fft_hr}
+    \caption{Thin film beam splitter, folded, fft, high resolution}
+    \label{fig:thin_film_beam_splitter_folded_fft_hr}
+\end{figure}
