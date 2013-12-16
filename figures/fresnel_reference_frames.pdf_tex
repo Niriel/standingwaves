@@ -50,23 +50,23 @@
   \makeatother%
   \begin{picture}(1,0.61844865)%
     \put(0,0){\includegraphics[width=\unitlength]{fresnel_reference_frames.pdf}}%
-    \put(0.3710359,0.51911832){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_1$}}}%
-    \put(0.31364006,0.3961777){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$s_1$}}}%
     \put(0.08253686,0.34665562){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{medium $n_a$}}}%
     \put(0.08253686,0.29713354){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{medium $n_b$}}}%
     \put(0.19808845,0.5034756){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{port 1}}}%
     \put(0.79235379,0.5034756){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{port 2}}}%
     \put(0.74283171,0.08253745){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{port 3}}}%
     \put(0.2479119,0.08152887){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{port 4}}}%
-    \put(0.49522112,0.04952288){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$n$}}}%
-    \put(0.50347483,0.35490923){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$u$}}}%
-    \put(0.72092168,0.37189955){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_2$}}}%
-    \put(0.66854852,0.46220713){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$s_2$}}}%
-    \put(0.66029485,0.28887979){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_3$}}}%
-    \put(0.61902638,0.22285036){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$s_3$}}}%
-    \put(0.445699,0.15682078){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$p_4$}}}%
-    \put(0.39617689,0.25586508){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$s_4$}}}%
-    \put(0.445699,0.42093881){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\theta_a$}}}%
-    \put(0.52823587,0.23110397){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\theta_b$}}}%
+    \put(0.49522112,0.04952288){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\vect{n}$}}}%
+    \put(0.50347483,0.35490923){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vect{u}$}}}%
+    \put(0.45395272,0.42093881){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\theta_a$}}}%
+    \put(0.51998219,0.22285036){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\theta_b$}}}%
+    \put(0.31364006,0.3961777){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vect{s}_1$}}}%
+    \put(0.66854852,0.46220713){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\vect{s}_2$}}}%
+    \put(0.61902638,0.22285036){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vect{s}_3$}}}%
+    \put(0.38792321,0.25586504){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vect{s}_4$}}}%
+    \put(0.3710359,0.51911832){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vect{p}_1$}}}%
+    \put(0.72092168,0.37189955){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vect{p}_2$}}}%
+    \put(0.66029485,0.28887979){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vect{p}_3$}}}%
+    \put(0.445699,0.15682078){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\vect{p}_4$}}}%
   \end{picture}%
 \endgroup%

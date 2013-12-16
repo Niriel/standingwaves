@@ -53,9 +53,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8.4067797"
-     inkscape:cx="157.73976"
-     inkscape:cy="53.59659"
+     inkscape:zoom="3.6211279"
+     inkscape:cx="122.59789"
+     inkscape:cy="97.094105"
      inkscape:document-units="cm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -92,7 +92,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <dc:creator>
           <cc:Agent>
             <dc:title>Bertrand Delforge</dc:title>
@@ -215,7 +215,7 @@
          sodipodi:role="line"
          id="tspan5076"
          x="213.82904"
-         y="870.27545">Absorber</tspan></text>
+         y="870.27545">Sky, absorber</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
@@ -237,7 +237,7 @@
          sodipodi:role="line"
          id="tspan5084"
          x="213.82904"
-         y="1015.5511">Receiver</tspan></text>
+         y="1015.5511">Mixer</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"
@@ -248,7 +248,7 @@
          sodipodi:role="line"
          id="tspan5088"
          x="116.38809"
-         y="919.88177">Source</tspan></text>
+         y="919.88177">LO</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:LMRoman12;-inkscape-font-specification:LMRoman12"

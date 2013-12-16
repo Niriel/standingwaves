@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{181.75663047bp}%
+    \setlength{\unitlength}{175.53438439bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -48,12 +48,12 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.6782504)%
+  \begin{picture}(1,0.70114416)%
     \put(0,0){\includegraphics[width=\unitlength]{beam_splitter_principle.pdf}}%
-    \put(0.50082414,0.64053844){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{Absorber}}}%
-    \put(0.89851787,0.43779265){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{Absorber}}}%
-    \put(0.50082414,0.00110918){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{Receiver}}}%
-    \put(0.07193878,0.4221967){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{Source}}}%
-    \put(0.63880524,0.22551559){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Thin film}}}%
+    \put(0.48312963,0.6626423){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{Sky, absorber}}}%
+    \put(0.89492059,0.45270969){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{Absorber}}}%
+    \put(0.48312963,0.0005469){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{Mixer}}}%
+    \put(0.03904138,0.4365609){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{LO}}}%
+    \put(0.62600181,0.23290795){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Thin film}}}%
   \end{picture}%
 \endgroup%
