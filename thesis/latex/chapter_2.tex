@@ -61,8 +61,8 @@ It is given for example in volts per meter or newtons per coulomb.
         \midrule
         $\omega$      &  $2 \pi f$   &  angular frequency \\
         $k$           &  $2 \pi / \lambda$   &   wave number or angular frequency\\
-        $\lambda$     &  $c/f$  &  wavelength \\
-        $c$           &  $c_0/n$  &  phase velocity \\
+        $\lambda$     &  $c / f$  &  wavelength \\
+        $c$           &  $c_0 / n$  &  phase velocity \\
         $c_0$         &  $=\SI{299792458}{\meter\per\second}$  &  speed of light in vacuum \\
         $n$           &  $\sqrt{\epsilon_r \mu_r}$  &  refractive index \\
         $\epsilon_r$  &  $\epsilon / \epsilon_0$  &  relative permittivity or electric constant\\
@@ -79,11 +79,11 @@ It is given for example in volts per meter or newtons per coulomb.
 \end{table}
 
 \Cref{tab:definitions_simple} summarizes the relations between various parameters used to describe a wave and its propagation medium.
-For plane waves in homogeneous materials, $Z=\eta$.  \todo{citation needed}
+For plane waves in homogeneous materials, $Z=\eta$.
 All the parameters introduced in this table are real numbers.
 It is possible to add more parameters, such as the electric conductivity of a material.
 Such parameters account for attenuation, phase delays, etc.
-However, these are more easily dealt with when using complex numbers.
+However, these are more easily dealt with when using complex numbers without changing any of these equations.
 In \cref{sec:polar_complex_notation}, we will go over these parameters again and explore the effects of giving them an imaginary part.
 
 
@@ -107,8 +107,74 @@ The hat above the $E$ signals that $\hat{E}$ is the complex equivalent of $E$.
 As shown by \cref{eq:e_z_t_real_complex_minus}, $E$ and $\hat{E}$ do not have the same value (one is real, the other is complex);
 however, both describe the same physical phenomenon.
 
-\todo[inline]{Meaning of complex frequencies, wave numbers, refractive indices, etc.}
+If we open the door to complex numbers, we may want to consider the effect of giving an imaginary part to the parameters of \cref{tab:definitions_simple}.
 
+The imaginary part of the complex angular frequency $\hat{\omega} = \omega' + i \omega''$ corresponds to an amplification of the wave in time, see \cref{eq:complex_angular_frequency}.
+If the imaginary part is negative, then the effect is an attenuation of the signal as time goes.
+\begin{subequations}
+    \begin{align}
+       \hat{E}(z, t) &=
+       E_0 \exp(i(kz - \hat{\omega} t + \varphi))
+       \\
+       &=
+       E_0 \exp(i(kz - (\omega' + i \omega'') t + \varphi))
+       \\
+       &=
+       E_0 \exp(i(kz - \omega' t + \varphi)) \exp(\omega'' t)
+    \end{align}
+    \label{eq:complex_angular_frequency}
+\end{subequations}
+This can be used to model systems that vary in time.
+Since the systems we study in this book are time-invariant, $\omega$ will always be real for us.
+
+Folowing the same reasoning, the imaginary part of the complex wavenumber $\hat{k} = k' + i k''$ corresponds to a spatial attenuation or amplification.
+See \cref{eq:complex_wavenumber}.
+If $k''> 0$, then the wave is attenuated as it propagates.
+This can model losses in a material.
+\begin{subequations}
+    \begin{align}
+       \hat{E}(z, t) &=
+       E_0 \exp(i(\hat{k}z - \omega t + \varphi))
+       \\
+       &=
+       E_0 \exp(i((k' + i k'')z - \omega t + \varphi))
+       \\
+       &=
+       E_0 \exp(i(k' z - \omega t + \varphi)) \exp(-k'' z)
+    \end{align}
+    \label{eq:complex_wavenumber}
+\end{subequations}
+Having $k'' \ne 0$ gives an imaginary part to the wavelength and the phase velocity
+(see \cref{tab:definitions_simple}).
+All these imaginary parts mean the same thing: the wave is getting attenuated.
+However, the speed of light in vacuum is known to be a real number.
+Therefore, the imaginary part of $\hat{k}$ comes from an imaginary part of the complex refractive index $\hat{n}$.
+This links the attenuation of the wave to a property of the material.
+Since the refractive index is derived from the relative electric permittivity and the relative magnetic permeability of a materials
+($\hat{n}=\sqrt{\hat{\epsilon}\hat{\mu}}$),
+any of them can be responsible for the attenuation of the wave.
+
+When using Snell's law \eqref{eq:snell}, the real part of the refractive indices must be used.
+
+In many cases (vacuum, mylar, aluminum), the relative magnetic permeability is very close to 1, making the electric permitivity the only parameter able to bear an imaginary part.
+This means that, in these cases, the wave is absorbed by a material because of its conductivity.
+The conductivity $\sigma$ and the imaginary part of the permittivity $\epsilon''$ are bound by \cref{eq:epsilon_second_sigma}.
+The higher the frequency, the less effect the conductivity has.
+This is understandable as inertia prevents the electrons from moving fast enough to cancel the electric field.
+\begin{equation}   
+    \epsilon'' = \sigma / \omega
+    \label{eq:epsilon_second_sigma}
+\end{equation}
+The conductivity itself can be complex, in which case its imaginary part acts like a frequency-dependant real part of the permittivity.
+
+In some cases, the relative magnetic permeability is very different from~1 and is able to go up to several thousands in the case of very pure iron.
+It can a priori be complex.
+\citeauthor{bowler2006frequency} has shown in \citetitle{bowler2006frequency} \cite{bowler2006frequency} that the imaginary part of the permeability is frequency dependant.
+However, that frequency dependance of $\mu''$ does not seem as simple as that of $\epsilon''$.
+
+Finally, the complex intrinsic impedance derived from the complex permittivity and permeability imply that the electric and magnetic fields are not in phase.
+Indeed, for a plane wave in a homogeneous material, the wave impedance $\hat{Z}=\hat{E}/\hat{H}$ equals the intrinsic impedance $\hat{\eta}=\sqrt{\hat{\mu}/\hat{\epsilon}}$.
+Therefore, the imaginary part of $\hat{\mu}$ or $\hat{\epsilon}$ creates a phase difference between $\hat{E}$ and $\hat{H}$.
 
 %=============================================================================
 \subsection{Phasors}
@@ -331,8 +397,7 @@ then \cref{eq:jones_rotation_using_inverse} gives the Jones matrix $J'$ correspo
     \label{eq:jones_rotation_using_inverse}
 \end{equation}
 \Cref{eq:jones_rotation_using_inverse} is correct, however it may not be the most practical to implement.
-Indeed, inverting matrices is an expensive and unstable operation for a computer to perform%
-\todo{citation needed}.
+Indeed, inverting matrices is an expensive and unstable operation for a computer to perform
 When we remember that the inverse of a rotation matrix is also its transpose%
 \todo{citation needed},
 then we get \cref{eq:jones_rotation_using_transpose} which has the advantage of being computationally cheap and stable.
@@ -357,7 +422,7 @@ We will use that property to save some computation, for example when propagating
 \subsection{Jones vectors and power}
 \label{sec:jones_vectors_and_power}
 When dealing with complex numbers, we must carefully define what we mean by ``power''.
-\citetitle{IEEE2002dictionary} \cite{IEEE2002dictionary} \todo{dl and check}defines the following terms and SI units:
+\citetitle{IEEE2002dictionary} \cite{IEEE2002dictionary} defines the following terms and SI units:
 \begin{description}
     \item[complex power]\quad%
     $\hat{S} = P + iQ$\quad%
@@ -390,7 +455,7 @@ This vector takes care of the fact that the electric and magnetic fields ($\vect
 However, as indicated by the absence of hat symbols, the components of $\vect{E}$, $\vect{H}$ and $\vect{S}$ are real numbers, not complex numbers.
 This means that we cannot use phasors directly in this equation.
 The letter~$\vect{S}$ here must not be confused with the~$\hat{S}$ above which corresponds to a complex power.
-Actually, since the Poynting vector deals with real values, it has more affinities with the active power density $P$\todo{Oh yeah?}.
+Actually, since the Poynting vector deals with real values, it has more affinities with the active power density $P$.
 \begin{equation}
     \vect{S} = \vect{E} \times \vect{H} \label{eq:poynting_vector}
 \end{equation}
@@ -551,7 +616,7 @@ This means that the time-averaged Poynting vector $\vect{\bar{S}}$ can be calcul
     \label{eq:poynting_from_phasors}
 \end{equation}
 \Cref{eq:poynting_from_phasors} gives the real averaged power density of a wave described by its electric and magnetic Jones vectors.
-If $\vect{\hat{H}}$ is unknown, it can be retreived from the electric field with Ohm's law \eqref{eq:ohm_law} using the wave impedance matrix $\hat{Z}$.
+If $\vect{\hat{H}}$ is unknown, it can be retreived from the electric field with a variant of Ohm's law \eqref{eq:ohm_law} using the wave impedance matrix $\hat{Z}$.
 In homogeneous isotropic materials, the impedance matrix equals the scalar impedance multiplied by the matrix of a $+\pi/2$ rotation around~$\vect{k}$.
 \begin{equation}
     \vect{\hat{E}} = \hat{Z} \vect{\hat{H}} \label{eq:ohm_law}
@@ -693,12 +758,8 @@ This equivalence means that we can see each polarization of each port as a full-
     \label{eq:matrix_totally_flattenned}
 \end{equation}
 Although the term is not canon, we call non-block matrices ``flat'' matrices.
-They are flat in the sense that they are two dimensional, while block matrices have four indices and are therefore four-dimensional.
+They are flat in the sense that they are two dimensional, while our block matrices have four indices and are therefore four-dimensional.
 In this book, we will switch between block matrices and flat matrices at our convenience.
-\todo{Is there actually a term for flat matrices?}
-
-\todo{Could tensors help here?}
-
 
 
 
@@ -877,7 +938,7 @@ As a result, the signal inside the cavity is the signal that enters the cavity m
 If there are losses, then $|q|<1$ and that series converges to $(1-q)^{-1}$ or, considering we are working with matrices, $(I - S^{ii}P)^{-1}$.
 
 Note that for the implementation, we may want to avoid inverting the matrix.
-Indeed, inverting matrices is costly and numerically unstable \todo{citation needed}.
+Indeed, inverting matrices is costly and numerically unstable.
 Even though \cref{eq:compute_bi_invert} is mathematically correct, we would rather solve $b^i$ in \cref{eq:compute_bi_solve}.
 
 \paragraph{Solving the output of the system.}
@@ -1672,19 +1733,21 @@ In case of normal incidence, the plane-of-incidence is undefined.
 Before we can apply the reflection and transmission coefficients given in \cref{eq:fresnel_oblique}, we need to decompose the incident field into a parallel and a perpendicular component.
 The incident field can be decomposed into a component that is parallel to the plane-of-incidence and one that is perpendicular to it.
 
+The plane of incidence is the plane that contains the direction of propagation and the normal to the surface.
+If both are collinear, that is if the incidence is normal, then the plane of incidence is undefined.
+
 We need notations.
 I call $\vect{k}$ the direction of propagation, $\vect{n}$ the normal to the interface, and $\vect{u}$ the normal to the plane-of-incidence.
 
 Since $\vect{u}$ is normal to the plane-of-incidence, and since the plane-of-incidence contains $\vect{n}$ and $\vect{k}$, then $\vect{u}$ is normal to both $\vect{n}$ and $\vect{k}$.
 In other words, $\vect{u}$ is collinear to the cross product of $\vect{n}$ and $\vect{k}$.
-\todo{zero denominator}
-We know that the cross-product is antisymetric
-($\vect{n} \times \vect{k} = \mathord{-} \vect{k} \times \vect{n}$)
-but in our case the order does not matter;
-indeed, the sign cancels itself out in $\vect{u} \vect{u}\transp$ as we will see later.
 \begin{equation}
     \vect{u} = \frac{1}{\norm{\vect{n} \times \vect{k}}} (\vect{n} \times \vect{k})  \label{eq:normal_to_plane_of_incidence}
 \end{equation}
+We know that the cross-product is antisymetric
+($\vect{n} \times \vect{k} = \mathord{-} \vect{k} \times \vect{n}$),
+therefore our choice is merely a convention with which we must remain consistent.
+In some cases, the convention does not matter as the sign cancels itself out in $\vect{u} \vect{u}\transp$ as we will see later in \cref{eq:perp_decomposition_matrix}.
 The order will matter in the next part when we consider the geometry of the system. \todo{What?}
 
 We get $\vect{\hat{E}}_\perp$ by projecting $\vect{\hat{E}}$ on the unit vector $\vect{u}$ according to \cref{eq:paraperp_1}.
@@ -1720,8 +1783,11 @@ In \cref{eq:para_perp_decomposition_matrix}, the matrices~$M_\perp$ and~$M_\para
 \end{subequations}
 \begin{subequations}
     \begin{align}
-        M_\perp &= \vect{u} \vect{u}\transp   \\
+        M_\perp &= \vect{u} \vect{u}\transp
+        \label{eq:perp_decomposition_matrix}
+        \\
         M_\parallel & = I - M_\perp
+        \label{eq:para_decomposition_matrix}
     \end{align}
     \label{eq:para_perp_decomposition_matrix}
 \end{subequations}
@@ -3231,18 +3297,16 @@ HIFI uses a similar approach for its bands 1, 2 and 3 (with wire grid polarizers
 
 \subsubsection{Modeling the networks}
 
-We can model a thin film using the principle described in \cref{sec:thin_film_at_oblique_incidence}.
-
-Let us model a thin film of biaxially-oriented polyethylene terephthalate or ``boPET'', more comonly known under trade-mame ``Mylar''.
+We can model the thin film using the principle described in \cref{sec:thin_film_at_oblique_incidence}.
+Let us model a thin film of biaxially-oriented polyethylene terephthalate or ``boPET'', more commonly known under trade-mame ``Mylar''.
 The table entry for ``PETP'' in the article of \citeauthor{lamb1996miscellaneous}~\cite{lamb1996miscellaneous} suggests that we choose 1.83 for the refractive index of the film at~\SI{500}{\giga\hertz}.
 Using the notations of the article,
 this 1.83 corresponds to the real part~$n$ of the refractive index~$\hat{n}=n-ik$.
 The imaginary part~$k$ is given by the ``$\tan \delta$'' column of the table and
 the equation (6) of that article, which links $\tan \delta$ to $k$: $\tan \delta = 2k/n$.
-Therefore, $k = n \tan \delta / 2$.
+Therefore, $k = (n \tan \delta) / 2$.
 With $n=1.83$ and $\tan \delta = 0.020$, we have $k=0.018$.
-\todo{Explain that in the complex section.}
-The phasor convention used in this book implies a sign flip: a positive imaginary part creates absorption.
+Our own conventions (deriving from~\cref{eq:e_z_t_real_minus}) require a sign flip: as explained in \vref{sec:polar_complex_notation}, a positive imaginary part creates absorption.
 The complex refractive index of our thin film is $1.83+0.018i$.
 
 % I know that the imaginary part of the refractive index corresponds to an absorption/gain.  The plus or minus sign probably depends on the convention chosen for k and omega.
@@ -3260,7 +3324,7 @@ The complex refractive index of our thin film is $1.83+0.018i$.
 To model the local oscillator and the mixer, I use networks that reflect \SI{10}{\percent} and transmit \SI{90}{\percent} of the incoming signal.
 This is a very simplified model for a mixer or a local oscillator, but it does take into account their principle characteristic from a standing wave point of view: they reflect.
 
-The two absorbers do not need any modeling, it is sufficient to leave the two corresponding ports of the thin film open.
+The two absorbers do not need any modeling: it is sufficient to leave the two corresponding ports of the thin film open.
 
 %-----------------------------------------------------------------------------
 
