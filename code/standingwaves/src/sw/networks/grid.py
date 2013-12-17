@@ -84,9 +84,10 @@ def _GridRT(a, d, s, f, propdir):
     return R, T
 
 def Grid(a, d, s, f, tb, attitude, k1):
+    grid_rest = np.array([0, 0, 1])
     A = tb.rot(*attitude)
     At = A.T
-    n = A.dot(tb.rest)  # Normal to the grid.
+    n = A.dot(grid_rest)  # Normal to the grid.
     q = geo.RotationAroundAxisQuaternion(n, geo.TAU / 2)
     k2 = geo.QuatRotate(q, k1)
     k3 = -k1

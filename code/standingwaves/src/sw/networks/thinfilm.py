@@ -75,7 +75,8 @@ def ThinFilmOblique(n1, n2, thickness, frequency, tb, att, k1):
     """Thin film of material n2 at non-normal incidence.  4 ports.
 
     """
-    n = tb.rot(*att).dot(tb.rest)
+    normal_rest = np.array([0, 0, 1])
+    n = tb.rot(*att).dot(normal_rest)
     tg = _ThinFilmGeometry(n, k1)
     rp, tp, rs, ts = _ThinFilmRT(n1, n2, thickness, frequency, tg.theta_a)
     # Reflections: rotations.
