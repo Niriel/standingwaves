@@ -1,3 +1,4 @@
+\chapter{Computing standing waves}
 \section{Principle}
 Our method is inspired from laser and circuit theory: we deal with discrete inputs and outputs rather than, for example, a spatial description of the fields.
 A system like the Focal Plane Unit of HIFI comprises a few dozens of optical elements~\cite{jackson2002hifi}, referred in the literature as ``networks''~\cite{siegman1986lasers}: wire grid polarizers, roof-top mirrors, horns, attenuators, free space, all having one or more input and output.
@@ -24,7 +25,7 @@ This is going to work unless higher modes can come back to the fundamental mode,
 
 %=============================================================================
 \subsection{Conventions and definitions}
-\Cref{eq:e_z_t_real_minus} and \cref{eq:e_z_t_real_plus} are two equivalent expressions of the amplitude of the electric field of a plane wave propagating along an axis~$\vect{z}$.
+Equations \eqref{eq:e_z_t_real_minus} and \eqref{eq:e_z_t_real_plus} are two equivalent expressions of the amplitude of the electric field of a plane wave propagating along an axis~$\vect{z}$.
 These two expressions are equivalent because the $\cos$ function is even.
 Choosing one or the other is a matter of convention.
 \begin{subequations}
@@ -300,7 +301,7 @@ The diagonal contains the reflections terms and the rest contains the transmissi
 
 \begin{figure}[hbtp]
     \centering
-    \input{\MyGraphicsPath scattering_matrix_notations.pdf_tex}
+    \input{scattering_matrix_notations.pdf_tex}
     \caption{A 4-ports network showing 4 inputs $a_i$ and four outputs $b_i$.  For example, this network could be a wire grid polarizer or a semi-transparent mirror, both acting as beam splitters.}%
     \label{fig:scattering_matrix_notations}
 \end{figure}
@@ -312,6 +313,8 @@ We will explore this further in \cref{sec:solving_a_system}.
 Scattering matrices are firstly designed to model discrete physical optical elements such as interfaces, distances, horns, grids, etc.
 It is possible to extend their use to an entire system made of several networks as long as it provides outputs that are linear combinations of inputs.
 We will also explore this further in \cref{sec:solving_a_system}.
+
+
 
 %=============================================================================
 \subsection{Jones calculus in 3D}
@@ -1031,10 +1034,36 @@ Unless the sources are actually phase-locked to each other, the proper way of ca
 
 In the case of HIFI, the radiation for the local oscillator, the cryostat windows, the black bodies and the sky must be solved separately.
 
-Like is the case for any incoherent signals,
-the results must be converted from amplitude to power (see \cref{sec:jones_vectors_and_power})
-then added together.
+As explained earlier, sources that are a priori incoherent become coherent when the bandwidth is narrow enough.
+In the case of HIFI, the bandwidth is narrower than \SI{1}{\mega\hertz},
+which gives a coherence time $t_c = 1/\SI{1}{\mega\hertz} \approx \SI{1}{\microsecond}$.
+This means that, for a duration of~\SI{1}{\micro\second}, the signal coming from the astronomical object, or the thermal noise coming from the local oscillator or the calibration black bodies, will be coherent.
+As such, it has a polarization and a phase.
+We can decompose the polarization of that wave on any convenient base, for example a orthonormal $(\vect{u_x}, \vect{u_y})$ base.
+This allows us to desbribe the wave with \cref{eq:incoherent_decomposed}.
+\begin{equation}
+    \vect{E} = E_0 \cos(kz - \omega t + \phi_x) \vect{u_x}
+             + E_0 \cos(kz - \omega t + \phi_y) \vect{u_y}
+    \label{eq:incoherent_decomposed}
+\end{equation}
+What makes the wave incoherent is that $\phi_x$ and $\phi_y$ are random.
+They are random, but they change relatively slowly with time (at the scale of the microsecond in HIFI).
 
+The $x$ and $y$ components are always coherent because they are correlated with themselves (trivial), even after one microsecond.
+However, there is a priori no correlation between the $x$ and $y$ components.
+This absence of correlation blurs all interferences between $x$ and $y$ after one microsecond.
+A typical HIFI observation integrates on the sky for about one second, which is a million times more than the coherence time.
+As a result, the $x$ and $y$ components of the incoming wave can, and must, be treated independantly.
+The two components of a incoherent wave must be treated as two independant coherent signal.
+
+The first optical element of the HIFI focal plane unit that is not a mirror is a wire-grid polarizer.
+Any incoherent signal from the sky, the black bodies or the local oscillator, is separated into two perpendicular components as soon as it enters the system.
+That wire-grid polarizer gives us a choice for the base $(\vect{u_x}, \vect{u_y})$.
+For example, $\vect{u_x}$ along the wires and $\vect{u_y}$ normal to the wires.
+When modeling an incoherent source, we do it in two steps: one coherent source linearly polarized in the $\vect{u_x}$ direction and another coherent source linearly polarized in the $\vect{u_y}$ direction.
+When calculating the response of the system, these two inputs must be applied separately.
+
+After computing the response of the system to each input, the results must be converted from amplitude to power (see \cref{sec:jones_vectors_and_power}) then added together.
 
 %-----------------------------------------------------------------------------
 \subsubsection{Implementation}
@@ -1713,7 +1742,7 @@ In case of normal incidence, the plane-of-incidence is undefined.
 
 \begin{figure}[hbtp]
     \centering
-    \input{\MyGraphicsPath fresnel_reference_frames.pdf_tex}
+    \input{fresnel_reference_frames.pdf_tex}
     \caption{\label{fig:fresnel_directions}Field directions chosen to express the Fresnel equations.}
     \caption*{
         $\vect{n}$ is normal to the interface,
@@ -2093,13 +2122,13 @@ The propagation between the two interfaces introduces a factor $a$.
 
 \begin{figure}[hbtp]
     \centering
-    \input{\MyGraphicsPath thin_film_normal.pdf_tex}
+    \input{thin_film_normal.pdf_tex}
     \caption{Thin film at normal incidence.}
     \label{fig:thin_film_normal}
 \end{figure}
 \begin{figure}[hbtp]
     \centering
-    \input{\MyGraphicsPath thin_film_normal_collapsed.pdf_tex}
+    \input{thin_film_normal_collapsed.pdf_tex}
     \caption{Thin film at normal incidence, collapsed.}
     \label{fig:thin_film_normal_collapsed}
 \end{figure}
@@ -2172,7 +2201,7 @@ The actual length of the medium 1 is not $d_1$ but $d_1 - d_2/2$.
 Likewise, the wave travels a distance $d_3 - d_2/2$ in the medium 3.
 \begin{figure}[hbtp]
     \centering
-    \input{\MyGraphicsPath thin_film_normal_compensation.pdf_tex}
+    \input{thin_film_normal_compensation.pdf_tex}
     \caption{Thin film at normal incidence, space compensation.}
     \label{fig:thin_film_normal_compensation}
 \end{figure}
@@ -2232,7 +2261,7 @@ It also illustrates the two systems that we wish to compare:
 \end{itemize}
 \begin{figure}[hbtp]
     \centering
-    \input{\MyGraphicsPath thin_film_normal_verification_principle.pdf_tex}
+    \input{thin_film_normal_verification_principle.pdf_tex}
     \caption{Thin film at normal incidence, verification, principle.}
     \label{fig:thin_film_normal_verification_principle}
 \end{figure}
@@ -2481,11 +2510,30 @@ The phasor predicted by both methods agree within $10^{-10}$: the magnitude of t
 In their paper from \citeyear{houde_2001} \citetitle{houde_2001}, \textcite{houde_2001} present a set of equations that approximate the electric field at any point near a wire grid polarizer.
 The incident wave is assumed plane, the surrounding propagation medium is assumed homogeneous and isotropic, and the wires are assumed to be free floating (no dielectric substrate) and to have a cylindrical section.
 
-The set of equations that interest us here are the equations numbered 23 to 35, 62 and 63 in \cite{houde_2001}.
+\subsubsection{Geometry}
+The article of \citeauthor{houde_2001} \cite{houde_2001} defines the following rest reference frame for the grid: wires in the $\vect{x}\vect{y}$ plane, wires along $\vect{x}$.
+Its normal, at rest, is therefore the $\vect{z}$ axis.
+
+If $R$ is the rotation matrix that move the grid from its rest attitude to its useful attitude, then the normal of the grid is $\vect{n}=R \vect{z}$.
+
+The grid is a four port network.
+$\vect{k}_1$,  is the direction of propagation of the wave indident to the port 1.
+We can derive the direction of propagation of the wave incident to the three other ports easily.
+The law of reflection states that $\vect{k}_1$, $\vect{k}_2$ and $\vect{n}$ are coplanar and that the directed angle between $\vect{k}_1$ and $\vect{n}$ equals that between $\vect{n}$ and $\vect{k}_2$.
+Therefore, one way of deriving $\vect{k}_2$ is to rotate $\vect{k}_1$ by \SI{180}{\degree} around $\vect{n}$.
+Then, $\vect{k}_3=-\vect{k}_1$ and $\vect{k}_4=-\vect{k_2}$.
+
+\subsubsection{Reflection and transmission coefficients}
+The set of equations that interest us here are the equations numbered 23 to 35, 62 and 63 in the article of \citeauthor{houde_2001} \cite{houde_2001}, which we copied here for convenience.
+The first two equations, \eqref{eq:grid_current_linear} and \eqref{eq:grid_current_circular}, describe the electric current in the wires.
+$K^x$ corresponds to a linear current and $K^\theta$ to a circular current.
+In the first case, electrons move along the length of the wire; in the other, they rotate around the axis of the wire.
 \begin{align}
     K^x &= \frac{E_0}{F} \cdot \alpha' \frac{N_x}{\Delta_x}
+    \label{eq:grid_current_linear}
     \\
     K^\theta &= (-j) \frac{E_0}{F} \cdot (\gamma' \beta - \beta' \gamma) \frac{N_\theta}{\Delta_\theta}
+    \label{eq:grid_current_circular}
 \end{align}
 with
 \begin{align}
@@ -2564,29 +2612,37 @@ They describe the reflected and transmitted fields in three dimensions for a gri
         \alpha K^x - j \frac{\beta}{\gamma} \frac{ka}{2} K^\theta
     \right]
 \end{align}
-Note that Houde calls these $R$ and $T$ ``reflection'' and ``transmission coefficient'', something they are not quite that since they contain $\alpha'$, $\beta'$ and $\gamma'$, corresponding to the amplitude of the incoming electric field.
+Note that Houde calls these $R$ and $T$ ``reflection'' and ``transmission coefficient'', something they are not quite since they contain $\alpha'$, $\beta'$ and $\gamma'$, corresponding to the amplitude of the incoming electric field in the three dimensions.
 These amplitudes have to be factored out if we want to really speak about reflection or transmission coefficients.
 
 When implementing these equations, some simplifications are obvious.
 For example, $\frac{E_0}{F}$ inside $K^x$ and $K^\theta$ cancels $\frac{F}{E_0}$ in $R$ and $T$;
-the complex unit $j$ within $k^\theta$ combines with $j$ in $R$ and $T$ to become -1.
+the complex unit $j$ within $K^\theta$ combines with $j$ in $R$ and $T$ to become -1.
 
 In these equations, $\alpha'$, $\beta'$ and $\gamma'$ are the three components of the direction of the incident electric field, satisfying $\alpha'^2 + \beta'^2 + \gamma'^2 = 1$.
-The incident electric field is $(e_x, e_y, e_z) = E_0(\alpha', \beta', \gamma')$.
+That condition seems to apply only to real numbers, restricting the use of this grid model to waves that are linearly polarized (their three components are in phase).
+However, there is no such limitation in the model.
+Indeed, the authors define the incident electric field as $(e_x, e_y, e_z) = E_0(\alpha', \beta', \gamma')$.
+The amplitude $E_0$ can be complex and it seems that its phase has to be shared among the three components.
+However, when we rewrite the equations to fit in a matrix, we will notice that the real parameters are not $\alpha'$, $\beta'$, $\gamma'$ and $E_0$, but $e_x$, $e_y$ and $e_z$ directly, which are all independant.
+In that case, each of them is free to have its own phase and the model also applies to elliptically polarized waves.
+
+
 In order to rewrite these equations in a matrix form that depends on $e_x$, $e_y$ and $e_z$, one needs to split each coefficient of transmission and reflection into three, like this:
 \begin{equation}
     e_{rx} = R^{xx} e_x + R^{xy} e_y + R^{xz} e_z
 \end{equation}
 so that we can write
-\begin{equation}
-    e_r = R 
+\begin{align}
+    e_r &= R e_i \\
+    e_r &=
     \begin{pmatrix}
         R_{xx} & R_{xy} & R_{xz} \\
         R_{yx} & R_{yy} & R_{yz} \\
         R_{zx} & R_{zy} & R_{zz}
     \end{pmatrix}
     e_i
-\end{equation}
+\end{align}
 for the reflection $R$ and a similar equation for the transmission $e_t = T e_i$.
 I start with $R_x$ defined in \cref{eq:houde_Rx} to get $R_{xx}$, $R_{xy}$ and $R_{xz}$.
 \begin{align*}
@@ -3164,11 +3220,19 @@ Another simplification:
         \frac{\beta^2}{\gamma}
     \end{pmatrix}
 \end{equation}
-This reflection and transmission matrix are Jones matrices.
-They must find their place inside the scattering matrix.
+These reflection and transmission matrices are Jones matrices.
+The parameters are the radius $a$ of the wires,
+the distance $d$ between the wires,
+the conductivity $\sigma$ of the wires,
+the frequency $f$ of the wave and
+the direction of propagation $\vect{k_1}=(\alpha, \beta, \gamma)$.
+We could consider the impedance of the surrounding medium as an additional parameter instead of using that of vacuum, but we did not need that.
+
+\subsubsection{Scattering matrices}
+The reflection and transmission matrices defined above are Jones matrices.
 But before, we must apply rotation matrices to them in order to account for the arbitrary orientation of the grid.
 Indeed, these Jones matrices are valid for grid lying in the $(x, y)$ plane, with the wires along $x$.
-Doing this follows the usual method for rotating Jones matrices described by \cref{eq:jones_rotation_using_transpose}.
+
 
 
 
@@ -3195,7 +3259,7 @@ Ports 1 and 6 are open to the outside world.
 
 \begin{figure}[hbtp]
     \centering
-    \input{\MyGraphicsPath simple_cavity_principle.pdf_tex}
+    \input{simple_cavity_principle.pdf_tex}
     \caption{Simple cavity, principle.}
     \caption*{
         Two reflective surfaces facing each other form a cavity.
@@ -3280,12 +3344,12 @@ The power that is not transmitted through the cavity is reflected back to the so
 A thin dielectric film can be used as a beam splitter, as illustrated in \cref{fig:beam_splitter_principle}.
 \begin{figure}[hbtp]
     \centering
-    \input{\MyGraphicsPath beam_splitter_principle.pdf_tex}
+    \input{beam_splitter_principle.pdf_tex}
     \caption{Beam splitter, principle.}
     \label{fig:beam_splitter_principle}
 \end{figure}
 
-This setup is one of the simplest way to inject LO and sky signal together on a mixer.
+This setup is one of the simplest way to inject local oscillator (LO) and sky signal together on a mixer.
 What we have here is a heterodyne telescope.
 The very transparent thin film couples most of the sky signal to the mixer, while coupling almost none of the local oscillator noise.
 Unfortunately, the thin film is also transparent to the LO signal (narrow line at the LO frequency) required to pump the mixer, so the LO signal must be very strong.

@@ -43,15 +43,21 @@
 \usepackage{graphicx}
     % Can't have pictures/photos/figures from files without that.
     % Note that vanilla latex will only accept eps.
-    
-\usepackage{subfigure}
-    % Lets me have labels such as a) b) c) inside a figure environment.
+
+
+\usepackage{import}
+    % Facilitates the organization of the book.  I can place each chapter in its own
+    % directory, along with its images.
+
 
 \usepackage[font=footnotesize, labelfont=bf]{caption}
     % So that I can add long captions under figures.
     % It provides me with \caption* that does not appear in the list of
     % figures but formats the text like \caption does.  It also lets me
     % use line breaks in the caption, and even bullet/enumerated lists.
+
+\usepackage{subcaption}
+    % Lets me have labels such as a) b) c) inside a figure environment.
 
 \usepackage[table]{xcolor}
     % xcolor gives color.
@@ -62,6 +68,8 @@
     % For professional-looking tables.
     % Brings the \toprule, \midrule and \bottomrule.
     % Remember not to use vertical rules in tables: they look cheap.
+
+\usepackage{multirow}
 
 \usepackage{tabularx}
 
@@ -85,15 +93,21 @@
 \usepackage{varioref}
     % For fancier references that also tell the page number.
 
-\usepackage[plainpages=false]{hyperref}
-    % Required direct pdf output, therefore all figures should be pdf too.
+\usepackage[plainpages=false, hypertexnames=false]{hyperref}
+    % Requires direct pdf output, therefore all figures should be pdf too.
     % This creates hyperlinks all over the place to jump to figures, references,
     % chapters and all.
+    % hypertexnames=false makes the package dumber, allowing it to work even if
+    % there are several chapter 1 in the document.
+    %
     
 \usepackage{cleveref}
     % Should make the typesetting of cross references more consistent.
     % Note that I needed to install a recent version of this package, the one I had
     % was too old to handle algorithms properly.
+    % NOTE that cleveref is confused by the subcaption package.  Whenever you place
+    % a label in a subfigure, cleveref hangs forever.  The label at the figure level
+    % works fine though.  So, no labeling of subfigures :(.
 
 % According to
 % http://tex.stackexchange.com/questions/113719/cleveref-fails-to-reference-algorithms
@@ -110,3 +124,4 @@
 \newcommand{\abs}[1]{\left| #1 \right|}
 \newcommand{\vect}[1]{\mathbf{#1}}
 \newcommand{\vangle}[2]{\left(#1, #2\right)}  % Angle between vectors.
+\newcommand{\transition}[3]{$\ce{#1}_{#2 \rightarrow #3}$}
