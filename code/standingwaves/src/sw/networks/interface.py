@@ -24,13 +24,31 @@ InterfaceGeometry = collections.namedtuple("InterfaceGeometry",
                                            "k2 k3 k4")
 
 def InterfaceNormal(na, nb):
+    """
+    na: refractive index on the side of the port 0.
+    nb: refractive index on the side of the port 1.
+
+    The result has identical components in the three dimensions.
+    This is fine as long as the incoming wave is transverse.
+
+    """
     ra, ta = geo.FresnelNormal(na, nb)
     rb, tb = geo.FresnelNormal(nb, na)
     I = np.identity(3, dtype=complex)
-    return np.array(np.bmat([[ra * I, tb * I],
-                             [ta * I, rb * I]]))
+    S00 = ra * I
+    S01 = tb * I
+    S10 = ta * I
+    S11 = rb * I
+    return np.array(np.bmat([[S00, S01],
+                             [S10, S11]]))
 
 def _InterfaceGeometry(na, nb, n, k1):
+    """
+    na: refractive index on the side of the ports 0 and 1 (A side).
+    nb: refractive index on the side of the ports 2 and 3 (B side).
+    n : normal to the surface, point to the A side.
+    k1: direction of incidence for the port 0.
+    """
     u = geo.ComputeIncidencePlaneNormal(n, k1)
     # Because of the way we made u, theta_a is always going to be positive.
     # So instead of this:

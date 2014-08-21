@@ -1,44 +1,321 @@
 \cleardoublepage
 \chapter{HIFI Standing wave calibration}
+
+%=============================================================================
 \section{Current HIFI calibration}
 
-HIFI uses a four-points calibration scheme to calibrate its flux: source, reference, hot and cold.
-These four equations can be used to retreive four variables.
-However, there are many more variables:
+%-----------------------------------------------------------------------------
+\subsection{Introduction}
+In his paper \citetitle{ossenkopf2002intensity} \cite{ossenkopf2002intensity}, \citeauthor{ossenkopf2002intensity} describes the various calibration schemes used in HIFI, with a strong emphasis on their effect on standing waves.
+The four observing modes, as we name them currently, are the following:
 \begin{itemize}
-    \item LSB sky signal
-    \item USB sky signal
-    \item LSB LO signal
-    \item USB LO signal
-    \item LSB cold black body signal
-    \item USB cold black body signal
-    \item LSB hot black body signal
-    \item USB hot black body signal
-    \item coupling mixer -- LSB sky
-    \item coupling mixer -- USB sky
-    \item coupling mixer -- LSB LO
-    \item coupling mixer -- USB LO
-    \item coupling mixer -- LSB CBB
-    \item coupling mixer -- USB CBB
-    \item coupling mixer -- LSB HBB
-    \item coupling mixer -- USB HBB
-    \item LSB mixer gain
-    \item USB mixer gain
-    \item LSB mixer noise
-    \item USB mixer noise
-    \item spectrometer gain
-    \item spectrometer noise
+    \item position switch;
+    \item dual beam switch;
+    \item frequency switch; and
+    \item load chop.
 \end{itemize}
-The first two are what we are looking for, the rest is just annoying.
-Too many variables, not enough equations, we need to make assumptions.
-My model is here to provide information on all the ``coupling'' variables.
+They are briefly described in \citetitle{AA_537_A17} \cite{AA_537_A17}.
+These four observing modes have commonalities: there is always a reference subtraction, and the bandpass calibration is done with a measurement on internal hot and cold black bodies.
+Before diving into the differences between the four observing modes and how they deal with standing waves, let us spend some time explaining the goal of the reference subtraction and bandpass calibration.
+
+%-----------------------------------------------------------------------------
+\subsection{Reference subtraction}
+The goal of the reference subtraction is to remove the strong noise originating from the telescope itself.
+Indeed, its primary mirror has a temperature of about \SI{80}{\kelvin} \cite{Sein2004mirror}.
+The local oscillator is also a source of noise of about \SI{120}{\kelvin}.
+Finally, the focal plane unit of HIFI itself has a temperature of about \SI{13}{\kelvin}.
+Subtracting the signal received from a reference point in the sky that is devoid of emission actually cleans the spectrum taken on the source from all these noise contributions.
+This works only if the instrument does not change significantly between the integration on the source and that on the reference.
+Possible changes are thermal instabilities and deliberate changes in the optical paths resulting from the actuation of the chopper or the diplexers.
+
+Subtracting spectra taken with different optical paths can result in visible distorsions of the calibrated spectrum, notably in the form of ripples on the baseline.
+These ripples are a result of standing waves.
+Standing waves modulate both the astronomical signal and the telescope noise.
+The telescope noise has often much more power than the astronomical (line and/or continuum) signal.
+Because the noise is so powerful, even a relatively small residual due to a minute change in standing waves can have an absolute level commensurable with that of the astronomical signal.
+For example, a \SI{100}{\kelvin} noise that differs by only \SI{1}{\percent} between the Source and Reference spectra leaves a \SI{1}{\kelvin} residual on the calibrated spectra, which is very significant in many observations.
+
+There is one important point to remember here: even the best reference source in the universe cannot correct for the effect of the standing waves on the useful astronomical signal.
+The best that the reference subtraction can do is perfectly remove any noise contribution from the satellite itself.
+The following equations illustrate the principle.
+\begin{align}
+    c_\text{source}    &= \eta_\text{sky} J_\text{source} + \eta_\text{telescope} J_\text{noise} \notag
+    \\
+    c_\text{reference} &= \eta_\text{sky} J_\text{reference} + \eta_\text{telescope} J_\text{noise} \notag
+    \\
+    c_\text{source} - C_\text{reference} &= \eta_\text{sky} (J_\text{source} - \underbrace{J_\text{reference}}_{=0}) \label{eq:remove_noise_only}
+\end{align}
+Here, $c$ refers to the output of the spectrometer and $J$ to the power of the signal coming from the sky.
+The efficiency $\eta$ contains the beam couplings, the standing wave modulations, the mixer gain, and the CCD conversion factor.
+The effect of the standing waves that modulate the astronomical signal is in $\eta_\text{sky}$; it is not removed by the reference subtraction.
+
+This brings us to the second part of the calibration: the bandpass calibration.
+
+%-----------------------------------------------------------------------------
+\subsection{Bandpass calibration}
+
+The purpose of the bandpass calibration is to determine the value of $\eta_\text{sky}$ so that we can retreive the value of the incoming power $J_\text{source}$ from the output of the spectrometer.
+
+In HIFI, the bandpass calibration is done by looking at two internal black bodies.
+The cold black body has a temperature of about~\SI{13}{\kelvin}.
+The hot black body has a temperature of about~\SI{100}{\kelvin}.
+Since we know the temperature of the black bodies, we know the power of their emission $J_\text{hot}$ and $J_\text{cold}$.
+The expectation is that the spectra measured on the black bodies follow the following equations:
+\begin{align}
+    c_\text{hot}  &= \eta_\text{sky} J_\text{hot} + \eta_\text{telescope} J_\text{noise} \notag
+    \\
+    c_\text{cold} &= \eta_\text{sky} J_\text{cold} + \eta_\text{telescope} J_\text{noise} \notag
+    \\
+    c_\text{source} - c_\text{cold} &= \eta_\text{sky} (J_\text{hot} - J_\text{cold}) \label{eq:ideal_calibration_loads}
+\end{align}
+With \cref{eq:ideal_calibration_loads} we can retreive the efficiency $\eta_\text{sky}$ and use it to solve \cref{eq:remove_noise_only} for $J_\text{source}$.
+\begin{equation}
+    J_\text{source} =
+    \frac{
+        c_\text{source} - c_\text{reference}
+    }{
+        c_\text{hot} - c_\text{cold}
+    }
+    (J_\text{hot} - J_\text{cold})
+    \label{eq:ideal_calibration_solution}
+\end{equation}
+
+Unfortunately, things are not that ideal.
+The optical path is different for the sky, cold and hot integrations.
+This means that the standing waves are different.
+In addition, the telescope noise from the hot and that from the cold may differ.
+\begin{align}
+    c_\text{hot}  &= \eta_\text{hot} J_\text{hot} + \eta_\text{hot, telescope} J_\text{hot, noise} \notag
+    \\
+    c_\text{cold} &= \eta_\text{cold} J_\text{cold} + \eta_\text{cold, telescope} J_\text{cold, noise} \notag \label{eq:real_calibration_loads}
+\end{align}
+The difference in optical paths between the hot and the cold prevents the telescope noise from being perfectly removed, even if it is the same in the two phases.
+Even if the noise were perfectly removed, the bandpass $\eta$ for the hot and the cold are not the same, and they also differ from the bandpass on the sky.
+Only at the first order we can assume $\eta_\text{cold} \approx \eta_\text{hot} \approx \eta_\text{sky}$.
+This assumption gives ``good enough'' results, but not perfect.
+This is why standing waves are not perfectly calibrated out.
+They are not calibrated out of the astronomical signal since $\eta_\text{sky}$ is only approximated by $\eta_\text{cold}$ and $\eta_\text{hot}$.
+They are not totally calibrated out of the telescope noise either.
+
+%-----------------------------------------------------------------------------
+\subsection{HIFI observing modes and standing waves}
+The fundamental difference between the four observing modes is the choice of reference point. Let us go over the four observing modes and review their effectiveness at dealing with removing the telescope noise in presence of standing waves.
+
+In position switch, the telescope slews from a source position ``On'' to a reference position ``Off'' which has ideally no emission.
+This mode is often used for sources that are more extended than 3~arcminutes, as the chopper can only go that far.
+An advantage of this observing mode is that the optical path is the same for the On and the Off.
+An inconvenient is that slewing the telescope takes time.
+Because the optical path is constant, we expect the standing waves to remain the same for the two phases.
+Therefore, subtracting the Off from the On should perfectly remove the telescope noise.
+
+In dual beam switch, a chopper (actuated mirror) alternates between two positions on the sky: the source ``On'' and a reference ``Off''.
+The reference must be within 3~arcminutes of the source, this is a limitation of the chopper.
+The advantage of chopping is that it is very fast: actuating a mirror is much faster than slewing an entire telescope.
+The inconvenient is that chopping changes the optical path, and therefore the standing waves.
+As a result, the telescope noise detected by the mixer differs between the On and the Off.
+Simply subtracting the Off from the On will not properly get rid of that noise.
+To correct that, we combine chopping with slewing.
+We first observe the source with the chopper on the left and the reference with the chopper on the right.
+Then we slew the telescope so that we can observe the same source with the chopper on the right this time, and the reference will be taken with the chopper on the left.
+Technically, the two references are different points on the sky, but since none of them is supposed to emit any radiation, it does not matter.
+That way, we can subtract the left reference from the left source, the right reference from the right source, and average the results.
+This scheme is more time-efficient than position switch, as we observe the source both before and after slewing.
+
+In frequency switch, the reference is at the same position as the source, but observed at a different frequency.
+The frequency throw is relatively small, a few tens of megahertz.
+This is sufficient to prevent the line from overlapping itself in the two phases, but still small enough that the continuum level remains the same.
+The line is observed in both phases, which makes this mode very time-efficient.
+However, when the local oscillator frequency changes, many instrumental parameters change.
+These changes have an influence on the reflectivity of the mixer and the local oscillator, which in turn changes the standing waves.
+As a result, the noise from the telescope cannot be perfectly canceled.
+By choosing a frequency throw that matches the period of the dominant standing wave, we can at least cancel the contribution of that standing wave to the telescope noise.
+
+Finally, in load chop, the cold black body is used as a reference.
+This mode is useful when there are no emission-free regions near the source.
+However, since the optics of the instrument change between the source and the reference, the noise of the telescope cannot be perfectly canceled.
+
+%-----------------------------------------------------------------------------
+\subsection{Conclusion}
+The equations presented in this section are simplified version of the ones used in HIFI.
+Although simplified, they do accurately illustrate the limitations of the current calibration schemes of HIFI.
+\citeauthor{ossenkopf2002intensity}'s memo \cite{ossenkopf2002intensity} contains more details.
+
+The calibration schemes of HIFI do two things: they remove the noise from the telescope, and tehy 
+
+
+%=============================================================================
+\section{Correct HIFI calibration}
+The four measurements done during an observation (source, reference, hot, cold) correspond to four equations.
+These four equations can be used to retreive four variables.
+However, as \citeauthor{ossenkopf2002intensity} describes in detail in his memo~\cite{ossenkopf2002intensity}, there are many more variables.
+Let us reproduce the first equation from that article.
+% The magic parameter of the array command is taken from
+% http://tex.stackexchange.com/questions/82485/alignat-makes-3-good-alignments-and-1-bad
+\begin{equation}
+    \begin{array}{*{15}{@{}>{{}}l<{{}}@{}}}
+            c
+        &
+            =
+        &
+            \gamma_\text{ssb}
+        &
+            \lbrace
+            \eta_\text{\,l,ssb}
+        &
+            [
+                \eta_\text{sf,ssb}
+        &
+                J_\text{S,ssb}
+        &
+                +
+        &
+                (1 - \eta_\text{sf,ssb}
+        &
+                )
+        &
+                J_\text{R,ssb}
+        &
+            ]
+        &
+            +
+            (1 - \eta_\text{\,l,ssb}
+        &
+            )
+        &
+            J_\text{T,ssb}
+        &
+            \rbrace
+        \\
+        &
+            +
+        &
+            \gamma_\text{isb}
+        &
+            \lbrace
+            \eta_\text{\,l,isb}
+        &
+            [
+                \eta_\text{sf,isb}
+        &
+                J_\text{S,isb}
+        &
+                +
+        &
+                (1 - \eta_\text{sf,isb}
+        &
+                )
+        &
+                J_\text{R,isb}
+        &
+            ]
+        &
+            +
+            (1 - \eta_\text{\,l,isb}
+        &
+            )
+        &
+            J_\text{T,isb}
+        &
+            \rbrace
+        \\
+        &
+            +
+        &
+            \gamma_\text{rec}
+        &
+            \multicolumn{12}{l}{
+                 J_\text{rec} + z
+            }
+    \end{array}
+    \label{eq:volker_count}
+\end{equation}
+Let us go briefly over the parameters in that equation, a more detailed description is given in the original paper.
+
+In \cref{eq:volker_count}, $c$ represents the output of the spectrometer in its arbitrary unit; in the case of the HIFI wideband spectrometer, $c$ is in CCD counts.
+
+The parameters $\gamma_\text{ssb}$ and $\gamma_\text{isb}$ relate to the bandpass of the electronics.
+This includes the mixer and all the IF-chain: amplifiers, wave guides, and eventually spectrometer (counts).
+These parameters provide the conversion from the unit in which we measure the power of the incoming signal (Kelvins, Janskys), and the output of the spectrometer.
+Because HIFI is a double-sideband instrument, each channel $c$ receives power from two sidebands: the signal sideband (ssb) and the image sideband (isb).
+The signal sideband is the sideband in which you place the line you are observing, it can be the upper or lower sideband.
+A priori, most parameters differ in both sidebands, this is why many variables in this equation are indexed with their sideband.
+
+The parameters $\eta$ are dimensionless and represent optical efficiencies.
+
+The sources of power appear as $J$.
+$J_\text{S}$ is the astronomical or calibration source at which we are looking.
+$J_\text{R}$ is the background radiation from the sky that is around (or behind in case of optically thin source) the astronomical source.
+$J_\text{T}$ is the emission from the telescope itself.
+
+The quantity $\gamma_\text{rec} J_\text{rec}$ relates to the receiver temperature, and $z$ is the base output of the spectrometer in absence of any input (dark current in case of a CCD).
+
+\Cref{eq:volker_count} is still quite optimistic.
+Indeed, it considers only one term of telesope noise.
+In reality, most elements produce noise: the primary mirror is at about~\SI{80}{\kelvin}, the local oscillator at \SI{120}{\kelvin}, and every element inside the focal plane unit is at about \SI{13}{\kelvin}.
+And that is just counting black-body noise, not the emission from the local oscillator diodes for example.
+It is possible to gather all these noise terms under a single umbrella term $J_\text{T}$ but this hides the fact that each of them has its own efficiency coefficient to corresponding to its coupling to the mixer.
+Instead of $(1-\eta_\text{\,l} J_\text{T})$, we are actually facing something like
+$1 - \sum_{i=1}^N (\eta_{\text{T}, i} J_{\text{T}, i})$.
+We can also simplify the writing by removing the explicit constraint that the sum of the efficiencies must be 1.
+The constraint remains true and we must not forget it, but we can simplify the writing by simply assigning an efficiency to each source:
+\begin{equation}
+    c =
+    \gamma_\text{ssb}
+    \sum_{i=1}^N \eta_{i\text{,ssb}} J_{i\text{,ssb}}
+    +
+    \gamma_\text{isb}
+    \sum_{i=1}^N \eta_{i\text{,isb}} J_{i\text{,isb}}
+    + \gamma_\text{rec} J_\text{rec} + z
+\end{equation}
+We can decide that $i=1$ corresponds to the astronomical source, $i=2$ to the reference, and the rest to various sources of noise.
+
+What do these efficiencies $\eta$ actually mean?
+They are the efficiencies at which the sources couple to the telescope beam.
+If we follow the notations laid out by \citeauthor{mangum2006tempscales} in his paper \citetitle{mangum2006tempscales}~\cite{mangum2006tempscales},
+then our $\eta$ corresponds to $\frac{G}{4\pi}\eta_c$.
+
+$\eta_c$ is the efficiency at which the source couples to the telescope beam.
+It is normalized11
+This efficiency is the product of two other efficiencies: the main beam efficiency $\eta_\text{mb}$ (independant of the source) and the efficiency at which the source couples to the main diffraction beam of the telescope $\eta_\text{cmb}$ (dependant of the source brilliance distribution).
+
+
+
+
+The method explained in \cref{sec:chapter2}, using properly parametrized network models, should be able to predict the loss due to standing waves.
+If the model is correct, then it can compute the values of each $\eta$ parameter.
+This reduces the number of unknowns in the system of equations.
+
+The unknowns that are left are $\gamma_\text{ssb}$, $\gamma_\text{isb}$,
+$\gamma_\text{rec} J_\text{rec}$, $z$, and all the $J$.
+
+The quantity $z$ represents the zero counts of the backend, which can be easily measured when terminating the backend input.
+This is regularly done in HIFI observations.
+Therefore, $z$ is known.
+
+The differences $\text{source} - \text{reference}$ and $\text{hot} - \text{cold}$ cancel the term $\gamma_\text{rec} J_\text{rec}$.
+It is still unknown but its value does not matter.
+
+The remaining unknowns are the sideband gains $\gamma$ and the various signals or noise $J$.
+Let us assume that $J_1$ corresponds to the source of interest, $J_2$ to the background radiation from the sky around the source (reference), $J_3$ the noise from the local oscillator, $J_4$ the noise from the primary mirror, and that other noises have the next $J$.
+$J_1$ is the main unknown, it is what we eventually wish to determine.
+$J_2$, the emission from the empty sky, should often be 0.  If it is not 0, then we either model it or we measure it with another observation.
+The values of the other $J$, the other sources of noise, are unknown (although we do have a rough idea).
+
+When the reference count is subtracted from the source count, many $J$ terms cancel out.
+When the emission in the reference is 0, then the only remaining terms are the emission of the source in the two sidebands, $J_{1,\text{ssb}}$ and $J_{1,\text{isb}}$.
+
+
 
 \section{New calibration using the LO power and my model}
 The LO power has always been ignored.
 However, even though it is weakly coupled to the mixer, it is so strong that we get a significant amount of energy from it.
-If we say that the LO is a 120 Kelvin black body, then it is perfectly reasonable to expect the mixer to see one or two kelvins from it.
+If we say that the LO is a 120 Kelvin black body, then it is perfectly reasonable to expect the mixer to see one or two kelvins from it (at least in diplexer bands).
 This is commensurable with many astronomical signals, even sometimes dominant.
-The current calibration pretends that the LO does not exist, assuming that the subtractions src-ref and hot-cold take it away.  This is not true for hot-cold as the standing waves are different.
+The current calibration pretends that the LO does not exist, assuming that the subtractions src-ref and hot-cold take it away.
+This is not true for hot-cold as the standing waves are different.
+
+
+%=============================================================================
 
 \section{Deriving model parameters from HIFI data}
 We need the best knowledge of the instrument.
@@ -54,4 +331,197 @@ However, they use diplexers, so my band 3 model can work here too.  It may just 
 \subsection{Phase factors}
 The mixers and the local oscillators have complex coefficient of reflections.
 It is necessary to know them in order to predict the phase of the standing wave pattern.
-Here, we attempt to reproduce some of the calibration observations we took on January.  There are diplexer scans that should help with the phase factor of the reflection coefficient of the LO and mixer, and there are observations of a CO line to constrain the sideband ratio.
+
+\subsubsection{Phase of a cavity}
+The gain of a cavity is a product of three terms:
+\begin{itemize}
+    \item energy entering the cavity $t_{2 \leftarrow 1} s$;
+    \item infinite reflections $\sum_{k=0}^\infty (r^2s^2)^k$;
+    \item and energy leaving the cavity $t_{1 \leftarrow 2}$.
+\end{itemize}
+\begin{equation}
+    g = t_{2 \leftarrow 1} s
+    \left[ \, \sum_{k=0}^\infty (r^2s^2)^k \right]
+    t_{1 \leftarrow 2}
+    % Had to add a small space with \, inside the brackets, otherwise the square bracket
+    % touches the k in the sum and that's ugly.
+    \label{eq:gain_cavity}
+\end{equation}
+Where $t_{2 \leftarrow 1}$ is the transmission coefficient when entering the cavity,
+$t_{1 \leftarrow 2}$ is the transmission coefficient when leaving the cavity,
+$r$ is the reflection coefficient inside the cavity,
+$s$ is the effect of the propagation in space between the two surfaces of the cavity.
+All these numbers are complex numbers, they have a magnitude and an argument.
+What we call the phase factor of the cavity is the argument of $g$.
+
+What is the magnitude and argument of the term of infinite reflection?
+We pose $q = r^2s^2$ to lighten the next equations.
+Calculating the phase of $q$ from that of $r$ and $s$ is trivial.
+Assuming $\abs{q} < 1$, we have the following equality:
+\begin{equation}
+    \sum_{k=0}^\infty q^k = \frac{1}{1 - q} = q'
+\end{equation}
+We call $q'$ the infinite sum of $q^k$.
+What we are looking for is the magnitude and phase of $q'$.
+Let us write $q'$ in rectangular form, separating the real and the imaginary parts.
+\begin{align}
+    q'
+    &=
+    \frac{1}{1 - q}
+    \\
+    &=
+    \frac{1}{1 - q_r - i q_i}
+    \\
+    &=
+    \frac{1}{(1 - q_r) + i (-q_i)}
+    \\
+    &=
+    \frac{1}{z_r + i z_i}
+    \\
+    &=
+    \frac{z_r - i z_i}{(z_r + i z_i)(z_r - i z_i)}
+    \\
+    &=
+    \frac{z_r - i z_i}{z_r^2 + z_i^2}
+    \\
+    &=
+    \frac{z_r}{z_r^2 + z_i^2}
+    + i
+    \frac{-z_i}{z_r^2 + z_i^2}
+    \\
+    &=
+    q'_r + i q'_i
+    \\
+    &=
+    \abs{q'} \exp(i\theta')
+\end{align}
+The argument $\theta'$ of $q'$ is given by $\atantwo(q'_i, q'_r)$.
+The function $\atantwo$ is provided in many programming languages as a mean to retrieve an angle from a $x$ and a $y$ coordinate.
+It is defined as such:
+\begin{equation}
+    \atantwo(y, x) =
+    \begin{cases}
+        \arctan (y / x)       & x > 0 \\
+        \arctan (y / x) + \pi & y \ge 0, x < 0 \\
+        \arctan (y / x) - \pi & y < 0, x < 0 \\
+        +\pi/2                & y > 0, x = 0 \\
+        -\pi/2                & y < 0, x = 0 \\
+        \textrm{undefined}    & y = 0, x = 0
+    \end{cases}
+\end{equation}
+
+We can now express the argument of the gain of the whole cavity as the sum of the arguments of its three components.
+\begin{equation}
+    \arg(g) = \arg(t_{2 \leftarrow 1}) + \arg(s) + \theta' + \arg(t_{1 \leftarrow 2})
+\end{equation}
+
+This is useful:
+We can measure the standing wave pattern and obtain $\arg(g)$ from that measurement.
+If everything else is known, then we can solve this equation and retreive the argument of $r$, or at least that of $q$, which is often unknown.
+
+$g$ is a gain applied to an input field phasor~$a$ to produce an output phasor~$b$.
+\begin{equation}
+    b = g a
+\end{equation}
+What the spectrometer measures is not the field, however, it is the power.
+If we assume that the wave impedance is the same for $a$ and $b$, and that we note it $Z$, then the output power $B$ is given by the equation
+\begin{equation}
+    B
+    = \frac{b \bar{b}}{Z}
+    = \frac{g a \bar{g} \bar{a}}{Z}
+    = g\bar{g} \frac{a \bar{a}}{Z}
+    = g\bar{g} A
+    = \abs{g}^2 A
+\end{equation}
+What we see here is that we have access to the modulus (absolute value) of $g$ but not its argument.
+And this makes sense: a difference in the phase can be interpreted as a delay in time, due to a longer travel distance.
+Traveling in a lossless material changes the phase but not the power.
+Therefore measuring the power says nothing of the phase.
+
+For example, consider the reflection on a black body.
+Physically, the black body can be a hollow container that is coated to minimize reflections, and may contain scattering surfaces.
+Such a device does not have a clearly-defined surface on which the reflection occurs, and therefore predicting the argument of its reflection coefficient is difficult.
+It it typically something that needs to be fitted to real data.
+
+The analytic case that we have just shown is here to illustrate how one can recover the phase factor (or argument) of a reflection coefficient from the phase factor of the standing wave pattern which includes an infinite amount of reflection.
+This analytic case is, however, of little practical use in our situation.
+The model of HIFI is more complex, and solving numerically for the phase factor of the reflection coefficient of a black body may be more efficient.
+
+
+\subsubsection{Fitting a phase factor from a folded spectrum}
+
+Assume a very low quality cavity.
+The resulting standing wave has very weak harmonics and is decently approximated with a single cosine.
+\begin{align}
+    \text{LSB} &= c \left[ 1 + a \cos(F(f_\text{LO} + f) + \phi) \right]
+    \\
+    \text{USB} &= c \left[ 1 + a \cos(F(f_\text{LO} - f) + \phi) \right]
+\end{align}
+In these equations, $c$ is a constant continuum level, $a$ the amplitude of the standing wave pattern.
+$F$ is the period of the standing wave.
+$f$ is the intermediate frequency and $f_\text{LO}$ the local oscillator frequency.
+Therefore $f_\text{LO} - f$ is the lower sideband frequency and $f_\text{LO} + f$ is the upper sideband frequency.
+$\phi$ is a term of phase.
+
+\begin{gather}
+    \text{DSB} = c
+        \left[
+            2 + a 
+            \left[
+                \cos \left( F(f_\text{LO} + f) + \phi \right)
+                +
+                \cos \left( F(f_\text{LO} - f) + \phi \right)
+            \right]
+        \right]
+    \\
+    \begin{split}
+    = c
+        \left[
+            2 + 2a
+            \left[
+                \cos \frac{F(f_\text{LO} + f) + \phi + F(f_\text{LO} - f) + \phi}{2}
+            \right.
+        \right.\\
+        \left.
+            \left.
+                \cos \frac{F(f_\text{LO} + f) + \phi - F(f_\text{LO} - f) - \phi}{2}
+            \right]
+        \right]
+    \end{split}
+    \\
+    = 2c \left[ 1+a \cos(F f_\text{LO} + \phi) \cos(F f) \right] \label{eq:folded_cos}
+\end{gather}
+\Cref{eq:folded_cos} shows that there is a degeneracy between the amplitude and the phase of a folded standing wave pattern.
+Does the folded standing wave pattern has a small amplitude because its unfolded version has a low amplitude $a$, or is it a destructive interference due to the phase $F f_\text{LO} + \phi$?
+
+Another important point brought by \cref{eq:folded_cos} is that the phase of the frequency-dependant term is~0.
+This helps constraining~F.
+Finding the phase~$\phi$ requires fitting~$F$ and $A=2ca \cos(F f_\text{LO} + \phi)$
+independantly.
+Once~$F$ is known, and since we know the values of~$c$ (by measuring the continuum) and~$a$ (by knowing the temperature of our black bodies) we can extract~$\phi$ from~$A$.
+
+On the data of Mars in band 1B, I fit these parameters:
+\begin{align*}
+    A_0 &= \phantom{-}\num{1.4107e-2} \pm \SI{4.0e-5}{\kelvin}
+    &
+    T_0 &= \num{89012426} \pm \SI{587}{\hertz}
+    \\
+    A_1 &= \num{-1.0346e-2} \pm \SI{4.0e-5}{\kelvin}
+    &
+    T_1 &= \num{97228552} \pm \SI{956}{\hertz}
+\end{align*}
+
+How does the uncertainty on the periods $T_0$ and $T_1$ compare to the sensitivity of $A = 2ca \cos(F f_\text{LO} + \phi)$?
+In our case, $f_\text{LO} = \SI{610.001}{\giga\hertz}$.
+If we take the fitted value of $T_0$, then we are dealing with a phase of
+$f_\text{LO} / T_0 = \num{610.001e9} / \num{89012426} \approx \num{6852.987}$.
+We are talking cycles here, multiply by $2\pi$ to get radians.
+If we add \SI{587}{\hertz} to $T_0$ then the phase is \num{6852.982} cycles.
+The difference between the two is 0.04 cycles (about \SI{14}{\degree}) which is well below~1.
+This means that the uncertainty on the standing wave period is very low; it does fix the phase with a very high precision.
+We know that when the standing wave pattern reaches the LO frequency, it has cycled 6852.98 times.
+
+
+%=============================================================================
+\section{A model of HIFI band 1}
+Here I present a drawing of the model.

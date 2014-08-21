@@ -2,6 +2,9 @@
 \chapter{Introduction to standing waves and HIFI}
 Standing waves are a result from interferences, and interferences are a consequence of coherence.
 
+\section{HIFI}
+Chopper: it changes the optics of the instrument.  Therefore it changes standing wave patterns.  \todo{link to chapter 4, when I explain how chopping messes up the 4 point calibration scheme because HIFI is coherent}
+
 \section{Coherence and interference}
 The mixer receives power from many sources:
 \begin{itemize}
@@ -54,6 +57,19 @@ Coherent system are always polarized.
 
 \section{Cavities}
 Two reflective surfaces facing each other form a cavity.
+
+INTRODUCE TERMS
+
+Fabry-Perot interferometers.
+
+Ripples: seen on the spectra.  Instead of "standing wave patterns".
+
+Whyborn 2002: cavities modulate not only the coupling, but also the intrinsic noise of the mixer itself.
+
+Reflection spoiler: scatter cone, the nipple on the secondary.
+
+
+
 At least one of the two surfaces must be partly transparent so that the light can enter and exit the cavity.
 The light that enters the cavity can come out after any number $N$ of round trips.
 If the distance between the surfaces is $d$, the length of a round trip is $2d$.
@@ -110,6 +126,17 @@ Low Q and high Q: sine is an approximation that works only at low Q.
     F = \frac{c}{2d} \label{eq:cavity_period}
 \end{equation}
 
+From Whyborn 2002, we can use a cosine to model the first order of the standing wave amplitude as a function of frequency.
+\begin{equation}
+    a(l) = A \cos
+    \left[
+        \left(
+            2 \pi \frac{2l}{\lambda}
+        \right)
+        + \theta
+    \right]
+\end{equation}
+
 
 \section{The Heterodyne Instrument for the Far Infrared}
 
@@ -126,6 +153,20 @@ This is a hundred times the longest distance inside HIFI.
 Therefore, in HIFI, the signals from the LO, the calibration sources and the sky are coherent.
 
 Show spectra with standing wave patterns.
+
+
+Discuss the black bodies.  Their temperature is monitored and reported at least every four seconds with a precision of a hundredth of a Kelvin \todo{citation}.
+Of course, a thermometer measures its own temperature; it is also heated up locally by the current required to operate it.
+How well the temperature of the black body matches that of the thermometer 
+
+
+Why is HIFI polarized?
+We could have used a thin film beam splitter to inject the LO into the signal, at least for the bands in which we have a bunch of LO power.
+I asked Brian Jackson why.
+He came up with two possible reasons:
+1) mixers are, by default, polarized.
+2) redundancy.
+To know the real reason, I should ask someone like Nick Whyborne.
 
 
 

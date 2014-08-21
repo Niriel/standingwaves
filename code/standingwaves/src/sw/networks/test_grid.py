@@ -195,10 +195,20 @@ class TestRT(unittest.TestCase):
         a = np.array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         e = np.array([0, 0, 0, .25, 0, .25, .25, .25, 0, 0, 0, 0])
         b = np.abs((G.dot(a))) ** 2  # Work in power.
-        print e
-        print b
-        print np.abs(b - e)
         self.assertTrue(np.allclose(b, e, 0, 1.e-2))
+    def testLeakage(self):
+        # Not a real test, I'm just measuring how much a grid leaks.
+        a = 1e-6
+        d = 4e-6
+        s = 1e10
+        f = 1e12
+        tb = geo.TaitBryan(0, 1, 2)
+        attitude = (geo.TAU / 8, 0, 0)
+        k1 = np.array([0, 0, 1])
+        G = grid.Grid(a, d, s, f, tb, attitude, k1)
+        a = np.array([0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        b = np.abs((G.dot(a))) ** 2  # Work in power.
+        print b
 
 
 if __name__ == "__main__":

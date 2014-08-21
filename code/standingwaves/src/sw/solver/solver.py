@@ -19,16 +19,28 @@ def ExpandCouplingsTo3d(couplings):
         couplings3d.extend([{cax, cbx}, {cay, cby}, {caz, cbz}])
     return couplings3d
 
+def CheckUnusedCouplings(couplings, n, known_unused):
+    """Return an exception if missing couplings, otherwise None."""
+    unused = set(xrange(n))
+    map(unused.discard, known_unused)
+    for a, b in couplings:
+        unused.discard(a)
+        unused.discard(b)
+    if len(unused) != 0:
+        return ValueError("Some ports are not used: %r." % unused)
+    return None
+
 def CheckCouplingSanity(couplings, n):
-    """No return value, raise exception if insane."""
+    """Return exception if insane, otherwise None."""
     counters = {}
     for coupling in couplings:
         for port in coupling:
             if not (0 <= port < n):
-                raise ValueError("Port %i is outside the [0, %i] range." % (port, n - 1))
+                return ValueError("Port %i is outside the [0, %i] range." % (port, n - 1))
             counters[port] = counters.get(port, 0) + 1
             if counters[port] > 1:
-                raise ValueError("Port %i is used more than once." % port)
+                return ValueError("Port %i is used more than once." % port)
+    return None
 
 def FindInside(couplings):
     inside = set()
@@ -96,7 +108,7 @@ def SolveCouplings(couplings, n):
     no = len(outside)
     return P, Q, no
 
-def SolveNetworks(P, Q, no, networks):
+def SolveNetworks((P, Q, no), networks):
     S = GatherNetworks(networks)
     if Q.shape != S.shape:
         raise ValueError("Declared number of ports (%i) does not match the sum of the ports of each network (%i)." % (Q.shape[0], P.shape[0]))
@@ -117,19 +129,24 @@ def SolveInputs(P, S1oo, S1oi, S1io, LU, a1o, c1o, c1i):
         b1 = np.concatenate((b1o, b1i))
     return b1
 
+def Solveb((P, Q, no), (S1oo, S1oi, S1io, LU), a, c):
+    a1 = Q.dot(a)
+    c1 = Q.dot(c)
+    a1o, _ = SeparateVectorRegions(a1, no)
+    c1o, c1i = SeparateVectorRegions(c1, no)
+    b1 = SolveInputs(P, S1oo, S1oi, S1io, LU, a1o, c1o, c1i)
+    b = (Q.T).dot(b1)
+    return b
+
 def Solver(n, couplings):
-    CheckCouplingSanity(couplings, n)
-    P, Q, no = SolveCouplings(couplings, n)
+    err = CheckCouplingSanity(couplings, n)
+    if err is not None:
+        raise err
+    solvedcouplings = SolveCouplings(couplings, n)
     def sendNetworks(networks):
-        S1oo, S1oi, S1io, LU = SolveNetworks(P, Q, no, networks)
+        solvednetworks = SolveNetworks(solvedcouplings, networks)
         def solve(a, c):
-            a1 = Q.dot(a)
-            c1 = Q.dot(c)
-            a1o, _ = SeparateVectorRegions(a1, no)
-            c1o, c1i = SeparateVectorRegions(c1, no)
-            b1 = SolveInputs(P, S1oo, S1oi, S1io, LU, a1o, c1o, c1i)
-            b = (Q.T).dot(b1)
-            return b
+            return Solveb(solvedcouplings, solvednetworks, a, c)
         return solve
     return sendNetworks
 

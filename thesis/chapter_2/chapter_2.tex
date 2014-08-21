@@ -1,5 +1,6 @@
 \cleardoublepage
 \chapter{Computing standing waves}
+\label{sec:chapter2}
 \section{Principle}
 Our method is inspired from laser and circuit theory: we deal with discrete inputs and outputs rather than, for example, a spatial description of the fields.
 A system like the Focal Plane Unit of HIFI comprises a few dozens of optical elements~\cite{jackson2002hifi}, referred in the literature as ``networks''~\cite{siegman1986lasers}: wire grid polarizers, roof-top mirrors, horns, attenuators, free space, all having one or more input and output.
@@ -1036,11 +1037,11 @@ Unless the sources are actually phase-locked to each other, the proper way of ca
 In the case of HIFI, the radiation for the local oscillator, the cryostat windows, the black bodies and the sky must be solved separately.
 
 As explained earlier, sources that are a priori incoherent become coherent when the bandwidth is narrow enough.
-In the case of HIFI, the bandwidth is narrower than \SI{1}{\mega\hertz},
+In the case of HIFI, the bandwidth is narrower than \SI{1}{\mega\hertz}
 which gives a coherence time $t_c = 1/\SI{1}{\mega\hertz} \approx \SI{1}{\microsecond}$.
 This means that, for a duration of~\SI{1}{\micro\second}, the signal coming from the astronomical object, or the thermal noise coming from the local oscillator or the calibration black bodies, will be coherent.
 As such, it has a polarization and a phase.
-We can decompose the polarization of that wave on any convenient base, for example a orthonormal $(\vect{u_x}, \vect{u_y})$ base.
+We can decompose the polarization of that wave on any convenient base, for example an orthonormal $(\vect{u_x}, \vect{u_y})$ base.
 This allows us to desbribe the wave with \cref{eq:incoherent_decomposed}.
 \begin{equation}
     \vect{E} = E_0 \cos(kz - \omega t + \phi_x) \vect{u_x}

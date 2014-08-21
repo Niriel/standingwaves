@@ -1,7 +1,7 @@
 import numpy as np
 
-def Mixer(rx, ry, tx, ty, tb, attitude):
-    Rd = tb.rot(*attitude)
+def Mixer(rx, ry, tx, ty, rot):
+    Rd = rot
     Ri = Rd.T
     S11 = np.array([[rx, 0, 0],
                     [0, ry, 0],

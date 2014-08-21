@@ -10,11 +10,11 @@ USE_PS = True
 import numpy as np
 if USE_PS:
     import matplotlib
-    matplotlib.use('ps')
+    matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
-import my_style
+from style import my_style
 
 
 
@@ -60,7 +60,7 @@ def load(filename):
     return lo, x, y
 
 
-with my_style.latex(my_style.WIDTH_IEEE_COLUMN):
+with my_style.latex(my_style.WIDTH_ARTICLE_KOSMA / 2):
     my_style.pretty(1)
     ax_profile = plt.subplot(1, 1, 1)
     los = []
@@ -143,6 +143,6 @@ with my_style.latex(my_style.WIDTH_IEEE_COLUMN):
         noise = np.median(noises)
         print scatter / noise
     if USE_PS:
-        plt.savefig('obsid_5000352C.eps', bbox_inches='tight')
+        plt.savefig('obsid_5000352C.pdf', bbox_inches='tight')
     else:
         plt.show()

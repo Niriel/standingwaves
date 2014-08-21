@@ -134,7 +134,7 @@ def plot(width, frequencies, b_lo, b_sky):
             plt.show()
 
     # Compute folded.
-    x_folded = xs[usb] - xs[usb][0]
+    x_folded = xs[usb] - lo_freq / 1.e9
     y_folded_h = lo_h[lsb] + sky_h[lsb] + lo_h[usb] + sky_h[usb]
     y_folded_v = lo_v[lsb] + sky_v[lsb] + lo_v[usb] + sky_v[usb]
 
@@ -277,6 +277,27 @@ def plot(width, frequencies, b_lo, b_sky):
         else:
             plt.show()
 
+    # Sideband ratio.
+    sbr_lo_h = lo_h[usb] / (lo_h[usb] + lo_h[lsb])
+    sbr_lo_v = lo_v[usb] / (lo_v[usb] + lo_v[lsb])
+    sbr_sky_h = sky_h[usb] / (sky_h[usb] + sky_h[lsb])
+    sbr_sky_v = sky_v[usb] / (sky_v[usb] + sky_v[lsb])
+    print "Sky H sbr stddev: %f." % np.std(sbr_sky_h)
+    print "Sky V sbr stddev: %f." % np.std(sbr_sky_v)
+    with style.latex(width):
+        style.pretty()
+        plt.figure(3)
+        plt.plot(x_folded, sbr_lo_h, '-', label=style.latexT("LO H"), color=style.COLORS_STD[1])
+        plt.plot(x_folded, sbr_lo_v, '--', label=style.latexT("LO V"), color=style.COLORS_STD[1])
+        plt.plot(x_folded, sbr_sky_h, '-', label=style.latexT("Sky H"), color=style.COLORS_STD[2])
+        plt.plot(x_folded, sbr_sky_v, '--', label=style.latexT("Sky V"), color=style.COLORS_STD[2])
+        plt.xlabel(style.latexT("Intermediate frequency [\\si{\giga\hertz}]"))
+        plt.ylabel(style.latexT("USB / (LSB + USB) [1]"))
+        plt.legend(loc="center right", prop={"size":6})
+        if USE_PDF:
+            plt.savefig("thin_film_beam_splitter_sbr.pdf", bbox_inches='tight')
+        else:
+            plt.show()
 
 
 def main(width):

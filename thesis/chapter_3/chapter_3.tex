@@ -18,12 +18,12 @@ IF
 
 \begin{figure}[hbtp]
     \centering
-    \includegraphics[width=\textwidth]{ports_diplexerband}
+    \includegraphics{ports_diplexerband}
     \caption{Networks and ports used in the model of a HIFI diplexer band.}
     \label{fig:ports_diplexerband}
 \end{figure}
 
-\begin{table}
+\begin{table}[hbtp]
     \begin{tabular}{rlll}
         \toprule
         nb & type & description & parameters \\
@@ -54,10 +54,6 @@ IF
         \bottomrule
     \end{tabular}
 \end{table}
-
-List the networks and the values of their parameters.
-Their default values are 'perfect'.
-Note that for grids, I cannot make it perfect.  But I can make the grid highly conductive and very thin.
 
 %=============================================================================
 \section{Exploration}
@@ -628,10 +624,10 @@ It is likely frequency-dependant.
 %-----------------------------------------------------------------------------
 \clearpage
 \subsection{Turn on the LO reflection}
-Until now, only the mixers and the rooftop mirrors have been reflective.
+Until now, only the H mixer and the rooftop mirrors have been reflective.
 Now, we make the local oscillator reflective as well.
-Like the mixer, the local oscillator is equipped with a horn that reflects one polarization and lets the other through.
-The polarization that does through hits the local oscillator diode and is reflected back toward the focal plane unit.
+Like the mixer, the local oscillator is equipped with a horn that reflects one polarization and lets the other through;
+the polarization that goes through hits the local oscillator diode and is reflected back toward the focal plane unit.
 
 \begin{figure}[hbtp]
     \centering
@@ -672,18 +668,31 @@ Instead, we simplify the problem by saying that since there are two rectangular 
 This is why, in our model, we use a single LO network (network number 11 on \cref{fig:ports_diplexerband}).
 
 In \cref{fig:12_lor_att00}, the LO is configured to reflect \SI{5}{\percent} of the incoming power regardless of its polarization.
-The H mixer, like in the previous experiments, is both co- and cross-pol reflective.
-The V mixer, however, is still perfectly black.
+The H mixer (left column), like in the previous experiments, is both co- and cross-pol reflective.
+The V mixer (right column), however, is still perfectly black.
 
-This creates a very strong modulation on top of all the others.
-This also allows the two mixers to see each other.
-Indeed, because the entry grid leaks, some standing wave patters in one polarization will affect the other after reflection on the local oscillator.
+Making the LO reflective creates a very strong modulation on top of all the other standing wave patterns.
+That modulation has a short period, due to the long distance between the mixer and the LO.
+At the center of the sideband, the mixer sees very little power from the LO, therefore that short-period standing wave pattern vanishes there.
 
+One can note that the standing wave pattern created by the LO-mixer cavity is not sinusoidal.
+This comes as no surprise: only low-quality cavities have patterns that seem sinusoidal;
+high-Q cavities have narrow resonnance peak.
+Here, we see these peaks on \cref{fig:12_lor_att00}(e).
+
+An important result of this simulation resides in the fact that the coupling of the V mixer exhibit standing wave patterns.
+How is that possible, since the V mixer reflects absolutely nothing and therefore creates no cavities?
+Once again, the culprit is an imperfect grid.
+The standing wave is created between the H mixer and the local oscillator, but the entry grid (network 0 on \cref{fig:ports_diplexerband}) leaks some of that power to the V mixer.
+When the local oscillator is reflective, the two mixers can interact.
+The members of the HIFI consortium use the term ``cross talk'' to refer to that phenomenon.
 
 %-----------------------------------------------------------------------------
 \clearpage
 \subsection{Effect of the attenuator in front of the local oscillator}
-Reduces the cross talk and the LO standing waves.
+In order to reduce the standing waves due to the LO reflection, an attenuator was placed on the LO path, near the cryostat window (network 9 on \cref{fig:ports_diplexerband}).
+Its attenuation is different for each mixer band, but is in the order of \SI{10}{\decibel}.
+The result of setting the gain of the attenuator to \SI{-10}{\decibel} is presented on \cref{fig:13_lor_att10}.
 
 \begin{figure}[hbtp]
     \centering
@@ -717,10 +726,26 @@ Reduces the cross talk and the LO standing waves.
     \label{fig:13_lor_att10}
 \end{figure}
 
+The attenuator has two effects:
+\begin{itemize}
+    \item It reduces the LO noise that reaches the FPU,
+    \item and it reduces the amplitudes of the standing waves by introducing strong losses on in the cavities involving the LO.
+\end{itemize}
+A drawback of using an attenuator is that it also attenuates the useful LO power emitted at the LO frequency (\SI{992}{\giga\hertz} in these experiments) as well.
+This means that it is more difficult to pump the mixers to their operational current.
+The reason why we are using diplexers instead of beam splitters in the first place is that the LO power is not plentiful in bands 3 and 4, and we want to couple as much as possible.
+Having to dissipate some of that power is an inconvenience.
+Choosing the attenuation is a matter of compromise between useful LO power and low standing waves.
+
 %-----------------------------------------------------------------------------
 \clearpage
 \subsection{Reflective source}
-Looking at the hot black body.
+In the next experiment, we change the source.
+We are not looking at the sky anymore but at a calibration black body.
+The sky does not reflect any power and therefore creates no standing waves.
+The calibration black bodies, however, are not as black as one could hope; they do reflect some power.
+\Cref{fig:14_hbb} presents the result of modeling HIFI looking at the hot black body (HBB).
+
 \begin{figure}[hbtp]
     \centering
     \begin{subfigure}[b]{.5\textwidth}
@@ -753,9 +778,36 @@ Looking at the hot black body.
     \label{fig:14_hbb}
 \end{figure}
 
+The distance mixer-HBB is set to \SI{1.625}{\meter}.
+This number is not precise, as the black body does not have a well-defined surface.
+What matters here is that this distance is close to the mixer-LO distance or \SI{1.5}{\meter}.
+Therefore, we expect standing waves of similar periods, difficult to tell apart.
+The cold black body is also at a similar distance, confusing things even more.
+
+The model used for the black bodies is what we could call a ``polarization scrambler''.
+It erases the polarization information from the incident wave by reflecting it into H and V equally.
+The reasoning behind this is that the surface of the black bodies is very complex, and there are multiple reflections in many directions inside the black bodies, which all contribute to the global reflection.
+This is just one model, one can model the black bodies differently.
+For example, we know that the beam in band 1 is slightly too wide to `fit' inside the cold black body.
+As a result, part of the beam hits the aluminum box.
+In that case, we expect part of the power to be reflected without its polarization scrambled.
+
+The magnitude of the coefficient of reflection of the HBB is about $\sqrt{0.05}$ in this experiment.
+That of the CBB is about $\sqrt{0.01}$.
+These values come from analysis of HIFI data in band 1.
+\todo{Cite Christophe Risacher here.}
+
+As we could expect, the center of the sidebands is dominated by the mixer-HBB standing wave, while the edges are dominated by the mixer-LO standing waves.
+Indeed, the modulation on the edges has not changed much since \cref{fig:13_lor_att10},
+but the modulation on the center has.
+
 %-----------------------------------------------------------------------------
 \clearpage
 \subsection{Reflective V mixer}
+The last step is to turn on the reflectivity of the V mixer.
+We give it the same reflection coefficients as the H mixer.
+The results are shown in \cref{fig:15_everything}.
+
 \begin{figure}[hbtp]
     \centering
     \begin{subfigure}[b]{.5\textwidth}
@@ -784,12 +836,14 @@ Looking at the hot black body.
         \includegraphics{chapter_3/15_everything_v_ssb}%
         \caption{V mixer folded coupling.}
     \end{subfigure}%
-    \caption{Looking at the hot black body.}
+    \caption{Looking at the hot black body, both mixers reflective.}
     \label{fig:15_everything}
 \end{figure}
 
-\subsection{Simulated diplexer scans}
-These reproduce distorsions observed on real diplexer scans.
-
-\subsection{Influence of the diplexer tuning on the cross talk}
-Show that mistuning one diplexer has an effect on the coupling of the mixer in the other branch.
+We notice some similarities and some differences.
+Here are possible explanations for these differences.
+\begin{itemize}
+    \item The entry grid leaks, therefore one polarization receives more sky and less LO than the other.  Furthermore, the phase shift that a grid causes to the incicent wave is different in transmission and in reflection.
+    \item Both mixers are in the same plane (only one mixer sub-assembly design, used twice).  This is a problem since they must be sensitive to two perpendicular polarizations.  The solution is to tune the diplexer differently for both.  For one mixer, we keep the sky as is and we rotate the LO.  For the other, it is the LO that keeps its direction and we rotate the sky.  These two different requirements result in different positions for the rooftop mirrors, and therefore different cavity sizes.
+    \item For the H polarization, the moving rooftop mirror is the one that faces the entry grid, not the one faces the H mixer.  For the V polarization, the moving rooftop mirror is the one facing the V mixer.  This is one additional asymetry can can explain the differences between the H and V couplings.
+\end{itemize}

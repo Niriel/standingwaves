@@ -69,7 +69,7 @@ def _GridRT(a, d, s, f, propdir):
     Txx = 1 + Rxx
     Txy = 0
     Txz = 0
-    Tyx = +common_c * kx * ky / kz
+    Tyx = +common_x * kx * ky / kz
     Tyy = -common_c * kz + 1
     Tyz = +common_c * ky
     Tzx = +common_x * kx
