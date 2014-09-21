@@ -1,18 +1,25 @@
 \cleardoublepage
 \chapter{Computing standing waves}
 \label{sec:chapter2}
-\section{Principle}
-Our method is inspired from laser and circuit theory: we deal with discrete inputs and outputs rather than, for example, a spatial description of the fields.
-A system like the Focal Plane Unit of HIFI comprises a few dozens of optical elements~\cite{jackson2002hifi}, referred in the literature as ``networks''~\cite{siegman1986lasers}: wire grid polarizers, roof-top mirrors, horns, attenuators, free space, all having one or more input and output.
-All these networks interact together two by two since there exists at least one optical path between each pair or networks.
-The number of interactions in the system increases faster than the square of the number of networks.
-One way to solve a system's reaction to a set of input would be to propagate the inputs from network to network, back and forth, until the fields appear to converge to a steady state.
-Instead, we propose a method to that directly provides the steady state.
+
+The Heterodyne Instrument for the Far Infrared (HIFI) has a frequency resolution of~\SI{1.1}{\mega\hertz} or lower and operates between~\num{640} and~\SI{1910}{\giga\hertz}.
+
+At such a high resolution, the thermal noise of the astronomical source, the calibration black bodies and the local oscillator (LO) qualify as ``narrow band Gaussian noise signals''~\cite{siegman1986lasers}.
+They have a coherence time~$\tau$ equal to the inverse of their bandwidth~$\tau=1/\Delta f$.
+A bandwidth of~\SI{1}{\mega\hertz} results in a coherence time of~\SI{1}{\micro\second} equivalent to a coherence length of~\SI{300}{\meter}.
+This is a hundred times the longest distance inside HIFI.
+Therefore, in HIFI, the signals from the LO, the calibration sources and the sky are coherent.
+We explained the meaning of ``coherent'' in~\cref{sec:chapter1}, \cref{sec:hifi_is_coherent}.
+
+Reflections in a coherent system give rise to interferences, and interferences inside a cavity create standing waves.
 
 %#############################################################################
-\section{Solver}
+
+\section{Mathematical description of plane electromagnetic waves}
+\sectionmark{Mathematical description of plane EM waves}
 
 %=============================================================================
+
 \subsection{Simplifications}
 
 Plane wave.
@@ -22,8 +29,6 @@ Not only a list, I must justify them.
 Anything below -40 dB can pretty much be ignored \todo{why?}.
 What does not couple is lost, so just model the higher modes with a loss parameter.
 This is going to work unless higher modes can come back to the fundamental mode, but that should be a very small effect.
-
-
 
 %=============================================================================
 \subsection{Conventions and definitions}
@@ -90,9 +95,12 @@ However, these are more easily dealt with when using complex numbers without cha
 In \cref{sec:polar_complex_notation}, we will go over these parameters again and explore the effects of giving them an imaginary part.
 
 
+
 %=============================================================================
+
 \subsection{Polar complex notation}
 \label{sec:polar_complex_notation}
+
 Euler's formula, given in \cref{eq:euler_formula}, relates the trigonometric function $\cos$ to a complex exponential.
 \begin{equation}    
     \exp(i\theta) = \cos(\theta) + i\sin(\theta) \label{eq:euler_formula}
@@ -130,7 +138,7 @@ If the imaginary part is negative, then the effect is an attenuation of the sign
 This can be used to model systems that vary in time.
 Since the systems we study in this book are time-invariant, $\omega$ will always be real for us.
 
-Folowing the same reasoning, the imaginary part of the complex wavenumber $\hat{k} = k' + i k''$ corresponds to a spatial attenuation or amplification.
+Following the same reasoning, the imaginary part of the complex wavenumber $\hat{k} = k' + i k''$ corresponds to a spatial attenuation or amplification.
 See \cref{eq:complex_wavenumber}.
 If $k''> 0$, then the wave is attenuated as it propagates.
 This can model losses in a material.
@@ -179,9 +187,15 @@ Finally, the complex intrinsic impedance derived from the complex permittivity a
 Indeed, for a plane wave in a homogeneous material, the wave impedance $\hat{Z}=\hat{E}/\hat{H}$ equals the intrinsic impedance $\hat{\eta}=\sqrt{\hat{\mu}/\hat{\epsilon}}$.
 Therefore, the imaginary part of $\hat{\mu}$ or $\hat{\epsilon}$ creates a phase difference between $\hat{E}$ and $\hat{H}$.
 
+
 %=============================================================================
 \subsection{Phasors}
 \index{phasor}
+
+Phasors are a convenient way to represent electric or magnetic fields that are periodic, by making the dependance on time implicit.
+
+
+%-----------------------------------------------------------------------------
 
 \subsubsection{Introducing phasors}
 By applying the exponentiation identity \cref{eq:exponentiation_identity},
@@ -211,10 +225,11 @@ In these equations, $\hat{E}(z)$ is a ``phasor representation'' of the sinusoida
 
 The term ``phasor'' is a portmanteau of ``phase vector'', indicating that $\hat{E}(z)$ can be visualized as a vector on the complex plane, and that $\hat{E}(z, t)$ makes that vector rotate with time.
 
+%-----------------------------------------------------------------------------
+
 \subsubsection{Convention}
 We have shown with equations~\ref{eq:e_z_t_real_minus} and \ref{eq:e_z_t_real_plus} that there are two conventions for representing the same physical phenomenon.
 Either the space factor or the time factor takes a negative sign, and that decision is a priori arbitrary.
-
 The choice of convention influences the definition of our phasors.
 We have to choose between
 \cref{eq:phasor_minus} and \cref{eq:phasor_plus}.
@@ -233,8 +248,9 @@ We have to choose between
 
 For simplicity, we choose \cref{eq:phasor_minus}.
 Indeed, it does not carry a negative sign.
-The negative sign is factored out in the time-factor $\exp{-i \omega t}$.
+The negative sign is factored out in the time-factor $\exp(-i \omega t)$.
 
+%-----------------------------------------------------------------------------
 
 \subsubsection{Discrete space}
 In our optical systems, we are hardly ever interested in the value of the phasor at any point.
@@ -251,6 +267,8 @@ This means that we do not keep the explicit dependency on $z$ in our computation
 \end{equation}
 In \cref{eq:phasor_no_z}, the phasors $\hat{E}_n$ do not depend on a space coordinate because they are defined for a specific location.
 This is the type of phasors that we will be using in the rest of our chapter.
+
+%-----------------------------------------------------------------------------
 
 \subsubsection{Phasor algebra}
 Phasors can be added together to produce a new phasor.
@@ -269,7 +287,509 @@ Since phasors can represent systems with one frequency only, the result of multi
 This means that computing the power transported by a wave is more subtle than just squaring the phasor, which we will study in \vref{sec:jones_vectors_and_power}.
 
 
+
+
+
+%#############################################################################
+
+
+
+\section{Cavities, interferences, standing waves and ripples}
+
+Explain interference.
+
+Show that incoherent systems do not have to care.
+Incoherent system: no phase information, just power.
+Incoherent system can still have polarization, but they can be unpolarized.
+Coherent system are always polarized.
+
+
+
+
+
 %=============================================================================
+\subsection{Cavities}
+In this section, we imagine that between our detector and the sky, we have a single cavity.
+Two reflective surfaces facing each other form a cavity.
+Each surface has two sides, so we have four sides in total that we label with the number 1 to 4 as illustrated on~\cref{fig:cavity_notations}.
+Let us consider the general case in which the reflection and transmission coefficients differ for each side and each surface,
+which happens in practice when the three regions of space separated by the two surfaces have different refractive indices.
+
+We note the incident electric field phasor $a_1$, this is the signal from the sky.
+We are interested in the outputs $b_1$ and $b_4$.
+$b_4$ is what our telescope detects, while $b_1$ corresponds to the sky signal that is reflected back to the sky.
+
+If we note $r_1$ to $r_4$ the coefficients of reflection,
+$t_1$ to $t_4$ the coefficients of transmission,
+and $s$ the effect of propagating through the space inside the cavity,
+then we have the list of relations given by~\crefrange{eq:cavity_rel_a2}{eq:cavity_rel_b4}.
+\begin{align}
+    a_2 &= s b_3             \label{eq:cavity_rel_a2} \\
+    a_3 &= s b_2             \label{eq:cavity_rel_a3} \\
+    b_1 &= t_2 a_2 + r_1 a_1 \label{eq:cavity_rel_b1} \\
+    b_2 &= t_1 a_1 + r_2 a_2 \label{eq:cavity_rel_b2} \\
+    b_3 &= r_3 a_3           \label{eq:cavity_rel_b3} \\
+    b_4 &= t_4 a_3           \label{eq:cavity_rel_b4}
+\end{align}
+By substitution, we can compute the value of~$a_3$ which is required to find~$b_4$.
+\begin{align}
+    a_3 &= s b_2                               \notag \\
+        &= s t_1 a_1 + s r_2 a_2               \notag \\
+        &= s t_1 a_1 + s^2 r_2 b_3             \notag \\
+        &= s t_1 a_1 + s^2 r_2 r_3 a_3         \notag \\
+    a_3 (1 - s^2 r_2 r_3) &= s t_1 a_1         \notag \\
+    a_3 &= s t_1 \frac{1}{1 - s^2 r_2 r_3} a_1 \notag \\
+    b_4 &= s t_1 \frac{1}{1 - s^2 r_2 r_3} t_3 a_1 \label{eq:cavity_b4_a1}
+\end{align}
+Likewise, we can compute~$a_2$ in order to find~$b_1$.
+\begin{align}
+    a_2 &= s b_3                                     \notag \\
+        &= s r_3 a_3                                 \notag \\
+        &= s^2 r_3 t_1 \frac{1}{1 - s^2 r_2 r_3} a_1 \notag \\
+    b_1 &= \left(s^2 r_3 t_1 \frac{1}{1 - s^2 r_2 r_3} t_2 + r_1 \right) a_1 \label{eq:cavity_b1_a1}
+\end{align}
+Equations~\eqref{eq:cavity_b4_a1} and \eqref{eq:cavity_b1_a1} give us the outputs of our cavity for an input~$a_1$.
+We know how much electric field our detector receives ($b_4$) and how much is sent back to space ($b_1$).
+
+Both equations have a term in $\frac{1}{1 - s^2 r_2 r_3}$.
+This fraction has the shape of $\frac{1}{1 - q}$ with $q=s^2 r_2 r_3$.
+This was to be expected.
+Indeed, $\frac{1}{1 - q}$ is the limit of the sum of the infinite series given in~\cref{eq:infinite_series}.
+\begin{equation}
+    1 + q + q^2 + q^3 + \ldots = \sum_{j=0}^\infty q^j = \frac{1}{1-q}
+    \label{eq:infinite_series}
+\end{equation}
+\Cref{eq:infinite_series} holds both for real and complex values of $q$ as long as $\abs{q} < 1$.
+We can also say that the sum of $q^j$ is a Taylor series\index{Taylor series} of $\frac{1}{1-q}$ centered at 0.
+At the first order, $\frac{1}{1-q} \approx 1 + q$.
+
+In our case, $q=s^2 r_2 r_3$, which represents the effect of a complete round-trip inside the cavity: $r_2$ and $r_3$ model the reflections on both surfaces and $s^2$ models crossing the space between these surfaces twice.
+The term $\frac{1}{1 - s^2 r_2 r_3}$ models the effect of an infinite amount of round-trips of the electromagnetic wave inside the cavity.
+We have solved for the steady state.
+
+The wave inside the cavity is a superposition of the infinite number of waves traveling in both directions (for $j=1$ to $\infty$).
+That wave is a ``standing wave'', its nodes and crests do not propagate in space.
+
+If $a_1$ is the astronomical signal coming from the sky, and if $b_4$ is the signal that is detected by our telescope, then we can define the transmission efficiency $\eta_t$ of our optics with~\cref{eq:cavity_transmission_efficiency}.
+In the same way, \cref{eq:cavity_reflection_efficiency} defines the reflection efficiency $\eta_r$ of our cavity.
+\begin{align}
+    \eta_t &= \frac{b_4}{a_1} = s t_1 t_3 \frac{1}{1 - s^2 r_2 r_3}
+    \label{eq:cavity_transmission_efficiency}
+    \\
+    \eta_r &= \frac{b_1}{a_1} = r_1 + s^2 r_3 t_1 t_2 \frac{1}{1 - s^2 r_2 r_3}
+    \label{eq:cavity_reflection_efficiency}
+\end{align}
+In the following section, we are going to show how the transmission efficiency can create ripples on a spectrum.
+
+
+
+%=============================================================================
+
+\subsection{Creating ripples with a cavity}
+
+%-----------------------------------------------------------------------------
+\subsubsection{Periodicity of the transmission efficiency}
+
+The transmission efficiency $\eta_t$ of our cavity is given by~\cref{eq:cavity_transmission_efficiency}.
+For the cavity to create ripples on a spectrum, $\eta_t$ must be a periodic function with respect to the frequency of the signal.
+
+A priori, each parameter in the definition of $\eta_t$ can be frequency-dependant.
+The coefficients of transmissions and the coefficients of reflection can all depend on the frequency.
+Saying that $r_i$ or $t_i$ is frequency-dependant is one thing, saying that their value is a periodic function of frequency is another:
+few physical materials, if any, have this property.
+The most natural place to find a periodic behavior is the parameter $s$ which models the effect of propagating through the space between the two surfaces of the cavity.
+
+If $d$ is the distance between the two surfaces, then the value of $s$ is given by~\cref{eq:cavity_s_k}.
+\begin{equation}
+    s = \exp \left( i\hat{k}d \right) \label{eq:cavity_s_k}
+\end{equation}
+In that equation, $\hat{k} = 2\pi / \hat{\lambda}$ is the wave number,
+which is complex if the propagation medium causes some attenuation.
+$\hat{\lambda} = \hat{c}/f$ is the wavelength.
+$\hat{c} = c_0 / \hat{n}$ is the phase velocity and $f$ is the frequency.
+Finally, $\hat{n}$ is the refractive index and $c_0$ the speed of light in vacuum.
+In~\cref{eq:cavity_s_f} we rewrite $s$ as a function of the frequency $f$.
+\begin{equation}
+    s = \exp \left( i 2\pi \hat{n} df/c_0 \right) \label{eq:cavity_s_f}
+\end{equation}
+
+We can separate the refractive index $\hat{n}$ into its real part $n'$ and imaginary part $n''$.
+Both $n'$ and $n''$ are real.
+\begin{equation}
+    s =
+    \exp \left( -2\pi n'' df/c_0 \right)
+    \exp \left( i 2\pi n' df/c_0 \right)
+    \label{eq:cavity_s_f_split}
+\end{equation}
+
+In \cref{eq:cavity_s_f_split}, the first exponential is not complex, it is a term of attenuation that depends on the frequency.
+This happens typically inside metals.
+Let us assume that the material of our cavity is a dielectric: $n''=0$; this is
+more relevant to the rest of this book (our cavities are mostly made of vacuum, or in some cases thin mylar films).
+We are left with this expression for~$s$.
+\begin{equation}
+    s = \exp \left( i 2\pi n' df/c_0 \right) \label{eq:cavity_s_f_real}
+\end{equation}
+\Cref{eq:cavity_s_f_real} shows that $s$ is periodic.
+The period is $F = c_0/(d n')$.
+
+This means that two frequencies that are separated by $F$ are dephased in the same way after propagating through the cavity.
+
+Better than periodic, $s$ is perfectly sinusoidal.
+The periodicity of $s$ is transferred to $\eta_t$, the transmission efficiency of the cavity.
+However, the sinusoidal nature of $s$ is not: the multiplicative inverse of a sine is not a sine.
+This is sufficient to create ripples on a spectrum; they may not look purely sinusoidal but they are periodic.
+
+The expression of $\eta_t$ contains an $s$ and an $s^2$.
+The period of $\eta_t$ is either that of $s$ or that of $s^2$,
+whichever is the greatest.
+Indeed, a signal that is $F$-periodic is also $2F$-periodic, but the reverse is not true.
+
+Since $\exp(x)^a = \exp(ax)$, $s^2$~is easy to compute.
+\begin{align*}
+    s^2 &= \exp\left(i 2\pi df n/c_0 \right)^2 \\
+        &= \exp\left(i 2\pi 2df n/c_0 \right)
+\end{align*}
+The period of $s^2$ is half of that of $s$.
+This gives $\eta_t$ the same period $F$ as $s$.
+
+%-----------------------------------------------------------------------------
+\subsubsection{From field to power}
+
+Until now, we have been dealing with phasors which are representations of the electric field.
+A spectrum, however, is given in terms of power.
+More precisely, in time-averaged active power.
+We will discuss in details how to compute powers from fields in~\cref{sec:jones_vectors_and_power}.
+For now, we borrow \cref{eq:power_efficiency} from page~\pageref{eq:power_efficiency},
+which links the power efficiency to the field efficiency.
+Our field efficiency is the transmission efficiency of the cavity $\eta_t$.
+If the admitances are the same before and after the cavity, then the power transmission efficiency of our cavity is given by~\cref{eq:cavity_transmission_efficiency_power},
+in which $H$ is a capital $\eta$.
+\begin{equation}
+    \bar{H}_t = \abs{\eta_t}^2 \label{eq:cavity_transmission_efficiency_power}
+\end{equation}
+
+Let us consider the first order: $\eta_t = t_1 t_3 s (1 + r_2 r_3 s^2)$.
+Its absolute value is given by the following equation.
+\begin{equation}
+    \abs{\eta_t}^2 = \abs{t_1}^2 \abs{t_2}^2 \abs{s}^2 \abs{1 + r_2 r_3 s^2}^2
+\end{equation}
+The absolute value of $s$ is 1.
+This means that the fundamental of the transmission efficiency does not modulate the power.
+This makes sense: the fundamental of $\eta_t$ corresponds to the wave that goes through the cavity without being reflected.
+It is shifted in phase, but it is not subject to any interference.
+A mere phase shift has no effect on the time-averaged active power.
+The term $\abs{1 + r_2 r_3 s^2}^2$ is more interesting.
+Let us pose $r=r_2 r_3$, $s=\exp(i\phi)$ and expand that term.
+\begin{align}
+    \abs{1 + r s^2}^2
+    &=
+    [\Re(1 + r s^2)]^2 + [\Im(1 + r s^2)]^2
+\end{align}
+\begin{align}
+    \Re(1 + r s^2)
+    &=
+    1 + \Re(r s^2) \notag
+    \\
+    &=
+    1 + \Re\left(
+        (r_r + i r_i) (\cos 2\phi + i\sin 2\phi)
+    \right) \notag
+    \\
+    &= 1 + r_r \cos 2\phi - r_i \sin 2\phi
+    \\
+    \Im(1 + r s^2)
+    &=
+    \Im(r s^2) \notag
+    \\
+    &=
+    \Im\left(
+        (r_r + i r_i) (\cos 2\phi + i\sin 2\phi)
+    \right) \notag
+    \\
+    &= r_i \cos 2\phi + r_r \sin 2\phi
+\end{align}
+When we raise these two expressions to the power 2 and add them, some terms disappear and some $\cos^2 + \sin^2$ can be replaced by 1.
+What remains is given in~\cref{eq:cavity_power_order1}.
+\begin{equation}
+     \abs{1 + r s^2}^2
+     =
+     1 + r_r^2 + r_i^2 + 2 r_r \cos 2\phi - 2 r_i \sin 2\phi
+     \label{eq:cavity_power_order1}
+\end{equation}
+In \cref{eq:cavity_power_order1}, $\phi = 2\pi f/F$ with $F=c/d$ the period of $s$.
+Since $\phi$ is multiplied by 2 inside the sine and the cosine, 
+the period of \cref{eq:cavity_power_order1} is $F/2 = c/(2d)$.
+The period of \cref{eq:cavity_power_order1} is also the period of the power transmission efficiency.
+This is the period of the ripple on the spectrum.
+
+We have only considered the first order.
+We could show that the higher orders add ripples of shorter periods.
+These shorter periods are divisors of $c/(2d)$, which makes $c/(2d)$ the fundamental period of the ripple.
+
+A cavity of length $d$ and speed of light $c$ creates a ripple of period $c/(2d)$.
+By measuring the period of a ripple, we can determine the length of the cavity that causes it.
+
+
+
+Whenever $N2d/\lambda$ is an integer, all the waves exiting the cavities have the same phase, we have resonance and constructive interference.
+This condition is verified for $2d=M\lambda$ with $M$ an integer, that is when the length of a round trip is a multiple of the wavelength.
+Other values of $\lambda$ produce destructive intereferences, or anything between totally constructive and totally destructive.
+The effect that a cavity has on a signal depends on its wavelength.
+
+
+
+
+INTRODUCE TERMS
+
+Fabry-Perot interferometers.
+
+Ripples: seen on the spectra.  Instead of "standing wave patterns".
+
+Whyborn 2002: cavities modulate not only the coupling, but also the intrinsic noise of the mixer itself.
+
+
+Insert a note here about energy conservation.
+In steady state, the amount of energy stored inside the cavity is constant, it reached a plateau.
+Therefore, everything that enters the cavity must leave it: energy must be conserved.
+Of course there are losses (diffraction, absorption), but losses are not necessary make the conservation of energy work.
+When we speak of destructive interference, it is on the detector-side of the cavity: the detector does not see anything, does not receive any energy.
+This means that the energy is coming out from the other side of the cavity: the sky-side.
+In a sense, a cavity is a device that can be either totally transmissive, or totally reflective, or anything inbetween, depending on the frequency of the signal going through.
+
+
+The spectra measured by the WBS have about 8000 channels, covering frequencies from 4 to \SI{8}{\giga\hertz} with a \SI{0.5}{\mega\hertz} spacing.
+Each of these channels has its own frequency, and therefore its own wavelength.
+This implies that each channel of the WBS spectrometer has its own coupling coefficient to the various sources of signal in the system, solely due to the cavities in the optics.
+
+If we consider a cavity of length $d=\SI{1.5}{\meter}$ (distance LO--mixer in HIFI), then its fundamental wavelength is $\lambda=2d/M$ for $M=1$, which gives $\lambda=\SI{3}{\meter}$.
+That wavelength corresponds to the frequency $f=c/\lambda \approx \SI{100}{\mega\hertz}$.
+The harmonics (higher values of $M$) are at \SI{200}{\mega\hertz}, \SI{300}{\mega\hertz}, \SI{400}{\mega\hertz}, \ldots, \SI{921700}{\mega\hertz}, \SI{921800}{\mega\hertz}, etc.  These last two values are near the \transition{CO}{8}{7} transition (\cref{table:co_transition_frequencies}).
+
+It should now be clear that any two frequencies separated by \SI{100}{\mega\hertz} are dephased in the same way by a \SI{1.5}{\meter}-long cavity.
+In other words, that cavity introduces periodic modulations of the coupling coefficient of the mixer, which produces periodic patters on the measured spectrum.
+
+Ideally the calibration should take care of standing waves, but it does not.
+Indeed, the calibration of HIFI requires integrating on the internal hot and cold black bodies (more details in~\cref{sec:chapter4}).
+This means changing the optical configuration of the instrument, as the chopper turns to select the source, and the black bodies are partly reflective.
+In a $(\text{on}-\text{off})/(\text{hot}-\text{cold})$ calibration scheme, the standing waves in the hot and the cold do not cancel each other, nor do they cancel the standing waves in the on and off phases.
+By using different optical paths during a single observation, and by not having an adequate model of these optical paths, we introduce standing wave artifacts in our spectra.
+
+%-----------------------------------------------------------------------------
+\subsubsection{Cavity period}
+\begin{equation}
+    F = \frac{c}{2l} \label{eq:cavity_period}
+\end{equation}
+
+From Whyborn 2002, we can use a cosine to model the first order of the standing wave amplitude as a function of the wavelength $\lambda$.
+\begin{equation}
+    a(l) = A \cos
+    \left[
+        \left(
+            2 \pi \frac{2l}{\lambda}
+        \right)
+        + \theta
+    \right]
+    \label{eq:transfer_function_cavity_wavelength}
+\end{equation}
+We can rewrite this equation to make the frequency $f$ explicit, this requires introducing the speed of light in the propagation medium $c$.
+\begin{equation}
+    a(l) = A \cos
+    \left[
+        \left(
+            2 \pi \frac{2lf}{c}
+        \right)
+        + \theta
+    \right]
+    \label{eq:transfer_function_cavity_frequency}
+\end{equation}
+
+\begin{equation}
+    1/1-q...
+    \label{eq:transfer_function_cavity_zero}
+\end{equation}
+
+
+This is of course an approximation, high-quality cavities have harmonics.
+
+Here we need a plot of what it means for frequencies from 0 to, say, 600 GHz which is in Band 1.
+We need to show it for two slightly different values of the cavity length.
+The goal is to show that even a small variation of the length leads to a strong phase shift (even several periods) when we reach the high frequencies.
+It is because the fringe stretches, it does not shift, it actually stretch or compress; and the farther you are from the origin, the bigger the effect.
+\begin{figure}
+    \missingfigure{Two fringe plots, for two different cavity sizes, showing the effect at 600 GHz.}
+    \caption{A small change of the length of a cavity has a drastic impact on the phase of the fringe at the frequencies at which HIFI operates.}
+    \label{fig:fringe_stretching}
+\end{figure}
+
+
+%-----------------------------------------------------------------------------
+\subsubsection{Phase factors}
+The mixers and the local oscillators have complex coefficient of reflections.
+It is necessary to know them in order to predict the phase of the standing wave pattern.
+
+\subsubsection{Phase of a cavity}
+The gain of a cavity is a product of three terms:
+\begin{itemize}
+    \item energy entering the cavity $t_{2 \leftarrow 1} s$;
+    \item infinite reflections $\sum_{k=0}^\infty (r^2s^2)^k$;
+    \item and energy leaving the cavity $t_{1 \leftarrow 2}$.
+\end{itemize}
+\begin{equation}
+    g = t_{2 \leftarrow 1} s
+    \left[ \, \sum_{k=0}^\infty (r^2s^2)^k \right]
+    t_{1 \leftarrow 2}
+    % Had to add a small space with \, inside the brackets, otherwise the square bracket
+    % touches the k in the sum and that's ugly.
+    \label{eq:gain_cavity}
+\end{equation}
+Where $t_{2 \leftarrow 1}$ is the transmission coefficient when entering the cavity,
+$t_{1 \leftarrow 2}$ is the transmission coefficient when leaving the cavity,
+$r$ is the reflection coefficient inside the cavity,
+$s$ is the effect of the propagation in space between the two surfaces of the cavity.
+All these numbers are complex numbers, they have a magnitude and an argument.
+What we call the phase factor of the cavity is the argument of $g$.
+
+What is the magnitude and argument of the term of infinite reflection?
+We pose $q = r^2s^2$ to lighten the next equations.
+Calculating the phase of $q$ from that of $r$ and $s$ is trivial.
+Assuming $\abs{q} < 1$, we have the following equality:
+\begin{equation}
+    \sum_{k=0}^\infty q^k = \frac{1}{1 - q} = q'
+\end{equation}
+We call $q'$ the infinite sum of $q^k$.
+What we are looking for is the magnitude and phase of $q'$.
+Let us write $q'$ in rectangular form, separating the real and the imaginary parts.
+\begin{align}
+    q'
+    &=
+    \frac{1}{1 - q}
+    \\
+    &=
+    \frac{1}{1 - q_r - i q_i}
+    \\
+    &=
+    \frac{1}{(1 - q_r) + i (-q_i)}
+    \\
+    &=
+    \frac{1}{z_r + i z_i}
+    \\
+    &=
+    \frac{z_r - i z_i}{(z_r + i z_i)(z_r - i z_i)}
+    \\
+    &=
+    \frac{z_r - i z_i}{z_r^2 + z_i^2}
+    \\
+    &=
+    \frac{z_r}{z_r^2 + z_i^2}
+    + i
+    \frac{-z_i}{z_r^2 + z_i^2}
+    \\
+    &=
+    q'_r + i q'_i
+    \\
+    &=
+    \abs{q'} \exp(i\theta')
+\end{align}
+The argument $\theta'$ of $q'$ is given by $\atantwo(q'_i, q'_r)$.
+The function $\atantwo$ is provided in many programming languages as a mean to retrieve an angle from a $x$ and a $y$ coordinate.
+It is defined as such:
+\begin{equation}
+    \atantwo(y, x) =
+    \begin{cases}
+        \arctan (y / x)       & x > 0 \\
+        \arctan (y / x) + \pi & y \ge 0, x < 0 \\
+        \arctan (y / x) - \pi & y < 0, x < 0 \\
+        +\pi/2                & y > 0, x = 0 \\
+        -\pi/2                & y < 0, x = 0 \\
+        \textrm{undefined}    & y = 0, x = 0
+    \end{cases}
+\end{equation}
+
+We can now express the argument of the gain of the whole cavity as the sum of the arguments of its three components.
+\begin{equation}
+    \arg(g) = \arg(t_{2 \leftarrow 1}) + \arg(s) + \theta' + \arg(t_{1 \leftarrow 2})
+\end{equation}
+
+This is useful:
+We can measure the standing wave pattern and obtain $\arg(g)$ from that measurement.
+If everything else is known, then we can solve this equation and retreive the argument of $r$, or at least that of $q$, which is often unknown.
+
+$g$ is a gain applied to an input field phasor~$a$ to produce an output phasor~$b$.
+\begin{equation}
+    b = g a
+\end{equation}
+What the spectrometer measures is not the field, however, it is the power.
+If we assume that the wave impedance is the same for $a$ and $b$, and that we note it $Z$, then the output power $B$ is given by the equation
+\begin{equation}
+    B
+    = \frac{b \bar{b}}{Z}
+    = \frac{g a \bar{g} \bar{a}}{Z}
+    = g\bar{g} \frac{a \bar{a}}{Z}
+    = g\bar{g} A
+    = \abs{g}^2 A
+\end{equation}
+What we see here is that we have access to the modulus (absolute value) of $g$ but not its argument.
+And this makes sense: a difference in the phase can be interpreted as a delay in time, due to a longer travel distance.
+Traveling in a lossless material changes the phase but not the power.
+Therefore measuring the power says nothing of the phase.
+
+For example, consider the reflection on a black body.
+Physically, the black body can be a hollow container that is coated to minimize reflections, and may contain scattering surfaces.
+Such a device does not have a clearly defined surface on which the reflection occurs, and therefore predicting the argument of its reflection coefficient is difficult.
+It it typically something that needs to be fitted to real data.
+
+The analytic case that we have just shown is here to illustrate how one can recover the phase factor (or argument) of a reflection coefficient from the phase factor of the standing wave pattern which includes an infinite amount of reflection.
+This analytic case is, however, of little practical use in our situation.
+The model of HIFI is more complex, and solving numerically for the phase factor of the reflection coefficient of a black body may be more efficient.
+
+
+\subsection{The sideband ratio problem}
+
+Explain how we perform the flux calibration.
+Explain how it cannot cancel all the standing waves.
+Explain how the dual sideband aspect makes things difficult: many more variables but not more equations.
+This is where the sideband ratio comes into play: it connects the LSB and USB gains, reducing the number of independant variables in the system.
+
+Because of the lack of equations, the sideband ratio cannot be retreived from the data and, instead, must be assumed.
+This is the motivation of my model.
+
+Show that, by looking at their period, we determined a while ago the cavities responsible.
+Point to the cavities on drawing.
+Tells that it imposes welcome constraints on our model.
+
+
+%#############################################################################
+%#############################################################################
+%#############################################################################
+%#############################################################################
+%#############################################################################
+
+
+%#############################################################################
+\section{Solver}
+In this chapter, we present our method to solve for the output of a system, while taking into account the infinity of reflections between every possible pair of optical components along every possible pathlength.
+
+This method is inspired from laser and circuit theory: we deal with discrete inputs and outputs rather than, for example, a spatial description of the fields.
+
+A system like the Focal Plane Unit of HIFI comprises a few dozens of optical elements~\cite{jackson2002hifi}, referred in the literature as ``networks''~\cite{siegman1986lasers}: wire grid polarizers, roof-top mirrors, horns, attenuators, free space, all having one or more input and output.
+All these networks interact together two by two since there exists at least one optical path between each pair or networks.
+The number of interactions in the system increases faster than the square of the number of networks.
+One way to solve a system's reaction to a set of input would be to propagate the inputs from network to network, back and forth, until the fields appear to converge to a steady state.
+This would be an iterative solver.
+Our solver is not iterative.
+Instead, we propose a method to that directly provides the steady state.
+
+
+
+%=============================================================================
+
+
+
+
+
+%=============================================================================
+
 \subsection{Scattering matrices}
 Scattering matrices \cite{siegman1986lasers} model the transfer of power or field from one side (port) of a network to another (\cref{fig:scattering_matrix_notations}).
 In coherent systems, they operate on phasors and therefore manipulate the field, not the power.
@@ -332,7 +852,7 @@ $\vect{\hat{E}}_i$ and $\vect{\hat{E}}_o$ are called ``Jones vectors''.
     \label{eq:jones_matrix_short}
 \end{equation}
 The components of the Jones vectors are phasors: complex numbers that encode the amplitude and phase of the field along different axes.
-The components of the Jones matrices are als numbers, these encode changes in amplitude and phase.
+The components of the Jones matrices are scalars, which encode changes in amplitude and phase.
 
 \Cref{eq:jones_matrix_2d} presents the traditional form of Jones vectors and matrices.
 \begin{equation}
@@ -352,14 +872,14 @@ The components of the Jones matrices are als numbers, these encode changes in am
     \end{pmatrix}
     \label{eq:jones_matrix_2d}
 \end{equation}
-The field is seen as the superposition of a horizontal and a vertical component, both linearly polarized.
+The field is seen as the superposition of a horizontal and a vertical component, both linearly polarized, noted $h$ and $v$.
 The phase difference between these components determines the handedness and the ellipticity of the polarization of the field.
 
 %-----------------------------------------------------------------------------
 \subsubsection{Extension to three dimensions}
 Although very useful for many applications, the traditional Jones matrices and vectors have limitations.
 First, the field is always expressed in a local reference frame: the horizontal and vertical directions are valid for one beam only and may change after any reflection or refraction.
-Therefore, to completely describe a field, the Jones vector is not enough since one needs to keep track of the orientation of its reference frame with three angles, a quaternion or a rotation matrix.
+Therefore, to completely describe a field, the Jones vector is not enough since one needs to keep track of the orientation of its reference frame with three Euler angles, a quaternion or a rotation matrix.
 
 Second, the horizontal and vertical directions are normal to each other and to the direction of propagation.
 This limits us to modeling either transverse electric or transverse magnetic waves depending on whether the Jones vector represents the electric or the magnetic field;
@@ -622,12 +1142,87 @@ This means that the time-averaged Poynting vector $\vect{\bar{S}}$ can be calcul
 \end{equation}
 \Cref{eq:poynting_from_phasors} gives the real averaged power density of a wave described by its electric and magnetic Jones vectors.
 If $\vect{\hat{H}}$ is unknown, it can be retreived from the electric field with a variant of Ohm's law \eqref{eq:ohm_law} using the wave impedance matrix $\hat{Z}$.
-In homogeneous isotropic materials, the impedance matrix equals the scalar impedance multiplied by the matrix of a $+\pi/2$ rotation around~$\vect{k}$.
+In homogeneous isotropic materials, the impedance matrix equals the scalar impedance multiplied by the matrix of a $-\pi/2$ rotation around~$\vect{k}$.
 \begin{equation}
     \vect{\hat{E}} = \hat{Z} \vect{\hat{H}} \label{eq:ohm_law}
 \end{equation}
+We can also use the admitance $\hat{Y} = \hat{Z}^{-1}$ and write $\vect{\hat{H}} = \hat{Y} \vect{\hat{E}}$.
+
 This is how we compute the power of a wave described by its Jones vector~$\vect{\hat{E}}$.
 
+Let us apply this in the case of a linear homogeneous material.
+Let us choose the orthonormal reference frame $(\vect{x}, \vect{y}, \vect{z})$ such that the electric field is carried by $\vect{x}$, the magnetic field by $\vect{y}$, and therefore the Poynting vector is carried by $\vect{z}$:
+$\vect{\hat{E}} = \hat{E} \vect{x}$,
+$\vect{\hat{H}} = \hat{H} \vect{y}$ and
+$\vect{\bar{S}} = \bar{S} \vect{z}$.
+In that situation, \Cref{eq:poynting_from_phasors} becomes \Cref{eq:poynting_from_phasors_aligned}.
+\begin{equation}
+    \bar{S} = \frac{1}{2}
+    \left(
+        \Re(\hat{E}) \Re(\hat{H}) + 
+        \Im(\hat{E}) \Im(\hat{H})
+    \right)
+    \label{eq:poynting_from_phasors_aligned}
+\end{equation}
+We replace $\hat{H}$ by its value $\hat{Y} \hat{E}$, where $\hat{Y}$ is the wave admitance.
+\begin{align*}
+    \hat{H}
+    &= \hat{Y} \hat{E}
+    \\
+    &= (Y_r + i Y_i)(E_r + i E_i)
+    \\
+    &= (Y_r E_r - Y_i E_i) + i (Y_r E_i + Y_i E_r)
+\end{align*}
+We inject this expression of $\hat{H}$ in \cref{eq:poynting_from_phasors_aligned}.
+\begin{align}
+    \bar{S}
+    &= \frac{1}{2}
+    \left(
+        E_r (Y_r E_r - Y_i E_i) + 
+        E_i (Y_r E_i + Y_i E_r)
+    \right)
+    \\
+    &= \frac{1}{2}
+    \left(
+        Y_r E_r^2 + Y_r E_i^2
+    \right)
+    \\
+    &= \frac{1}{2} Y_r (E_r^2 + E_i^2)
+    \\
+    &= \frac{1}{2} Y_r \abs{E}^2
+\end{align}
+Note that $Y_r = 1/Z_r$ only if $Z_i=0$.
+In general, $Y_r$ is given by \cref{eq:Yr}.
+\begin{align}
+    \hat{Y}
+    &= \frac{1}{\hat{Z}}
+    = \frac{1}{Z_r + i Z_i}
+    = \frac{Z_r - i Z_i}{(Z_r + i Z_i)(Z_r - i Z_i)}
+    = \frac{Z_r - i Z_i}{Z_r^2 + Z_i^2}
+    \\
+    Y_r &= \frac{Z_r}{Z_r^2 + Z_i^2} \label{eq:Yr}\\
+    Y_i &= \frac{-Z_i}{Z_r^2 + Z_i^2}
+\end{align}
+In our last step, we define the notion of power efficiency.
+It is the ratio of the power at two points in a system.
+If we consider two points $a$ and $b$ in our system, then their powers are given by
+equations~\eqref{eq:power_a} and~\eqref{eq:power_b}.
+The power efficiency is given by~\cref{eq:power_efficiency}.
+\begin{align}
+    \bar{S}_a &= \frac{1}{2} Y_{r, a} \abs{E_a}^2 \label{eq:power_a}\\
+    \bar{S}_b &= \frac{1}{2} Y_{r, b} \abs{E_b}^2 \label{eq:power_b}\\
+    \frac{\bar{S}_b}{\bar{S}_a}
+    &=
+    \frac{Y_{r, b}}{Y_{r, a}}
+    \frac{\abs{E_b}^2}{\abs{E_a}^2}
+    =
+    \frac{Y_{r, b}}{Y_{r, a}}
+    \abs{\frac{E_b}{E_a}}^2
+    \label{eq:power_efficiency}
+\end{align}
+\Cref{eq:power_efficiency} is important:
+it links the power efficiency $\bar{S}_b / \bar{S}_a$
+to the field efficiency $E_b / E_a$ where $E_a$ and $E_b$ are phasors.
 
 
 %=============================================================================
@@ -1085,7 +1680,7 @@ The networks themselves are ordered since they are indexed from 1 to $N$.
 Therefore, there is a natural way of numbering the ports of the whole system.
 The port~$j$ of the network~$i$ corresponds to the port~$k$ of the whole system, where
 \begin{equation}
-    k = \sum_{m=0}^{i - 1}n_m + j \label{eq:port_numbering}
+    k = \sum_{m=1}^{i - 1}n_m + j \label{eq:port_numbering}
 \end{equation}
 
 With that information, it is trivial to fill the scattering matrix of the whole system, $S$, with values from the scattering matrices from each network $S_i$.
