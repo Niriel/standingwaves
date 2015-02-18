@@ -1,1096 +1,975 @@
 \cleardoublepage
-\chapter{HIFI Standing wave calibration}
+\chapter{Interference model of HIFI Band 1}
 \label{sec:chapter4}
 
+
+%#############################################################################
+\section{Introduction}
+The previous chapters describe a physically-based model that we created to predict the effect of interferences in coherent detectors.
+This chapter compares our model to observational data from the HIFI instrument~\cite{AA_518_L6}.
+Our goal is to validate our model and to derive parameters several system parameters for the HIFI instrument that are only approximately known from its design and commissioning.
+
+We choose to model HIFI Band 1.
+Bands~1, 2 and 5 of HIFI have fewer optical elements than Bands~3, 4, 6 and 7, making them easier to model and reducing the number of parameters (see~\cref{sec:hifi_bands}).
+Indeed, Bands~3, 4, 6 and 7 use rooftop mirrors to form Martin--Puplett interferometers in order to maximize the coupling of the mixer to the sky and the local oscillator at the same time.
+In Bands~1, 2 and 5, the LO power is high enough and there is no need to maximize its coupling to the mixer, allowing for a simpler design with less side-effects.
+The coupling of the LO to the mixer is very weak in Band~1, which means that the LO--mixer cavities produce almost no interference;
+this reduces again the number of parameters.
+In his technical note \citetitle{risacher2011standingwaves}~\cite{risacher2011standingwaves}, \citeauthor{risacher2011standingwaves} confirms that the LO--mixer ripples are not detected in Band~1.
+
+In a typical observation, HIFI takes four measurements: one on the source of astronomical interest, one on a part of the sky devoid of emission, and one on the hot and cold internal calibration loads.
+The integrations on the loads are used to calibrate the bandpass of the instrument.
+Ideally, the loads are black bodies, which means that they are perfect absorbers.
+In practice, the loads are not perfect black bodies but reflect a fraction of the incident electromagnetic waves.
+Likewise, the mixer reflects a fraction of the incident wave.
+These reflections create interferences that impact the bandpass calibration of the instrument and results in ripples on the spectra.
+
+
+
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{mars_25_original}
+    \caption{Observation of Mars by HIFI in Band~1 with the WBS-H showing a continuum modulated by ripples.
+    Source: HSA, ObsID 0x2FB00EB.}
+    \label{fig:mars_25_original}
+\end{figure}
+
+The spectrum that we choose is shown in~\cref{fig:mars_25_original}.
+It is an observation of the planet Mars recorded in Band~1 by the WBS-H backend, the wide-band spectrometer, horizontally polarized.
+This spectrum shows a continuum modulated by ripples.
+Atmospheric models of Mars predict a flat continuum, therefore we can attribute these ripples to an instrumental artifact that the calibration does not correct: interferences.
+We choose this spectrum to validate our model because the ripples are relatively strong compared to the thermal noise present in the observation.
+In this chapter, we use these ripples to derive the position of the loads, their reflection coefficient, and that of the mixer.
+
+We begin the chapter with a brief description of the optics of HIFI Band~1.
+Then we proceed to model the ripples in two steps.
+First, we create a semi-analytic model, in which we model the ripples using ad-hoc perfect sinusoids.
+This model gives us the periods of the ripples, which we can convert into approximate distances.
+Second, we create a physically-based numerical model using the method detailed in~\cref{sec:chapter2}.
+
+
+%#############################################################################
+\FloatBarrier
+
+
+
+\section{HIFI Band 1}
+\Cref{fig:band1_layout} presents the optical layout of Band 1 of HIFI.
+The signal from the local oscillator and the signal from the source are combined by a wire grid polarizer.
+Two mixers detect the resulting beams.
+
+Waves polarized in the plane of the page are called ``vertically polarized'' while waves polarized normally to the page are called ``horizontally polarized''.
+The ``H~mixer'' detects horizontal waves, and the ``V~mixer'' detects vertical waves.
+
+\begin{figure}[hbtp]
+    \centering
+    \footnotesize
+    \input{band1_layout.pdf_tex}
+    \caption{Layout of the optics of Band~1}
+    \label{fig:band1_layout}
+\end{figure}
+
+Two wire grid polarizers ensure that the waves propagating toward the mixers are properly polarized for an optimal coupling to the mixer: they are noted ``H~grid'' and ``V~grid'' on the figure.
+The wires of the H~grid are normal to the plane of the page and those of the V~grid lie in the plane of the page.
+Grids are four-port devices (see~\cref{sec:wire_grid_polarizer}), two ports of each grids are dumped onto an absorber, getting rid of any unwanted polarization.
+
+Three mirrors focus the beam from the grids into the horns of the mixers.
+
+The signal from the sky is not polarized.
+The thermal noise from the local oscillator and the calibration loads is not polarized either.
+However, the useful signal of the local oscillator, that which pumps the mixers, is vertically polarized.
+
+In Band~1, the local oscillator produces a beam whose power is much too high to properly pump the two mixers; most of the LO power needs to be dumped.
+This is achieved by slightly rotating grid-0: its wires make an angle of~\SI{5.7}{\degree} with the plane of the page.
+With that configuration, grid~0 sends most of the LO power down the H path, where it mostly goes through the H~grid into the dumps, and only a small fraction reaches the H~mixer.
+The small fraction of LO power sent down the V~path by grid~0 is mostly reflected by the V~grid toward the V~mixer.
+In the end, each mixer sees about~\SI{1}{\percent} of the LO power, the right amount of power to pump them optimally.
+
+This very low coupling between the mixers and the local oscillator has an advantage: the LO--mixer cavities are very lossy and the interferences that they create are likely to be negligible.
+In addition, the local oscillator itself is equipped with a~\SI{10}{\decibel} attenuator, which reduces interferences even more.
+As a result, we expect that most of the ripples are caused by interferences in the cavities formed by the mixers and the calibration loads.
+The coupling between the mixers and the local oscillator is greater in Bands~2 and 5; modeling them requires more parameters to account for this.
+
+
+
+
+
+%#############################################################################
+\FloatBarrier
+
+
+
+\section{Analysis of the ripples}
+
+
+
 %=============================================================================
-\section{Current HIFI calibration}
 
-%-----------------------------------------------------------------------------
-\subsection{Introduction}
-In his paper \citetitle{ossenkopf2002intensity} \cite{ossenkopf2002intensity}, \citeauthor{ossenkopf2002intensity} describes the various calibration schemes used in HIFI, with a strong emphasis on their effect on standing waves.
-The four observing modes, as we name them currently, are the following:
-\begin{itemize}
-    \item position switch;
-    \item dual beam switch;
-    \item frequency switch; and
-    \item load chop.
-\end{itemize}
-They are briefly described in \citetitle{AA_537_A17} \cite{AA_537_A17}.
-These four observing modes have commonalities: there is always a reference subtraction, and the bandpass calibration is done with a measurement on internal hot and cold black bodies.
-Before diving into the differences between the four observing modes and how they deal with standing waves, let us spend some time explaining the goal of the reference subtraction and bandpass calibration.
+\subsection{Smoothing}
+In order to make the ripples more apparent, we smooth the original spectrum.
+We do so by zeroing all power at periods shorter than a given threshold (\SI{40}{\mega\hertz} in our case).
 
-%-----------------------------------------------------------------------------
-\subsection{Reference subtraction}
-The goal of the reference subtraction is to remove the strong noise originating from the telescope itself.
-Indeed, its primary mirror has a temperature of about \SI{80}{\kelvin} \cite{Sein2004mirror}.
-The local oscillator is also a source of noise of about \SI{120}{\kelvin}.
-Finally, the focal plane unit of HIFI itself has a temperature of about \SI{13}{\kelvin}.
-Subtracting the signal received from a reference point in the sky that is devoid of emission actually cleans the spectrum taken on the source from all these noise contributions.
-This works only if the instrument does not change significantly between the integration on the source and that on the reference.
-Possible changes are thermal instabilities and deliberate changes in the optical paths resulting from the actuation of the chopper or the diplexers.
+\Cref{fig:mars_filtered} shows the result of that smoothing.
+The original data is shown in black, the smoothed data green and the residual in gray.
 
-Subtracting spectra taken with different optical paths can result in visible distorsions of the calibrated spectrum, notably in the form of ripples on the baseline.
-These ripples are a result of standing waves.
-Standing waves modulate both the astronomical signal and the telescope noise.
-The telescope noise has often much more power than the astronomical (line and/or continuum) signal.
-Because the noise is so powerful, even a relatively small residual due to a minute change in standing waves can have an absolute level commensurable with that of the astronomical signal.
-For example, a \SI{100}{\kelvin} noise that differs by only \SI{1}{\percent} between the Source and Reference spectra leaves a \SI{1}{\kelvin} residual on the calibrated spectra, which is very significant in many observations.
-
-There is one important point to remember here: even the best reference source in the universe cannot correct for the effect of the standing waves on the useful astronomical signal.
-The best that the reference subtraction can do is perfectly remove any noise contribution from the satellite itself.
-The following equations illustrate the principle.
-\begin{align}
-    c_\text{source}    &= \eta_\text{sky} J_\text{source} + \eta_\text{telescope} J_\text{noise} \notag
-    \\
-    c_\text{reference} &= \eta_\text{sky} J_\text{reference} + \eta_\text{telescope} J_\text{noise} \notag
-    \\
-    c_\text{source} - c_\text{reference} &= \eta_\text{sky} (J_\text{source} - \underbrace{J_\text{reference}}_{=0}) \label{eq:remove_noise_only}
-\end{align}
-Here, $c$ refers to the output of the spectrometer and $J$ to the power of the signal coming from the sky.
-The efficiency $\eta$ contains the beam couplings, the standing wave modulations, the mixer gain, and the CCD conversion factor.
-The effect of the standing waves that modulate the astronomical signal is in $\eta_\text{sky}$; it is not removed by the reference subtraction.
-
-This brings us to the second part of the calibration: the bandpass calibration.
-
-%-----------------------------------------------------------------------------
-\subsection{Bandpass calibration}
-
-The purpose of the bandpass calibration is to determine the value of $\eta_\text{sky}$ so that we can retreive the value of the incoming power $J_\text{source}$ from the output of the spectrometer.
-
-In HIFI, the bandpass calibration is done by looking at two internal black bodies.
-The cold black body has a temperature of about~\SI{13}{\kelvin}.
-The hot black body has a temperature of about~\SI{100}{\kelvin}.
-Since we know the temperature of the black bodies, we know the power of their emission $J_\text{hot}$ and $J_\text{cold}$.
-The expectation is that the spectra measured on the black bodies follow the following equations:
-\begin{align}
-    c_\text{hot}  &= \eta_\text{sky} J_\text{hot} + \eta_\text{telescope} J_\text{noise} \notag
-    \\
-    c_\text{cold} &= \eta_\text{sky} J_\text{cold} + \eta_\text{telescope} J_\text{noise} \notag
-    \\
-    c_\text{source} - c_\text{cold} &= \eta_\text{sky} (J_\text{hot} - J_\text{cold}) \label{eq:ideal_calibration_loads}
-\end{align}
-With \cref{eq:ideal_calibration_loads} we can retreive the efficiency $\eta_\text{sky}$ and use it to solve \cref{eq:remove_noise_only} for $J_\text{source}$.
-\begin{equation}
-    J_\text{source} =
-    \frac{
-        c_\text{source} - c_\text{reference}
-    }{
-        c_\text{hot} - c_\text{cold}
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{mars_25_smoothed}
+    \bigskip
+    \includegraphics{mars_25_smoothed_zoom}
+    \caption{
+        Smoothing the spectrum of Mars separates the ripples from other sources of noise.
+        Top: full spectrum, \SI{4}{\giga\hertz}-wide.
+        Bottom: zoom on a \SI{1}{\giga\hertz}-wide region.
     }
-    (J_\text{hot} - J_\text{cold})
-    \label{eq:ideal_calibration_solution}
-\end{equation}
-
-Unfortunately, things are not that ideal.
-The optical path is different for the sky, cold and hot integrations.
-This means that the standing waves are different.
-In addition, the telescope noise from the hot and that from the cold may differ.
-\begin{align}
-    c_\text{hot}  &= \eta_\text{hot} J_\text{hot} + \eta_\text{hot, telescope} J_\text{hot, noise} \notag
-    \\
-    c_\text{cold} &= \eta_\text{cold} J_\text{cold} + \eta_\text{cold, telescope} J_\text{cold, noise} \notag \label{eq:real_calibration_loads}
-\end{align}
-The difference in optical paths between the hot and the cold prevents the telescope noise from being perfectly removed, even if it is the same in the two phases.
-Even if the noise were perfectly removed, the bandpass $\eta$ for the hot and the cold are not the same, and they also differ from the bandpass on the sky.
-Only at the first order we can assume $\eta_\text{cold} \approx \eta_\text{hot} \approx \eta_\text{sky}$.
-This assumption gives ``good enough'' results, but not perfect.
-This is why standing waves are not perfectly calibrated out.
-They are not calibrated out of the astronomical signal since $\eta_\text{sky}$ is only approximated by $\eta_\text{cold}$ and $\eta_\text{hot}$.
-They are not totally calibrated out of the telescope noise either.
-
-%-----------------------------------------------------------------------------
-\subsection{HIFI observing modes and standing waves}
-The fundamental difference between the four observing modes is the choice of reference point. Let us go over the four observing modes and review their effectiveness at dealing with removing the telescope noise in presence of standing waves.
-
-In position switch, the telescope slews from a source position ``On'' to a reference position ``Off'' which has ideally no emission.
-This mode is often used for sources that are more extended than 3~arcminutes, as the chopper can only go that far.
-An advantage of this observing mode is that the optical path is the same for the On and the Off.
-An inconvenient is that slewing the telescope takes time.
-Because the optical path is constant, we expect the standing waves to remain the same for the two phases.
-Therefore, subtracting the Off from the On should perfectly remove the telescope noise.
-
-\label{sec:dual_beam_switch}In dual beam switch, a chopper (actuated mirror) alternates between two positions on the sky: the source ``On'' and a reference ``Off''.
-The reference must be within 3~arcminutes of the source, this is a limitation of the chopper.
-The advantage of chopping is that it is very fast: actuating a mirror is much faster than slewing an entire telescope.
-The inconvenient is that chopping changes the optical path, and therefore the standing waves.
-As a result, the telescope noise detected by the mixer differs between the On and the Off.
-Simply subtracting the Off from the On will not properly get rid of that noise.
-To correct that, we combine chopping with slewing.
-We first observe the source with the chopper on the left and the reference with the chopper on the right.
-Then we slew the telescope so that we can observe the same source with the chopper on the right this time, and the reference will be taken with the chopper on the left.
-Technically, the two references are different points on the sky, but since none of them is supposed to emit any radiation, it does not matter.
-That way, we can subtract the left reference from the left source, the right reference from the right source, and average the results.
-This scheme is more time-efficient than position switch, as we observe the source both before and after slewing.
-
-In frequency switch, the reference is at the same position as the source, but observed at a different frequency.
-The frequency throw is relatively small, a few tens of megahertz.
-This is sufficient to prevent the line from overlapping itself in the two phases, but still small enough that the continuum level remains the same.
-The line is observed in both phases, which makes this mode very time-efficient.
-However, when the local oscillator frequency changes, many instrumental parameters change.
-These changes have an influence on the reflectivity of the mixer and the local oscillator, which in turn changes the standing waves.
-As a result, the noise from the telescope cannot be perfectly canceled.
-By choosing a frequency throw that matches the period of the dominant standing wave, we can at least cancel the contribution of that standing wave to the telescope noise.
-
-Finally, in load chop, the cold black body is used as a reference.
-This mode is useful when there are no emission-free regions near the source.
-However, since the optics of the instrument change between the source and the reference, the noise of the telescope cannot be perfectly canceled.
-
-%-----------------------------------------------------------------------------
-\subsection{Conclusion}
-The equations presented in this section are simplified version of the ones used in HIFI.
-Although simplified, they do accurately illustrate the limitations of the current calibration schemes of HIFI.
-\citeauthor{ossenkopf2002intensity}'s memo \cite{ossenkopf2002intensity} contains more details.
-
-The calibration schemes of HIFI do two things: they remove the noise from the telescope, and they convert the CCD counts into an antenna temperature.
-
-
-%=============================================================================
-\section{Correct HIFI calibration}
-The four measurements done during an observation (source, reference, hot, cold) correspond to four equations.
-These four equations can be used to retreive four variables.
-However, as \citeauthor{ossenkopf2002intensity} describes in detail in his memo~\cite{ossenkopf2002intensity}, there are many more variables.
-Let us reproduce the first equation from that article.
-% The magic parameter of the array command is taken from
-% http://tex.stackexchange.com/questions/82485/alignat-makes-3-good-alignments-and-1-bad
-\begin{equation}
-    \begin{array}{*{15}{@{}>{{}}l<{{}}@{}}}
-            c
-        &
-            =
-        &
-            \gamma_\text{ssb}
-        &
-            \lbrace
-            \eta_\text{\,l,ssb}
-        &
-            [
-                \eta_\text{sf,ssb}
-        &
-                J_\text{S,ssb}
-        &
-                +
-        &
-                (1 - \eta_\text{sf,ssb}
-        &
-                )
-        &
-                J_\text{R,ssb}
-        &
-            ]
-        &
-            +
-            (1 - \eta_\text{\,l,ssb}
-        &
-            )
-        &
-            J_\text{T,ssb}
-        &
-            \rbrace
-        \\
-        &
-            +
-        &
-            \gamma_\text{isb}
-        &
-            \lbrace
-            \eta_\text{\,l,isb}
-        &
-            [
-                \eta_\text{sf,isb}
-        &
-                J_\text{S,isb}
-        &
-                +
-        &
-                (1 - \eta_\text{sf,isb}
-        &
-                )
-        &
-                J_\text{R,isb}
-        &
-            ]
-        &
-            +
-            (1 - \eta_\text{\,l,isb}
-        &
-            )
-        &
-            J_\text{T,isb}
-        &
-            \rbrace
-        \\
-        &
-            +
-        &
-            \gamma_\text{rec}
-        &
-            \multicolumn{12}{l}{
-                 J_\text{rec} + z
-            }
-    \end{array}
-    \label{eq:volker_count}
-\end{equation}
-Let us go briefly over the parameters in that equation, a more detailed description is given in the original paper.
-
-In \cref{eq:volker_count}, $c$ represents the output of the spectrometer in its arbitrary unit; in the case of the HIFI wideband spectrometer, $c$ is in CCD counts.
-
-The parameters $\gamma_\text{ssb}$ and $\gamma_\text{isb}$ relate to the bandpass of the electronics.
-This includes the mixer and all the IF-chain: amplifiers, wave guides, and eventually spectrometer (counts).
-These parameters provide the conversion from the unit in which we measure the power of the incoming signal (Kelvins, Janskys), and the output of the spectrometer.
-Because HIFI is a double-sideband instrument, each channel $c$ receives power from two sidebands: the signal sideband (ssb) and the image sideband (isb).
-The signal sideband is the sideband in which you place the line you are observing, it can be the upper or lower sideband.
-A priori, most parameters differ in both sidebands, this is why many variables in this equation are indexed with their sideband.
-
-The parameters $\eta$ are dimensionless and represent optical efficiencies.
-
-The sources of power appear as $J$.
-$J_\text{S}$ is the astronomical or calibration source at which we are looking.
-$J_\text{R}$ is the background radiation from the sky that is around (or behind in case of optically thin source) the astronomical source.
-$J_\text{T}$ is the emission from the telescope itself.
-
-The quantity $\gamma_\text{rec} J_\text{rec}$ relates to the receiver temperature, and $z$ is the base output of the spectrometer in absence of any input (dark current in case of a CCD).
-
-\Cref{eq:volker_count} is still quite optimistic.
-Indeed, it considers only one term of telesope noise.
-In reality, most elements produce noise: the primary mirror is at about~\SI{80}{\kelvin}, the local oscillator at \SI{120}{\kelvin}, and every element inside the focal plane unit is at about \SI{13}{\kelvin}.
-And that is just counting black-body noise, not the emission from the local oscillator diodes for example.
-It is possible to gather all these noise terms under a single umbrella term $J_\text{T}$ but this hides the fact that each of them has its own efficiency coefficient to corresponding to its coupling to the mixer.
-Instead of $(1-\eta_\text{\,l} J_\text{T})$, we are actually facing something like
-$1 - \sum_{i=1}^N (\eta_{\text{T}, i} J_{\text{T}, i})$.
-We can also simplify the writing by removing the explicit constraint that the sum of the efficiencies must be 1.
-The constraint remains true and we must not forget it, but we can simplify the writing by simply assigning an efficiency to each source:
-\begin{equation}
-    c =
-    \gamma_\text{ssb}
-    \sum_{i=1}^N \eta_{i\text{,ssb}} J_{i\text{,ssb}}
-    +
-    \gamma_\text{isb}
-    \sum_{i=1}^N \eta_{i\text{,isb}} J_{i\text{,isb}}
-    + \gamma_\text{rec} J_\text{rec} + z
-\end{equation}
-We can decide that $i=1$ corresponds to the astronomical source, $i=2$ to the reference, and the rest to various sources of noise.
-
-What do these efficiencies $\eta$ actually mean?
-They are the efficiencies at which the sources couple to the telescope beam.
-If we follow the notations laid out by \citeauthor{mangum2006tempscales} in his paper \citetitle{mangum2006tempscales}~\cite{mangum2006tempscales},
-then our $\eta$ corresponds to $\frac{G}{4\pi}\eta_c$.
-
-$\eta_c$ is the efficiency at which the source couples to the telescope beam.
-It is normalized.
-This efficiency is the product of two other efficiencies: the main beam efficiency $\eta_\text{mb}$ (independant of the source) and the efficiency at which the source couples to the main diffraction beam of the telescope $\eta_\text{cmb}$ (dependant of the source brilliance distribution).
-
-
-
-
-The method explained in \cref{sec:chapter2}, using properly parametrized network models, should be able to predict the loss due to standing waves.
-If the model is correct, then it can compute the values of each $\eta$ parameter.
-This reduces the number of unknowns in the system of equations.
-
-The unknowns that are left are $\gamma_\text{ssb}$, $\gamma_\text{isb}$,
-$\gamma_\text{rec} J_\text{rec}$, $z$, and all the $J$.
-
-The quantity $z$ represents the zero counts of the backend, which can be easily measured when terminating the backend input.
-This is regularly done in HIFI observations.
-Therefore, $z$ is known.
-
-The remaining unknowns are $\gamma_\text{rec} J_\text{rec}$, the sideband gains $\gamma$ and the various signals or noise $J$.
-Let us assume that $J_1$ corresponds to the source of interest, $J_2$ to the background radiation from the sky around the source (reference), $J_3$ the noise from the local oscillator, $J_4$ the noise from the primary mirror, and that other noises have the next $J$.
-$J_1$ is the main unknown, it is what we eventually wish to determine.
-$J_2$, the emission from the empty sky, should often be 0\todo{Or CMB?}.  If it is not 0, then we either model it or we measure it with another observation.
-The values of the other $J$, the other sources of noise, are unknown (although we do have a rough idea).
-
-When the reference count is subtracted from the source count, many $J$ terms cancel out.
-When the emission in the reference is 0, then the only remaining terms are the emission of the source in the two sidebands, $J_{1,\text{ssb}}$ and $J_{1,\text{isb}}$.
-
-When the cold count is subtracted from the hot count, not all the $J$ terms cancel out as the optical paths differ, leading to different $\eta$ even when the $J$ are identical.
-However, our model is supposed to provide us with the efficiencies, so only the sources of noise must be assumed.
-
-If we assume that our model correctly predicts all the efficiencies, and if we know the noise power emitted by the various optical elements of the telescope and the blank sky, then the only unknowns that remain are the emission from the source in both sidebands
-$J_{1,\text{src, ssb}}$ and $J_{1,\text{src, isb}}$
-the gain of the electronics in both sidebands
-$\gamma_{1,\text{ssb}}$ and $\gamma_{1,\text{isb}}$,
-and the receiver noise $\gamma_\text{rec} J_\text{rec}$.
-This makes a total of five variables, and we have four equations.
-It is necessary to make an assumption on one of the three non-$J$ terms in order to solve the system.
-
-
-%=============================================================================
-
-\section{Deriving model parameters from HIFI data}
-We need the best knowledge of the instrument.
-Some parameters come from design, some from measure, and some are guesses.
-
-HIFI has 7 bands.  Therefore we could expect 7 systems.
-Realistically, doing band~1 and band 3 or 4 would be enough.
-Indeed, band~1 is a beam splitter band, bands 3 and 4 are diplexer bands.
-What we learn there can be applied to bands 2, 3 and 5.
-HEB bands are stained by another type of standing waves (electrical, after the mixer), we leave them apart from now.
-However, they use diplexers, so my band 3 model can work here too.  It may just be more difficult to fit parameters because of all the electrical standing waves on top.
-
-\subsubsection{Phase-amplitude degeneracy}
-
-Assume a very low quality cavity.
-The resulting ripple has very weak harmonics and is decently approximated with a single cosine.
-\begin{align}
-    \text{LSB} &= c \left[ 1 + a \cos(T(f_\text{LO} + f) + \phi) \right]
-    \\
-    \text{USB} &= c \left[ 1 + a \cos(T(f_\text{LO} - f) + \phi) \right]
-\end{align}
-In these equations, $c$ is a constant continuum level, $a$ the amplitude of the ripple.
-$T$ is $2\pi$ divided by the period of the ripple.
-$f$ is the intermediate frequency and $f_\text{LO}$ the local oscillator frequency.
-Therefore $f_\text{LO} - f$ is the lower sideband frequency (LSB) and $f_\text{LO} + f$ is the upper sideband frequency (USB).
-$\phi$ is a term of phase.
-
-We chose a cosine rather than a sine because the transfer function of a cavity is at its maximum for $f=0$.
-See~\cref{eq:transfer_function_cavity_zero}
-
-The mixer folds the LSB on top of the USB.
-The following equations show the effect that it has on the ripple.
-\begin{gather}
-    \text{DSB} = c
-        \left[
-            2 + a 
-            \left[
-                \cos \left( T(f_\text{LO} + f) + \phi \right)
-                +
-                \cos \left( T(f_\text{LO} - f) + \phi \right)
-            \right]
-        \right]
-    \\
-    \begin{split}
-    = c
-        \left[
-            2 + 2a
-            \left[
-                \cos \frac{T(f_\text{LO} + f) + \phi + T(f_\text{LO} - f) + \phi}{2}
-            \right.
-        \right.\\
-        \left.
-            \left.
-                \cos \frac{T(f_\text{LO} + f) + \phi - T(f_\text{LO} - f) - \phi}{2}
-            \right]
-        \right]
-    \end{split}
-    \\
-    = 2c \left[ 1+a \cos(T f_\text{LO} + \phi) \cos(T f) \right] \label{eq:folded_cos}
-\end{gather}
-\Cref{eq:folded_cos} shows that there is a degeneracy between the amplitude and the phase of a folded standing wave pattern.
-A DSB ripple may have a small amplitude because the unfolded ripple has a low amplitude $a$, or because of the destructive interference $\cos(T f_\text{LO} + \phi)$.
-
-Another important point brought by \cref{eq:folded_cos} is that the phase of the frequency-dependant term is~0.
-This helps constraining~$F$.
-Finding the phase~$\phi$ requires fitting~$T$ and $A=2ca \cos(T f_\text{LO} + \phi)$
-independantly.
-Once~$T$ is known, and since we know the values of~$c$ (by measuring the continuum) and~$a$ (by knowing the temperature of our black bodies) we can extract~$\phi$ from~$A$.
-
-%=============================================================================
-\section{Modeling the standing waves of HIFI band~1}
-
-%-----------------------------------------------------------------------------
-\subsection{Introduction}
-In this section, we will attempt to match our model to real data.
-Our model has several free parameters, and we will use real HIFI data to constrain them.
-
-The band~1 of HIFI is interesting in this respect for several reasons.
-\begin{itemize}
-    \item
-        The signal-to-noise ratio is high, which facilitates fitting.
-        However this advantage can be negated if the duration of the observation is very short.
-    \item
-        The local oscillator is very weakly coupled to the mixer.
-        As a result, we do not expect to see any ripple due to standing waves in the mixer--LO cavity.
-        The ripples that we expect to see correspond to the cavities formed by the mixer and the hot black body, and the mixer and the cold black body.
-    \item
-        At this relatively low frequency (for HIFI), the beam is relatively wide.
-        It may be slightly larger than the black bodies.
-        This leads to less absorption, and therefore stronger reflections.
-        This should increase the quality of the mixer--black-body cavities,
-        and therefore create stronger ripples on the spectrum.
-\end{itemize}
-
-The stronger the ripples, the easier they are to fit.
-A signal with a strong continuum is more likely to show strong ripples.
-Indeed, the amplitude of the standing waves is proportional to that of the signal.
-However, strong ripples are not guaranteed: when the mixer superposes the sidebands,
-the LSB and USB ripples interfer together in a way that can be destructive,
-as shown by~\cref{eq:folded_cos}.
-
-We selected an observation of the planet Mars in band~1A.
-Its observation identifier (ObsId) in the Herschel Science Archive is 0x50004203 (hexadecimal).
-The observation is a map of Mars, it contains several spectra taken with different pointings.
-The spectrum that we have chosen is the number 25 of the level-2 product.
-The spectrum, as calibrated by the HIFI pipeline, is show on~\cref{fig:mars_data}.
-The spectrum does not show any spectral lines, only a continuum distorted by ripples due to standing waves.
-We must remember that the spectrum that we are seing here is the superposition of the LSB and USB signal.
-Since the continuum is present in both sidebands, the level that we are observing here is twice the real continuum.
-Mars is radiating \SI{2}{\kelvin} in LSB, \SI{2}{\kelvin} in USB, for a total of \SI{4}{\kelvin} in the intermediate frequency.
-\begin{figure}
-    \centering
-    \includegraphics{mars_data}
-    \caption{Observation of Mars by HIFI in band~1A showing a continuum and ripples due to standing waves.}
-    \label{fig:mars_data}
-\end{figure}
-
-%-----------------------------------------------------------------------------
-\subsubsection{The frequency axis}
-HIFI observations report two local oscillator frequencies.
-One was actually produced by the local oscillator.
-The other one carries a term that cancels the velocity of the satellite relatively to the Local Standard of Rest (LSR), compensating for the doppler-shift of the frequencies.
-
-For this observation, the LO was tuned at
-$f_\text{LO, sat} = \SI{490.97475}{\giga\hertz}$;
-this is the LO frequency in the reference frame of the satellite.
-The LO frequency that takes the radial velodicy into account is
-$f_\text{LO, LSR} = \SI{491.001}{\giga\hertz}$;
-this is the LO frequency in the Local Standard of Rest.
-
-The spectrum provided by the HIFI pipeline has its frequency axis in USB frequency in the LSR, which we write $f_\text{USB, LSR}$.
-This is not what we want; we want to know the physical frequencies that entered our instrument: $f_\text{LSB, sat}$ and $f_\text{USB, sat}$.
-Therefore, we must express the frequencies in the reference frame of the satellite.
-To do this, we compute the intermediate frequency scale from the LSR USB and the LSR LO with~\cref{eq:f_if_from_src}.
-Then, we compute the satellite-frame LSB and USB frequencies from the intermediate frequency and the satellite-frame LO frequency with \crefrange{eq:f_lsb_sat}{eq:f_usb_sat}.
-\begin{align}
-    f_\text{IF} &= f_\text{USB, LSR} - f_\text{LO, LSR} \label{eq:f_if_from_src} \\
-    f_\text{LSB, sat} &= f_\text{LO, sat} - f_\text{IF} \label{eq:f_lsb_sat}\\
-    f_\text{USB, sat} &= f_\text{LO, sat} + f_\text{IF} \label{eq:f_usb_sat}
-\end{align}
-On~\cref{fig:mars_data}, we have already applied this transformation.
-
-%-----------------------------------------------------------------------------
-\subsubsection{The temperature axis}
-The spectrum provided by the pipeline has its temperature axis given as~$T_a^*$.
-$T_a^*$~is the observed source antenna temperature corrected for atmospheric attenuation,
-radiative loss, and rearward scattering and spillover \cite{mangum2006tempscales}.
-Obviously, the values on this axis are incorrect.
-$T_a^*$ assumes a correct bandpass calibration, and such a calibration should result in a spectrum without ripples.
-By claiming that this is a $T_a^*$, we assign instrumental effects to the astronomical source.
-
-Since the spectrum has no line, only a continuum, and since we can assume that the continuum varies only slowly in frequency, we `know' that the correct value for~$T_a^*$ is close to a constant~\SI{4}{\kelvin}: the median flux is \SI{3.986}{\kelvin}.
-Everything else is to be blamed on standing waves.
-
-%-----------------------------------------------------------------------------
-\subsubsection{Expected standing waves}
-Our observation of Mars is taken in Dual Beam Switch mode (see \cref{sec:dual_beam_switch} on page~\pageref{sec:dual_beam_switch}).
-This means that the signal was taken with two different chopper positions, then averaged.
-We know that changing the position of the chopper changes the standing waves.
-However, we are not worried about that.
-Indeed, in band~1, the main cavities are
-\begin{itemize}
-    \item mixer--local oscillator,
-    \item mixer--antenna,
-    \item mixer--cold black body, and
-    \item mixer--hot black body.
-\end{itemize}
-Let us quickly review them to show that changing the chopper position is either irrelevant or negligible.
-
-We know that the coupling of the mixer to the LO is very weak because of the way the wire-grid beam splitters are rotated, therefore standing waves in the mixer--LO cavity should be negligible.  Anyway, this cavity does not change with the chopper position.
-
-The mixer--antenna cavity does change with the chopper position.  But we know that the scatter cone on the secondary mirror of the telescope efficiently gets rid of the standing waves in that cavity, or at least drowns them in the noise.
-Therefore, we believe that we can ignore it.
-
-As for the mixer--black bodies cavity, they do not exist when we are looking at the sky so they pose no problem during the reference subtraction.
-
-Our hypothesis is the following: we can use this spectrum of Mars to determine the exact distance between the mixer and the calibration black bodies.
-
-The standing waves that were in the instruments during the integrations on the hot and cold internal calibration black bodies do not cancel out.
-Not only the hot and cold standing waves are different, which prevents the complete disappearance of the additive noise during the subtraction $\text{hot}-\text{cold}$,
-but they are also different from the standing waves in the sky phase, which prevents the complete correction of the bandpass of the instrument in the division $\text{sky}/\text{blackbodies}$.
-The distance between the mixer and the calibration black bodies is approximately~$l \approx \SI{1.5}{\meter}$, therefore we expect ripples with a period of $F = c_0/l \approx \SI{100}{\mega\hertz}$ with $c_0$ the speed of light in vacuum.
-
-We expect to see two ripples, the periods of which will tell us how far the hot and cold black bodies are from the mixer.
-
-
-
-%-----------------------------------------------------------------------------
-\subsection{Period of the black-body ripples}
-We wish to asses the presence of two ripples near~\SI{100}{\mega\hertz} in the Mars data,
-and if we find them we wish to measure their period.
-Their period will tell us the distance between the mixer and the calibration black bodies.
-
-%-----------------------------------------------------------------------------
-\subsubsection{Assessing the presence of two ripples}
-In order to visually determine the presence of two ripples, we take a Fourier transform of our spectrum.
-We apply a hanning window before taking the FFT in order to reduce the amount of artifacts.
-
-The $y$ axis of the result of the FFT is an array of complex numbers.
-We are interested in the power, therefore we plot the square of the absolute value (modulus) of the result of the FFT.
-
-The $x$ axis of the result of the FFT is a `frequency' that has the dimension of time.
-For example, if the original spectrum has its $x$ axis in \si{\hertz} then the FFT has its $x$ axis in seconds.
-We plot its multiplicative inverse in order to visualize periods.
-
-The FFT should show two peaks near~\SI{100}{\mega\hertz}.
-\Cref{fig:mars_fft} confirms these predictions.
-Two peaks are clearly visible just below~\SI{100}{\mega\hertz}.
-\begin{figure}
-    \centering
-    \includegraphics{mars_fft}
-    \caption{Fourier transform of the Mars spectrum (black) and its filtered version (red).}
-    \label{fig:mars_fft}
-\end{figure}
-
-In order to isolate the contributions of these two ripples from the rest of the spectrum, for visual inspection, we used a digital bandpass filter.
-\Cref{fig:mars_filter} shows the filter that we are using.
-It is a Butterworth filter pushed to its limit.
-Butterworth filters are known to have a very flat response without ripples, but this is difficult to achieve when the spectral resolution is so coarse.
-In our case, the cutout periods are \SI{40}{\mega\hertz} and \SI{150}{\megahertz}.
-Anything narrower would yield a filter that is unusable.
-\begin{figure}
-    \centering
-    \includegraphics{mars_filter}
-    \caption{Transfer function of a Butterworth passband filter between 40 and~\SI{150}{\mega\hertz} for a sampling period of \SI{0.5}{\mega\hertz}}.
-    \label{fig:mars_filter}
-\end{figure}
-
-The effect of the filter on the FFT is shown on~\cref{fig:mars_fft}.
-The effect of the filter on the data in the direct domain is show on~\cref{fig:mars_filtered}.
-
-\begin{figure}
-    \centering
-    \includegraphics{mars_filtered}
-    \caption{Spectrum before (black) and after (red) applying the passband filter.}
     \label{fig:mars_filtered}
 \end{figure}
 
-That second plot reveals that the spectrum is more complex than a couple of beating sines.
-There is some evidence of beating: at \SI{495.7}{\giga\hertz} and \SI{497.0}{\giga\hertz}, the enveloppe of the ripple is weaker.
-However, it does not seem to happen at \SI{498.3}{\giga\hertz} where we would expect it.
-Still, assuming the beat is real, then it has a period of about
-$T_\text{beat}\approx 497.0 - 495.7 = \SI{1.3}{\giga\hertz}$.
-If we say that the right peak on the FFT has a period of
-$T_\text{right}=\SI{100}{\mega\hertz}$,
-then we can try to predict the period of the high peak
-$T_\text{left}$ to be about \SI{93}{\mega\hertz} (see \crefrange{eq:thigh0}{eq:thigh2}).
+The smoothed curve appears as a sinusoid wrapped in a sinusoidal envelope.
+This ``beat'' pattern is typically produced when two sines of different but close periods are added together.
+We are therefore expecting the contribution of two ripples, each coming from one cavity.
+The period of the ripples, about~\SI{100}{\mega\hertz}, is compatible with the distance of about~\SI{1.5}{\meter} that separate the calibration loads from the mixer.
+\todo[inline]{Ref for the mixer--load distance, it's not easy to find, we mostly know it from previous standing waves analysis}
+Indeed, the length~$d$ of a cavity and the period~$F$ of the ripple that it produces are linked by
+the relation
+\begin{equation}
+    d = \frac{c}{2F}
+    \label{eq:relation_length_period}
+\end{equation}
+in which $c$ is the speed of light in the medium, which we assume to be vacuum.
+This equation is a rewrite of~\vref{eq:relation_length_period_nice}, in which the speed of light is made explicit.
 
-\begin{align}
-    T_\text{beat} &= \SI{1300}{\mega\hertz} &
-    F_\text{beat} = 1/T_\text{beat}&= \SI{0.8}{\nano\second}
-    \label{eq:thigh0}\\
-    T_\text{right}  &= \SI{100}{\mega\hertz} &
-    F_\text{right}  = 1/T_\text{right} &= \SI{10}{\nano\second}
-    \label{eq:thigh1}\\
-    F_\text{left} &= F_\text{beat} + F_\text{right} = \SI{10.8}{\nano\second} &
-    T_\text{left} = 1/F_\text{left} &= \SI{93}{\mega\hertz}
-    \label{eq:thigh2}
-\end{align}
+An ideal spectrum for our purpose would combine a strong continuum, no spectral line, strong ripples and a low noise; but such spectra have little astronomical value and are therefore extremely rare, if at all present, in the HIFI database.
+This spectrum shows very strong ripples these are helpful to constrain some parameters of our model.
+Unfortunately, the thermal noise on top of these ripples is also very strong.
+Indeed, the integration time of this observation is quite short: this observation was not designed to measure the continuum of Mars but to calibrate the pointing of the satellite.
 
-Because the sampling of the FFT is relatively coarse, the peaks are not well resolved.
-We can fit gaussians to these peaks in order to determine their centers.
+%\begin{table}[hbtp]
+%    \centering
+%    \begin{tabular}{lc}
+%        \toprule
+%        spectrum & standard deviation [\si{\kelvin}]\\
+%        \midrule
+%        original & 0.101\\
+%        smoothed & 0.080\\
+%        residual & 0.061\\
+%        \bottomrule
+%    \end{tabular}
+%    \caption{There is almost as much energy in the noise (residual) as in the ripples (smoothed).}
+%    \label{tab:mars_filtered_stddev}
+%\end{table}
 
-%-----------------------------------------------------------------------------
-\subsubsection{Determining the periods of the two ripples.}
-\label{sec:determining_the_periods_of_the_two_ripples}
-Because the original data is noisy, we do not expect the peaks to be very narrow.
-Indeed, the noise in the data blurs the period, lowering and broadening the peaks on the FFT.
 
-The wider the peak, the more samples it covers, the more constraints we have for fitting a model to the peak.
-However, we still expect the peaks to be undersampled.
 
-In order to find the center of these peaks, we assume that their shape is relatively well described by a gaussian.
-It does not really matter whether we fit the gaussian on a $x$ axis that has the dimension or time or that of a period.
-Indeed, on such a small scale, the irregularity of the sampling of the period axis is negligible.
+%=============================================================================
 
-We create a model containing two gaussians and we use a least-square fitting algorithm to determine the six parameters describing these two gaussians.
+\subsection{Fourier Transform}
+Ripples are quasi-periodic features.
+As such, they appear as peaks on a Fourier Transform.
+\Cref{fig:mars_25_dft} shows the Discrete Fourier Transform of the spectrum of Mars.
 
-We know that our original data is noisy, therefore each point of the FFT has an uncertainty attached to it.
-We should use this uncertainty to weigh the data samples used in the fit.
-However, since the noise is almost the same for each channel, especially for channels that are that close to each other, all the data samples would have the same weight.
-In that case, we can just leave the weights at 1 and achieve the same result.
-
-The fit returns the six parameters describing the two gaussians: height, position and standard deviation for each gaussian, which correspond to the amplitude, period and period uncertainty of the ripples.
-These optimal parameters are given in~\cref{tab:mars_fft_fitted} and their corresponding representation on top of the FFT is show in~\cref{fig:mars_fft_fitted}.
-\begin{table}[hbtp]
-    \centering
-    \begin{tabular}{llSl}
-        \toprule
-        Ripple left  & amplitude          &  0.128 & \si{\kelvin}    \\
-        Ripple left  & period             & 91.115 & \si{\mega\hertz}\\
-        Ripple left  & period uncertainty &  1.108 & \si{\mega\hertz}\\
-        \midrule
-        Ripple right & amplitude          &  0.021 & \si{\kelvin}    \\
-        Ripple right & period             & 97.693 & \si{\mega\hertz}\\
-        Ripple right & period uncertainty &  1.515 & \si{\mega\hertz}\\
-    \bottomrule
-    \end{tabular}
-    \caption{Optimal parameters for the gaussian model of the FFT.}
-    \label{tab:mars_fft_fitted}
-\end{table}
 \begin{figure}[hbtp]
     \centering
-    \includegraphics{mars_fft_fitted}
+    \hfill\includegraphics{mars_25_dft_lin}\\
+    \hfill\includegraphics{mars_25_dft_log}
     \caption{
-        FFT (black) and its gaussian model (red).
-        The vertical lines mark the position of the peaks.%
+        Direct Fourier Transform of the original Mars spectrum (black) and its smoothed version (green).
+        The inner plot zooms onto the two peaks.
+        The vertical lines mark the approximate periods of the hot (red) and cold (blue) ripples.
+        Top: linear vertical scale.
+        Bottom: logarithmic vertical scale.
     }
-    \label{fig:mars_fft_fitted}
+    \label{fig:mars_25_dft}
 \end{figure}
 
-We could look at the covariance matrix of the fit objective function at the optimum: its diagonal gives us an estimation of the uncertainty of the fit.
-Because the number of samples used for the fit is so low, the fit is likely to match the data very well and the covariance matrix will indicate a very small uncertainty.
-We should not trust it: we do not have enough samples in our gaussian to average out the effect of the noise, we are actually fitting noise as if it were data.
-Instead of relying on the covariance matrix to tell us how precise the position of our peaks is, let us just use the standard deviation of the gaussian as an estimate of our position uncertainty.
-This is probably an overestimation but it is wiser to err on the safe and pessimist side.
+The horizontal axis of \cref{fig:mars_25_dft} represents the periods: short-period features are on the left, long-period features are on the right.
+The continuum is not represented as it has an infinite period.
+The vertical axis is either linear (top plot) or logarithmic (bottom plot).
+In both cases, the vertical axis represents the power present at a given period.
+Since our goal is to locate peaks, and not measure their power, the vertical axis has been normalized.
 
-We need a better estimate of the periods than the one provided by fitting the peaks on the FFT.
-We perform another fit, this time on the spectrum itself and not its FFT, using the result of the FFT fit as a first guess.
-Our model is a sum of two cosines with a phase of \SI{0}{\degree}.
-We fit it against the filtered data, not the full data.
-The free parameters are the periods and the amplitudes of these cosines.
-The result is shown in~\cref{tab:mars_cosine_fitted} and on~\cref{fig:mars_sine_fit}.
-The uncertainties reported in the table are computed from the covariance matrix generated during the fit, they are overestimated because of the way we compute the noise level.
+With its linear axis, the top plot shows that most of the power is concentrated into two peaks that are located at approximately~\SI{91}{\mega\hertz} and~\SI{98}{\megahertz}, marked by the red and blue vertical lines.
+The resolution of the Fourier Transform is low at these periods, one would need spectra with a much broader frequency coverage to resolve these peaks.
+The bottom plot is interesting because it shows no evidence of harmonics.
+The fundamentals are located at~\SI{91}{\mega\hertz} and \SI{98}{\megahertz}, we could expect harmonics peaking at half these periods, and even weak harmonics would stand out on a logarithmic scale.
+The lack of visible harmonics suggests that the cavities that create the ripple are very lossy (see~\cref{sec:fabry_gain}), unless the resolution of the DFT is too low.
+
+These plots in the Fourier domain bring evidence that we can model the ripples as two perfect sinusoids.
+
+
+
+%=============================================================================
+
+\subsection{Perfect-sines model}
+\label{sec:perfect_sines_model}
+Examining the Direct Fourier Transform of the spectrum shows evidence of two sinusoidal ripples but offers only a very crude approximation of their period.
+
+To determine the periods of the ripples more accurately, we model the smoothed spectrum with three components: a polynomial of degree 1 for the baseline and two sinusoidal functions.
+
+The baseline is modeled with~$y=a(f-f_0)+b$ where
+$f$ the frequency of the channel and
+$f_0=\SI{496974750000}{\hertz}$ is the frequency in the middle of the spectrum.
+Each ripple is modeled with~$y = C \cos(\phi) + S \sin(\phi)$ where
+$\phi = 2 \pi f / F$ and $F$ is the period of the sine.
+
+The model parameters are given in \cref{tab:two_sines_fit}.
+This model gives us a much better estimate of the periods of the ripples than the one provided by the DFT.
+\Cref{fig:mars_sine_fit} illustrates the differences between the smoothed spectrum of Mars and its model using perfect sines.
+
 
 \begin{table}[hbtp]
+% Cont result ['7.211908771679127', '-1.262493598126238e-11']
+% Cont errors ['5.614822816527074e-05', '4.7109413498749796e-14']
     \centering
-    \begin{tabular}{llSl}
+    \begin{tabularx}{\textwidth}{X c c}
         \toprule
-        Ripple left  & amplitude             &  4.70e-02  & \si{\kelvin} \\
-        Ripple left  & amplitude uncertainty &  6.8e-05   & \si{\kelvin} \\
-        Ripple left  & period                & 90788799.4 & \si{\hertz}\\
-        Ripple left  & period uncertainty    & 312        & \si{\hertz}\\
+            &
+            slope $a$ [\si{\kelvin\per\hertz}]
+            &
+            average $b$ [\si{\kelvin}]
+            \\
         \midrule
-        Ripple right & amplitude             & 2.07e-02   & \si{\kelvin} \\
-        Ripple right & amplitude uncertainty & 6.8e-05    & \si{\kelvin} \\
-        Ripple right & period                & 97526840.7 & \si{\hertz}\\
-        Ripple right & period uncertainty    & 818        & \si{\hertz}\\
+            baseline
+            &
+            $\num{-1.262e-11} \pm \num{4.7e-14}$
+            &
+            $\num{7.21191} \pm \num{5.6e-05}$
+            \\
         \bottomrule
-    \end{tabular}
-    \caption{Optimal parameters for the cosine model of the filtered mars data.}
-    \label{tab:mars_cosine_fitted}
+    \end{tabularx}
+    \bigskip
+% Hot  result ['-0.024374668042950198', '-0.084177761411197496', '90964727.019958138']
+% Hot  error  ['0.032581863729936822', '0.0094248123566952492', '1025.6247261452409']
+% Cold result ['-0.03334118353679541', '-0.039445727877105055', '97604192.684090942']
+% Cold error  ['0.026008970168651415', '0.021974915562550285', '2011.3533923905459']
+    \begin{tabularx}{\textwidth}{X c c c}
+        \toprule
+        ripple
+        &
+            $\cos$ amplitude $C$ [\si{\kelvin}]
+        &
+            $\sin$ amplitude $S$ [\si{\kelvin}]
+        &
+            period $F$ [\si{\hertz}]
+        \\
+        \midrule
+        hot &
+        $\num{-0.01965} \pm \num{0.00055}$ &
+        $\num{ 0.08539} \pm \num{0.00013}$ &
+        $\num{90964800} \pm \num{1000}$ \\
+        cold &
+        $\num{-0.03658} \pm \num{0.00032}$ &
+        $\num{ 0.03645} \pm \num{0.00032}$ &
+        $\num{97604400} \pm \num{2100}$\\
+        \bottomrule
+    \end{tabularx}
+    \caption{
+        Parameters modeling the baseline and the ripples of the smoothed spectrum of Mars with a polynomial and two sinusoids.
+    }
+    \label{tab:two_sines_fit}
 \end{table}
 
-\begin{equation}
-    \cos(l) + \cos(r) = 2 \cos \frac{l+r}{2} \cos \frac{l-r}{2}
-\end{equation}
-Fast: f.  Slow: s.
-f = l+r.  Ff =    94 037 275 Hz
-s = l-r.  Fs = 2 628 165 778 Hz
-
-Number of periods:
-nl = 4.9097475e+11 / Fl = 5407.88
-nr = 4.9097475e+11 / Fr = 5034.25
-
-Now we have a problem.  When I run the model, the period in the LSB is different from that in the USB.  Is that an effect of the frequency-dependance of the grids?
-
-Let us run a few models with a high number of points, for different qualities of grids.
-
-             cold_lsb      cold_usb      hot_lsb       hot_usb
-Terrible     97525209.7017 97535505.3236 90790855.0702 90791336.1938
-Bad grid     97525757.7989 97528507.7396 90790980.7196 90791305.1247
-Average grid 97525738.8229 97528378.7062 90790989.0694 90791259.5892
-Good grid    97525734.7035 97528371.7159 90790990.0195 90791308.1827
-
-     cold_diff           cold_ratio             hot_diff           hot_ratio
-terr -10295.621899992228 -2.639081349275494e-05 -481.1236000061035 -1.3248094338354034e-06
-bad  -2749.940700009465  -7.049168323536814e-06 -324.4050999879837 -8.932729822174089e-07
-avg  -2639.8833000063896 -6.767053506605794e-06 -270.5198000073433 -7.448960512543225e-07
-good -2637.0124000012875 -6.759694651932258e-06 -318.1631999909878 -8.760853980289941e-07
-
-So it appears that the difference in period between the LSB and USB is not affected by the quality of the grid.  Horrible grids have shitty perfs, but perfect grids (nanometer-sized wires) don't cancel the frequency-dependance.
-
-Turning off the LO reflection totally.
-
-             cold_lsb      cold_usb      hot_lsb       hot_usb
-Average grid 97525683.8215 97528460.5574 90790985.503 90791280.0253
-
-     cold_diff           cold_ratio             hot_diff           hot_ratio
-avg  -2776.7358999997377 -7.11785927143856e-06 -294.52229999005795 -8.109886148109437e-07
-
-Making the LO black still does not change anything.
-
-Fitting both lsb and usb at the same time gives a period that is not the average of lsb and usb.
-lsb = 97525683.8215
-usb = 97528460.5574
-(lsb+usb)/2   = 97527072.18945 a
-dsb           = 97526874.2421  b
-a-b           = 197.94734999537468
-(a-b)/(a+b)/2 = 2.5053204984204925e-07
-So it's not like I can easily interpolate the period linearly.
-
-Let us assume that the period increases linearly.
-lsb = 97525683.8215
-usb = 97528460.5574
-Over 12 GHz (middle of the band is at +/- 6)
-That's (97528460.5574 - 97525683.8215) / 12e9 = 2.3139465833331148e-07 of slope.  Unit 1.
-
-What happens when we fold a signal like that, that is obviously not periodic?
-Probably complicated.
-
-This is why I end up trying a cos fit on a folded black body simulation.
-Problem: it does not work too well.
-
-For one thing, Maybe I should have measured the period on a folded spectrum plotted in IF.
-Indeed, the natural frequency axis of a folded spectrum is IF.  But OK, I did it on the USB.
-I had no difficulty fitting two pure cosines to the Mars data.
-
-Why do I have a difficulty doing so with my model?  Are the reflections too strong, which
-creates harmonics that confuse the fitter?  I reduce the reflectivity of the black bodies and try again a COLD simulation.  It was 0.05.
-With 0.010:
-  97526230.6356 97527772.1652
-Wow, it does reduce the difference: -1541.529599994421 -3.951545669044067e-06
-With 0.005:
-  97526306.4941 97527628.6255
-  -1322.131399989128 -3.3891431084905955e-06
-  Still, but it's not huge.
-So I can reduce the harmonics by making the cavity shittier, which helps the fit a little bit.
-But there is still a frequency dependance and I cannot pretend it is not there.
-I don't know where it's from, but it is in my model.
-
-When folding a perfect sine, there is no phase information in the end: the phase of the unfolded sine is swallowed into the amplitude of the folded sine.
-When I fold a pseudo-periodic sine, I most probably introduce a phase.
-In that case, it is likely that the phase of the unfolded sine actually matters.
-This is perhaps why I do not manage to fit the folded model with a cosine only.
-
-So, let us fit the period of the folded hot and folded cold with a high resolution, allowing both the sine and the cos to vary.  There will most probably be a non-zero phase.
-But we will correct that later by keeping the distance constand but changing the complex part of the refractive index.  Let us hope that changing that phase factor of the reflection coefficient will not change the period.
-
-Cold: 1.5333979832692477 97526822.41    instead of 97526840.7
-Hot : 1.6474356100250245 90788560.5884  instead of 90788799.4
-
-Result is shit.
-Full precision parameters
-['-0.11153637532835889', '0.061988761454210235',
-'-0.06164752125973702', '0.045927314655778893']
-
-I fit myself by dichotomy.
-
-Cold: 1.5333985682141571, 97526981.4065 vs 97526840.7215, 5034.24532288 vs 5034.25258491
-Hot : 1.6474324862136842, 90789323.0179 vs 90788799.3724, 5407.84680048 vs 5407.87799149
-Doesn't look good.  I mean, it's not in phase with the real data.
-I'm only 1 to 3 percent out of phase at the LO frequency!  Barely more at the USB frequency.  So what the hell?  Well, that's because I allowed a sine in the fit here, while it was supposed to be cos only.  At least, the beat is at the right place, this is good.
-But ok, let's release the complex refractive index.
-For some reason, the fitter does not touch the imaginary part of the reflection coefficients at all.  Weird.
-Still shit.  Actually, I am NOT SURE AT ALL that changing the phase of the reflection coefficient changes the phase of the ripple.
-
-Reflection coefficient    cold distance      cold period   cold phase      hot distance       hot period    hot phase
-0.05<160                  1.5333979832692477 97568104.0947 39.0011986582   1.6474356100250245 90799254.179  -87.7627420873
-0.05<180                  1.5333979832692477 97527384.7591 79.5591205003   1.6474356100250245 90788092.3443 151.28035725
-
-
-
-ALLRIGHT.  So I figured out something about how I fitted cos on my mars data.
-
-The cos fit used cos only.  We now know that this is not justifiable: the model predicts that the period varies between LSB and USB, therefore introducing a non-0 phase on the folded spectrum.  I released the sin.
-
-The cossin fit was done on the IF scale, not the USB scale.  PROBLEM: the IF scale was done using the incorrect lo frequency!  It was using the source frame instead of satellite frame.  I changed that.
-
-Here are the new results for the cos-sin fit on the mars data:
-cold cos 0.0038539995013890343 K
-cold sin 0.021387554783970041  K
-cold per 97594954.546071783    Hz
-cold pha 1.3925113869568606    rad
-hot  cos 0.021742029199714193  K
-hot  sin 0.041946419895544131  K
-hot  per 90936624.420788705    Hz
-hot  pha 1.0925935814729846    rad
-
-Here are the new results fitting only a cos.
-cold cos 0.022171890500097435  K
-cold per 97927951.977024063    Hz
-hot  cos 0.045314271523442709  K
-hot  per 91158944.986680001    Hz
-
-COLD BLACK BODY
-Fitting with 2000 channels, cos only.
-cavity length     1.5269936704615454
-reflection phase  3.1499936088570895
-F_fld 97927951.2106 vs 97927951.977 err -7.82617668739e-09
-n_fld 5013.63240965 vs 5013.63237041
-X2_p 1.53958715212e-09
-X2_v 4.70471939465e-12  # No normalization of the variance, so it's sensitive to the number of channels.
-X2   1.54429187151e-09
-
-HOT BLACK BODY
-Fitting with 2000 channels, cos only.
-cavity length  1.6400685743706491
-refl phase     3.2089365869035946
-F_fld 91158944.963 vs 91158944.9867 err -2.60265784674e-10
-n_fld 5385.91961765 vs 5385.91961625
-X2_p 1.96496062589e-12
-X2_v 6.02121964246e-15
-X2   1.97098184554e-12
-
-Then I fit the magnitude of the reflection coefficients using the 4-phases calibration.
-Note that this stills allows the magnitude to flip sign.
-Got bored waiting for the last decimals:
-cbb_r_b 0.284605 ∠ -180 (-0.284595245887-0.00239092817767j)
-hbb_r_b 0.078748 ∠ +004 (0.0785695922684+0.00529919879027j)
-
-
-The residual is as almost as big as the data itself but this is fine:
-we are trying to fit only the periods of the ripples, not their full shape.
-The fitted periods are \SI{90.7888}{\mega\hertz} and \SI{97.5268}{\mega\hertz}.
-\begin{figure}
-    \includegraphics{mars_sine_fit}
-    \caption{Fit of the black body ripples with two sines.}
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{mars_25_sine_fit}
+    \caption{Model of the ripple using two sinusoids.}
     \label{fig:mars_sine_fit}
 \end{figure}
 
+Using~\cref{eq:relation_length_period} with $c=c_0$ (the speed of light in vacuum), we get our first estimate of the length of the cavities which we give in~\cref{tab:first_estimate_cavity_length}.
+The mixer and the hot load are separated by~\SI{1.64}{\meter}, the mixer and the cold load by~\SI{1.53}{\meter}.
+These are optical path lengths, not actual distances.
+Assuming~$c=c_0$ is justified by the fact that the focal plane unit of HIFI is in vacuum.
+However, this assumption suggests that there is only vacuum between the loads and the mixers, which we know is not the case since there are two grids and three mirrors in that optical path.
+Furthermore, the surface of a load is a mathematical one: a load does not present a perfectly plane surface normal to the beam; we assume that the load behave as if it had an effective plane surface at a given effective distance.
+For these two reasons, we expect that the optical path lengths that we just calculated differ somewhat from the actual distances between the mixers and the loads.
 
-
-%-----------------------------------------------------------------------------
-\subsection{Distance of the black bodies to the mixer.}
-
-%-----------------------------------------------------------------------------
-\subsubsection{Effective speed of light in the cavity.}
-\label{sec:effective_speed_of_light}
-From the period $F$ of the ripple, we can derive the length $l$ of the cavity with~\cref{eq:cavity_length_from_period}.
-\begin{equation}
-    l = \frac{c}{2F} \label{eq:cavity_length_from_period}
-\end{equation}
-In this equation, $c$ is the speed of light in the propagation medium.
-
-The two periods that we have fitted are \SI{90.7888}{\mega\hertz} and \SI{97.5268}{\mega\hertz}.
-Our cavities are in vacuum, so we can use the speed of light in vacuum for $c$.
-If we do this, we find cavities of length \SI{1.65104}{\meter} and \SI{1.53697}{\meter}.
-These lengths are incorrect.
-Indeed, in HIFI, there are two wire grid polarizers between the mixer and the black bodies.
-These grids are not made of vacuum, therefore they introduce an additional phase shift that~\cref{eq:cavity_length_from_period} does not take into account.
-
-We just stated that using the speed of light in vacuum is inadequate because it ignores the phase shifts introduced by the grids.
-However, the relation $l = \frac{c}{2F}$ still holds, only for a different value of $c$ which we can call the effective speed of light in the cavity.
-We know which periods we wish to see, and once we have found $c$, we have found the two cavity lengths.
-
-The fact that a single effective speed of light applies to two cavities is a hypothesis that may not hold.
-If we can reach a better fit by using two effective speed of lights rather than one, then we will consider that the effective speed of light may be frequency-dependant.
-
-%-----------------------------------------------------------------------------
-\subsubsection{Numerical model of HIFI band~1.}
-In order to determine the distance of the black bodies to the mixer, we create a numerical model of the band~1 of HIFI using the method described in \cref{sec:chapter2}.
-The networks constituting this model, and their connections, are represented on~\cref{fig:networks_band_1}.
-
-\begin{figure}
-    \missingfigure{Drawing of the networks of the band~1 model}
-    \caption{The model of HIFI band~1 has 15 networks.}
-    \label{fig:networks_band_1}
-\end{figure}
-
-The source can be either be the sky, the cold or the hot black body.
-
-When the source is the sky, its reflection coefficient is 0, there is no cavity involving the sky.
-Because of that, the distance between the source and the first grid does not matter and we set it to the arbitrary value of \SI{0}{\meter}.
-
-When the source is a black body, its reflection coefficient is a free parameter.
-Each black body as its own.
-
-The distances of the black bodies to the beam splitter 0 are unknown but are not independant.
-They are both linked to the effective speed of light in cavity that we mentionned in~%
-\cref{sec:effective_speed_of_light}
-and to the periods that we fitted with two sines in~%
-\cref{sec:determining_the_periods_of_the_two_ripples}.
-We know the periods of the ripples, we are going to find the value of the effective speed of light that yields distances that reproduce these periods.
-For the distances of the two black bodies, there is only one free parameter: the effective speed of light of the cavity.
-
-The known distances between the networks are given in~\cref{tab:bsband_distances}.
-These distances are valid at room temperature.
-In the cryostat, which maintains the optics at a temperature of about~\SI{13}{\kelvin}, the focal plane unit shrinked.
-The linear coefficient of thermal expansion for aluminum at~\SI{293}{\kelvin} is approximately~\SI{23.1e-6}{\per\kelvin}; which gives~\SI{0.6}{\percent} of length difference between~\SI{293}{\kelvin} and~\SI{13}{\kelvin}.
-For us, this does not matter: we are interested in the mixer--black-body cavities and their
-length are unknown.
-The lengths that we will find by fitting the model to the data will compensate for the fact that we did not shrink our model.
-If we were interested in the cavities formed by the two mixers, or the mixer and the LO, then the shrinking would matter.
-
-\begin{table}
+\begin{table}[hbtp]
     \centering
-    \begin{tabular}{lS}
+    \begin{tabular}{lcc}
         \toprule
-        beam splitter 0 -- beam splitter 1  & 0.040   \\
-        beam splitter 0 -- beam splitter 2  & 0.040   \\
-        beam splitter 1 -- mixer 1          & 0.204   \\
-        beam splitter 2 -- mixer 2          & 0.204   \\
-        beam splitter 0 -- attenuator       & 0.74585 \\
-        attenuator -- local oscillator      & 0.57361 \\
+        ripple &
+        period [\si{\hertz}] &
+        pathlength [\si{\meter}] \\
+        \midrule
+        hot  & $\num{90964800} \pm \num{1000}$ & $\num{1.64785} \pm \num{0.00004}$ \\
+        cold & $\num{97604400} \pm \num{2100}$ & $\num{1.53575} \pm \num{0.00006}$ \\
         \bottomrule
     \end{tabular}
-    \caption{Distances between the optical elements, in meters.}
-    \label{tab:bsband_distances}
+    \caption{First estimation of the distance between the mixer and the loads, from the
+    period of the ripples.}
+    \label{tab:first_estimate_cavity_length}
 \end{table}
 
-The parameters of the other networks are listed in \cref{tab:network_parameters}
 
-\begin{table}
+
+
+
+%#############################################################################
+\FloatBarrier
+
+
+
+\section{Interference modeling of HIFI Band 1}
+We apply the method of~\cref{sec:chapter2} to model the optics of HIFI.
+We rely on this model to predict the interferences in the mixer--load cavities.
+
+The interference model alone can only predict the gains of the system for a given input.
+In order to reproduce the spectrum of Mars, we need to apply these gains to an input power.
+
+
+First, we describe how we must calibrate the output of our model to reproduce the spectrum of Mars.
+Then, we present the configuration of networks that we use to model the optics of Band~1 and predict its gains.
+Finally, we determine the powers, and therefore electric field amplitudes, that enter our system.
+
+
+
+%=============================================================================
+
+\subsection{Calibration equation}
+
+The spectrum of Mars shown in~\cref{fig:mars_25_original} is the result of the standard HIFI calibration pipeline,
+which is described in the~\citetitle{hifiobserversmanual}~\cite{hifiobserversmanual}.
+This pipeline applies the reference subtraction and the bandpass calibration described by \citeauthor{ossenkopf2002intensity} in~\citetitle{ossenkopf2002intensity}~\cite{ossenkopf2002intensity}.
+It is summarized by the following equation:
+\begin{equation}
+    J_\text{src}(f)% - J_\text{ref}(f)
+    = 
+    \frac{
+        c_\text{src}(f) - c_\text{ref}(f)
+    }{
+        c_\text{hot}(f) - c_\text{cold}(f)
+    }
+    (\eta_\text{hot} + \eta_\text{cold} - 1)
+    (
+        J_\text{hot}(f_\text{LO}) - J_\text{cold}(f_\text{LO})
+    )
+    \text{.}
+    \label{eq:mars_calibration}
+\end{equation}
+$J_\text{src}(f)$ is the spectrum plotted on~\cref{fig:mars_25_original}, it would correspond to the power detected from Mars expressed as a Rayleigh--Jeans temperature if the calibration had properly removed the ripples.
+The four values $c_\text{src}$, $c_\text{ref}$, $c_\text{hot}$ and $c_\text{cold}$ correspond to the output of the spectrometer expressed in its native arbitrary unit (``CCD counts'' for the WBS) for the four pointings done during the observation:
+on Mars (``src''), on the blank sky (``ref'') and on the hot and cold calibration loads.
+The two terms $\eta_\text{hot}$ and $\eta_\text{cold}$ are the power coupling efficiencies of the beam to the calibration loads.
+Finally, $J_\text{hot}$ and $J_\text{cold}$ refer to the power emitted by the calibration loads, expressed as Rayleigh--Jeans temperatures.
+
+For this observation,
+$f_\text{LO} = \SI{490.97475}{\giga\hertz}$,
+$\eta_\text{hot} = 0.959$,
+$\eta_\text{cold} = 0.991$,
+$T_\text{hot} = \SI{100.275}{\kelvin}$ and
+$T_\text{cold} = \SI{13.134}{\kelvin}$.
+
+The last two parameters, $T_\text{hot}$ and $T_\text{cold}$ are the physical temperatures of the calibration loads measured by thermometers during the observation.
+Assuming that the loads are black bodies, their spectral radiance $B$ follow Planck's law.
+\begin{equation}
+    B
+    =
+    \frac{2 h f^3}{c^2} \frac{1}{e^{\frac{h f}{k_B T} - 1}}
+    \label{eq:planck_law}
+\end{equation}
+Here, $T$ is the temperature of the load, $f$ is the frequency, $h$ is Planck's constant, $c$ is the speed of light in the propagation medium (vacuum for us) and $k_B$ is the Boltzmann constant.
+We want to express their spectral radiance as Rayleigh--Jeans temperatures $J_\text{hot}$ and $J_\text{cold}$.
+We do this by solving Rayleigh--Jeans' law for $J$.
+\begin{equation}
+    B
+    =
+    \frac{2 f_\text{LO}^2 k_B}{c^2}J
+    \label{eq:rayleigh_jeans_law}
+\end{equation}
+The results are $J_\text{hot} = \SI{88.95}{\kelvin}$ and $J_\text{cold} = \SI{4.70}{\kelvin}$.
+We must remember that HIFI is a double-sideband instrument: each channel of the spectrum contains a contribution from both sidebands.
+When looking at a continuum source at a temperature $J$, HIFI receives $J$ in each sideband for a total of $2J$.
+To compensate, the scaling factor $J_\text{hot} - J_\text{cold}$ must be multiplied by 2.
+This is equivalent to having $J_\text{hot} = \SI{177.90}{\kelvin}$ and $J_\text{cold}=\SI{9.40}{\kelvin}$.
+
+
+Rayleigh--Jeans' law is an approximation of Planck's law for low frequencies and/or high temperatures.
+The difference between $T_\text{hot}$ and $J_\text{hot}$ and between $T_\text{cold}$ and $J_\text{cold}$ illustrates that this approximation is poor in the range of powers and frequencies at which HIFI operates.
+Nevertheless, it is customary for radioastronomers to express powers as Rayleigh--Jeans temperatures.
+
+Since our goal is to reproduce a real observation of Mars with our model of the optics of HIFI Band~1, we use the same equation and the same parameters to calibrate our model.
+Our model must provide $c_\text{src}$, $c_\text{ref}$, $c_\text{hot}$ and $c_\text{cold}$.
+This is the subject of the next sections.
+
+
+
+%=============================================================================
+
+\subsection{IF chain}
+The Intermediate Frequency (IF) chain processes the signal output by the mixer.
+It consists in amplifiers, filters, and eventually a detector.
+In our case, the detector is a pixel of the CCD of the WBS.
+The output $c$ of the detector is an affine function of the power of its input $P_\text{detector input}$:
+\begin{equation}
+    c = G_\text{detector} \; P_\text{detector input} + z
+\end{equation}
+in which $G$ converts the unit from power to CCD count, and $z$ is an arbitrary constant.
+The subtractions and the division in the calibration equation remove $G$ and $z$ from our concern.
+\begin{equation}
+    \frac{
+        c_\text{src} - c_\text{ref}
+    }{
+        c_\text{hot} - c_\text{cold}
+    }
+    =
+    \frac{
+        P_\text{detector input, src} - P_\text{detector input, ref}
+    }{
+        P_\text{detector input, hot} - P_\text{detector input, cold}
+    }
+\end{equation}
+
+Each power $P$ in the previous equation is proportional to the square of the amplitude of the electric field.
+That coefficient of proportionality also disappears during the division.
+\begin{equation}
+    \frac{
+        c_\text{src} - c_\text{ref}
+    }{
+        c_\text{hot} - c_\text{cold}
+    }
+    =
+    \frac{
+        \abs{\cp{e}_\text{detector input, src}}^2
+        -
+        \abs{\cp{e}_\text{detector input, ref}}^2
+    }{
+        \abs{\cp{e}_\text{detector input, hot}}^2
+        -
+        \abs{\cp{e}_\text{detector input, cold}}^2
+    }
+\end{equation}
+
+Finally, the electric field at the input of the detector is proportional to the electric field at the output of the mixer:
+$\cp{e}_\text{detector input} = \cp{g}_\text{IF chain} \cp{e}_\text{mixer output}$.
+The division removes once again the common factor~$\abs{\cp{g}_\text{IF chain}}^2$.
+\begin{equation}
+    \frac{
+        c_\text{src} - c_\text{ref}
+    }{
+        c_\text{hot} - c_\text{cold}
+    }
+    =
+    \frac{
+        \abs{\cp{e}_\text{mixer output, src}}^2
+        -
+        \abs{\cp{e}_\text{mixer output, ref}}^2
+    }{
+        \abs{\cp{e}_\text{mixer output, hot}}^2
+        -
+        \abs{\cp{e}_\text{mixer output, cold}}^2
+    }
+\end{equation}
+In other words, we can completely ignore the IF chain.
+
+
+
+%=============================================================================
+
+\subsection{Mixing}
+Although mixers are non-linear devices, their useful output phasor is proportional to their input phasor in the case of small signals.
+\begin{equation}
+    \begin{aligned}
+    \cp{e}_\text{mixer output}
+    &=
+    \cp{g}_\text{mixer, LSB} \;
+    \cp{e}_\text{mixer input, LSB} \\
+    &+
+    \cp{g}_\text{mixer, USB} \;
+    \cp{e}_\text{mixer input, USB}
+    \end{aligned}
+\end{equation}
+The frequency of the input phasors are $f_\text{LSB}$ and $f_\text{USB}$.
+The frequency of the output phasor is $f_\text{IF}$.
+The gain $\cp{g}_\text{mixer}$ is intrinsic to the mixer, it may depend on the frequency and be different for the LSB abd USB frequency.
+
+As this equation shows, mixers are coherent devices: they operate in field, not in power.
+Although correct at any instant $t$, this equation cannot be applied to our situation.
+Indeed, HIFI spectra are integrated over several seconds, which is orders of magnitude above the coherence time of the LSB and USB signals.
+The LSB and USB signals are both coherent on their own, but they are not correlated with each other for that long: they are not phase-locked to each other.
+The proper way of combining the contributions of the LSB and USB signals is in power:
+\begin{equation}
+    \abs{\cp{e}_\text{mixer output}}^2
+    =
+    \abs{\cp{e}_\text{mixer output, LSB}}^2
+    +
+    \abs{\cp{e}_\text{mixer output, USB}}^2
+\end{equation}
+with
+\begin{align}
+    \cp{e}_\text{mixer output, LSB}
+    &=
+    \cp{g}_\text{mixer, LSB}
+    \;
+    \cp{e}_\text{mixer input, LSB}
+    \\
+    \cp{e}_\text{mixer output, USB}
+    &=
+    \cp{g}_\text{mixer, USB}
+    \;
+    \cp{e}_\text{mixer input, USB}
+    \text{.}
+\end{align}
+
+The standard HIFI pipeline assumes that the gain is the same for both sidebands:
+$\cp{g}_\text{mixer, LSB} = \cp{g}_\text{mixer, USB} = \cp{g}_\text{mixer}$.
+We make the same assumption in our model.
+The resulting term $\abs{\cp{g}_\text{mixer}}^2$ disappears during the bandpass calibration.
+With the subscript ``mi'' standing for ``mixer input'', we get the following equality.
+\begin{gather}
+    \frac{
+        c_\text{src} - c_\text{ref}
+    }{
+        c_\text{hot} - c_\text{cold}
+    }\notag
+    =
+    \\
+    \frac{
+        \left(
+            \abs{\cp{e}_\text{mi, LSB, src}}^2
+            +
+            \abs{\cp{e}_\text{mi, USB, src}}^2
+        \right)
+        -
+        \left(
+            \abs{\cp{e}_\text{mi, LSB, ref}}^2
+            +
+            \abs{\cp{e}_\text{mi, USB, ref}}^2
+        \right)
+    }{
+        \left(
+            \abs{\cp{e}_\text{mi, LSB, hot}}^2
+            +
+            \abs{\cp{e}_\text{mi, USB, hot}}^2
+        \right)
+        -
+        \left(
+            \abs{\cp{e}_\text{mi, LSB, cold}}^2
+            +
+            \abs{\cp{e}_\text{mi, USB, cold}}^2
+        \right)
+    }
+\end{gather}
+
+We must compute eight mixer input spectra: one per pointing and per sideband.
+Each spectrum is the product of the optical gain by the input power.
+
+
+
+%=============================================================================
+
+\subsection{Optical gains}
+We model the optics of HIFI Band~1 with the networks shown in~\cref{fig:band1_networks}.
+Each optical element is modeled with a $n$-port network which is represented numerically by a scattering matrix.
+Using the technique that we describe in~\cref{sec:chapter2},
+we solve the output of the system for each channel, for different parameters and for all the relevant sources of power.
+\begin{figure}[hbtp]
+    \centering
+    \footnotesize
+    \input{band1_networks.pdf_tex}
+    \caption{Networks of band 1.}
+    \label{fig:band1_networks}
+\end{figure}
+
+The white rectangles of~\cref{fig:band1_networks} represent distances between the other networks.
+\Cref{tab:known_distances} lists the known distances.
+The unknown distances, which we are trying to determine, are the distances between grid~0 and the surface of the calibration loads: the two white rectangles on the left of the chopper.
+
+\begin{table}[hbtp]
+    \centering
+    \begin{tabular}{ll}
+        \toprule
+        distance network     & length [\si{\meter}] \\
+        \midrule
+        grid 0 -- H grid     & \num{0.040}   \\
+        grid 0 -- V grid     & \num{0.040}   \\
+        H grid -- H mixer    & \num{0.204}   \\
+        V grid -- V mixer    & \num{0.204}   \\
+        grid 0 -- attenuator & \num{0.74585} \\
+        attenuator -- LO     & \num{0.57361} \\
+        \bottomrule
+    \end{tabular}
+    \caption{
+        Known distances between the optical elements of HIFI Band~1.
+        Source: \todo[inline]{Willem Jellema's thesis}
+    }
+    \label{tab:known_distances}
+\end{table}
+
+In HIFI, the chopper is an actuated mirror that directs the beam of the telescope toward the sky or the calibration loads.
+In our model, we represent it with a network whose transmission coefficient equals either 1 or 0 so that it connects one and only one source to grid~0.
+
+The reflection on the loads and the mixers is a combination of several reflections on different points of the loads.
+We assume that the overall reflection is equivalent to a single effective reflection on an effective mathematical surface normal to the direction of propagation of the beam (see~\cref{sec:gray_body}).
+Each load has two unknown parameters: a complex reflection coefficient and the position of its effective surface.
+
+The parameters of the other networks used in our model are listed in~\cref{tab:network_parameters}.
+All these values are estimates that we consider reasonable.
+
+\begin{table}[hbtp]
     \centering
     \begin{tabular}{lr}
         \toprule
-        grid wire radius                 & \SI{1}{\micro\meter} \\
-        grid wire spacing (axis to axis) & \SI{4}{\micro\meter} \\
-        grid wire conductivity           & \SI{3e7}{\siemens}   \\
-        LO reflection coefficient $x$    & $-\sqrt{0.05}$       \\
-        LO reflection coefficient $y$    & $-\sqrt{0.05}$       \\
-        mixer reflection coefficient $x$ & $-\sqrt{0.10}$       \\
-        mixer reflection coefficient $y$ & $-\sqrt{0.90}$       \\
-        beam splitter 0 rotation $z$     & \SI{-5.7}{\degree}   \\
-        attenuator                       & \SI{-10}{\decibel}   \\
+        grid wire radius                          & \SI{1}{\micro\meter} \\
+        grid wire spacing (axis to axis)          & \SI{4}{\micro\meter} \\
+        grid wire conductivity                    & \SI{1e7}{\siemens\per\meter}   \\
+        LO reflection coefficient                 & $-\sqrt{0.05}$       \\
+        mixer reflection coefficient, co-pol      & $-\sqrt{0.05}$       \\
+        mixer reflection coefficient, cross-pol   & $-1$       \\
+        mixer transmission coefficient, co-pol    & $\sqrt{0.95}$       \\
+        mixer transmission coefficient, cross-pol & $0$       \\
+        attenuator gain                           & \SI{-10}{\decibel}   \\
+        coupling coefficient to hot load          & $\sqrt{0.959}$       \\
+        coupling coefficient to cold load         & $\sqrt{0.991}$       \\
         \bottomrule
     \end{tabular}
-    \caption{Various network parameters.}
+    \caption{Network parameters used to model HIFI Band~1.}
     \label{tab:network_parameters}
 \end{table}
 
-\Cref{tab:model_temperatures} lists the temperature of the sources.
-We do not include the cosmological background and the antenna temperature because they are subtracted during the calibration.
-\begin{table}
+The reflection coefficient of the local oscillator barely matters, as we have established earlier that the cavities involving the local oscillator are too lossy to produce measurable ripples.
+We set it to reflect~\SI{5}{\percent} of the incoming power but experimentation with the model confirms that its effect is negligible: the model is barely insensitive to the value of this parameter; the reflections from the loads dominate by orders of magnitude.
+
+The rectangular horn of the mixer is designed to couple one polarization (called ``co-pol'') and reflect the other (called ``cross-pol'').
+This is why we set the cross-pol reflection coefficient to~\SI{100}{\percent}.
+We begin our model by assuming a co-pol reflection of~\SI{5}{\percent} in power.
+Later in this chapter, we free this parameter and let a fitting algorithm determine its value.
+The transmission coefficient of the mixer represents the fraction of the electric field that the mixer actually detects and can down-convert to the intermediate frequency~(IF).
+
+
+
+%=============================================================================
+
+\subsection{Input powers}
+The four inputs are Mars, a portion of blank sky, the hot load and the cold load.
+The local oscillator is also an input (via its~\SI{120}{\kelvin} thermal noise) that is present in each pointing.
+
+We assume that all the sources emit according to Planck's law.
+For sources that are not black but gray bodies (such as the calibration loads), our optical model performs the appropriate attenuation automatically (see the gray body surfaces on~\cref{fig:band1_networks}).
+
+We know the physical temperatures of the hot and cold loads:
+\SI{100.275}{\kelvin} and \SI{13.134}{\kelvin}.
+The power originating from Mars that enters our optics corresponds to a Rayleigh--Jeans temperature is about~\SI{7.2}{\kelvin} (average of the continuum), which translates into a physical temperature of \SI{11.8}{\kelvin}.
+We set the local oscillator and the blank sky temperatures to zero.
+
+Setting the LO temperature to~\SI{0}{\kelvin} is justified by the very high losses of the LO--mixer cavities.
+Experiments with the model show that setting it to a more realistic~\SI{120}{\kelvin} has no significant influence on the predictions of the model.
+Ignoring the LO completely speeds up the calculations.
+
+Setting the blank sky temperature to~\SI{0}{\kelvin} is justified by the $T_a^*$ scale of the original spectrum.
+A more correct treatment would require to know the extension of Mars and its position inside the telescope beam.
+This is not required because the spectrum of Mars that we are trying to reproduce has its temperature axis in $T_a^*$: it ignores pointing and extension and assumes that Mars is a point source in the middle of the beam.
+As a result, the background radiation completely disappears in the power subtraction $P_\text{src}-P_\text{ref}$ and we can ignore it.
+
+Our optical model does not operate on powers but on electric fields.
+The SI units of these electric fields is \si{\volt\per\meter}.
+The corresponding SI unit for power is a power density in \si{\watt\per\meter\squared}.
+The power density is proportional to the square of the absolute value of the field amplitude.
+That coefficient of proportionality disappears during the bandpass calibration and we do not need to know it.
+Planck's law does not give a power density but a spectral radiance, expressed in
+\si{\watt\per\meter\squared\per\steradian\per\hertz}.
+The coefficient of proportionality in~\si{\per\steradian\per\hertz} that relates the spectral radiance and the power density also vanishes during the bandpass calibration, we do not have to calculate it either.
+For our practical purpose, intensities equal the square root of powers.
+
+Finally, all our sources are thermal noise.
+As such, their radiation is unpolarized.
+\Cref{sec:jones_unpolarized} describes how to treat unpolarized sources:
+they are decomposed into two polarized sources of opposite polarizations, and their individual contributions are added in power.
+
+We have defined all the steps that we take to model our spectrum of Mars.
+In the next section, we confront that model to the original data taken by HIFI.
+
+
+
+
+
+%#############################################################################
+\FloatBarrier
+
+
+
+\section{Hot and cold ripple fit}
+
+Fitting periodic pattern is notoriously problematic:
+when the objective function is a~$\chi^2$, then is has many local extrema in which the fitter can get stuck.
+To avoid that problem, we fit our model in two steps.
+\begin{enumerate}
+    \item match the period and the phase of the ripples, and
+    \item match the rest.
+\end{enumerate}
+We have two ripples: one caused by the hot load and one by the cold load.
+The period and the phase of each ripple depend on the length of the cavity and the argument of the reflection coefficient of the load.
+In this section, we fit the two mixer--load distances and the argument of the reflection coefficient.
+
+We use the word ``argument'' instead of ``phase'' for the reflection coefficient because we already use the word ``phase'' for the phase of the sinusoid of the ripple.
+The reflection coefficient is a complex number with a magnitude and an argument, we are fitting this argument.
+
+Fitting two ripples at once can be difficult but we do not have to do it:
+\cref{sec:perfect_sines_model} gives us a perfect-sine model for each ripple, independently of the other.
+This allows us to fit two independent interference models, one for the hot and one for the cold ripple.
+During the fits, we normalize the ripples predicted by the interference models.
+Indeed, the folding step required by the mixing process adds the lower and upper sideband ripples together, which can be constructive or destructive, resulting in highly-variable amplitudes that mislead the fitters.
+At this stage, we are interested only in the period and the phase, so we normalize the ripples.
+
+\Cref{fig:mars_interf_stages_cold} shows different stages of the interference modeling of the cold ripple.
+The top plot presents the gain of the modeled optical system;
+it oscillates between \SI{80}{\percent} and almost \SI{100}{\percent}.
+The second plot shows the optical gain multiplied by the actual power emitted by the cold black body: this is the power that couples to the mixer;
+the slope results from a combination of Planck's law and Rayleigh--Jeans' law.
+The third plot shows the effect of the mixer folding the spectrum;
+this spectrum is the one that we compare to the perfect-sine model.
+Finally, the bottom plot shows the sideband radio defined as $G_\text{USB}/(G_\text{LSB}+G_\text{USB})$;
+channels that are USB-dominated have a sideband ratio greater than~\num{0.5}.
+
+\begin{figure}[hbtp]
     \centering
-    \begin{tabular}{lS}
+    \includegraphics{mars_25_interf_dsb_gain_cold}
+    \caption*{Gain: what the mixer detects if the cold load emits a power of~1.}
+    \bigskip
+    \includegraphics{mars_25_interf_dsb_temp_cold}
+    \caption*{Cold load power seen by the mixer before being folded.}
+    \bigskip
+    \includegraphics{mars_25_interf_fld_temp_cold}
+    \caption*{Cold load power seen by the mixer after being folded.}
+    \bigskip
+    \includegraphics{mars_25_interf_sbr_cold}
+    \caption*{Sideband ratio: USB gain / (LSB gain + USB gain).}
+    \caption{Three stages of the interference modeling for the cold load, and the sideband ratio.}
+    \label{fig:mars_interf_stages_cold}
+\end{figure}
+
+
+\Cref{tab:interf_vs_perfectsine} lists the parameters of the interference model that best reproduce the perfect-sine model of the hot and the cold load.
+The corresponding ripples are shown in~\cref{fig:mars_25_interf_distance_fit_cold,fig:mars_25_interf_distance_fit_hot}.
+The vertical axis is arbitrary because the ripples are normalized.
+Neither the hot and cold best interference models match the perfect-sine model perfectly.
+This is due to the fact that some combinations of distance and argument produce ripples that do not approximate simple sines, as shown in~\cref{fig:mars_25_interf_distance_fit_cold_poor}.
+\begin{table}[hbtp]
+    % HOT
+    % ## Distance param 1.6491521148703148
+    % ## Distance error 8.5017794640728818e-05
+    % ## Angle param 4.1068006437048581
+    % ## Angle error 0.08755492869280726
+    % X2 = 0.0085045429515
+    % COLD
+    % ## Distance param 1.5349642234206082
+    % ## Distance error 6.4163290218112999e-05
+    % ## Angle param 4.1915111156985274
+    % ## Angle error 0.068293124275238634
+    % X2 = 0.00289102399052
+    \centering
+    \begin{tabular}{l c c}
         \toprule
-        sky source       &   2     \\
-        sky reference    &   0     \\
-        cold black body  &  13.134 \\
-        hot black body   & 100.275 \\
-        local oscillator & 120     \\
+            load
+            &
+            distance [\si{\meter}]
+            &
+            argument [\si{\radian}] \\
+        \midrule
+            hot  & $\num{1.64915} \pm \num{8.5e-5}$    &    $\num{4.11} \pm \num{0.08}$ \\
+            cold & $\num{1.53496} \pm \num{6.4e-5}$    &    $\num{4.19} \pm \num{0.06}$ \\
         \bottomrule
     \end{tabular}
-    \caption{Source temperatures in Kelvin.}
-    \label{tab:model_temperatures}
+    \caption{Parameters that make the interference model of the hot and cold spectra fit their perfect-sine model.}
+    \label{tab:interf_vs_perfectsine}
 \end{table}
 
-%-----------------------------------------------------------------------------
-\subsubsection{Inputs to the model}
-Our model does not operate on temperatures but on electric fields or on powers.
-To convert temperatures to power, we use Plank's law~\eqref{eq:planks_law}.
-\begin{equation}
-    B_f(T) = \frac{2 h f^3}{c^2} \frac{1}{e^{\frac{h f}{k_B T} - 1}} \label{eq:planks_law}
-\end{equation}
-In~\cref{eq:planks_law},
-$h$ is the Plank constant, $k_B$ the Boltzman constant, $c$ the speed of light, $f$ the frequency and $T$ the temperature.
-$B_f$ is a spectral radiance, the SI unit of which is \si{\watt \per \steradian \per \meter \squared \per \hertz}.
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{mars_25_interf_distance_fit_hot}
+    \caption{Best fit of the hot ripple.}
+    \label{fig:mars_25_interf_distance_fit_hot}
+\end{figure}
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{mars_25_interf_distance_fit_cold}
+    \caption{Best fit of the cold ripple.}
+    \label{fig:mars_25_interf_distance_fit_cold}
+\end{figure}
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{mars_25_interf_distance_fit_cold_poor}
+    \caption{Some narrow ranges of the argument of the reflection coefficient produce complex ripples that prevent a better fit.}
+    \label{fig:mars_25_interf_distance_fit_cold_poor}
+\end{figure}
 
-Our model computes efficiencies that transform an input electric field into an output electric field.
-If we square the absolute value of these efficiencies, we can work in power (or power density).
-Since our model is linear, it does not matter whether we feed it a power $S$, or $S$ multiplied by a constant.
-That constant will disappear during the division of the calibration equation.
-Therefore, we can simply let $S = B_f(T)$ and ignore the impedance, the solid angle and the bandwidth.
+We have compared one model to another in order to determine the mixer--load distances
+and the argument of the reflection coefficient of the loads.
+This gives us a very good first-guess to seed a fit that compares our complete interference model to the real data from Mars.
+This is the subject of the next section.
 
 
 
 
-%-----------------------------------------------------------------------------
-\subsubsection{Difficulties in fitting periodic features}
-We must keep in mind that a small relative error in the period of the ripple can lead to a big absolute error when several thousands of periods are considered.
-Indeed, when we try a new cavity size, we stretch or compress the ripple.
-See~\cref{fig:ripple_stretching}.
 
-According to the result of the cosine fit of the Mars data presented in~\cref{tab:mars_cosine_fitted},
-the period of the left ripple is $90788799.4 \pm \SI{312}{\hertz}$.
-Let us take the two extremes: \SI{90788487.4}{\hertz} and \SI{90789111.4}{\hertz}.
-The LO frequency is \SI{490.97475}{\giga\hertz}.
-In the first case, there are \num{5408}~periods between the frequency 0 and the LO frequency.
-In the other case, there are 
+%#############################################################################
+\FloatBarrier
 
-According to our fit on the FFT, the left ripple has a period of
-$91.115 \pm \SI{1.108}{\mega\hertz}$.
-Let us take the two extremes: \SI{90.001}{\mega\hertz} and \SI{92.223}{\mega\hertz}.
-The LO frequency is \SI{490.97475}{\giga\hertz}.
-In the first case, there are \num{5455}~periods between 0 and the LO frequency, while in the other there are \num{5324}~periods.
-That is a difference of 131 periods, or a phase difference of \SI{47160}{\degree}.
 
-The previous paragraph is important.
-It means that any tiny change in the length of a cavity has a drastic influence on what happens at the frequencies at which we are working.
-This can make fitting the size of the cavities extremely difficult since we must get it right to four or five decimals under the wavelength.
-This would not be so bad if the ripple was keeping its amplitude constant.
-The real problem is that when the LSB and USB are folded onto each other, the ripple interferes with itself, it can construct or destruct:
-the phase information of the original ripple is swallowed into the amplitude of the folded one, as show by~\cref{eq:folded_cos}.
-Therefore, a small change in length can have a very strong effect on the amplitude of the ripple.
-That forces us to fit a new amplitude (actually a reflection coefficient) for each new distance that we try.
 
-As it is often the case when trying to fit periodic patterns, the $\chi^2$ landscape has many local minima in which the fitter is likely to fall.
-In our case, because of what we just explained about the rapidity at which the phase changes as a function of the distance, the first guess has to be almost equal to the optimum if we want the fit to converge toward the real optimum.
-This is a problem.
+\section{Full model fit}
+The analysis done in the previous section gives us very good first-guesses for the mixer--load distances and the argument of the reflection coefficient of the two loads.
+In this section, we compare our interference model to the real Mars data.
 
-Fitting in the Fourier domain is one way to avoid local minima since the function that we are fitting is not periodic anymore.
-Unfortunately, we saw that it can result only in a crude approximation of the periods since the FFT has few points around~\SI{100}{\mega\hertz}.
-
-We can investigate another possibility.
-For each result of the HIFI band~1 model we fit two cosines, like we did in~%
-\cref{sec:determining_the_periods_of_the_two_ripples}.
-The result is two periods.
-This time, the periods are very accurate because they are measured using a high number of points.
-Since we know what the two periods are supposed to be, we can define our objective function as the sum of the square of the difference between the fitted and ideal periods.
-By trying to minimize this function, the fitter should converge to correct values of the cavity lengths without falling in local minima.
-
-Unfortunately, this method still suffers from the problem of interferences:
-if we never touch the reflection coefficients of the black bodies, each result of the HIFI band~1 model can have very different ripple amplitudes.
-If we try to fit the reflection coefficients at the same time, we confuse the fitter.
-Indeed, the fitter does not expect that changing the distance will change the amplitude of the ripple so much, therefore its best guess as to what the best next reflection coefficient will be is almost always wrong.
-
-We must prevent the ripples from interfering with themselves.
-We can do that simply by not folding the spectrum produced by our model.
-If we do not fold, and if we do not calibrate, then the ripples on each phase (hot, cold, on off) are very well behaved.
-In that case, fitting their period is relatively easy.
-
-%-----------------------------------------------------------------------------
-\subsubsection{First guess}
-
-We started the fit with the following first guess:
+The free parameters are
 \begin{itemize}
-    \item reflection coefficient of the cold black body: \num{-0.05},
-    \item reflection coefficient of the hot black body: \num{-0.05} and
-    \item effective refractive index of the cavity: \num{1.003}.
+    \item the hot reflection coefficient, magnitude,
+    \item the hot reflection coefficient, argument,
+    \item the cold reflection coefficient, magnitude,
+    \item the cold reflection coefficient, argument,
+    \item the distance between the hot surface and the H mixer,
+    \item the distance between the cold surface and the H mixer,
+    \item and the physical temperature of Mars.
 \end{itemize}
 
-The effective refractive index $n$ links the effective speed of light $c$ to the speed of light in vacuum $c_0$: $c = c_0 / n$.
-We use a refractive index instead of the speed of light because it keeps the parameter relatively close to 1.
+The interference model is compared to the smoothed version of the Mars spectrum, from which the linear trend (first-order polynomial fitted in~\cref{sec:perfect_sines_model}) is removed.
+We remove the linear trend because our interference model does not predict it, it may be astronomical and not instrumental in nature.
+Without a better model of Mars, we need to leave this trend out.
 
-The first guess of the refractive index was found by setting `arbitrary' values to the distances of the black bodies to the beam splitter, measuring the periods of the resulting ripples, and solving~\cref{eq:cavity_length_from_period} for $c$.
+The result is shown in~\cref{fig:mars_25_interf_smoothed_vs_interf}.
+The model parameters for this optimal solutions are listed in~\cref{tab:mars_full_model} for two cases:
+in the first case, the coefficient of reflection of the mixer is fixed;
+in the second case, it is a free parameter.
 
-The `arbitrary' values used for the distances were those corresponding to the periods fitted in~%
-\cref{sec:determining_the_periods_of_the_two_ripples},
-converted into distances by using the speed of light in vacuum in~%
-\cref{eq:cavity_length_from_period}.
+The uncertainties given in this table are very conservative estimates:
+They are calculated assuming that their probability distribution is Gaussian, which obviously cannot be true for reflection coefficients that must reside inside the complex disk of radius~1.
+We include them for the sake of disclosure, but a much better measurement of these uncertainties could be given by Bayesian analysis or Monte Carlo simulations.
 
-We found two values of $c$, one per black body, which agreed within \SI{0.01}{\percent}.
-Their average was \SI{99.77}{\percent} of the speed of light in vacuum,
-corresponding to a refractive index of \num{1.00231}.
-
-Running the model with a refractive index \num{1.00231} resulted in overshooting, the peaks on the FFT were located at too-high periods.
-We found that \num{1.003} brought the peaks of the model on top the peaks of the data.
-This is why we use \num{1.003} as our first guess for the effective refractive index of the cavity.
-
-The first guess for the reflection coefficients were found by hand, by matching the height of the peaks of the FFT of the model to those of the real data.
-It only takes three or four tries to have a good match.
-A reflection coefficient of~\num{-0.05} corresponds to a reflectivity (in power) of~\SI{0.25}{\percent}.
-This seems low, but if we consider the fact that black bodies are supposed to be black, then~\SI{0.25}{\percent} can be significant.
-Let us remember that the reflection coefficients that we are fitting also fit our uncertainty on the reflectivity of the mixer, which we arbitrarily (educated guess) set to~\SI{10}{\percent} in the co-pol and~\SI{90}{\percent} in the cross-pol.
-
-%-----------------------------------------------------------------------------
-\subsubsection{Result of the fit}
-\todo[inline]{I already have a few failures.  I could write about them, I have the figures ready.  But as explained in the "Difficulties" section, there may be a method that works.  I will try that new method before writing anything here.  If it fails, I report the failure.  If it works, I report the success.
-
-In the meanwhile, I have been writing the introduction.}
-
-Using a single effective speed of light yielded the following refractive index: 1.01267822169.
-This value reproduces well the quick ripple that we see on the spectrum, but not the beat.
-The beat is there, but its phase is wrong, as shown by~\cref{fig:result_single_c}.
-On~\cref{fig:result_single_c}, the amplitude of the ripple is not well reproduced because we did not fit the coefficient of reflection of the black bodies, only the lengths of the cavities; what matters on this figure are the periods of the ripple.
-Since the simulated beat is not satisfactory, we are forced to abandon our hypothesis of a single effective speed of light.
-
-\begin{figure}
+\begin{figure}[hbtp]
     \centering
-    \missingfigure{Best period fit with a single effective speed of light}
-    \caption{Best period fit using a single effective speed of light: the phase of the beat is not properly reproduced.}
-    \label{fig:result_single_c}
+    \includegraphics{mars_25_interf_smoothed_vs_interf}
+    \caption{Best reproduction of the spectrum of Mars with our interference model.}
+    \label{fig:mars_25_interf_smoothed_vs_interf}
 \end{figure}
 
-We relax the system and allow for each cavity to be fitted independently: a single speed of light is not enough.
-We rerun the fit, this time letting each cavity free.
-
-\begin{figure}
+\begin{table}
+    % 1.6480265532364544 +/-0.0012526911025520437
+    % 1.5339021240876065 +/-0.0010667862540373438
+    % 0.037896590464644483 +/-0.23324988755084228
+    % 19.392660220711125 +/-31.097964720905996      0.5431042991723657
+    % 0.3042926590794563 +/-0.75312073096021415
+    % 24.807068124703694 +/-22.943509146023409      2.815919549575141
+    % 11.725143032389045 +/-0.15502956205003632
+    % STDDEV residual: 0.0380157531167
     \centering
-    \missingfigure{Best period fit with one effective speed of light per cavity}
-    \caption{Best period fit using one effective speed of light per cavity.}
-    \label{fig:result_two_c}
+    \begin{tabular}{l r@{}c@{}l r@{}c@{}l l}
+        \toprule
+        parameter &
+        \multicolumn{3}{c}{value} &
+        \multicolumn{3}{c}{uncertainty} & unit\\
+        \midrule
+            hot distance                                 &  1&.&6480  &  0&.&0012 & [\si{\meter}]  \\
+            cold distance                                &  1&.&5339  &  0&.&0011 & [\si{\meter}]  \\
+            hot reflection coefficient, magnitude        &  0&.&0379  &  0&.&23   & [1]            \\
+            hot reflection coefficient, argument         &  0&.&5431  & 31& &     & [\si{\radian}] \\
+            cold reflection coefficient, magnitude       &  0&.&3043  &  0&.&75   & [1]            \\
+            cold reflection coefficient, argument        &  2&.&8159  & 23& &     & [\si{\radian}] \\
+            mars temperature                             & 11&.&72    &  0&.&15   & [\si{\kelvin}] \\
+        \bottomrule
+    \end{tabular}
+    \caption*{Case 1: The magnitude of the reflection coefficient of the mixer is fixed at~$-\sqrt{0.05}$.}
+    \bigskip
+    \begin{tabular}{l r@{}c@{}l r@{}c@{}l l}
+        \toprule
+        parameter &
+        \multicolumn{3}{c}{value} &
+        \multicolumn{3}{c}{uncertainty} & unit\\
+        \midrule
+            hot distance                                 &  1&.&6480 &  0&.&0012 & [\si{\meter}]  \\
+            cold distance                                &  1&.&5339 &  0&.&0011 & [\si{\meter}]  \\
+            hot reflection coefficient, magnitude        &  0&.&0442 &  0&.&34   & [1]            \\
+            hot reflection coefficient, argument         &  0&.&55   & 31& &     & [\si{\radian}] \\
+            cold reflection coefficient, magnitude       &  0&.&7033 &  3&.&07   & [1]            \\
+            cold reflection coefficient, argument        &  2&.&40   & 21& &     & [\si{\radian}] \\
+            mixer reflection, magnitude                  & -0&.&19   &  1&.&0    & [1]            \\
+            mars temperature                             & 11&.&84   &  1&.&32   & [\si{\kelvin}] \\
+        \bottomrule
+    \end{tabular}
+    \caption*{Case 2: The magnitude of the reflection coefficient of the mixer is free.}
+    \caption{Interference model parameters that best reproduce the real Mars data.}
+    \label{tab:mars_full_model}
+\end{table}
+
+
+
+%#############################################################################
+\FloatBarrier
+
+
+
+\section{Discussion}
+
+Although the model seems to fit the data quite well in~\cref{fig:mars_25_interf_smoothed_vs_interf}, the residual shows strong sinusoidal features.
+These are due to small mismatches in amplitude or in phase.
+This model is not good enough to make quantitative predictions of the ripples, but its qualitative predictions are satisfactory.
+
+The spectrum of Mars with which we have worked so far is part of a series of spectra taken with different pointings.
+\Cref{fig:mars_24_interf_smoothed_vs_interf} shows the very same model applied to another spectrum of Mars.
+With this pointing, Mars couples less to the beam, which explains the lower continuum (\SI{4}{\kelvin} here, versus \SI{7.2}{\kelvin} with the original spectrum).
+The model shown on \Cref{fig:mars_24_interf_smoothed_vs_interf} results from a fit during which the temperature of Mars is the only free parameter while the other parameters are taken from~\cref{tab:mars_full_model}.
+The bandpass of the instrument has not significantly changed between the two pointings, therefore the model fits the new data quite well without modification.
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics{mars_24_interf_smoothed_vs_interf}
+    \caption{Same model applied to another spectrum}
+    \label{fig:mars_24_interf_smoothed_vs_interf}
 \end{figure}
 
+The magnitude of the reflection coefficients given in~\cref{tab:mars_full_model} may appear surprising.
+The calibration loads are supposed to be close to black bodies but the model predicts that the cold load reflects between 30 and \SI{70}{\percent} of the electric field intensity, which corresponds to a reflectivity in power between 10 and \SI{50}{\percent}.
+In the next paragraphs we list hypotheses that can explain these surprising results.
+
+The most obvious possible justification is that the data is noisy.
+As shown in~\cref{fig:mars_filtered}, the thermal noise is almost as strong as the ripples that we are trying to measure.
+We filter some of that noise by cutting the short-periods but that does not remove the contribution of that noise at the periods of our ripples.
+The fitter treats that noise as if it were signal and converges toward somewhat incorrect values.
+
+There is a degeneracy between the parameters: one equation for two variables.
+Indeed, the behavior of a cavity depends on the product on the reflection coefficient of its two surfaces (see~\vref{eq:fabry_gain_r2_r3}).
+For each coefficient of reflection of the mixer, we can find a coefficient of reflection of the hot and cold loads that reproduce the observed ripple: whenever one decreases the other increases to compensate with the same result.
+To remove this degeneracy, we need more equations, which means more cavities.
+If the LO--mixer cavity were less lossy, it would produce its own ripples and introduce one new equation to the problem, but it would also introduce one additional variable: the reflection coefficient of the LO itself.
+This may still help: the load and the LO would form their own cavity (after reflection on the mixer).
+With three parameters in three cavities, the degeneracy should disappear.
+
+\begin{figure}[hbtp]
+    \centering
+    \input{hbb.pdf_tex}
+    \caption{Photograph of the hot calibration load of HIFI.}
+    \label{fig:hbb_photo}
+\end{figure}
+The model for the loads may be lacking.
+We model the loads as a single plane surface because the Direct Fourier Transform of the HIFI data does not show any evidence of something mode complicated.
+It may be the case, though, that the loads need to be modeled with two surfaces instead of one.
+The hot load of HIFI is shown in~\cref{fig:hbb_photo}.
+It is a wedge-shaped hole coated in an absorbent material.
+Although the entire beam is supposed to couple to the wedge-shaped aperture, part of it may couple to the flat surface around it, especially in Band~1 where the beam is the widest.
+A better model of the hot load may require two surfaces: one for the aperture and one for its surrounding.
+Surprisingly high or low reflection coefficients may result from an inadequate model of the loads.
+
+With more data we could constrain these parameters better and refine the model.
+However, even in its current simple state and despite a low signal-to-noise ratio,
+the qualitative predictions of the model seem satisfactory.
 
 
-Cold black body with realistic grids.
-Flsb  97526670.8417 vs 97526840.7215 err 1.74187761276e-06
-Fusb  97527159.335 vs 97526840.7215 err 3.26693141594e-06
-Fdsb  97526820.3249 vs 97526840.7215 err 2.09138659166e-07
-(lsb+usb)/2 = 97526915.08835
 
-Hot black body with realistic grids
-Flsb  90788546.7988 vs 90788799.3724 err 2.78199093969e-06
-Fusb  90788472.8567 vs 90788799.3724 err 3.59643178379e-06
-Fdsb  90788928.484 vs 90788799.3724 err 1.42210894587e-06
-(lsb+usb)/2 = 90788509.82775
+
+
+%#############################################################################
+\FloatBarrier
+
+
+
+\section{Conclusion}
+A physically-based model of the optics of a coherent detector can predict the effects of interferences on the bandpass of that detector.
+
+We created a physically-based model of the optics of HIFI Band~1 and compared its predictions to an actual HIFI observation of the planet Mars.
+Despite the low signal-to-noise ratio and a lack of constraints on some parameters of the model, we reproduced the ripples seen on the continuum of the spectrum of Mars.
+The amplitudes, frequency and phase of the modeled ripples are very close to the real ones.
+Even if we could not constrain our model well enough to achieve a quantitative match in that specific case,
+we consider that this is a successful proof of concept for our modeling technique.
+
+We encourage instrument designers to allocate some time to measure the complex reflection coefficients of their optical components for different LO frequencies.
+Matching the physically-based model to the real data would allow to correct the calibration by properly taking into account the ripples caused by the interferences in the optics.

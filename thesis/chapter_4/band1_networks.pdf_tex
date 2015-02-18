@@ -1,0 +1,68 @@
+%% Creator: Inkscape inkscape 0.48.2, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'band1_networks.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{300.82974244bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.83927943)%
+    \put(0,0){\includegraphics[width=\unitlength]{band1_networks.pdf}}%
+    \put(0.5411169,0.00067015){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{LO}}}%
+    \put(0.09824729,0.44353982){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{sky}}}%
+    \put(0.19247487,0.74506815){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{hot load}}}%
+    \put(0.06055626,0.62257232){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{cold load}}}%
+    \put(0.37150727,0.41527165){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{chopper}}}%
+    \put(0.88975891,0.67910882){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{H mixer}}}%
+    \put(0.76726307,0.81102732){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{V mixer}}}%
+    \put(0.59765344,0.26450748){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{attenuator}}}%
+    \put(0.5788079,0.49065365){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{grid 0}}}%
+    \put(0.5788079,0.79218182){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{V grid}}}%
+    \put(0.88033616,0.49065365){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{H grid}}}%
+    \put(0.58823069,0.11374348){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{gray body surface}}}%
+    \put(0.56938515,0.60372682){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{distance}}}%
+    \put(0.27727969,0.61314949){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{coupling coeff}}}%
+  \end{picture}%
+\endgroup%

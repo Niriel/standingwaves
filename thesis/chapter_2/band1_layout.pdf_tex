@@ -1,0 +1,61 @@
+%% Creator: Inkscape inkscape 0.48.2, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'band1_layout.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{197.13572041bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.82378742)%
+    \put(0,0){\includegraphics[width=\unitlength]{band1_layout.pdf}}%
+    \put(0.54229296,0.13043485){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{grid + dump}}}%
+    \put(0.26908898,0.43239731){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{grid + dump}}}%
+    \put(0.22595151,0.77749709){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{mixer H}}}%
+    \put(0.91615104,0.70560123){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{mixer V}}}%
+    \put(0.29784731,0.00102265){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{LO}}}%
+    \put(0.15405574,0.15919314){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{Sky}}}%
+    \put(0.24033069,0.08729753){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{BS}}}%
+  \end{picture}%
+\endgroup%

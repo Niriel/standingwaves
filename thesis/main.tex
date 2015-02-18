@@ -1,12 +1,21 @@
 \documentclass[a4paper,11pt]{book}
+
+\newif\ifDraft
+\newif\ifPrint
+\Drafttrue % Comment out to set to false.
+%\Printtrue % Comment out to set to false.
+
 \input{packages}
 
 \setcounter{secnumdepth}{3}
     % Number the subsubsections too, as the default stops at subsections.
-\setcounter{tocdepth}{5}
-    % Table of content goes down to the subparagraphs.
+\setcounter{tocdepth}{3}
+    % Table of content goes down to the subsubsections.
 
-\title{The effect of standing waves on the calibration of heterodyne receivers.}
+\title{
+    The effect of standing waves\\
+    on the calibration of heterodyne receivers.\\
+}
 \author{Bertrand Delforge}
 
 \makeindex
@@ -16,12 +25,15 @@
 
 \begin{document}
 \frontmatter
-\maketitle
+%\maketitle
+\ifDraft
+    \renewcommand*\contentsname{Content \today}
+\fi
 \tableofcontents
 
-\listoffigures
-\listofalgorithms
-%\newpage
+%\listoffigures
+%\listofalgorithms
+\newpage
 
 %\subimport{abstract/}{abstract}
 %\subimport{acknowledgements/}{acknowledgements}
@@ -29,23 +41,34 @@
 \mainmatter
 
 %\subimport{chapter_1/}{chapter_1}
+
+%\setcounter{chapter}{1}
 %\subimport{chapter_2/}{chapter_2}
+
+%\setcounter{chapter}{2}
 %\subimport{chapter_3/}{chapter_3}
-\subimport{chapter_4/}{chapter_4}
-%\subimport{chapter_5/}{chapter_5}
+
+%\setcounter{chapter}{3}
+%\subimport{chapter_4/}{chapter_4}
+
+\setcounter{chapter}{4}
+\subimport{chapter_5/}{chapter_5}
+
+%\setcounter{chapter}{5}
 %\subimport{chapter_6/}{chapter_6}
 
-\begin{appendices}
-\subimport{appendix_a/}{appendix_a}
-\end{appendices}
+%\begin{appendices}
+%    %\subimport{appendix_a/}{appendix_a}
+%    \subimport{appendix_b/}{appendix_b}
+%\end{appendices}
 
 \backmatter
 
 %\input{summary_dutch}
 
-\cleardoublepage
-\addcontentsline{toc}{chapter}{Index}
-\printindex
+%\cleardoublepage
+%\addcontentsline{toc}{chapter}{Index}
+%\printindex
 
 \cleardoublepage
 \addcontentsline{toc}{chapter}{Bibliography}

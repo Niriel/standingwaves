@@ -4,17 +4,26 @@
 
 \usepackage{amsmath}
     % Brings the align environment for lining up equations on the =.
+\usepackage{bm}
+    % For bold mathematics.
+    % An advantage of using \bm over \mathbf is that \bm keeps the
+    % letters slanted in maths.  I use bold letters for vectors,
+    % I see no reason to have them typeset upright.
+    % Another advantage is that is works on greek letters too.
 
 % According to
 % http://tex.stackexchange.com/questions/96350/problem-with-algorithmic-and-hyperref
 % if I want to have hyperref working with algorithm, I must
 % first load float, then hyperref, then algorithm.
-% Putting float here solves the TOC links to the algorithms, otherwise they'd all point
-% to page 1.
+% Putting float here solves the TOC links to the algorithms, otherwise they'd
+% all point to page 1.
 % Also, putting float-algo-hyper creates a massive amount of warnings for pretty much
 % every algo command like \State.
 \usepackage{float}
 
+\usepackage{placeins}
+    % Brings \FloatBarrier command. It forces Tex to typeset all remaining floats
+    % at that point and doesn't include a \clearpage afterwards.
 
 \usepackage{makeidx}
     % Needed to build the index.
@@ -31,7 +40,6 @@
     % For chemical formulas.
     % Brings \ce.
 
-%\usepackage[mediumspace,mediumqspace,squaren]{SIunits}
 \usepackage{siunitx}
     % Otherwise I can't write the mu symbol for micrometers.
     % It also brings me the \degree symbol, woo!
@@ -44,11 +52,9 @@
     % Can't have pictures/photos/figures from files without that.
     % Note that vanilla latex will only accept eps.
 
-
 \usepackage{import}
     % Facilitates the organization of the book.  I can place each chapter in its own
     % directory, along with its images.
-
 
 \usepackage[font=footnotesize, labelfont=bf]{caption}
     % So that I can add long captions under figures.
@@ -73,15 +79,23 @@
 
 \usepackage{tabularx}
 
+\usepackage{rotating}
+
 \usepackage{stmaryrd}
     % For the llbracket and rrbracket to denote integer intervals.
+
+\ifDraft
+    \usepackage{todonotes}
+        % Big post-its, handy while writing.
+\else
+    \usepackage[disable]{todonotes}
+\fi
     
-\usepackage{todonotes}
-    % Big post-its, handy while writing.
-    
-\usepackage[]{biblatex}
+\usepackage[sorting=none]{biblatex}
     % Fantastic bibliography manager that I'll use just for its
     % \citetitle command.
+    % For sorting orders, see
+    % https://www.sharelatex.com/blog/2013/07/31/getting-started-with-biblatex.html
 
 % As a rule of thumb, hyperref goes last.  Only a few packages go after.
 % cleveref is a well known one.  bookmark is another one.
@@ -93,13 +107,22 @@
 \usepackage{varioref}
     % For fancier references that also tell the page number.
 
-\usepackage[plainpages=false, hypertexnames=false]{hyperref}
+\ifPrint
+    \usepackage[draft]{hyperref}
+\else
+    \usepackage[plainpages=false, hypertexnames=false]{hyperref}
     % Requires direct pdf output, therefore all figures should be pdf too.
     % This creates hyperlinks all over the place to jump to figures, references,
     % chapters and all.
     % hypertexnames=false makes the package dumber, allowing it to work even if
     % there are several chapter 1 in the document.
-    %
+    \hypersetup{
+        colorlinks,
+        linkcolor={red!50!black},
+        citecolor={green!40!black},
+        urlcolor={blue!80!black}
+    }
+\fi
     
 \usepackage{cleveref}
     % Should make the typesetting of cross references more consistent.
@@ -117,15 +140,40 @@
 \usepackage{algpseudocode}
     % For pseudocode.
 
-\crefname{appendix}{appendix}{appendices}
-\Crefname{appendix}{Appendix}{Appendices}
+\crefname{appsec}{appendix}{appendices}
+\Crefname{appsec}{Appendix}{Appendices}
+
+\hyphenation{aniso-tro-pic iso-tro-pic impe-dance va-cuum algo-rithm algo-rithms col-linear pe-rio-dic}
+
+% Fix the spacing introduced by \left and \right in formulas.
+\let\originalleft\left
+\let\originalright\right
+%\def\left#1{\mathopen{}\originalleft#1}
+%\def\right#1{\originalright#1\mathclose{}}
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
 
 \newcommand{\decibel}{dB}
 \newcommand{\equaldef}{\stackrel{\text{\tiny def}}{=}}
-\newcommand{\transp}{^\top}
-\newcommand{\norm}[1]{\left\| #1 \right\|}
-\newcommand{\abs}[1]{\left| #1 \right|}
-\newcommand{\vect}[1]{\mathbf{#1}}
-\newcommand{\atantwo}{\textrm{atan2}}
-\newcommand{\vangle}[2]{\left(#1, #2\right)}  % Angle between vectors.
+\newcommand{\transp}{^\top}                     % Tranposed of a matrix.
+\newcommand{\norm}[1]{\left\| #1 \right\|}      % Norm of a vector.
+\newcommand{\abs}[1]{\left| #1 \right|}         % Absolute value of a scalar.
+\newcommand{\cp}[1]{\hat{#1}}                   % Complex object.
+\newcommand{\timeavg}[1]{\langle #1 \rangle}
+\newcommand{\Timeavg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\vect}[1]{\bm{#1}}                  % Real vector.
+\newcommand{\vectcp}[1]{\cp{\vect{#1}}}         % Complex vector.
+\newcommand{\vectu}[1]{\dot{\vect{#1}}}         % Unit (real) vectors.
+\newcommand{\matr}[1]{\mathrm{#1}}              % Real matrix.
+\newcommand{\matrcp}[1]{\cp{\matr{#1}}}         % Complex matrix.
+\DeclareMathOperator{\atantwo}{atan2}           % Arctan(y, x).
+\newcommand{\dif}{\mathrm{d}}                   % For integrals: dx dy dz.
+\newcommand{\inprod}[2]{\langle #1, #2 \rangle} % Inner product of two vectors.
+\newcommand{\vangle}[2]{\left(#1, #2\right)}    % Angle between vectors.
 \newcommand{\transition}[3]{$\ce{#1}_{#2 \rightarrow #3}$}
+% Used as indices:
+\newcommand{\I}{I} % Incident.
+\newcommand{\R}{R} % Reflected.
+\newcommand{\T}{T} % Transmitted/refracted.
+\newcommand{\re}{r} % Real part.
+\newcommand{\im}{i} % Imaginary part.
