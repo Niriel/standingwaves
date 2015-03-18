@@ -6,7 +6,7 @@
 %#############################################################################
 \section{Introduction}
 The previous chapters describe a physically-based model that we created to predict the effect of interferences in coherent detectors.
-This chapter compares our model to observational data from the HIFI instrument~\cite{AA_518_L6}.
+This chapter compares our model to observational data from the HIFI instrument~\parencite{AA_518_L6}.
 Our goal is to validate our model and to derive parameters several system parameters for the HIFI instrument that are only approximately known from its design and commissioning.
 
 We choose to model HIFI Band 1.
@@ -15,7 +15,7 @@ Indeed, Bands~3, 4, 6 and 7 use rooftop mirrors to form Martin--Puplett interfer
 In Bands~1, 2 and 5, the LO power is high enough and there is no need to maximize its coupling to the mixer, allowing for a simpler design with less side-effects.
 The coupling of the LO to the mixer is very weak in Band~1, which means that the LO--mixer cavities produce almost no interference;
 this reduces again the number of parameters.
-In his technical note \citetitle{risacher2011standingwaves}~\cite{risacher2011standingwaves}, \citeauthor{risacher2011standingwaves} confirms that the LO--mixer ripples are not detected in Band~1.
+\Textcite{risacher2011standingwaves} confirms that the LO--mixer ripples are not detected in Band~1.
 
 In a typical observation, HIFI takes four measurements: one on the source of astronomical interest, one on a part of the sky devoid of emission, and one on the hot and cold internal calibration loads.
 The integrations on the loads are used to calibrate the bandpass of the instrument.
@@ -27,7 +27,7 @@ These reflections create interferences that impact the bandpass calibration of t
 
 
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics{mars_25_original}
     \caption{Observation of Mars by HIFI in Band~1 with the WBS-H showing a continuum modulated by ripples.
@@ -62,7 +62,7 @@ Two mixers detect the resulting beams.
 Waves polarized in the plane of the page are called ``vertically polarized'' while waves polarized normally to the page are called ``horizontally polarized''.
 The ``H~mixer'' detects horizontal waves, and the ``V~mixer'' detects vertical waves.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \footnotesize
     \input{band1_layout.pdf_tex}
@@ -111,9 +111,9 @@ In order to make the ripples more apparent, we smooth the original spectrum.
 We do so by zeroing all power at periods shorter than a given threshold (\SI{40}{\mega\hertz} in our case).
 
 \Cref{fig:mars_filtered} shows the result of that smoothing.
-The original data is shown in black, the smoothed data green and the residual in gray.
+The original data is shown in black, the smoothed data in green and the residual in gray.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics{mars_25_smoothed}
     \bigskip
@@ -130,7 +130,7 @@ The smoothed curve appears as a sinusoid wrapped in a sinusoidal envelope.
 This ``beat'' pattern is typically produced when two sines of different but close periods are added together.
 We are therefore expecting the contribution of two ripples, each coming from one cavity.
 The period of the ripples, about~\SI{100}{\mega\hertz}, is compatible with the distance of about~\SI{1.5}{\meter} that separate the calibration loads from the mixer.
-\todo[inline]{Ref for the mixer--load distance, it's not easy to find, we mostly know it from previous standing waves analysis}
+%\todo[inline]{Ref for the mixer--load distance, it's not easy to find, we mostly know it from previous standing waves analysis}
 Indeed, the length~$d$ of a cavity and the period~$F$ of the ripple that it produces are linked by
 the relation
 \begin{equation}
@@ -141,11 +141,11 @@ in which $c$ is the speed of light in the medium, which we assume to be vacuum.
 This equation is a rewrite of~\vref{eq:relation_length_period_nice}, in which the speed of light is made explicit.
 
 An ideal spectrum for our purpose would combine a strong continuum, no spectral line, strong ripples and a low noise; but such spectra have little astronomical value and are therefore extremely rare, if at all present, in the HIFI database.
-This spectrum shows very strong ripples these are helpful to constrain some parameters of our model.
+This spectrum shows very strong ripples which are helpful to constrain some parameters of our model.
 Unfortunately, the thermal noise on top of these ripples is also very strong.
 Indeed, the integration time of this observation is quite short: this observation was not designed to measure the continuum of Mars but to calibrate the pointing of the satellite.
 
-%\begin{table}[hbtp]
+%\begin{table}
 %    \centering
 %    \begin{tabular}{lc}
 %        \toprule
@@ -169,7 +169,7 @@ Ripples are quasi-periodic features.
 As such, they appear as peaks on a Fourier Transform.
 \Cref{fig:mars_25_dft} shows the Discrete Fourier Transform of the spectrum of Mars.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \hfill\includegraphics{mars_25_dft_lin}\\
     \hfill\includegraphics{mars_25_dft_log}
@@ -218,7 +218,7 @@ This model gives us a much better estimate of the periods of the ripples than th
 \Cref{fig:mars_sine_fit} illustrates the differences between the smoothed spectrum of Mars and its model using perfect sines.
 
 
-\begin{table}[hbtp]
+\begin{table}
 % Cont result ['7.211908771679127', '-1.262493598126238e-11']
 % Cont errors ['5.614822816527074e-05', '4.7109413498749796e-14']
     \centering
@@ -270,7 +270,7 @@ This model gives us a much better estimate of the periods of the ripples than th
     \label{tab:two_sines_fit}
 \end{table}
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics{mars_25_sine_fit}
     \caption{Model of the ripple using two sinusoids.}
@@ -285,7 +285,7 @@ However, this assumption suggests that there is only vacuum between the loads an
 Furthermore, the surface of a load is a mathematical one: a load does not present a perfectly plane surface normal to the beam; we assume that the load behave as if it had an effective plane surface at a given effective distance.
 For these two reasons, we expect that the optical path lengths that we just calculated differ somewhat from the actual distances between the mixers and the loads.
 
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{lcc}
         \toprule
@@ -329,9 +329,8 @@ Finally, we determine the powers, and therefore electric field amplitudes, that 
 
 \subsection{Calibration equation}
 
-The spectrum of Mars shown in~\cref{fig:mars_25_original} is the result of the standard HIFI calibration pipeline,
-which is described in the~\citetitle{hifiobserversmanual}~\cite{hifiobserversmanual}.
-This pipeline applies the reference subtraction and the bandpass calibration described by \citeauthor{ossenkopf2002intensity} in~\citetitle{ossenkopf2002intensity}~\cite{ossenkopf2002intensity}.
+The spectrum of Mars shown in~\cref{fig:mars_25_original} is the result of the standard HIFI calibration pipeline \parencite{hifiobserversmanual}.
+This pipeline applies the reference subtraction and the bandpass calibration described in \textcite{ossenkopf2002intensity}.
 It is summarized by the following equation:
 \begin{equation}
     J_\text{src}(f)% - J_\text{ref}(f)
@@ -564,7 +563,7 @@ We model the optics of HIFI Band~1 with the networks shown in~\cref{fig:band1_ne
 Each optical element is modeled with a $n$-port network which is represented numerically by a scattering matrix.
 Using the technique that we describe in~\cref{sec:chapter2},
 we solve the output of the system for each channel, for different parameters and for all the relevant sources of power.
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \footnotesize
     \input{band1_networks.pdf_tex}
@@ -576,7 +575,7 @@ The white rectangles of~\cref{fig:band1_networks} represent distances between th
 \Cref{tab:known_distances} lists the known distances.
 The unknown distances, which we are trying to determine, are the distances between grid~0 and the surface of the calibration loads: the two white rectangles on the left of the chopper.
 
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{ll}
         \toprule
@@ -592,7 +591,7 @@ The unknown distances, which we are trying to determine, are the distances betwe
     \end{tabular}
     \caption{
         Known distances between the optical elements of HIFI Band~1.
-        Source: \todo[inline]{Willem Jellema's thesis}
+        Source: Willem Jellema, private communication.
     }
     \label{tab:known_distances}
 \end{table}
@@ -607,7 +606,7 @@ Each load has two unknown parameters: a complex reflection coefficient and the p
 The parameters of the other networks used in our model are listed in~\cref{tab:network_parameters}.
 All these values are estimates that we consider reasonable.
 
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{lr}
         \toprule
@@ -722,7 +721,7 @@ this spectrum is the one that we compare to the perfect-sine model.
 Finally, the bottom plot shows the sideband radio defined as $G_\text{USB}/(G_\text{LSB}+G_\text{USB})$;
 channels that are USB-dominated have a sideband ratio greater than~\num{0.5}.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics{mars_25_interf_dsb_gain_cold}
     \caption*{Gain: what the mixer detects if the cold load emits a power of~1.}
@@ -745,7 +744,7 @@ The corresponding ripples are shown in~\cref{fig:mars_25_interf_distance_fit_col
 The vertical axis is arbitrary because the ripples are normalized.
 Neither the hot and cold best interference models match the perfect-sine model perfectly.
 This is due to the fact that some combinations of distance and argument produce ripples that do not approximate simple sines, as shown in~\cref{fig:mars_25_interf_distance_fit_cold_poor}.
-\begin{table}[hbtp]
+\begin{table}
     % HOT
     % ## Distance param 1.6491521148703148
     % ## Distance error 8.5017794640728818e-05
@@ -775,19 +774,19 @@ This is due to the fact that some combinations of distance and argument produce 
     \label{tab:interf_vs_perfectsine}
 \end{table}
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics{mars_25_interf_distance_fit_hot}
     \caption{Best fit of the hot ripple.}
     \label{fig:mars_25_interf_distance_fit_hot}
 \end{figure}
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics{mars_25_interf_distance_fit_cold}
     \caption{Best fit of the cold ripple.}
     \label{fig:mars_25_interf_distance_fit_cold}
 \end{figure}
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics{mars_25_interf_distance_fit_cold_poor}
     \caption{Some narrow ranges of the argument of the reflection coefficient produce complex ripples that prevent a better fit.}
@@ -797,7 +796,6 @@ This is due to the fact that some combinations of distance and argument produce 
 We have compared one model to another in order to determine the mixer--load distances
 and the argument of the reflection coefficient of the loads.
 This gives us a very good first-guess to seed a fit that compares our complete interference model to the real data from Mars.
-This is the subject of the next section.
 
 
 
@@ -836,7 +834,7 @@ The uncertainties given in this table are very conservative estimates:
 They are calculated assuming that their probability distribution is Gaussian, which obviously cannot be true for reflection coefficients that must reside inside the complex disk of radius~1.
 We include them for the sake of disclosure, but a much better measurement of these uncertainties could be given by Bayesian analysis or Monte Carlo simulations.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics{mars_25_interf_smoothed_vs_interf}
     \caption{Best reproduction of the spectrum of Mars with our interference model.}
@@ -910,7 +908,7 @@ With this pointing, Mars couples less to the beam, which explains the lower cont
 The model shown on \Cref{fig:mars_24_interf_smoothed_vs_interf} results from a fit during which the temperature of Mars is the only free parameter while the other parameters are taken from~\cref{tab:mars_full_model}.
 The bandpass of the instrument has not significantly changed between the two pointings, therefore the model fits the new data quite well without modification.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics{mars_24_interf_smoothed_vs_interf}
     \caption{Same model applied to another spectrum}
@@ -934,7 +932,7 @@ If the LO--mixer cavity were less lossy, it would produce its own ripples and in
 This may still help: the load and the LO would form their own cavity (after reflection on the mixer).
 With three parameters in three cavities, the degeneracy should disappear.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{hbb.pdf_tex}
     \caption{Photograph of the hot calibration load of HIFI.}

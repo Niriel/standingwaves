@@ -24,6 +24,9 @@
 \usepackage{placeins}
     % Brings \FloatBarrier command. It forces Tex to typeset all remaining floats
     % at that point and doesn't include a \clearpage afterwards.
+\usepackage{afterpage}
+    % Used in the rare occasions where I need to place two related figures o
+    % odd/even pages.
 
 \usepackage{makeidx}
     % Needed to build the index.
@@ -56,7 +59,7 @@
     % Facilitates the organization of the book.  I can place each chapter in its own
     % directory, along with its images.
 
-\usepackage[font=footnotesize, labelfont=bf]{caption}
+\usepackage[font=footnotesize,labelfont=bf]{caption}
     % So that I can add long captions under figures.
     % It provides me with \caption* that does not appear in the list of
     % figures but formats the text like \caption does.  It also lets me
@@ -64,6 +67,9 @@
 
 \usepackage{subcaption}
     % Lets me have labels such as a) b) c) inside a figure environment.
+    % Unfortunately something is broken, I cannot give labels to these
+    % subcaptions when hyperef is active, the pdf compiler hangs forever.
+    
 
 \usepackage[table]{xcolor}
     % xcolor gives color.
@@ -78,7 +84,10 @@
 \usepackage{multirow}
 
 \usepackage{tabularx}
-
+    % Brings the X column type, auto expand to fill the page.
+\usepackage{array}
+    % Brings >{} and <{} column modifiers to wrap the content into stuff.
+    
 \usepackage{rotating}
 
 \usepackage{stmaryrd}
@@ -91,7 +100,7 @@
     \usepackage[disable]{todonotes}
 \fi
     
-\usepackage[sorting=none]{biblatex}
+\usepackage[sorting=none,citestyle=authoryear]{biblatex}
     % Fantastic bibliography manager that I'll use just for its
     % \citetitle command.
     % For sorting orders, see
@@ -153,7 +162,9 @@
 \renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
 \renewcommand{\right}{\aftergroup\egroup\originalright}
 
-\newcommand{\decibel}{dB}
+\newcommand{\decibel}{dB}  % \DeclareSIunit doesn't work with my version.
+\newcommand{\parsec}{pc}
+\newcommand{\astronomicalunit}{au}
 \newcommand{\equaldef}{\stackrel{\text{\tiny def}}{=}}
 \newcommand{\transp}{^\top}                     % Tranposed of a matrix.
 \newcommand{\norm}[1]{\left\| #1 \right\|}      % Norm of a vector.
@@ -170,10 +181,19 @@
 \newcommand{\dif}{\mathrm{d}}                   % For integrals: dx dy dz.
 \newcommand{\inprod}[2]{\langle #1, #2 \rangle} % Inner product of two vectors.
 \newcommand{\vangle}[2]{\left(#1, #2\right)}    % Angle between vectors.
-\newcommand{\transition}[3]{$\ce{#1}_{#2 \rightarrow #3}$}
+\newcommand{\Jlevel}[2]{$J=#1\!\rightarrow\!#2$}
+\newcommand{\transition}[3]{\ce{#1}~\Jlevel{#2}{#3}}
 % Used as indices:
 \newcommand{\I}{I} % Incident.
 \newcommand{\R}{R} % Reflected.
 \newcommand{\T}{T} % Transmitted/refracted.
 \newcommand{\re}{r} % Real part.
 \newcommand{\im}{i} % Imaginary part.
+\newcommand{\radex}{\textsc{radex}}
+\newcommand{\Radex}{\textsc{Radex}}
+
+%http://tex.stackexchange.com/questions/38972/how-to-forbid-latex-to-put-text-between-figures
+\renewcommand\topfraction{0.85}
+\renewcommand\bottomfraction{0.85}
+\renewcommand\textfraction{0.1}
+\renewcommand\floatpagefraction{0.85}
