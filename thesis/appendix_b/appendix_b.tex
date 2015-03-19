@@ -1,3 +1,5 @@
+\cleardoublepage
+\begin{refsection}
 \chapter{Complex harmonic plane waves}
 \label[appsec]{sec:complex_harmonic_plane_waves}
 
@@ -11,12 +13,11 @@ When both directions are equal, the wave is said to be ``homogeneous'';
 when they differ, the wave is ``heterogeneous''.
 This is illustrated by~\cref{fig:homo_hetero_wave} which represents a homogeneous wave in a dielectric (medium $a$) refracted by the interface with a conductor (medium~$b$);
 the refracted wave is heterogeneous.
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     %\footnotesize
     \input{homo_hetero_wave.pdf_tex}
-    \caption{Homogeneous and heterogeneous plane waves.}
-    \caption*{
+    \caption{Homogeneous and heterogeneous plane waves.
         A homogeneous wave in a dielectric (medium~$a$) is refracted
         at the interface with a conductor (medium~$b$);
         the refracted wave is heterogeneous.
@@ -41,7 +42,7 @@ Instead, we use only vector calculus and algebra.
 \section{Complex algebra}
 We list in~\cref{tab:notations} the principal notations that we will use throughout this chapter.
 
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{lll}
         \toprule
@@ -587,9 +588,13 @@ Its demonstration fits in a single line.
 
 %=============================================================================
 \subsection{Maxwell's macroscopic equations}
+\label{sec:maxwell_macroscopic}
 
 Maxwell's macroscopic equations for complex fields are identical to those for real fields.
-We can find them in~\citetitle{jackson1998classical} by~\citeauthor{jackson1998classical}~\cite{jackson1998classical}.
+We can find them in~\textcite{jackson1998classical}.
+We should not forget to mention the immense contribution of Oliver Heaviside after James Clerk Maxwell's work.
+It is Heaviside who, by developing vector analysis, reduced the twenty equations of Maxwell into the four that we now know~\parencite{nahin2002oliver}.
+
 \begin{subequations}
     \label{eq:complex_maxwell_macroscopic}
     \begin{align}
@@ -606,18 +611,15 @@ We can find them in~\citetitle{jackson1998classical} by~\citeauthor{jackson1998c
         \label{eq:maxwell_div_b}
     \end{align}
 \end{subequations}
-
-We should not forget to mention the immense contribution of Oliver Heaviside after James Clerk Maxwell's work.
-It is Heaviside who, by developing vector analysis, reduced the twenty equations of Maxwell into the four that we now know
-(\citetitle{nahin2002oliver} by \citeauthor{nahin2002oliver}~\cite{nahin2002oliver}).
-
 The meaning of each symbol is summarized in~\cref{tab:maxwell_symbols}.
-\Cref{eq:maxwell_div_d,eq:maxwell_div_b} are not really independent from
-\cref{eq:maxwell_curl_e,eq:maxwell_curl_h}: they derive from them and the postulate that charges are conserved~\cite{stratton1941electromagnetic}.
 
-\begin{table}[hbtp]
+
+\Cref{eq:maxwell_div_d,eq:maxwell_div_b} are not independent from
+\cref{eq:maxwell_curl_e,eq:maxwell_curl_h}: they derive from them and the postulate that charges are conserved~\parencite{stratton1941electromagnetic}.
+
+\begin{table}
     \centering
-    \begin{tabular}{cll}
+    \begin{tabular}{@{}cll@{}}
     \toprule
     symbol         & name & SI unit \\
     \midrule
@@ -687,7 +689,7 @@ Most media are dispersive.
 In this section we consider linear homogeneous and isotropic propagation media.
 Furthermore, we assume that the media are electrically neutral ($\cp{\rho}_f = 0$) and that there are no external sources of current ($\vectcp{J}_e=0$).
 
-Harmonic plane waves are a solution to Maxwell's equations~\cite{stratton1941electromagnetic}.
+Harmonic plane waves are a solution to Maxwell's equations~\parencite{stratton1941electromagnetic}.
 Plane waves have a constant frequency and their wavefronts (iso-phase surfaces) are all parallel.
 True plane waves are infinitely extended, carry an infinite energy, and therefore cannot exist in practice.
 However, many waves are approximately plane waves in a localized region of space,
@@ -724,7 +726,7 @@ A scalar phasor~$\cp{g}$ is a complex scalar that encodes the amplitude $g$ and 
     \cp{g} = g \exp(i \phi_g)
     \text{.}
 \end{equation}
-Scalar phasors are sometimes written with the following notation, in which the symbol~$\angle$ introduces the angle (or phase)~\cite{nilsson2007electric}:
+Scalar phasors are sometimes written with the following notation, in which the symbol~$\angle$ introduces the angle (or phase)~\parencite{nilsson2007electric}:
 \begin{equation}
     \cp{g} = g \angle \phi_g
     \text{.}
@@ -835,7 +837,7 @@ When the directions of propagation and decay are the same, the wave is said to b
 When these directions differ, the wave is ``heterogeneous''.
 This is independent of the homogeneity of the propagation media: heterogeneous waves can exist in homogeneous media.
 There are as many ways for a wave to be homogeneous as there are ways for its wave vector to be self-aligned, as summarized in~\cref{tab:types_homo_hetero_waves}.
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \rowcolors{1}{}{gray!20}
     \begin{tabularx}{\textwidth}{p{3cm}lX}
@@ -1527,7 +1529,7 @@ $
     \cp{S} = P + iQ
 $
 from electrical engineering, which links the various kinds of electric powers in a circuit.
-\citetitle{IEEE2002dictionary} \cite{IEEE2002dictionary} defines the terms and SI units listed in~\cref{tab:complex_powers}.
+\Textcite{IEEE2002dictionary} defines the terms and SI units listed in~\cref{tab:complex_powers}.
 By analogy, we call $\timeavg{\vectcp{\mathcal{S}}}$,
 $\timeavg{\vect{\mathcal{P}}}$ and
 $\timeavg{\vect{\mathcal{Q}}}$ ``time averaged complex, active and reactive Poynting vectors''.
@@ -1578,7 +1580,7 @@ over the same surface~$\Sigma$.
     \label{eq:active_reactive_power_from_poynting_vector}
 \end{equation}
 
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{lll}
         \toprule
@@ -1620,7 +1622,7 @@ We want to know, not only their amplitude, but also their phase, their direction
 
 The plane of the interface offers two choices for a normal.
 The vector~$\vectu{n}_{ab}$ is the normal to the interface~$\mathcal{I}$ oriented from medium $a$ to medium~$b$.
-The following continuity equations must be true for every point on the interface~\cite{stratton1941electromagnetic}.
+The following continuity equations must be true for every point on the interface~\parencite{stratton1941electromagnetic}.
 \begin{align}
     &\vectu{n}_{ab} \times (\vectcp{E}_b - \vectcp{E}_a) = 0 \\
     &\vectu{n}_{ab} \times (\vectcp{H}_b - \vectcp{H}_a) = \vectcp{J}_s \\
@@ -1628,7 +1630,7 @@ The following continuity equations must be true for every point on the interface
     &\vectu{n}_{ab} \cdot  (\vectcp{B}_b - \vectcp{B}_a) = 0
 \end{align}
 In these equations, $\vectcp{J}_s$ the a surface current density;
-it equals 0, except on the surface of a perfect conductor \cite{stratton1941electromagnetic}.
+it equals~0, except on the surface of a perfect conductor~\parencite{stratton1941electromagnetic}.
 $\cp{\rho}_s$ is the surface charge density.
 
 Since in our case there are no surface charges and no surface currents (beyond the ones generated by our waves themselves), $\vectcp{J}_s=0$ and $\cp{\rho}_s=0$.
@@ -1835,7 +1837,7 @@ and the speed of light in vacuum $c_0$ by
     \cp{k} = \frac{\cp{\omega}}{c_0} \cp{n}
     \text{.}
 \end{equation}
-This yields the familiar form of Snell's law that we can find in many textbooks such as \citetitle{hecht2002optics} by~\citeauthor{hecht2002optics}~\cite{hecht2002optics}:
+This yields the familiar form of Snell's law that we can find in many textbooks such as \textcite{hecht2002optics}:
 \begin{equation}
     \cp{n}_a \sin \theta_\I = \cp{n}_b \sin \theta_\T
     \text{.}
@@ -2053,7 +2055,7 @@ but we need to decide whether the transmitted wave propagates toward or away fro
 Then, to determine $N$, we need to to finally decide the direction of the normal to the interface.
 \Cref{tab:N_for_normal_vs_k} gives the value of $N$ in the four possible situations.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \footnotesize
     \input{incidence_toward_away.pdf_tex}
@@ -2066,7 +2068,7 @@ Then, to determine $N$, we need to to finally decide the direction of the normal
     \label{fig:incidence_toward_away}
 \end{figure}
 
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{ccc}
         \toprule
@@ -2157,7 +2159,7 @@ We now need to know the amplitude, the phase and the direction of the fields.
 
 We will use the term ``transmission'' instead of ``refraction'' because it starts with a ``t'', we reserve the letter ``r'' for reflections.
 
-Fresnel's equations give the expression of reflection and transmission coefficients~\cite{hecht2002optics}.
+Fresnel's equations give the expression of reflection and transmission coefficients~\parencite{hecht2002optics}.
 We need only to know them for the electric field.
 We can deduce the magnetizing field from the electric field and the wave vector.
 
@@ -2778,7 +2780,7 @@ For example, let us consider $\cp{r}_\perp$ when both the incident and the trans
     \end{align}
 \end{subequations}
 This is similar to Fresnel's equation for transmission given
-in~\citetitle{hecht2002optics}~\cite{hecht2002optics}:
+in~\textcite{hecht2002optics}:
 \begin{equation}
     r_\perp
     =
@@ -2795,7 +2797,7 @@ in~\citetitle{hecht2002optics}~\cite{hecht2002optics}:
 with $\theta_\I=\theta_a$ the angle of incidence and $\theta_\T=\theta_b$ the angle of refraction.
 The fractions $n/\mu$ come from $k=\omega n/c_0$ and equal $\sqrt{\epsilon/\mu}$.
 
-Although correct, the trigonometric form of Fresnel's equations as presented by~\citeauthor{hecht2002optics} are limited to the homogeneous waves.
+Although correct, the trigonometric form of Fresnel's equations as presented by~\textcite{hecht2002optics} are limited to the homogeneous waves.
 It is possible to stretch them to treat evanescent waves or more general heterogeneous waves but the complex trigonometry loses its intuitive aspect and becomes more cumbersome than helpful.
 
 Furthermore, the trigonometric form only produces scalars, while our algebraic form produces matrices which elegantly deal with the parallel case.
@@ -2819,7 +2821,7 @@ We can make another comment on the familiar trigonometric form of Fresnel's equa
     \label{eq:fresnel_wrong}
     \text{.}
 \end{equation}
-Some sources (Wikipedia~\cite{wiki:fresnel} for instance) mention only this form without explicitly stating that it is valid only when the magnetic permeabilities equal~1.
+Some sources~\parencite[for instance][]{wiki:fresnel} mention only this form without explicitly stating that it is valid only when the magnetic permeabilities equal~1.
 This can confuse the reader since these equations still contain refractive indices, which depend on the magnetic permeabilities: the equations appears to `work' with any permeability via $n=\sqrt{\epsilon_r \mu_r}$ with $\epsilon_r = \epsilon / \epsilon_0$ and $\mu_r = \mu / \mu_0$, but actually do not.
 The proper way of writing the trigonometric form of Fresnel's equations is to use the wave admittance $Y=\sqrt{\epsilon/\mu}$ instead of the refractive index:
 \begin{equation}
@@ -2850,8 +2852,7 @@ Once again, the notion of refractive index seems unnecessary; and in this case, 
 In this chapter, we have derived the laws of reflection and transmission (refraction) for complex harmonic plane waves at the plane interface between two linear homogeneous isotropic media.
 
 The expression of these laws is more general than the ones found in most textbooks.
-\citeauthor{stratton1941electromagnetic} got very close in the chapter~9 of his book
-\citetitle{stratton1941electromagnetic}~\cite{stratton1941electromagnetic} but his reliance on real trigonometry limits his equations to the case of homogeneous incident waves.
+Chapter~9 of \textcite{stratton1941electromagnetic} got close but the reliance on real trigonometry limits the equations to the case of homogeneous incident waves, even though the outgoing waves may be heterogeneous.
 In our study, we removed this limitation by avoiding all trigonometry.
 Our expressions for the laws of reflection and transmission are purely algebraic.
 This makes them able to deal with heterogeneous waves as well as homogeneous waves.
@@ -2868,6 +2869,10 @@ without trigonometry, there is no need for specific reference frames;
 without refractive indices, there is no restriction to homogeneous waves.
 We encourage the reader to do the same and keep their equations as general as possible.
 
+
+%#############################################################################
+%\clearpage
+\printbibliography[heading=subbibliography]
 \begin{figure}[b!]
     \centering
     \begin{subfigure}[t]{.47\textwidth}
@@ -2884,3 +2889,4 @@ We encourage the reader to do the same and keep their equations as general as po
         \caption*{G. J. Stodart - Frontpiece in James Maxwell, The Scientific Papers of James Clerk Maxwell. Ed: W. D. Niven. New York: Dover, 1890.  Public domain.}
     \end{subfigure}%
 \end{figure}
+\end{refsection}

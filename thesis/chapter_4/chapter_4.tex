@@ -1,5 +1,6 @@
 \cleardoublepage
-\chapter{Interference model of HIFI Band 1}
+\begin{refsection}
+\chapter{Interference model of HIFI Band~1}
 \label{sec:chapter4}
 
 
@@ -9,8 +10,8 @@ The previous chapters describe a physically-based model that we created to predi
 This chapter compares our model to observational data from the HIFI instrument~\parencite{AA_518_L6}.
 Our goal is to validate our model and to derive parameters several system parameters for the HIFI instrument that are only approximately known from its design and commissioning.
 
-We choose to model HIFI Band 1.
-Bands~1, 2 and 5 of HIFI have fewer optical elements than Bands~3, 4, 6 and 7, making them easier to model and reducing the number of parameters (see~\cref{sec:hifi_bands}).
+We choose to model HIFI Band~1.
+Bands~1, 2 and 5 of HIFI have fewer optical elements than Bands~3, 4, 6 and 7, making them easier to model by reducing the number of free parameters (see~\cref{sec:hifi_bands}).
 Indeed, Bands~3, 4, 6 and 7 use rooftop mirrors to form Martin--Puplett interferometers in order to maximize the coupling of the mixer to the sky and the local oscillator at the same time.
 In Bands~1, 2 and 5, the LO power is high enough and there is no need to maximize its coupling to the mixer, allowing for a simpler design with less side-effects.
 The coupling of the LO to the mixer is very weak in Band~1, which means that the LO--mixer cavities produce almost no interference;
@@ -31,7 +32,7 @@ These reflections create interferences that impact the bandpass calibration of t
     \centering
     \includegraphics{mars_25_original}
     \caption{Observation of Mars by HIFI in Band~1 with the WBS-H showing a continuum modulated by ripples.
-    Source: HSA, ObsID 0x2FB00EB.}
+    Source: HSA, obsid 0x2fb00eb.}
     \label{fig:mars_25_original}
 \end{figure}
 
@@ -481,7 +482,7 @@ Although mixers are non-linear devices, their useful output phasor is proportion
 \end{equation}
 The frequency of the input phasors are $f_\text{LSB}$ and $f_\text{USB}$.
 The frequency of the output phasor is $f_\text{IF}$.
-The gain $\cp{g}_\text{mixer}$ is intrinsic to the mixer, it may depend on the frequency and be different for the LSB abd USB frequency.
+The gain $\cp{g}_\text{mixer}$ is intrinsic to the mixer, it may depend on the frequency and be different for the LSB and USB frequency.
 
 As this equation shows, mixers are coherent devices: they operate in field, not in power.
 Although correct at any instant $t$, this equation cannot be applied to our situation.
@@ -971,3 +972,7 @@ we consider that this is a successful proof of concept for our modeling techniqu
 
 We encourage instrument designers to allocate some time to measure the complex reflection coefficients of their optical components for different LO frequencies.
 Matching the physically-based model to the real data would allow to correct the calibration by properly taking into account the ripples caused by the interferences in the optics.
+%#############################################################################
+%\clearpage
+\printbibliography[heading=subbibliography]
+\end{refsection}

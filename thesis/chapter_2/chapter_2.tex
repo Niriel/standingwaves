@@ -1,8 +1,10 @@
 \cleardoublepage
+\begin{refsection}
 \chapter{Modeling interferences in complex coherent instruments}
 \chaptermark{Modeling interferences}
 \label{sec:chapter2}
 
+%#############################################################################
 \section{Introduction}
 \label{sec:chapter2_0}
 
@@ -13,23 +15,25 @@ This model is not iterative: it uses a closed-form mathematical representation o
 No model is perfect: models rely on simplifications, and their predictions within these specifications can only be as accurate as our knowledge of the model parameters.
 We are working toward a zero-order description of the system that includes the complicated interactions between all the cavities via all the possible optical paths, rather than considering the higher-order effects related to the spatial distribution of the reflected fields and exchange or scattering of power between beam modes.
 For this reason, the modeling technique that we present in this chapter ignores the self-diffraction of the electromagnetic beams
-(see \citetitle{goldsmith1998quasioptical} by \citeauthor{goldsmith1998quasioptical}~\cite{goldsmith1998quasioptical} for a detailed explanation of Gaussian beams and their modes).
+(see \textcite{goldsmith1998quasioptical} for a detailed explanation of Gaussian beams and their modes).
 The model that we propose works with plane waves.
 The current chapter relies heavily on the notations, conventions, definitions and results of
 \vref{sec:complex_harmonic_plane_waves}, \textit{\nameref{sec:complex_harmonic_plane_waves}}.
+That appendix details the mathematics and physics of complex plane waves, their propagation and their behavior at plane interfaces.
+In the current chapter, we apply the results of~\cref{sec:complex_harmonic_plane_waves} to the interferences in cavities.
 
 In the particular case of HIFI, a model based on plane waves should provide a good approximation.
 First, most of the optical elements of HIFI are placed at the waist of the beams, where the wavefront is plane.
 Second, HIFI has well-designed and matched optics, so that the dominant reflections in the system always reflect power back in roughly the same beam mode.
 Third, HIFI makes use of corrugated horns to couple the optical beams to the local oscillator diodes or the mixers.
-When corrugated horns are used with properly tuned waveguides, they emit and receive single-mode beams (see~\citetitle{clarricoats1966propagation} by \citeauthor{clarricoats1966propagation}~\cite{clarricoats1966propagation}).
+When corrugated horns are used with properly tuned waveguides, they emit and receive single-mode beams \parencite{clarricoats1966propagation}.
 Similarly, a device designer makes sure that his microwave circuit will optimally couple to the fundamental waveguide mode by making a selection of coupling structures, device substrates, and in general by assuring an impedance match to the electromagnetic environment.
 In other words, if any energy is converted to a high-order mode by the optics, then it will not couple to the mixer and can, for any practical purpose, be modeled with a simple term of loss.
 
 We will begin this chapter with the study of a simple cavity.
 This will provide a concrete example to illustrate the more abstract second part of this chapter, in which we describe the mathematics of our model.
 Next, we will describe a complete implementation of our model with algorithms that can easily be translated into any imperative programming language.
-Finally, we will provide a short catalog of typical optical elements that can be used with our model to get you started with your own modeling.
+Finally, we will provide a short catalog of typical optical elements that can be used with our model.
 
 
 
@@ -44,11 +48,11 @@ Finally, we will provide a short catalog of typical optical elements that can be
 \label{sec:fabry_perot_example}
 
 Cavities can have a dramatic effect on the gain of a coherent receiver, as illustrated in~\cref{fig:mars_50010cb7_WBSH_USB_chp2}.
-This baseline of this spectrum present a strong ripple of period~\SI{90}{\mega\hertz}.
+The baseline of this spectrum present a strong ripple with a period of~\SI{90}{\mega\hertz}.
 Atmospheric models of Mars predict that the baseline of this spectrum, on each side of the absorption line, should be featureless.
-This indicates that the ripple is an instrumental artifact: interferences in cavity modulate the gain of the instrument.
+This indicates that the ripple is an instrumental artifact: interferences in cavities modulate the gain of the instrument.
 In this section, we will show how cavities produce ripples.
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics[width=\textwidth]{mars_50010cb7_WBSH_USB}
     \caption{Interferences have modulated the baseline of this HIFI spectrum of the planet Mars.
@@ -90,7 +94,7 @@ This will show how a cavity in the optical path of a coherent instrument can pro
 
 \subsection{Reflection and transmission coefficients of a cavity}
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{cavity.pdf_tex}
     \caption{Fabry-Pérot etalon, notations.}
@@ -254,16 +258,16 @@ in which $P_{a_1}$, $P_{b_1}$ and $P_{b_4}$ are the active power carried by the 
 In~\cref{sec:time_averaged_complex_poynting_vector} we derived the expression of the time-averaged active Poynting vector of a homogeneous plane wave in a linear uniform isotropic medium,
 \cref{eq:complex_poynting_homogeneous_real},
 which we reproduce here:
-\begin{equation}
-    \Timeavg{\vect{\mathcal{P}}}
-    =
-    \frac{1}{2}
-    \exp(2\omega_i t)
-    Y_r
-    \norm{\vect{e}_1}^2
-    \vectu{k}
-    \tag{\ref{eq:complex_poynting_homogeneous_real}}
-\end{equation}
+%\begin{equation}
+%    \Timeavg{\vect{\mathcal{P}}}
+%    =
+%    \frac{1}{2}
+%    \exp(2\omega_i t)
+%    Y_r
+%    \norm{\vect{e}_1}^2
+%    \vectu{k}
+%    \tag{\ref{eq:complex_poynting_homogeneous_real}}
+%\end{equation}
 with
 \begin{equation}
     Y_r = \Re\left( \sqrt{\frac{\cp{\epsilon}}{\cp{\mu}}} \right)
@@ -391,7 +395,7 @@ The minus sign can be ignored when the direction does not matter.
 \subsection{Periodicity of the gains}
 \label{sec:periodicity_in_power}
 
-For the cavity to create ripples on a spectrum (see \vref{fig:mars_50010cb7_WBSH_USB_chp2}), $T$ must be a (quasi-)periodic function of the frequency.
+For the cavity to create ripples on a spectrum (see \vref{fig:mars_50010cb7_WBSH_USB_chp2}), $T$ must be a periodic (or at least oscillating) function of the frequency.
 Assuming that the materials $A$, $B$ and $C$ are not dispersive, the only source of periodicity is the propagation coefficient $\cp{d}$, which models the effect on the phase and amplitude of propagating inside the cavity.
 
 
@@ -462,7 +466,15 @@ The period is
 
 To be rigorous, $\cp{d}$ is periodic only if $\alpha_i=0$, which is required to cancel the contribution of $\omega_r$ to the first exponential.
 If the medium $B$ is dielectric, $\epsilon_i=0$ and $\mu_i=0$, which implies that $\alpha_i=0$.
-If metals are involved, then $\cp{d}$ may be quasi-periodic.
+If metals are involved, then $\cp{d}$ may be oscillating%
+\footnote{
+Periodic function: $f$ is periodic if $\exists T, T \ne 0, \forall t, f(t)=f(t+T)$.  The smallest positive value of $T$ satisfying this condition is called the period of $f$.\\
+Almost-periodic function: the function is periodic within a defined level of accuracy, its regularity increases over multiple periods.  Example: planetary orbits.\\
+Quasiperiodic function: the periodicity of $f$ is irregular and unpredictable.  Example: El Ni\~no (`period' varies between 4 and 12 years, spectral density peaks at 5 years).\\
+Pseudo-periodic function: function of several variables that has a period for each variable.\\
+Oscillating function: the function moves between extremes.  Examples: $x \rightarrow sin(1/x)$, $x \rightarrow sin(x)/x$.
+}
+rather than periodic: the period itself may be a function of frequency and can therefore be defined only locally.
 
 
 
@@ -540,7 +552,7 @@ These periodicities transfer to the reflection and transmission gains of the sys
 
 To summarize:
 The cavity modulates the reflection and transmission gains of the system.
-This modulation is periodic (or quasi-periodic).
+This modulation is periodic (or oscillating).
 The fundamental period of this modulation is
 \begin{equation}
     F = 
@@ -550,7 +562,7 @@ The fundamental period of this modulation is
 \end{equation}
 This periodic modulation of the transmission gain of the system is responsible for the ripples observed on the baseline of the spectrum shown in~\cref{fig:mars_50010cb7_WBSH_USB_chp2}.
 
-In a more realistic system, the materials are dispersive (their electric permeability and magnetic permittivity depend on the frequency), and the reflection and transmission gains may not be really periodic, but only quasi-periodic.
+In a more realistic system, the materials are dispersive (their electric permittivity and magnetic permeability depend on the frequency), and the reflection and transmission gains may not be really periodic, but only oscillating.
 
 
 
@@ -560,7 +572,7 @@ In a more realistic system, the materials are dispersive (their electric permeab
 
 When the interferences are destructive on the detector-side of the cavity, they are constructive on the source-side: the power is sent back to the source.
 This is illustrated by~\cref{fig:cavity_energy_conservation}.
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics{cavity_energy_conservation}
     \caption{Power conservation in a lossless cavity.}
@@ -590,19 +602,19 @@ Our method is unique in that it solves directly for the steady state of the elec
 To do that, we model the optical system with a set of linear equations and solve it.
 
 At its core, our method relies on an abstraction of an optical system that we call ``network''.
-A network can represent either a concrete optical element such as a mirror, or a an arbitrarily complex configuration of interconnected elements such as the entire focal plane unit of HIFI described by~\citeauthor{jackson2002hifi} in \citetitle{jackson2002hifi}~\cite{jackson2002hifi}.
+A network can represent either a concrete optical element such as a mirror, or an arbitrarily complex configuration of interconnected elements such as the entire focal plane unit of HIFI described by~\textcite{jackson2002hifi}.
 
 In electrical engineering, the term ``network'' refers to an interconnection of discrete electrical components.
 Transmission-line theory extends the meaning of ``network'' to include non-discrete elements such as an arbitrary length of cable.
 Applying the notion of networks to optics is not a new idea,
-for example~\citeauthor{siegman1986lasers} does so in his book \citetitle{siegman1986lasers}~\cite{siegman1986lasers},
+it can be found in~\textcite{siegman1986lasers},
 but it is a powerful one.
 
-Networks have one or more ``port'' that allow them to be connected to other networks.
+Networks have one or more ``ports'' that allow them to be connected to other networks.
 When two ports are connected, the output of each port is the input of the other.
 For example, \cref{fig:fp_networks} represents the Fabry-Pérot etalon that we studied in the previous section: the rectangles represent networks, the dots represent ports, and the lines represent connections between ports.
 The whole Fabry-Pérot elaton can be seen either as a single two-port network or as three connected elementary two-port networks.
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{fp_networks.pdf_tex}
     \caption{Constitutive networks of a Fabry-Pérot etalon.}
@@ -615,11 +627,10 @@ For our study, we assume that these equations are linear,
 which allows us to represent a $n$-port network with a $n$--by--$n$ matrix.
 
 Circuit theory introduces several types of matrices that can model networks.
-In the chapter~4 of \citetitle{pozar2009microwave}~\cite{pozar2009microwave},
-\citeauthor{pozar2009microwave} describes matrices of impedance parameters, admittance parameters, hybrid parameters, ABCD parameters, etc., which all correspond to a different choice of input and output quantities for the networks, namely various combinations of electric voltages and currents.
-Voltages and currents are not convenient when working at frequencies above the gigahertz, they become difficult to measure and somewhat abstract for waves propagating in free space;
+The chapter~4 of \textcite{pozar2009microwave} describes matrices of impedance parameters, admittance parameters, hybrid parameters, ABCD parameters, etc., which all correspond to a different choice of input and output quantities for the networks, namely various combinations of electric voltages and currents.
+Voltages and currents are not convenient when working at frequencies above a gigahertz, they become difficult to measure and somewhat abstract for waves propagating in free space;
 at high frequencies, it is easier to measure the power of a wave, or its intensity (proportional to the square root of that power).
-In his book, \citeauthor{pozar2009microwave} describes another set of parameters called ``scattering parameters'', which together form a ``scattering matrix'', that are more adapted to our situation.
+\textcite{pozar2009microwave} describes another set of parameters called ``scattering parameters'', which together form a ``scattering matrix'', that are more adapted to our situation.
 Indeed, the scattering parameters convey the ideas of incident, reflected and transmitted wave intensity.
 In our model, we model networks with scattering matrices.
 
@@ -634,7 +645,7 @@ We will now describe the mathematics that solve for these coefficients.
 
 \subsection{Scattering matrices}
 
-Scattering matrices \cite{pozar2009microwave,siegman1986lasers} model the transfer of power or field intensity between the ports of a network.
+Scattering matrices \parencite{pozar2009microwave,siegman1986lasers} model the transfer of power or field intensity between the ports of a network.
 In coherent systems, scattering matrices operate on the intensity and the phase of the electromagnetic waves, not their power.
 Indeed, in coherent systems the electromagnetic fields add linearly but the powers do not: two fields of equal amplitude carry the same power, but if they have opposite phases, their sum carries no power at all.
 
@@ -644,7 +655,7 @@ Following the conventional notations for scattering matrices,
 the input to the port number $i$ is noted $\cp{a}_i$ and its output is noted~$\cp{b}_i$.
 The inputs and outputs of a network are complex numbers.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{scattering_matrix_notations.pdf_tex}
     \caption{A 4-port network showing four inputs $\cp{a}_i$ and four outputs $\cp{b}_i$.}%
@@ -710,7 +721,7 @@ these three networks have the following scattering matrices:
     \end{pmatrix}
     \text{.}
 \end{align}
-The parameters~$\cp{r}_4$ and $\cp{t}_4$ are not represented on~\cref{fig:cavity_notations}
+The parameters~$\cp{r}_4$ and $\cp{t}_4$ are not represented in~\cref{fig:cavity_notations}
 because we did not consider, at the time, waves incident on the interface side number~4.
 The scattering parameter $\matrcp{S}_\text{interfaceAB,1,1} = \cp{r}_1$ represents the coefficient of reflection of a wave incident to the interface side number~1 if there is nothing on that side of the interface but an infinite expanse of medium~$A$.
 This is what is meant by matching the input to the network.
@@ -735,8 +746,7 @@ This is the subject of the next section.
 \subsubsection{Jones calculus}
 
 In order to model interferences in a coherent instrument, we must keep track at all time of the intensity, phase and polarization of the electromagnetic field.
-In~\citeyear{jones1941calculus},
-\citeauthor{jones1941calculus} introduced a method for doing exactly that in~\citetitle{jones1941calculus}~\cite{jones1941calculus},
+\textcite{jones1941calculus} introduced a method for doing exactly that,
 which was later named ``Jones calculus''.
 
 Jones calculus introduces Jones vectors and Jones matrices.
@@ -752,7 +762,7 @@ Two Jones vectors $\vectcp{E}^a$ and~$\vectcp{E}^b$ and a Jones matrix~$\matrcp{
 \end{equation}
 
 Although Jones calculus does not impose it, it is often convenient to define Jones vectors from the electric field of the wave, which is why we note them with the letter~$E$.
-In this book~\citetitle{hecht2002optics}, \citeauthor{hecht2002optics} expands Jones vectors and Jones matrices in the following way:
+\Textcite{hecht2002optics} expands Jones vectors and Jones matrices in the following way:
 \begin{equation}
     % Jones matrix in 2D.
     \begin{pmatrix}
@@ -773,7 +783,7 @@ In this book~\citetitle{hecht2002optics}, \citeauthor{hecht2002optics} expands J
 In that formalism,
 a polarized electric field is seen as the superposition of a horizontal and a vertical component, both linearly polarized, noted $h$ and $v$.
 The amplitude and phase difference between these components determines the handedness and the ellipticity of the polarization of the field.
-If the the horizontal and vertical components are in phase, then the field is linearly polarized; if their phase difference is~\SI{90}{\degree} then the field is circularly polarized.
+If the horizontal and vertical components are in phase, then the field is linearly polarized; if their phase difference is~\SI{90}{\degree} then the field is circularly polarized.
 
 The linearity of the system allows us to use he same Jones matrix to relate the phasors of the two fields:
 \begin{equation}
@@ -798,13 +808,12 @@ We described phasors in~\vref{sec:phasor_notation}.
 \paragraph{Jones calculus and unpolarized waves.}
 \label{sec:jones_unpolarized}
 Jones calculus is unable to model networks that depolarize waves.
-There exists another formalism called ``Mueller calculus'' named after Hans Mueller who developped it in~\citeyear{mueller1943memorandum}~\cite{mueller1943memorandum}.
-Mueller calculus is a matrix method for manipulating Stockes vectors, which are four-dimensional real vectors that have room for unpolarized waves.
+There exists another formalism called ``Mueller calculus'' named after Hans Mueller who developed it \parencite{mueller1943memorandum}.
+Mueller calculus is a matrix method for manipulating Stokes vectors, which are four-dimensional real vectors that have room for unpolarized waves.
 However, Mueller calculus works in power, not in field, which makes it unsuitable for modeling interferences, for which the phase of the field is needed.
 
 Even though Jones calculus cannot model depolarizing networks, it can be applied to unpolarized waves.
-\citeauthor{goodman1985statistical} explains in detail in~\citetitle{goodman1985statistical}~\cite{goodman1985statistical}
-how an unpolarized or partially polarized wave can be represented in terms of polarized waves.
+\textcite{goodman1985statistical} explains in detail how an unpolarized or partially polarized wave can be represented in terms of polarized waves.
 A totally unpolarized wave can be decomposed into two polarized waves of opposite polarizations and equal intensities.
 These opposite polarizations are arbitrary; we can choose circular left and circular right, or more conveniently horizontal and vertical.
 \begin{equation}
@@ -825,7 +834,7 @@ These opposite polarizations are arbitrary; we can choose circular left and circ
     \end{aligned}
 \end{equation}
 Each polarization carries half of the surface power density of the wave.
-What makes this wave unpolarized is that the relative phase between~$\vectcp{E}^{ah}$ and $\vectcp{E}^{av}$ varies randomly much quicker than the phase of each component.
+What makes this wave unpolarized is that the phase difference between~$\vectcp{E}^{ah}$ and $\vectcp{E}^{av}$ varies randomly.
 Independently, $\vectcp{E}^{ah}$ and $\vectcp{E}^{av}$ are coherent, but $\vectcp{E}^a$ is not.
 Since $\vectcp{E}^{ah}$ and $\vectcp{E}^{av}$ are coherent, we can apply Jones calculus to them.
 \begin{equation}
@@ -858,7 +867,7 @@ We explained power calculations in~\cref{sec:time_averaged_complex_poynting_vect
 The previous paragraph can be extended from unpolarized sources to completely independent sources.
 Whenever two sources of electromagnetic waves that are not phase-locked to each other feed a system modeled with Jones matrices, the response of the system must be computed for each source independently and the results added in power.
 
-For example, the astronomical signal and the noise of the local oscillator enter the focal plane unit of HIFI at the same time but their phases are not correlated;
+For example, both the astronomical signal and the noise of the local oscillator enter the focal plane unit of HIFI at the same time but their phases are not correlated;
 the two polarizations of the sky and the two polarizations of the local oscillator must be treated separately, yielding four output fields that we must add in power.
 
 
@@ -872,7 +881,14 @@ First, the field is always expressed in a local reference frame: the horizontal 
 Therefore, to completely describe a field, the Jones vector is not enough and one needs to keep track of the orientation of its reference frame.
 
 Second, the horizontal and vertical directions are normal to each other and to the direction of propagation.
-This limits us to modeling either transverse electric or transverse magnetic waves depending on whether the Jones vector represents the electric or the magnetizing field;
+This limits us to modeling either transverse electric or transverse magnetic waves depending on whether the Jones vector represents the electric or the magnetizing field%
+\footnote{
+The terminology varies in the literature.
+In this chapter, we call~$\vectcp{E}$ and $\vectcp{B}$ ``electric'' and ``magnetic'' field intensities.
+The electric and magnetic fields are the quantities figuring in Maxwell's microscopic equations.
+The fields introduced in the macroscopic equations are~$\vectcp{D}$ and $\vectcp{H}$, which we call ``electric displacement'' and ``magnetizing'' field intensities.
+See~\cref{sec:maxwell_macroscopic} for details.
+};
 this cannot model hybrid waves, in which both the electric and the magnetizing field can have a component along the direction of propagation.
 Therefore, this cannot model propagation in birefringent materials~\footnote{We have not modeled birefringent material during our study; doing so would require reworking the derivations of~\cref{sec:complex_harmonic_plane_waves} to account for anisotropic propagation media.}.
 
@@ -906,7 +922,7 @@ In phasor notation, this reduces to
 in which~$\vectcp{e^a}$ and $\vectcp{e}^b$ are vector phasors of the type we used in all of~\cref{sec:phasor_notation}.
 
 When extended to three dimensions, Jones calculus deals not only with the amplitude and the phase of a wave, but also its direction.
-Under that light, the reflection and transmission matrices for an interface that we derived in~\vref{sec:fresnel_matrix} are Jones matrices.
+In that light, the reflection and transmission matrices for an interface that we derived in~\vref{sec:fresnel_matrix} are Jones matrices.
 
 
 
@@ -952,7 +968,7 @@ Since Jones vectors describe polarized waves, we decided to model each input and
 Each port of a network receives and emits a polarized wave.
 This makes $\vectcp{a}$ and $\vectcp{b}$ vectors of Jones vectors.
 As a consequence, each element of the scattering matrix $\matrcp{S}$ is a Jones matrix.
-Using our notations for vectors (bold letters) and matrices (upright letters), the previous equation is rewritten
+Using our notations for vectors (bold letters) and matrices (upright letters), \cref{eq:scattering_matrix} is rewritten
 \begin{equation}
         \begin{pmatrix}
             \vectcp{b}_1\\
@@ -1041,8 +1057,7 @@ Its expansion for a two-port network is
     \label{eq:matrix_of_matrices}
 \end{equation}
 
-Matrices of matrices are compatible with simple algebraic operations (the product above follows the usual rule for multiplying matrices), but we prefer to interpret them as more conventional ``block matrices''.
-Block matrices are described by \citeauthor{eves2012elementary} in \citetitle{eves2012elementary} \cite{eves2012elementary}.
+Matrices of matrices are compatible with simple algebraic operations (the product above follows the usual rule for multiplying matrices), but we prefer to interpret them as more conventional ``block matrices'' \parencite{eves2012elementary}.
 They are conventional matrices, in the sense that they hold scalars, but they are subdivided in regions, or ``blocks''.
 Mathematically, \cref{eq:matrix_of_matrices} is equivalent to
 \begin{equation}
@@ -1091,7 +1106,7 @@ This equivalence means that we can see each component of each port as a full-fle
 
 Although the term is not official, we decide to call non-block matrices ``flat'' matrices.
 They are flat in the sense that they are two dimensional, while our block matrices have four indices and are therefore four-dimensional.
-In this book, we will switch between block matrices and flat matrices at our convenience.
+In this chapter, we switch between block matrices and flat matrices at our convenience.
 Flat matrices are convenient for reducing the number of indices while block matrices are convenient whenever we think in term of Jones calculus.
 
 
@@ -1111,7 +1126,7 @@ We call $\matrcp{S}$ the flat scattering matrix of that system.
         \cp{S}_{n, 1} & \cp{S}_{n, 2} & \cdots & \cp{S}_{n, n}
     \end{pmatrix}
 \end{equation*}
-Its inputs electric field phasors are~$\vectcp{a}$ and its outputs electric field phasors are~$\vectcp{b}$ with
+Its input electric field phasors are~$\vectcp{a}$ and its output electric field phasors are~$\vectcp{b}$ with
 \begin{equation*}
     \vectcp{b} = \matrcp{S} \vectcp{a}
     \text{.}
@@ -1125,7 +1140,7 @@ Here, $n$ is the number of ports of $\matrcp{S}$, equal to the sum of the number
 
 \subsubsection{Connected networks}
 
-Some of the networks constituting the system are connected by one port or more.
+Some of the networks constituting a system are connected by one port or more.
 If two networks G and H are connected by their port $g$ and $h$ (see~\cref{fig:output_g_is_input_h}), then the output phasor of $g$ is the input phasor of $h$ and the output phasor of $h$ is the input phasor of $g$:
 \begin{equation}
     \left\lbrace
@@ -1138,7 +1153,7 @@ If two networks G and H are connected by their port $g$ and $h$ (see~\cref{fig:o
     \text{.}
 \end{equation}
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{output_g_is_input_h.pdf_tex}
     \caption{Two networks connected by one port: the output of one is the input of the other.}
@@ -1151,11 +1166,11 @@ Second, a port can be connected to zero or one other port, not more.
 Third, a port must not be connected to itself.
 
 The third rule might not be necessary from a mathematical point of view, but it makes little sense physically to loop a port to itself and it simplifies slightly the implementation of some algorithms of~\cref{sec:solver_implementation}.
-For these rules, the network to which a port belong do not matter: we can connect two different ports of the same network, or we can connect two networks several times with different pairs of ports.
+For these rules, the network to which a port belongs does not matter: we can connect two different ports of the same network, or we can connect two networks several times with different pairs of ports.
 
 We call the ports that are connected ``inside ports'', and those that are not connected ``outside ports''.
 If we note~$\vectcp{a}^o$ the inputs from the outside world,
-$\vectcp{b}^o$ the outputs to the outside world,~$\vectcp{a}^i$ the inputs inside the system and~$\vectcp{b}^i$ the outputs inside the system, then we can reorder the rows and columns of the vectors~$\vectcp{a}$,~$\vectcp{b}$ and the matrix~$\matrcp{S}$ to put together the inside ports and the outside ports.
+$\vectcp{b}^o$ the outputs to the outside world,~$\vectcp{a}^i$ the inputs inside the system and~$\vectcp{b}^i$ the outputs inside the system, then we can reorder the rows and columns of the vectors~$\vectcp{a}$,~$\vectcp{b}$ and the matrix~$\matrcp{S}$ to organize the matrix in blocks of inside ports and outside ports.
 \begin{equation}
     \begin{pmatrix}
         \vectcp{b}^o\\
@@ -1203,13 +1218,13 @@ $\vectcp{a}^i$ and~$\vectcp{b}^i$ are nice to have as they allow us to see what 
 \subsubsection{Internal transmissions and reflections}
 
 How are internal inputs~$\vectcp{a}^i$ and internal outputs~$\vectcp{b}^i$ related?
-\Cref{eq:connected_inputs_outputs} indicates that each element of $\vectcp{a}^i$ is equal to an element of $\vectcp{b}^i$, therefore $\vectcp{a}^i$ can be obtain by reordering $\vectcp{b}^i$ and vice-versa.
+\Cref{eq:connected_inputs_outputs} indicates that each element of $\vectcp{a}^i$ is equal to an element of $\vectcp{b}^i$, therefore $\vectcp{a}^i$ can be obtained by reordering $\vectcp{b}^i$ and vice versa.
 \index{permutation matrix}In other words, there exists a permutation matrix~$\matr{P}$ such that
 \begin{equation}
     \vectcp{a}^i = \matr{P} \vectcp{b}^i \text{.} \label{eq:relation_ai_bi}
 \end{equation}
 Permutation matrices\index{permutation matrix} permute the order of rows and columns of matrices.
-They contain one and only one 1 per row and per column, all the other elements are~0.
+They contain one and only one ``1'' per row and per column, all the other elements are~0.
 Pre-multiplying by a permutation matrix changes the order of the rows,
 while post-multiplying by a permutation matrix changes the order of the columns.
 The transpose of a permutation matrix is also a permutation matrix.
@@ -1260,7 +1275,7 @@ The eigenvalues~$\cp{\lambda}$ of a matrix~$\matrcp{M}$ are solutions of
 In our case, $\cp{\lambda}=1$ and $\matrcp{M}=\matrcp{S}^{ii}\matr{P}$.
 Saying $\det(\matr{I} - \matrcp{S}^{ii}\matr{P}) = 0$ is equivalent to saying that there exist non-zero vectors $\vectcp{v}$, called ``eigenvectors'',
 such that $\vectcp{v} = \matrcp{S}^{ii}\matr{P}\vectcp{v}$.
-The question of the invertibility of $\matr{I} - \matrcp{S}^{ii}\matr{P}$ relates to the whether or not these eigenvectors exist.
+The question of the invertibility of $\matr{I} - \matrcp{S}^{ii}\matr{P}$ relates to whether or not these eigenvectors exist.
 The following argument, based on physical considerations, will demonstrate that there are no such vectors.
 
 $\vectcp{b}^i$ is what $\matrcp{S}^{ii}\matr{P}$ is applied to in \cref{eq:compute_bi}, therefore we are looking for vectors $\vectcp{b}^i$ satisfying
@@ -1298,7 +1313,7 @@ Therefore $\matrcp{S}^{ii}\matr{P}$ has no eigenvalues.
 Therefore 1 is not an eigenvalue.
 Therefore $\det(\matr{I}-\matrcp{S}^{ii}\matr{P}) \neq 0$.
 Therefore $\matr{I}-\matrcp{S}^{ii}\matr{P}$ has an inverse.
-Therefore \cref{eq:compute_bi_invert} is correct, and the system of equations can be solved for~$\vectcp{b}_i$.
+Therefore \cref{eq:compute_bi_invert} is correct, and the system of equations can be solved for~$\vectcp{b}^i$.
 
 It can be interesting to draw a parallel between our problem and the convergence of an infinite geometric series.
 Indeed, the sum of an infinite series of ratio $\cp{q}$ converges if $\abs{\cp{q}} < 1$:
@@ -1316,7 +1331,7 @@ If there are losses, then the infinite sum of reflections converges to $(\matr{I
 
 \subsubsection{Solving the output of the system}
 
-Once we know the internal reflections of the system ($\vectcp{b}^i$ as a function of itself), getting the output of the system is trival.
+Once we know the internal reflections of the system ($\vectcp{b}^i$ as a function of itself), getting the output of the system is trivial.
 The second step is to compute~$\vectcp{b}^o$ from~$\vectcp{a}^o$ and~$\vectcp{b}^i$.
 We do that by taking $\vectcp{b}^o$ from \cref{eq:s_outside_inside} and eliminating $\vectcp{a}^i$ with \cref{eq:relation_ai_bi}.
 \begin{subequations}
@@ -1340,7 +1355,7 @@ Therefore, the local oscillator is warmer, radiating heat.
 With the current state of our model, we can make this local oscillator power an external source.
 However, the windows that physically separate the cryostat from the outside world are also relatively warm, and they also act as sources of radiation.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{cryostat_window.pdf_tex}
     \caption{The cryostat windows are warm enough to emit a significant power.}
@@ -1434,9 +1449,15 @@ These output fields must be added in power, port by port.
 \FloatBarrier
 \section{Implementation of the model}
 \label{sec:solver_implementation}
-In this section, we present algorithms that provide a concrete implementation our solver.
+In this section, we present algorithms that provide a concrete implementation of our solver.
 
-Although the mathematics are quite simple, implementing our solver requires careful book keeping of the many indices of the many matrices.
+The algorithms in this section are written in a pseudo-language that can easily be translated into any imperative procedural language, provided that language supports complex numbers and comes with a suitable linear algebra library.
+
+All the procedures that we provide are ``pure'': they do not have side-effects, nor do they retain state or mutate variables escaping their scope.
+Consequently, functional programmers should have no difficulties replacing our ``for loops'' with functional abstractions such as ``map'' and ``reduce''.
+Another benefit of this purity is that our algorithms can be parallelized with minimal effort.
+
+Although the mathematics are quite simple, implementing our solver requires careful book-keeping of the many indices of the many matrices.
 In order to make this section less abstract and easier to follow, let us consider the very simple system made of three networks that is shown in~\cref{fig:implementation_0}.
 This system represents the simplest heterodyne telescope that can be built.
 The sky and the local oscillator emit a signal (red arrows).
@@ -1449,7 +1470,7 @@ Let us ignore, for the sake of simplicity, that the electric field is in three d
 Using vectors would triple the number of ports, which would be more realistic, but the algorithms are the same in both cases.
 In our example, our networks exchange a single scalar.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{implementation_0.pdf_tex}
     \caption{A system made of three networks.}
@@ -1473,7 +1494,7 @@ The whole system is modeled with a~$n$--by--$n$ scattering matrix, where~$n$ is 
 In our example, $n=4+1+2=7$.
 \end{itemize}
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{implementation_1.pdf_tex}
     \caption{Each network has its ports numbered.}
@@ -1495,7 +1516,7 @@ The port~$j$ of the network~$i$ corresponds to the port~$k$ of the whole system,
 \end{equation}
 The resulting port numbers for our example are shown in~\cref{fig:implementation_2}.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{implementation_2.pdf_tex}
     \caption{Numbering of the ports of the whole system.}
@@ -1505,9 +1526,9 @@ The resulting port numbers for our example are shown in~\cref{fig:implementation
 With that information, it is trivial to fill the scattering matrix of the whole system, $\matrcp{S}$, with values from the scattering matrices from each network~$\matrcp{S}_i$.
 This is what \cref{algo:gather_networks} (\textsc{GatherNetworks}) does.
 In our example, the result is a 7--by--7 matrix like~\cref{eq:implementation_3}.
-The three blocks on the diagonal correspond to the scattering matrix of each network.
+Each block on the diagonal corresponds to the scattering matrix of each network.
 The beam-splitter matrix is 4--by--4, the local oscillator matrix is 1--by--1 and the mixer matrix is 2--by--2.
-The rest of $\matrcp{S}$ is filled with zeros.
+The rest of $\matrcp{S}$ is filled with zeros:
 \begin{align}
     \matrcp{S}
     &=
@@ -1531,8 +1552,10 @@ The rest of $\matrcp{S}$ is filled with zeros.
             \cp{S}_{3_{1,1}} & \cp{S}_{3_{1,2}}\\
             \cp{S}_{3_{2,1}} & \cp{S}_{3_{2,2}}
         \end{matrix}
-    \end{pmatrix}
-    \\
+    \end{pmatrix}\text{.}
+\end{align}
+Or, with unique port numbers,
+\begin{align}
     \matrcp{S}
     &=
     \begin{pmatrix}
@@ -1555,11 +1578,11 @@ The rest of $\matrcp{S}$ is filled with zeros.
             \cp{S}_{6,6} & \cp{S}_{6,7}\\
             \cp{S}_{7,6} & \cp{S}_{7,7}
         \end{matrix}
-    \end{pmatrix}
+    \end{pmatrix}\text{.}
     \label{eq:implementation_3}
 \end{align}
 
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{GatherNetworks}
     \label{algo:gather_networks}
     \begin{algorithmic}
@@ -1592,9 +1615,16 @@ The rest of $\matrcp{S}$ is filled with zeros.
 
 \subsection{Defining the network connections}
 
-\index{connection descriptor}One way of representing the connection of two ports is with a set of cardinal~2 that I name ``connection descriptor''.
+\index{connection descriptor}One way of representing the connection of two ports is with a set%
+\footnote{
+    We use the mathematical meaning of the word ``set'': a collection of \textit{distinct} objects considered as an object in its own right.
+    The cardinal of a set is the number of objects that it contains.
+    Some programming languages provide sets (Python is one of them).
+    If your programming language of choice does not, other data structures can be used instead, as long as the programmer makes sure that an object can appear at most once in the collection.
+}
+of cardinal~2 that I name ``connection descriptor''.
 Its two elements are the two identifiers of the ports that are connected.
-For example, if the port 3 of the system is connected to the port 6, then we can represent that connection with the set $\lbrace 3, 6\rbrace$ which is equal to the set $\lbrace 6, 3\rbrace$ (sets are unordered).
+For example, if port~3 of the system is connected to port~6, then we can represent that connection with the set $\lbrace 3, 6\rbrace$ which is equal to the set $\lbrace 6, 3\rbrace$ (sets are unordered).
 
 Enforcing a cardinal of 2 prevents the connection of a port to itself: $\lbrace 4, 4\rbrace = \lbrace 4\rbrace$ which has a cardinal of~1.
 To be valid, each element must be between 1 and $n$, the number of ports in the whole system.
@@ -1615,22 +1645,23 @@ From the set of connection descriptors and the total number of ports in the syst
 \Cref{algo:find_inside} (\textsc{FindInside}) returns a set containing all the ports that are connected to another port; in our case it returns $\lbrace 3, 4, 5, 6 \rbrace$.
 \Cref{algo:find_outside} (\textsc{FindOutside}) returns a set containing the ports that are not connected; in our case it returns the set $\lbrace 1, 2, 7 \rbrace$.
 
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{FindInside}
     \label{algo:find_inside}
     \begin{algorithmic}
         \Require {\textit{connections}} \Comment{a valid set of connection descriptors}
         \Function{FindInside}{\textit{connections}}
-        \State {\textit{inside} $\gets \emptyset$}
+        \State {\textit{inside} $\gets \emptyset$} \Comment{$\emptyset$ is the empty set}
         \ForAll{\textit{connection} $\in$ \textit{connections}}
             \State {\textit{inside} $\gets$ \textit{inside} $\cup$ \textit{connection}}
+            \Comment{$\cup$ is set union}
         \EndFor
         \\ \Return {\textit{inside}} \Comment{a set containing all the connected ports}
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{FindOutside}
     \label{algo:find_outside}
     \begin{algorithmic}
@@ -1639,6 +1670,7 @@ From the set of connection descriptors and the total number of ports in the syst
         \Function{FindOutside}{\textit{inside}, $n$}
         \State{\textit{allports} $\gets \lbrace 1, 2, 3, \dots, n \rbrace$}
         \State{\textit{outside} $\gets$ \textit{allports} $\setminus$ \textit{inside}}
+        \Comment{$\setminus$ is set complement}
         \\ \Return {\textit{outside}} \Comment{a set containing all the non-connected ports}
         \EndFunction
     \end{algorithmic}
@@ -1649,8 +1681,8 @@ From the set of connection descriptors and the total number of ports in the syst
 %=============================================================================
 
 \subsection{Grouping the scattering parameters into inside and outside blocks}
-A priori, the system scattering matrix $\matrcp{S}$ (that we built from the network scattering matrices $\matrcp{S}_i$) is not organized into inside and outside blocks like shown on \cref{eq:s_outside_inside}.
-\index{permutation matrix}However, there exists a permutation matrix~$\matr{Q}$ such as
+A priori, the system scattering matrix $\matrcp{S}$ (that we built from the network scattering matrices $\matrcp{S}_i$) is not organized into inside and outside blocks as shown by \cref{eq:s_outside_inside}.
+\index{permutation matrix}However, there exists a permutation matrix~$\matr{Q}$ such that
 \begin{gather}
     \left\lbrace
     \begin{aligned}
@@ -1686,14 +1718,14 @@ We want to swap the rows and columns of~$\matrcp{S}$ so that the ports 1, 2 and 
     =
     \left(
     \begin{array}{ccc|cccc}
-        \cp{S}_{1,1} & \cp{S}_{1,2} &         & \cp{S}_{1,3} & \cp{S}_{1,4} &         &         \\
-        \cp{S}_{2,1} & \cp{S}_{2,2} &         & \cp{S}_{2,3} & \cp{S}_{2,4} &         &         \\
-                &         & \cp{S}_{7,7} &         &         &         & \cp{S}_{7,6} \\
-                \hline
-        \cp{S}_{3,1} & \cp{S}_{3,2} &         & \cp{S}_{3,3} & \cp{S}_{3,4} &         &         \\
-        \cp{S}_{4,1} & \cp{S}_{4,2} &         & \cp{S}_{4,3} & \cp{S}_{4,4} &         &         \\
-                &         &         &         &         & \cp{S}_{5,5} &         \\
-                &         & \cp{S}_{6,7} &         &         &         & \cp{S}_{6,6} \\
+        \cp{S}_{1,1} & \cp{S}_{1,2} &              & \cp{S}_{1,3} & \cp{S}_{1,4} &              &              \\
+        \cp{S}_{2,1} & \cp{S}_{2,2} &              & \cp{S}_{2,3} & \cp{S}_{2,4} &              &              \\
+                     &              & \cp{S}_{7,7} &              &              &              & \cp{S}_{7,6} \\
+        \hline
+        \cp{S}_{3,1} & \cp{S}_{3,2} &              & \cp{S}_{3,3} & \cp{S}_{3,4} &              &              \\
+        \cp{S}_{4,1} & \cp{S}_{4,2} &              & \cp{S}_{4,3} & \cp{S}_{4,4} &              &              \\
+                     &              &              &              &              & \cp{S}_{5,5} &              \\
+                     &              & \cp{S}_{6,7} &              &              &              & \cp{S}_{6,6} \\
     \end{array}
     \right)
     \text{.}
@@ -1703,13 +1735,13 @@ The corresponding permutation matrix~$\matr{Q}$ is
 \begin{equation}
     \matr{Q} =
     \begin{pmatrix}
-        1  &     &     &     &     &     &     \\
-           &  1  &     &     &     &     &     \\
-           &     &     &     &     &     &  1  \\
-           &     &  1  &     &     &     &     \\
-           &     &     &  1  &     &     &     \\
-           &     &     &     &  1  &     &     \\
-           &     &     &     &     &  1  &     \\
+        1  &  0  &  0  &  0  &  0  &  0  &  0  \\
+        0  &  1  &  0  &  0  &  0  &  0  &  0  \\
+        0  &  0  &  0  &  0  &  0  &  0  &  1  \\
+        0  &  0  &  1  &  0  &  0  &  0  &  0  \\
+        0  &  0  &  0  &  1  &  0  &  0  &  0  \\
+        0  &  0  &  0  &  0  &  1  &  0  &  0  \\
+        0  &  0  &  0  &  0  &  0  &  1  &  0  \\
     \end{pmatrix}
     \text{.}
     \label{eq:implementation_5}
@@ -1729,14 +1761,15 @@ We already showed the result for our example in~\cref{eq:implementation_5}.
 \Cref{algo:separate_inside_outside} (\textsc{SeparateInsideOutside})
 uses the outputs of the algorithms \ref{algo:find_inside} (\textsc{FindInside}) and~\ref{algo:find_outside} (\textsc{FindOutside}).
 
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{SeparateInsideOutside}
     \label{algo:separate_inside_outside}
     \begin{algorithmic}
         \Require {\textit{inside}} \Comment{a set containing all the connected ports}
         \Require {\textit{outside}} \Comment{a set containing all the non-connected ports}
         \Function{SeparateInsideOutside}{\textit{inside}, \textit{outside}}
-        \State{$n \gets$ \Call{Cardinal}{\textit{inside}}+\Call{Cardinal}{\textit{outside}}}
+        \State{$n \gets \abs{\textit{inside}} + \abs{\textit{outside}}$}
+        \Comment{$\abs{S}$ is cardinal of set S}
         \State{\textit{insorted} $\gets$ \Call{Sort}{\textit{inside}}} \Comment{Ordered list}
         \State{\textit{outsorted} $\gets$ \Call{Sort}{\textit{outside}}} \Comment{Ordered list}
         \State {$\matr{Q} \gets$ $n$--by--$n$ matrix filled with 0}
@@ -1754,7 +1787,7 @@ uses the outputs of the algorithms \ref{algo:find_inside} (\textsc{FindInside}) 
 \Cref{algo:separate_inside_outside_example} shows how to compute $\matr{Q}$ for our example.
 The ``Ensure'' statements are assertions, propositions that must be true if the algorithm is working properly.
 
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{SeparateInsideOutside, example}
     \label{algo:separate_inside_outside_example}
     \begin{algorithmic}
@@ -1809,24 +1842,28 @@ The results are
 \end{equation}
 and
 \begin{equation}
+    \arrayrulecolor{gray!75}
     \matr{Q} \matrcp{S} \matr{Q}^{-1}
     =
-    \begin{pmatrix}
+    \left(
+        \begin{array}{ccc|cccc}
         \cp{S}_{1,1} & \cp{S}_{1,2} & \cp{S}_{1,7} & \cp{S}_{1,3} & \cp{S}_{1,4} & \cp{S}_{1,5} & \cp{S}_{1,6} \\
         \cp{S}_{2,1} & \cp{S}_{2,2} & \cp{S}_{2,7} & \cp{S}_{2,3} & \cp{S}_{2,4} & \cp{S}_{2,5} & \cp{S}_{2,6} \\
         \cp{S}_{7,1} & \cp{S}_{7,2} & \cp{S}_{7,7} & \cp{S}_{7,3} & \cp{S}_{7,4} & \cp{S}_{7,5} & \cp{S}_{7,6} \\
+        \hline
         \cp{S}_{3,1} & \cp{S}_{3,2} & \cp{S}_{3,7} & \cp{S}_{3,3} & \cp{S}_{3,4} & \cp{S}_{3,5} & \cp{S}_{3,6} \\
         \cp{S}_{4,1} & \cp{S}_{4,2} & \cp{S}_{4,7} & \cp{S}_{4,3} & \cp{S}_{4,4} & \cp{S}_{4,5} & \cp{S}_{4,6} \\
         \cp{S}_{5,1} & \cp{S}_{5,2} & \cp{S}_{5,7} & \cp{S}_{5,3} & \cp{S}_{5,4} & \cp{S}_{5,5} & \cp{S}_{5,6} \\
         \cp{S}_{6,1} & \cp{S}_{6,2} & \cp{S}_{6,7} & \cp{S}_{6,3} & \cp{S}_{6,4} & \cp{S}_{6,5} & \cp{S}_{6,6} \\
-    \end{pmatrix}
+        \end{array}
+    \right)
     =
     \matrcp{S}'
     \text{.}
     \label{eq:q_s_qtranspose_sprime}
 \end{equation}
 
-The next step, separating $\vectcp{a}'$ in two and $\matrcp{S}'$ in four, is trivial to implement.
+The next step, separating $\vectcp{a}'$ in two blocks and $\matrcp{S}'$ in four blocks, is trivial to implement.
 See how~\cref{algo:separate_matrix_blocks}
 (\textsc{SeparateMatrixBlocks}) splits $\matrcp{S}'$ into its four blocks.
 A similar technique can be used to split
@@ -1837,24 +1874,6 @@ of the matrix $\matrcp{S}'$ from \cref{eq:q_s_qtranspose_sprime}
 into inside and outside matrices
 and~\cref{eq:qa_qb_qc_decomposed} shows the decomposition of
 the input and output vectors.
-
-\begin{algorithm}[hbtp]
-    \caption{SeparateMatrixBlocks}
-    \label{algo:separate_matrix_blocks}
-    \begin{algorithmic}
-        \Require {$\matrcp{S}'$} \Comment{permutted scattering matrix}
-        \Require {$n^o$} \Comment{number of outside ports}
-        \Function{SeparateBlocks}{$\matrcp{S}'$, $n^o$}
-        \State{$n \gets$ \Call{Size}{$\matrcp{S}'$}}
-        \State{$\matrcp{S}'^{oo} \gets \matrcp{S}'_{1     : n^o, \: 1     : n^o}$}
-        \State{$\matrcp{S}'^{oi} \gets \matrcp{S}'_{1     : n^o, \: n^o+1 : n  }$}
-        \State{$\matrcp{S}'^{io} \gets \matrcp{S}'_{n^o+1 : n  , \: 1     : n^o}$}
-        \State{$\matrcp{S}'^{ii} \gets \matrcp{S}'_{n^o+1 : n  , \: n^o+1 : n  }$}
-        \\ \Return {$\matrcp{S}'^{oo}$, $\matrcp{S}'^{oi}$, $\matrcp{S}'^{io}$, $\matrcp{S}'^{ii}$}
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-
 \begin{equation}
     \begin{aligned}
     \matrcp{S}'^{oo}
@@ -1910,6 +1929,23 @@ the input and output vectors.
     \label{eq:qa_qb_qc_decomposed}
 \end{equation}
 
+\begin{algorithm}
+    \caption{SeparateMatrixBlocks}
+    \label{algo:separate_matrix_blocks}
+    \begin{algorithmic}
+        \Require {$\matrcp{S}'$} \Comment{permuted scattering matrix}
+        \Require {$n^o$} \Comment{number of outside ports}
+        \Function{SeparateBlocks}{$\matrcp{S}'$, $n^o$}
+        \State{$n \gets$ \Call{Size}{$\matrcp{S}'$}}
+        \State{$\matrcp{S}'^{oo} \gets \matrcp{S}'_{1     : n^o, \: 1     : n^o}$}
+        \State{$\matrcp{S}'^{oi} \gets \matrcp{S}'_{1     : n^o, \: n^o+1 : n  }$}
+        \State{$\matrcp{S}'^{io} \gets \matrcp{S}'_{n^o+1 : n  , \: 1     : n^o}$}
+        \State{$\matrcp{S}'^{ii} \gets \matrcp{S}'_{n^o+1 : n  , \: n^o+1 : n  }$}
+        \\ \Return {$\matrcp{S}'^{oo}$, $\matrcp{S}'^{oi}$, $\matrcp{S}'^{io}$, $\matrcp{S}'^{ii}$}
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
 Our algorithm successfully reorganized our data in a way that is compatible with \cref{eq:s_outside_inside}.
 
 
@@ -1958,7 +1994,7 @@ Indeed, in our example, $\vectcp{b}'^i$ contains four elements only so we cannot
 We need to map the indices given by the set of connection descriptors to indices that can be used to address the various matrices.
 In our example, 3 is mapped to 1 ($\cp{b}'^i_1 = \cp{b}_3$), and 6 is mapped to 4 ($\cp{b}'^i_4 = \cp{b}_6$); therefore saying that ports 3 and 6 are connected is equivalent to saying that indices 1 and 4 need to be permuted.
 \Cref{algo:port_to_index} (\textsc{PortToIndex}) converts a port identifier to an index usable to address $\matrcp{S}'^{ii}$, $\vectcp{a}'^i$ or $\vectcp{b}'^i$.
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{PortToIndex}
     \label{algo:port_to_index}
     \begin{algorithmic}
@@ -1974,7 +2010,7 @@ In our example, 3 is mapped to 1 ($\cp{b}'^i_1 = \cp{b}_3$), and 6 is mapped to 
 
 We can now construct the permutation matrix $\matr{P}$ with \cref{algo:connect_inputs_to_outputs} (\textsc{ConnectInputsToOutputs}).
 
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{ConnectInputsToOutputs}
     \label{algo:connect_inputs_to_outputs}
     \begin{algorithmic}
@@ -2028,7 +2064,7 @@ The fact that the ones in this matrix are on the antidiagonal is purely coincide
 \ref{algo:separate_inside_outside} and
 \ref{algo:connect_inputs_to_outputs}
 to produce $\matr{P}$ and $\matr{Q}$ from the set of connection descriptors and the total number of ports.
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{SolveConnections}
     \label{algo:solve_connections}
     \begin{algorithmic}
@@ -2060,12 +2096,12 @@ We have now everything we need to solve \cref{eq:compute_bi_ci_solve}, which I r
 In this equation, everything is known except~$\vectcp{b}'^i$.
 We wish to solve this equation for~$\vectcp{b}'^i$.
 
-Methods for solving systems of linear equations are described at length in the chapter 2 of \citetitle{Press:2007:NRE:1403886}~\cite{Press:2007:NRE:1403886} by~\citeauthor{Press:2007:NRE:1403886}.
-The famous ``Linear Algebra PACKage'', \textsc{lapack} in short, implements some of these methods in the Fortran programming language~\cite{lapack}.
-This library has been ported to many other languages, notably to Python with SciPy~\cite{scipy}.
+Methods for solving systems of linear equations are described at length in chapter~2 of \textcite{Press:2007:NRE:1403886}.
+The famous ``Linear Algebra PACKage'', \textsc{lapack} in short, implements some of these methods in the Fortran programming language~\parencite{lapack}.
+This library has been ported to many other languages, notably to Python with SciPy~\parencite{scipy}.
 
 We chose to solve our system with a LU decomposition, sometimes called ``LU factorization''.
-LU decomposition was introduced by~\citeauthor{turing1948rounding} in~\citetitle{turing1948rounding}~\cite{turing1948rounding}.
+LU decomposition was introduced in~\textcite{turing1948rounding}.
 The LU decomposition is very general in that it requires few hypotheses on the system it is trying to solve.
 Another advantage of the LU decomposition is that it can be computed once, its result stored, and then used several times to solve the same system for different values of~$a'^o$ and~$c'^i$.
 
@@ -2074,7 +2110,7 @@ We have not tried this ourselves and are therefore unable to guarantee a signifi
 
 \Cref{algo:solve_networks} (\textsc{SolveNetworks}) separates the scattering matrix of the whole system into its four blocks and factorizes
 $(\matr{I} - \matrcp{S}'^{ii}\matr{P})$.
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{SolveNetworks}
     \label{algo:solve_networks}
     \begin{algorithmic}
@@ -2103,9 +2139,9 @@ $(\matr{I} - \matrcp{S}'^{ii}\matr{P})$.
 %=============================================================================
 \subsection{Solving for each source}
 
-Finally, the last step consists in applying the inputs to the system.
+Finally, the last step consists of applying the inputs to the system.
 This is described by \cref{algo:solve_inputs} (\textsc{SolveInputs}).
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{SolveInputs}
     \label{algo:solve_inputs}
     \begin{algorithmic}
@@ -2128,7 +2164,7 @@ This is described by \cref{algo:solve_inputs} (\textsc{SolveInputs}).
 This is an example.
 In a real application, where we need to loop over frequencies and apply different inputs for each frequency, we would call \textsc{SolveConnections} once for the whole system, then \textsc{SolveNetworks} for each set of parameters (such as the frequency), then call \textsc{SolveInputs} for each source of radiation.
 This is illustrated by \cref{algo:solve_system_realistic}.
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{SolveSystem}
     \label{algo:solve_system}
     \begin{algorithmic}
@@ -2152,7 +2188,7 @@ This is illustrated by \cref{algo:solve_system_realistic}.
     \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[hbtp]
+\begin{algorithm}
     \caption{SolveSystemRealistic}
     \label{algo:solve_system_realistic}
     \begin{algorithmic}
@@ -2181,7 +2217,7 @@ This is illustrated by \cref{algo:solve_system_realistic}.
     \end{algorithmic}
 \end{algorithm}
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{implementation_3.pdf_tex}
     \caption{Inputs and outputs.}
@@ -2214,9 +2250,8 @@ $\cp{Y}=Y_r=1/\eta_0$ is the admittance of free space, with $\eta_0 = 119.916983
     the speed of light in vacuum.
     This may change if the ampere is redefined in~2018 during the
     `26\textsuperscript{th} General Conference on Weights and Measures'.
-    \citeauthor{mills2006redefinition} describes a rationale for this change
-    in \citetitle{mills2006redefinition}~\cite{mills2006redefinition}.
-    The changes were reviewed in November~2014 during the 25\textsuperscript{th} conference and published in \citetitle{resolutioncgpm2014}~\cite{resolutioncgpm2014}.
+    \textcite{mills2006redefinition} describes a rationale for this change.
+    The changes were reviewed in November~2014 during the 25\textsuperscript{th} conference and published in \textcite{resolutioncgpm2014}.
 }.
 The phase that we choose for the electric phasor~$\cp{e}_\text{sky}$ is arbitrary, so we set it to~0.
 \begin{equation}
@@ -2264,7 +2299,7 @@ $P_\text{sky detected} = Y_r\abs{\cp{b}_{\text{sky},7}}^2 \mathcal{A}_d/ 2$
 where~$\mathcal{A}_d$ is the collecting area of the detector.
 
 Our second step is to compute the LO noise power that the mixer detects.
-The principle is exactly similar, except that the electric phasor for the LO noise is placed in~$\cp{c}_5$: the LO noise is emitted by the port~5.
+The principle is exactly similar, except that the electric phasor for the LO noise is placed in~$\cp{c}_5$: the LO noise is emitted by Port~5.
 
 The total time-averaged active power detected by the mixer when looking at the sky while receiving some LO noise is the sum of the detected powers for the sky and the LO.
 \begin{align*}
@@ -2297,8 +2332,8 @@ In this section, we build the scattering matrices of various common optical netw
 \subsection{Space}
 We can model a length of space with a two-port network.
 The phase and intensity of an electromagnetic wave is a function of its location~$\vect{p}$.
-The port~1, in location~$\vect{p}_1$, receives a wave of wave vector~$\vectcp{k}_1$.
-The port~2, in location~$\vect{p}_2$, receives a wave of wave vector~$\vectcp{k}_2$.
+Port~1, in location~$\vect{p}_1$, receives a wave of wave vector~$\vectcp{k}_1$.
+Port~2, in location~$\vect{p}_2$, receives a wave of wave vector~$\vectcp{k}_2$.
 The space between $\vect{p}_1$ and $\vect{p}_2$ is homogeneous.
 
 As shown in~\cref{sec:wavenumber_squared}, the wave vectors contain the nature of the propagation medium.
@@ -2306,16 +2341,16 @@ Indeed, $\vectcp{k}_1\cdot\vectcp{k}_1 = \cp{\omega}^2\cp{\epsilon}\cp{\mu}$.
 Since there is only one propagation medium in that length of space,
 $\vectcp{k}_1\cdot\vectcp{k}_1 = \vectcp{k}_2\cdot\vectcp{k}_2$.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{network_distance.pdf_tex}
-    \caption{The effect of propagating between two points of space (top) can be modeled with a 2-port network (bottom).}
-    \caption*{
+    \caption{The effect of propagating between two points of space (top) can be modeled with a 2-port network (bottom).
         The network is parametrized by the locations of the two points,
         $\vect{p}_1$ and $\vect{p}_2$,
         and the incident wave vectors at these two points,
         $\vectcp{k}_1$ and $\vectcp{k}_2$.
-        The wave vectors are complex, potentially not self-aligned, we represent their real part with a solid line and their imaginary part with a dashed line.
+        The wave vectors are complex and potentially not self-aligned.
+        We represent their real part with a solid line and their imaginary part with a dashed line.
     }
     \label{fig:network_distance}
 \end{figure}
@@ -2327,7 +2362,7 @@ We define the transmission coefficient~$\cp{t}_{2,1}$ as
     \cp{t}_{2,1}\,
     \vectcp{e} \exp\left(i \vectcp{k}_1 \cdot \vect{p}_1\right)
 \end{equation}
-in which~$\vectcp{e}$ is the vector phasor of the electric field of the wave incident to the port~1,
+in which~$\vectcp{e}$ is the vector phasor of the electric field of the wave incident to Port~1,
 $\vectcp{k}_1$ its wave vector
 and $\vect{p}_1$ and $\vect{p}_2$ two locations in space.
 It represents the effect of the propagation from $\vect{p}_1$ to $\vect{p}_2$ on the phase and intensity of the wave.
@@ -2386,24 +2421,24 @@ In this section, we use these results to create the scattering matrices that mod
 When the incidence is oblique, that is when the wave vector of the incident wave is not complex-collinear to the normal of the interface, then we can model the interface with a 4-port network.
 \Cref{fig:network_interface} illustrates the relation between the four ports and four wave vectors corresponding to four incident waves.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{network_interface.pdf_tex}
-    \caption{A plane interface between two propagation media (top) can be modeled as a 4-port network (bottom).}
-    \caption*{The wave of wave vector $\vectcp{k}_1$ is partly reflected and partly transmitted.
-    Its reflection has for wave vector $-\vectcp{k}_2$ and its transmission~$-\vectcp{k}_3$.
+    \caption{A plane interface between two propagation media (top) can be modeled as a 4-port network (bottom).
+    The wave with the wave vector $\vectcp{k}_1$ is partly reflected and partly transmitted.
+    Its reflection has the wave vector $-\vectcp{k}_2$ and its transmission~$-\vectcp{k}_3$.
     Likewise, $\vectcp{k}_2$ reflects as $-\vectcp{k}_1$ and transmits as $-\vectcp{k_4}$, etc.
     }
     \label{fig:network_interface}
 \end{figure}
 
-The incident waves have for wave vectors
+The incident waves have the wave vectors
 $\vectcp{k}_1$, $\vectcp{k}_2$, $\vectcp{k}_3$ and $\vectcp{k}_4$.
-The outcoming waves have for wave vectors
+The outgoing waves have the wave vectors
 $-\vectcp{k}_1$, $-\vectcp{k}_2$, $-\vectcp{k}_3$ and $-\vectcp{k}_4$.
 Their relations are listed in~\cref{tab:inc_ref_tra}.
 
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{ccc}
         \toprule
@@ -2420,8 +2455,9 @@ Their relations are listed in~\cref{tab:inc_ref_tra}.
 \end{table}
 The four wave vectors are related by Snell's law, which we derived in~\cref{sec:snells_law}.
 In~\cref{sec:result_snells_law} we showed how to compute the reflected and transmitted wave vectors from an incident wave vector, the normal~$\vectu{n}$ to the interface, and the electric permittivity and magnetic permeability of the two propagation media.
-Let us assume that~$\vectcp{k}_1$ is known, we need to compute the wave vectors of for the three other ports.
-First, $\vectcp{k}_1$ is decomposed into a component along the normal, noted $\cp{k}_{1n}\vectu{n}$, and one normal to it (tangential to the interface), named $\vectcp{k}_t$.
+Let us assume that~$\vectcp{k}_1$ is known, we need to compute the wave vectors of the three other ports.
+First, $\vectcp{k}_1$ is decomposed into a component along the normal, noted $\cp{k}_{1n}\vectu{n}$, and one perpendicular to it (tangential to the interface), named $\vectcp{k}_t$
+(Snell's law states that $\vectcp{k}_t=\vectcp{k}_{1t}=\vectcp{k}_{2t}=\vectcp{k}_{3t}=\vectcp{k}_{4t}$).
 Then, with the notations of the current section, we have
 \begin{align}
     \vectcp{k}_2
@@ -2461,7 +2497,7 @@ Flip the sign of~$N$ for each condition that is not verified.
 For example, if the transmitted waves do propagate away from the interface but the normal points toward the medium~$A$, change the sign once.
 That means that if both conditions are false, you flip the sign twice, the two minus signs cancel and $N$ remains the same.
 
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{cc}
         \toprule
@@ -2475,8 +2511,6 @@ That means that if both conditions are false, you flip the sign twice, the two m
     \end{tabular}
     \caption{
         Values of $N$ used in case of tangential incidence.
-    }
-    \caption*{
         Use these values for~$N$ to compute the wave vectors when
         the transmitted waves propagate away from the interface (most common scenario)
         and the normal points toward the medium~$B$.
@@ -2484,8 +2518,8 @@ That means that if both conditions are false, you flip the sign twice, the two m
     \label{tab:fresnel_implementation_N}
 \end{table}
 
-We note $\matrcp{r}_j$ and $\matrcp{t}_j$ the coefficients of reflection and transmission of the wave incident to the port number $j$.
-All these coefficient of reflection and transmission are matrices.
+We call $\matrcp{r}_j$ and $\matrcp{t}_j$ the coefficients of reflection and transmission of the wave incident to the Port number $j$.
+All these coefficients of reflection and transmission are matrices.
 The block scattering matrix of that network is given by
 \begin{equation}
     \matrcp{S} =
@@ -2500,7 +2534,7 @@ The block scattering matrix of that network is given by
 
 Each coefficient can be computed by using the matrix expression of Fresnel's equations given in~\cref{sec:fresnel_matrix} using the correct indices.
 These are listed in~\cref{tab:fresnel_implementation_indices}.
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{cccccccc}
         \toprule
@@ -2530,10 +2564,10 @@ These are listed in~\cref{tab:fresnel_implementation_indices}.
 An interface at normal incidence can be modeled as a two-port network,
 as shown in~\cref{fig:network_interface_normal}.
 Normal incidence, in our case, is defined by~$\vectcp{k} \times \vectu{n} = 0$.
-This means that the plane of incidence is undefined.
+This means that the plane of incidence is undefined (see~\cref{sec:snells_law}).
 This situation is easily solved, as described in the last paragraph of~\cref{sec:decomposition_para_perp}.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{network_interface_normal.pdf_tex}
     \caption{A plane interface between two propagation media at normal incidence (top) can be modeled as a 2-port network (bottom).}
@@ -2562,7 +2596,7 @@ The block scattering matrix has the following form:
     \text{.}
 \end{equation}
 Its parameters are obtained by using the values of~\cref{tab:fresnel_implementation_normal_indices} in~\cref{eq:fresnel_reflection_matrix,eq:fresnel_transmission_matrix}.
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{cccccccc}
         \toprule
@@ -2583,7 +2617,7 @@ Its parameters are obtained by using the values of~\cref{tab:fresnel_implementat
 
 %-----------------------------------------------------------------------------
 \subsubsection{Reflection only}
-When the transmission does not matter, for example when we model a metallic mirror or a dump, then we can simply ignore the ports that are in the medium~$B$.
+When the transmission does not matter, for example when we model a metallic mirror or an ideal absorber, then we can simply ignore the ports that are in the medium~$B$.
 At oblique incidence,
 \begin{equation}
     \matrcp{S}
@@ -2610,7 +2644,7 @@ and at normal incidence,
 HIFI uses rooftop mirrors to rotate the polarization of the incoming wave.
 \Cref{fig:rooftop_render} shows two identical rooftop mirrors.
 Each rooftop mirror is made of two perpendicular reflective surfaces.
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics[width=\textwidth]{rooftop_render}
     \caption{Computer-generated rendering of two rooftop mirrors.}
@@ -2626,7 +2660,7 @@ Its block scattering matrix is
     \end{pmatrix}
 \end{equation}
 where $\matrcp{r}$ is the reflection coefficient of the rooftop mirror.
-Assuming a wave propagating toward $+\vectu{z}$ and a rooftop mirror whose surfaces intersect along~$\vectu{x}$,
+Assuming a wave propagating toward $+\vectu{z}$ (see~\cref{fig:rooftop_imperfect}) and a rooftop mirror whose surfaces intersect along~$\vectu{x}$,
 its ideal reflection coefficient is
 \begin{equation}
     \matrcp{r} =
@@ -2658,10 +2692,10 @@ This is true for a perfect rooftop mirror.
 
 The rooftop mirrors in HIFI are not perfect.
 They are made out of a metal with a finite conductivity.
-Furthermore, they are carved from a single block which limits the perfection of the intersection of the two plane surfaces.
-\Cref{fig:rooftop_photo} shows that where the planes should intersect at right angle, there is actually a smooth curve, the radius of which corresponds to that of the drilling tool.
+Furthermore, they are milled from a single block which limits the perfection of the intersection of the two plane surfaces.
+\Cref{fig:rooftop_photo} shows that where the planes should intersect at right angle, there is actually a smooth curve, the radius of which corresponds to that of the milling tool.
 Part of this curve forms a mirror at normal incidence.
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \includegraphics[width=.5\textwidth]{rooftop_front}%
     \includegraphics[width=.5\textwidth]{rooftop_side}
@@ -2671,7 +2705,7 @@ Part of this curve forms a mirror at normal incidence.
 
 The imperfection at the intersection of the two main surfaces can be approximated with a plane normal to the direction of propagation, shown in~\cref{fig:rooftop_imperfect}.
 The polarization of the electric field incident to that plane is not rotated.
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{rooftop_imperfect.pdf_tex}
     \caption{Side and front view of a rooftop mirror with an imperfect intersection modeled as a plane interface.}
@@ -2685,10 +2719,10 @@ Each interface forms its own network and can be modeled with the method presente
 A fourth network divides the incident wave in three: the incident wave shines on the three interfaces simultaneously, but each surface receives a power that is proportional to its coupling to the wave (related to its surface area).
 In the other direction, the three contributions to the wave are added together.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{rooftop_networks.pdf_tex}
-    \caption{Network modeling of a rooftop mirror.}
+    \caption{Network modeling of an imperfect rooftop mirror.}
     \label{fig:rooftop_networks}
 \end{figure}
 
@@ -2714,25 +2748,32 @@ in which~$\matr{I}_3$ is the identity matrix of rank~3.
 %=============================================================================
 \subsection{Wire grid polarizer}
 \label{sec:wire_grid_polarizer}
-In their paper from \citeyear{houde_2001} \citetitle{houde_2001}, \textcite{houde_2001} present a set of equations modeling the effect of a wire-grid polarizer on the intensity, polarization, phase and direction of a plane wave.
-
-The article makes the following assumptions:
+\Textcite{houde_2001} present a set of equations modeling the effect of a wire-grid polarizer on the intensity, polarization, phase and direction of a plane wave.
+That work makes the following assumptions:
 \begin{itemize}
     \item The surrounding propagation medium is vacuum.
     \item The incident wave is plane and homogeneous.
     \item The grid contains an infinite amount of infinitely long wires, all parallel and coplanar.
-    \item The wires are free floating (no dielectric substrate).
-    \item The wires have a cylindrical section.
+    \item The wires are free floating (no thin-film dielectric substrate).
+    \item The wires have a cylindrical cross-section.
     \item The radius of the wires is much smaller than the wavelength of the incident wave.
-    \item The conductivity of the wires is very high, so that the electric field does not penetrate deeply inside the wires (the currents are described by a dirac distribution to remain exactly on the surface of the wires).
+    \item The conductivity of the wires is very high, so that the electric field does not penetrate deeply inside the wires (the currents are described by a Dirac distribution to remain exactly on the surface of the wires).
     \item The results are computed for the far field.
-    \item We are in a steady periodic state (the angular frequency is real).
+    \item We are in a steady periodic state (the angular frequency is real), which means that this grid model cannot be used with time-varying inputs (see~\cref{sec:complex_angular_frequency}).
 \end{itemize}
 
-\subsubsection{Reflection and transmission coefficients}
-In this section, we reshape some equations of the article in order to express them as Jones matrices.
+\begin{figure}
+    \centering
+    \footnotesize
+    \input{grid.pdf_tex}
+    \caption{A free-floating wire grid polarizer, its dimensions and its local reference frame.}
+    \label{fig:grid}
+\end{figure}
 
-The set of equations that interest us are the equations numbered 23, 24 and 30 to 35 in the article of \citeauthor{houde_2001} \cite{houde_2001}, which we reproduce here for convenience.
+\subsubsection{Reflection and transmission coefficients}
+In this section, we rewrite some equations from~\textcite{houde_2001} in order to express them as Jones matrices.
+
+The set of equations that interest us are the equations numbered 23, 24 and 30 to 35 in the article, which we reproduce here for convenience.
 The notations are explained in the article, we will not explain them here.
 The first two equations, \eqref{eq:grid_current_linear} and \eqref{eq:grid_current_circular}, describe the electric current at the surface of the wires.
 $K^x$ corresponds to a linear current and $K^\theta$ to a circular current.
@@ -2744,6 +2785,11 @@ In the first case, electrons move along the length of the wire; in the other, th
     K^\theta &= (-i) \frac{E_0}{F} \cdot (\gamma' \beta - \beta' \gamma) \frac{N_\theta}{\Delta_\theta}
     \label{eq:grid_current_circular}
 \end{align}
+In these equations, $E_0$ is the amplitude of the electric field, $F$ a constant (the value of which does not matter because it disappears from the equations at a later stage).
+$(\alpha, \beta, \gamma)\transp$ is the direction of the wave vector and
+$(\alpha', \beta', \gamma')\transp$ is the direction of the electric field.
+The parameters $N_x$, $\Delta_x$, $N_\theta$ and $\Delta_\theta$ encode the effect of the geometry of the grid and the angle of incidence.
+
 The following equations describe the components of the reflected and transmitted fields in the reference frame of the grid.
 \begin{align}
     r_{xg}
@@ -2795,21 +2841,21 @@ The following equations describe the components of the reflected and transmitted
     \right)
 \end{align}
 We use the subscript~``$g$'' to remind us that these are valid in the reference frame of the grid.
-Note that Houde calls these $r$ and $t$ ``reflection'' and ``transmission coefficient'', something they are not quite since they contain $\alpha'$, $\beta'$ and $\gamma'$, which correspond to the intensity of the incoming electric field in the three dimensions: $\vect{e}_g=E_0 (\alpha' \: \beta' \: \gamma')\transp$.
-These amplitudes have to be factored out if we want to really speak about reflection or transmission coefficients.
+Note that \citeauthor{houde_2001} call these $r$ and $t$ ``reflection'' and ``transmission coefficient'', something they are not quite since they contain $\alpha'$, $\beta'$ and $\gamma'$, which correspond to the intensity of the incoming electric field in the three dimensions: $\vect{e}_g=E_0 (\alpha' \: \beta' \: \gamma')\transp$.
+These amplitudes have to be factored out if we want actual reflection and transmission coefficients.
 
 When examining these equations, some simplifications are obvious.
 For example, $\frac{E_0}{F}$ inside $K^x$ and $K^\theta$ cancels $\frac{F}{E_0}$ in $r$ and $t$;
 the complex unit~$i$ within $K^\theta$ combines with $i$ in $r$ and $t$ to become~$-1$.
 
-In these equations, $\alpha'$, $\beta'$ and $\gamma'$ are the three components of the direction of the incident electric field, satisfying $\alpha'^2 + \beta'^2 + \gamma'^2 = 1$.
+In these equations, $\alpha'$, $\beta'$ and $\gamma'$ are the three components of the direction of the incident electric field vector, satisfying $\alpha'^2 + \beta'^2 + \gamma'^2 = 1$.
 That condition seems to apply only to real numbers, restricting the use of this grid model to waves that are linearly polarized (their three components are in phase).
 However, there is no such limitation in the model.
 Indeed, the authors define the incident electric field as
 $(e_{xg} \: e_{yg} \: e_{zg})\transp = E_0(\alpha' \: \beta' \: \gamma')\transp$.
-The amplitude $E_0$ can be complex and it seems that its phase has to be shared among the three components.
-But when we rewrite the equations in a matrix form, we will notice that the actual parameters that matters are not $\alpha'$, $\beta'$, $\gamma'$ and $E_0$, but $e_{xg}$, $e_{yg}$ and $e_{zg}$ themselves, which allow them to all be independent.
-In that case, each of them is free to have its own phase and the model also applies to elliptically polarized waves.
+The amplitude $E_0$ can be complex which makes its phase common to the three components.
+When we rewrite the equations in a matrix form, we notice that the actual parameters that matter are not $\alpha'$, $\beta'$, $\gamma'$ and $E_0$, but $e_{xg}$, $e_{yg}$ and $e_{zg}$ themselves, all of which can have their own phase.
+Consequently, the model also applies to elliptically-polarized waves.
 
 In order to rewrite these equations in a matrix form, one needs to split each coefficient of transmission and reflection into three components like this:
 \begin{equation}
@@ -2868,7 +2914,7 @@ By identification, we find these values for $r_{xxg}$, $r_{xyg}$ and $r_{xzg}$.
     \end{aligned}
     \right.
 \end{equation}
-Let us continue with $r_{yg}$.
+Let us continue with $r_{yg}$,
 \begin{align*}
     e_{\R yg}
     &= r_{yg} E_0
@@ -2965,7 +3011,7 @@ Let us continue with $r_{yg}$.
     \end{aligned}
     \right.
 \end{equation}
-Same thing for $r_{zg}$.
+and similarly for $r_{zg}$,
 \begin{align*}
     e_{\R zg} &= r_{zg} E_0
     \\
@@ -3052,8 +3098,8 @@ Same thing for $r_{zg}$.
     \end{aligned}
     \right.
 \end{equation}
-We have the nine parameters of the reflection coefficient matrix.
-Now, we compute the transmission matrix.
+Hence, we have derived the nine parameters of the reflection coefficient matrix.
+Next, we compute the transmission matrix.
 \begin{align*}
     e_{\T xg} &= t_{xg} E_0
     \\
@@ -3315,7 +3361,7 @@ Now, we compute the transmission matrix.
     \right.
 \end{equation}
 
-Another simplification:
+With another simplification,
 \begin{equation}
     k = 2\pi / \lambda
     \quad \Rightarrow \quad
@@ -3325,8 +3371,7 @@ Another simplification:
     =
     \frac{a}{d}
 \end{equation}
-
-The matrix form of the reflection and transmission coefficients is
+the matrix form of the reflection and transmission coefficients reduces to
 \begin{equation}
     \matr{r}_g =
     \begin{pmatrix}
@@ -3367,6 +3412,7 @@ The matrix form of the reflection and transmission coefficients is
     \end{pmatrix}
     \label{eq:grid_rg}
 \end{equation}
+and
 \begin{equation}
     \matr{t}_g =
     \begin{pmatrix}
@@ -3410,8 +3456,8 @@ The matrix form of the reflection and transmission coefficients is
 \end{equation}
 These reflection and transmission matrices are three-dimensional Jones matrices.
 
-In these matrices, the parameter $a$ is the radius of the wires;
-$d$ is the axis-to-axis distance between the wires.
+In these matrices, the parameter $a$ is the radius of the wires
+and $d$ is the axis-to-axis distance between the wires.
 Because the incident wave is homogeneous and propagating in a lossless medium (vacuum), $\vectcp{k}_1$ is actually a real vector: $\vectcp{k}_1 = \vect{k}_1$.
 Therefore it has an associated real wave number~$k$
 \begin{equation}
@@ -3435,7 +3481,8 @@ It defines the values $\alpha$, $\beta$ and $\gamma$ that appear in the matrices
     =
     \vectu{k}_1
 \end{equation}
-The parameters $N_x$, $\Delta_x$, $N_\theta$ and $\Delta_\theta$ are given by
+
+The parameters $N_x$, $\Delta_x$, $N_\theta$ and $\Delta_\theta$ are given by \textcite{houde_2001}:
 \begin{align}
     N_x
     &=
@@ -3532,29 +3579,31 @@ where $\Psi$ is Euler's constant (\num{0.577}\dots), $k'= k \sqrt{1-\alpha^2}$ a
 is the wave impedance at the surface of the wire.
 This expression is merely a complicated way to write
 $\cp{Z}_s = \sqrt{\mu_0 / \cp{\epsilon}}$ with $\cp{\epsilon}=-i \sigma / \omega$.
-The minus sign is a consequence of the convention chosen in the article.
+The minus sign is a consequence of the convention chosen by~\citeauthor{houde_2001}.
 Before using these equations, we must adapt the two conventions.
 
 \subsubsection{Sign conventions}
-We need to adapt the conventions of the article to that of our model.
-Our model uses the physics convention
-$\vectcp{E}=\vectcp{e} \exp[i(\vectcp{k}\cdot \vect{r} - \cp{\omega}t)]$ while the article uses the engineering convention
+We need to adapt the conventions of~\textcite{houde_2001} to that of our model.
+We use the physics convention
+$\vectcp{E}=\vectcp{e} \exp[i(\vectcp{k}\cdot \vect{r} - \cp{\omega}t)]$
+while \citeauthor{houde_2001} use the engineering convention
 $\vectcp{E}=\vectcp{e} \exp[i(-\vectcp{k}\cdot \vect{r} + \cp{\omega}t)]$.
 Both conventions must describe the same physical phenomenon.
 The actual physical phenomenon studied here is a
 real electric field~$\vect{E} = \Re(\vectcp{E})$.
 In order to describe that same real phenomenon, the wave vectors in each convention must be complex conjugates of each other.
 Likewise, the complex angular frequency in one convention is the complex conjugate of the other.
-In order to use the equations~\cref{eq:grid_rg,eq:grid_tg}, we must take the complex conjugate of the incident wave vector and of the angular frequency.
+In order to use \cref{eq:grid_rg,eq:grid_tg}, we must take the complex conjugate of the incident wave vector and of the angular frequency.
 
-In the article, the surrounding medium is lossless and the incident wave is homogeneous, therefore the wave vector is real and is equal to its conjugate.
+In \textcite{houde_2001}, the surrounding medium is lossless and the incident wave is homogeneous, therefore the wave vector is real and is equal to its conjugate.
 However, the wave vector in the metallic wire has an imaginary part linked to the conductivity of the medium.
-Since the article assumes that the angular frequency and the magnetic permeabilities are real, it is sufficient to flip the sign of this conductivity: we must replace $\sigma$ with $-\sigma$ in the equations.
+Since the \citeauthor{houde_2001} assume that the angular frequency and the magnetic permeabilities are real, it is sufficient to flip the sign of this conductivity: we must replace $\sigma$ with $-\sigma$ in the equations.
 In particular, $\cp{Z}_s = \sqrt{\mu_0 / \cp{\epsilon}}$ must use
 $\cp{\epsilon} = -i (-\sigma) / \omega$.
 
+%-----------------------------------------------------------------------------
 \subsubsection{Scattering matrix}
-A grid at oblique incidence forms a four-port network.
+A grid at oblique incidence is modeled by a four-port network.
 Its block scattering matrix in the reference frame of the grid is
 \begin{equation}
     \matrcp{S}_g
@@ -3568,6 +3617,7 @@ Its block scattering matrix in the reference frame of the grid is
     \label{eq:grid_scattering_local}
 \end{equation}
 in which every $\matrcp{r}_{ig}$ and $\matrcp{t}_{ig}$ is a Jones matrix referring to a reflection or a transmission coefficient.
+
 In the global reference frame, its block scattering matrix is
 \begin{equation}
     \matrcp{S}
@@ -3589,17 +3639,35 @@ The Jones matrices in the grid and global reference frames are related by a rota
 \end{equation}
 See~\cref{sec:rotating_jones_matrices} for a brief note on rotating Jones matrices.
 
-The article of \citeauthor{houde_2001} \cite{houde_2001} defines the following reference frame for the grid: the wires are along $\vectu{x}_g=(1 \; 0 \; 0)\transp$ and the normal to the grid is $\vectu{z}_g=(0 \; 0 \; 1)\transp$.
-The article presents another reference frame called ``laboratory'' reference frame but it is not useful for us: it actually consists in two reference frames, one for the incident and transmitted waves and one for the reflected wave; it is not a global reference frame.
+\citeauthor{houde_2001} define the following reference frame for the grid: the wires are along $\vectu{x}_g=(1 \; 0 \; 0)\transp$ and the normal to the grid is $\vectu{z}_g=(0 \; 0 \; 1)\transp$ (see~\cref{fig:grid}).
+They also present another reference frame called ``the laboratory reference frame'' but it is not useful for us:
+it actually consists of two reference frames, one for the incident and transmitted waves and one for the reflected wave; it is not a global reference frame.
 
-In the global reference frame, the wires of the grid are along the
-vector~$\matr{A} (1 \; 0 \; 0)\transp$
-and the normal of the grid is $\vectu{n} = \matr{A} (0 \; 0 \; 1)\transp$.
+In the global reference frame,
+%the wires of the grid are along the vector~$\matr{A} (1 \; 0 \; 0)\transp$ and
+the normal of the grid is $\vectu{n} = \matr{A} (0 \; 0 \; 1)\transp$.
+Since a grid is a four-port device not unlike an interface at oblique incidence, we use the notations and indices of~\cref{fig:network_interface}:
+Port~1 reflects to Port~2 and transmits to Port~3.
+$\vect{k}_1$ is the wave vector of the wave incident to Port~1,
+$\vect{k}_2$ is the wave vector of the wave incident to Port~2, etc.
 
-$\vect{k}_1$ is the wave vector of the wave incident to the port~1,
-$\vect{k}_2$ is the wave vector of the wave incident to the port~2, etc.
-From Snell's law, we get $\vect{k}_2$ by flipping the sign of the tangential component
-More precisely, we flip the sign of the normal component to account for the reflection, then the sign of the whole vector to make it incident to the grid.
+The normal component of $\vect{k}_1$ and $\vect{k}_2$ is positive: the waves incident to Ports~1 and 2 propagate along the normal, not against it.
+The normal component of $\vect{k}_3$ and $\vect{k}_4$ is negative.
+This point is important: the equations modeling the grid are not symmetrical.
+These equations assume that the incident wave propagates in the direction of the normal to the grid ($\vect{k} \cdot \vectu{n} >= 0$)
+which is true for Ports~1 and ~2 but not for Ports~3 and~4.
+If we apply the grid equations to a wave propagating the wrong direction, the grid equations create energy instead of absorbing and splitting it, which is not physical.
+To determine the reflection and transmission coefficients of Ports~3 and~4,
+it is sufficient to calculate
+$\matrcp{r}_{1g}$, $\matrcp{t}_{1g}$, $\matrcp{r}_{2g}$ and $\matrcp{t}_{2g}$.
+By symmetry,
+$\matrcp{r}_{3g}=\matrcp{r}_{1g}$,
+$\matrcp{t}_{3g}=\matrcp{t}_{1g}$,
+$\matrcp{r}_{4g}=\matrcp{r}_{2g}$ and
+$\matrcp{t}_{4g}=\matrcp{t}_{2g}$.
+
+From Snell's law, we obtain $\vect{k}_2$ by flipping the sign of the tangential component.
+More precisely, we flip the sign of the normal component to account for the reflection, and subsequently flip the sign of the whole vector to make it incident onto the grid.
 Then, because the propagation medium is the same on both sides of the grid, we have
 $\vectcp{k}_3 = -\vectcp{k}_1$ and
 $\vectcp{k}_4 = -\vectcp{k}_2$.
@@ -3619,36 +3687,35 @@ They correspond to the following vectors expressed in the grid reference frame:
     \vect{k}_{4g} &= \matr{A}^{-1} \vect{k}_4
     \text{.}
 \end{align}
+
 To compute the reflection and transmission coefficients for each port, we use the values given by~\cref{tab:grid_values}
 in~\cref{eq:grid_rg,eq:grid_tg}.
-\begin{table}[hbtp]
+\begin{table}
     \centering
     \begin{tabular}{cc}
         \toprule
-                          & $(\alpha \; \beta \; \gamma)\transp$ \\
+        coefficient                         & $(\alpha \; \beta \; \gamma)\transp$ \\
         \midrule
-        $\matrcp{r}_{1g}$ & $\vectu{k}_{2g}$ \\
-        $\matrcp{t}_{1g}$ & $\vectu{k}_{3g}$ \\
-        $\matrcp{r}_{2g}$ & $\vectu{k}_{1g}$ \\
-        $\matrcp{t}_{2g}$ & $\vectu{k}_{2g}$ \\
-        $\matrcp{r}_{3g}$ & $\vectu{k}_{4g}$ \\
-        $\matrcp{t}_{3g}$ & $\vectu{k}_{1g}$ \\
-        $\matrcp{r}_{4g}$ & $\vectu{k}_{3g}$ \\
-        $\matrcp{t}_{4g}$ & $\vectu{k}_{2g}$ \\
+        $\matrcp{r}_{1g} = \matrcp{r}_{3g}$ & $\vectu{k}_{2g}$ \\
+        $\matrcp{t}_{1g} = \matrcp{t}_{3g}$ & $\vectu{k}_{3g}$ \\
+        $\matrcp{r}_{2g} = \matrcp{r}_{4g}$ & $\vectu{k}_{1g}$ \\
+        $\matrcp{t}_{2g} = \matrcp{t}_{4g}$ & $\vectu{k}_{2g}$ \\
         \bottomrule
     \end{tabular}
     \caption{
-        Values to feed to the grid equations to compute the scattering coefficients.
+        Values of $\alpha$, $\beta$ and $\gamma$
+        to feed to the grid equations to compute the scattering coefficients in the reference frame of the grid.
     }
     \label{tab:grid_values}
 \end{table}
+
 
 Once all the reflection and transmission coefficients are calculated in the reference frame of the grid, we use~\cref{eq:grid_rotation} to express them in the global reference frame.
 We can then populate the scattering matrix~\cref{eq:grid_scattering_global}.
 
 For a grid at normal incidence, we use the same technique as the one described in~\vref{sec:interface_normal_incidence}, \textit{\nameref{sec:interface_normal_incidence}} with $\vect{k}_2=-\vect{k}_1$.
 
-\todo{FIX THIS, the behavior of Houde's grids is asymetrical, see my code.}
+
 
 
 
@@ -3668,17 +3735,17 @@ In thermal equilibrium, a black body of temperature $T$ emits a spectral radianc
         -1
     }
 \end{equation}
-in whick $f$ the frequency, $h$ is the Planck constant, $k_B$ the Boltzmann constant and $c$ the speed of light in the medium surrounding the black body.
+in which $f$ the frequency, $h$ is the Planck constant, $k_B$ the Boltzmann constant and $c$ the speed of light in the medium surrounding the black body.
 The SI unit of $B$ is \si{\watt\per\meter\squared\per\steradian\per\hertz}.
-The total power density emitted by a black body is given by the Stefan--Boltzmann law
+The total surface power density emitted by a black body is given by the Stefan--Boltzmann law
 \begin{equation}
     j^\star = \sigma T^4
 \end{equation}
 in which $\sigma$ is the Stefan--Boltzmann constant and
 $j^\star$ is expressed in \si{\watt\per\meter\squared}.
 
-Black bodies do not adequately model the calibration loads of an instrument.
-Although the calibration loads are designed to minimize reflection, it is never zero.
+Black bodies do not adequately model the calibration loads of an instrument like HIFI.
+Although the calibration loads are designed to minimize reflection, said reflections are never zero.
 A better model for calibrations load uses gray bodies.
 Gray bodies emit and reflect at the same time,
 but the more they reflect, the less they emit.
@@ -3709,10 +3776,10 @@ Using the notations of the figure,
     \cp{b}_1 &= 0 \\
     \cp{b}_2 &= \alpha \cp{a}_1 + \cp{r} \cp{a}_2
 \end{align}
-Here, the input $\cp{a}_1$ is the power density emitted by an ideal black body.
+Here, the input $\cp{a}_1$ is the electric field emitted by an ideal black body.
 The reflection and emission coefficients $\cp{r}$ and $\alpha$ transform this black body emission into a gray body emission.
 
-\begin{figure}[hbtp]
+\begin{figure}
     \centering
     \input{gray_body.pdf_tex}
     \caption{Model of a gray body.}
@@ -3732,7 +3799,7 @@ with $\matr{I}_3$ the identity matrix of rank~3.
 One can of course replace the scalars $\cp{r}$ and $\alpha$ by 3--by--3 matrices to take into account anisotropies and rotations of polarization if needed.
 
 One limitation: calibration loads are sometimes coated with a black powder in order to scatter any reflected light.
-This is likely to partly depolarize the light that comes back inside the optics.
+This is likely to partly depolarize the light upon reflection.
 As we stated in~\cref{sec:jones_unpolarized}, Jones calculus cannot deal with that effect.
 Our model considers depolarized light as absorbed.
 
@@ -3745,59 +3812,63 @@ Our model considers depolarized light as absorbed.
 %=============================================================================
 
 \subsection{Summary}
-In this chapter, we have presented our method for calculating the gain of a coherent receiver.
+This chapter presents our method for calculating the gain of a coherent receiver.
 This method takes into account the infinite amount of reflections between every possible optical paths inside every cavity of the system.
 
 The strength of our approach resides in the fact that it is not iterative: it computes the steady state directly by solving a closed-form mathematical representation of the system.
 This is possible because our model makes the assumption that every optical element is affine.
-Affine is an improvement over purely linear systems: the output of every optical element is a linear function of its inputs, plus a constant term (which may equal 0).
-This constant terms allows us to have sources of electromagnetic radiations inside our system, which is useful to model the thermal noise of some components.
+Affine is an improvement over purely linear systems: the output of every optical element is a linear function of its inputs, plus a constant term (which may equal~0).
+This constant term allows us to have sources of electromagnetic radiations inside our system, which is useful to model the thermal noise of some components.
 
 We model optical elements as networks that are interconnected by ports.
-We use scattering matrices and Jones matrices (that we extended to three dimensions) to model the transfer of amplitude, phase, polarization and orientation of the electric field between these ports.
-This mathematical formalism allows us to represent an entire system of arbitrary complexity, including all its internal reflections, with one single set of linear equations (a matrix) for which there exist an analytical closed-form solution.
-In this chapter, we have not only presented the mathematics behind our model, but also detailed how it could be implemented and solved numerically in an imperative programing language such as Python+Scipy~\cite{python,scipy}, Octave~\cite{octave:2014} or GDL~\cite{gnudatalanguage}
-(to cite only free software).
+We use scattering matrices and Jones matrices (that we extend to three dimensions) to model the transfer of amplitude, phase, polarization and orientation of the electric field between these ports.
+This mathematical formalism can represent a system of arbitrary complexity, including all its internal reflections, with one single set of linear equations (a matrix) for which there exist an analytical closed-form solution.
 
-Our model involves five steps:
+Our model makes the assumption that the waves propagating inside the system are plane.
+It does not make the assumption, however, that these waves are homogeneous.
+By allowing the wave vector to have complex components, we can model materials that are neither perfect dielectrics nor ideal conductors.
+By allowing the frequency to have an imaginary part, we can model the response of a time-invariant system to a variable input.
+In order to keep the current chapter focused on interferences,
+we dedicate \cref{sec:complex_harmonic_plane_waves} to our study of complex harmonic plane waves in general.
+
+This chapter also details how to implement and solve numerically our model in an imperative programing language such as Python+SciPy~\parencite{python,scipy}, Octave~\parencite{octave:2014} or GDL~\parencite{gnudatalanguage}
+(to cite only free software%
+\footnote{
+   The word ``free'' in ``free software'' is to be understood in the sense of freedom, not necessarily price: ``the users have the freedom to run, copy, distribute, study, change and improve the software''~\parencite{gplv3}.
+   Python, SciPy, Octave and GDL are distributed either under the General Public License or a license compatible with it.
+}).
+
+Modeling optical interferences involves five steps:
 \begin{enumerate}
     \item build the scattering matrix of each network of the system,
     \item compute the scattering matrix of the entire system,
-    \item reshape that matrix to extract the block responsible for the infinite internal reflections,
+    \item reorder the rows and columns of that matrix to extract the block responsible for the infinite internal reflections,
     \item solve the infinite reflections for a given set of inputs,
-    \item solve the rest of the system for that same set of inputs.
+    \item solve the output of the system for that same set of inputs.
 \end{enumerate}
 This must be done for each frequency of interest and for each source separately (unless they are phase-locked).
 
 It is trivial to parallelize the code in order to compute one frequency per computer core and speed up the calculations when modeling an entire spectrum.
-The ``embarrassingly parallel'' nature of the computations may even make this model a good candidate for being implemented on GPU
-with OpenGL Compute Shaders~\cite{opengl},
-OpenCL~\cite{opencl}
-or CUDA~\cite{cuda}.
+The ``embarrassingly parallel'' nature of the computations may even make this model a good candidate for being implemented on Graphics Processing Units
+with OpenGL Compute Shaders~\parencite{opengl44},
+OpenCL~\parencite{opencl2}
+or CUDA~\parencite{cuda}.
 
 
 
 %=============================================================================
-
 \subsection{Beyond plane waves?}
-The work we have presented in this book focuses on plane waves.
+The work that we present in this chapter focuses on (potentially inhomogeneous) plane waves.
 Plane waves can be good approximations of real electromagnetic beams.
 In reality however, beams carry a finite power and their wavefront has a curvature.
-The width of the beam and the radius of its curvature are additional parameters that would need to be included in our model if we wanted to apply it beyond plane waves.
+The width of the beam and the radius of its curvature are additional parameters that would need to be included in our model if we were to apply it beyond plane waves.
 If we consider the higher-order modes of Gaussian beams, the number of parameters increases again.
 It is easy to compute the plane wave that is equal to an infinite sum of plane waves that are all parallel;
 but it may not be so easy to compute an infinite sum of beams of various widths and curvature.
-The reader interested in Gaussian beams and cavities may be interested in the books
-\citetitle{goldsmith1998quasioptical} by \citeauthor{goldsmith1998quasioptical}~\cite{goldsmith1998quasioptical} and
-\citetitle{siegman1986lasers} by \citeauthor{siegman1986lasers}~\cite{siegman1986lasers}.
-
-\begin{figure}[hbtp]
-    \centering
-    \footnotesize
-    \input{cavity_stability.pdf_tex}
-    \caption{Cavity stability.}
-    \label{fig:cavity_stability}
-\end{figure}
+The reader curious about Gaussian beams and cavities may be interested in
+\textcite{goldsmith1998quasioptical}
+and
+\textcite{siegman1986lasers}.
 
 \Cref{fig:cavity_stability} illustrates one of the difficulties arising from having finite-sized beams.
 On the left picture, the curvature and the width of the plane wave (both infinite) is conserved by a cavity formed by plane surfaces.
@@ -3810,14 +3881,44 @@ However, when the cavity is unstable, radius and width are not constant, they ca
 If the reflection and transmission coefficients do not depend on the width and the radius then we can still apply our model, but if these coefficients are function of the geometry of the beam, then our system is not linear anymore.
 It may still have a closed-form expression, but not in the form of a matrix.
 
+\begin{figure}
+    \centering
+    \footnotesize
+    \input{cavity_stability.pdf_tex}
+    \caption{Cavity stability.}
+    \label{fig:cavity_stability}
+\end{figure}
+
+%=============================================================================
+\subsection{Extension to inhomogeneous materials}
+Without extending our model to Gaussian beams, there is still room for improvement.
+
+HIFI Band~5 uses a sapphire lens to focus the beam onto its mixers.
+Like most crystals, sapphire is birefringent: its electric permittivity and magnetic permeabilities are functions of the polarization of the wave.
+
+In the current state of the model we can use Jones calculus to introduce a polarization-dependent phase shift for particular cases.
+Having a less ad-hoc and more general approach would be beneficial.
+Since we have already unified dielectrics and metals with our complex harmonic plane waves, introducing inhomogeneous materials would let us model materials that are metallic in one direction and dielectric in another.
+In other words: it might be possible to model a wire grid polarizer as an inhomogeneous thin film.
+
+One way to proceed would be to rework~\cref{sec:complex_harmonic_plane_waves} and let the electric permittivity and magnetic permeability be matrices.
 
 
 %=============================================================================
 
 \subsection{Applications}
-In HIFI for example, the problematic interaction between the mixer and the diplexer (see~\cref{sec:chapter3}\todo{Reference to Chapter 3 broken because not included in this document}) could have been more accurately predicted if our model had been available at the time.
+In HIFI for example, the problematic interaction between the mixer and the diplexer (see~\cref{sec:chapter4}) could have been more accurately predicted if our model had been available at the time of its design.
 Our model would have taken into account the leakage of the grids and the imperfection of the rooftop mirrors to produce meaningful qualitative results.
 Seeing these predictions, the engineers working on HIFI might have considered dumping the unwanted polarization exiting the diplexer with a grid and an absorber instead of letting it reflect almost perfectly on the mixer.
 
 Even though our model does not come pre-packaged in a software suite with a graphical editor and a vast library of components, its core is already a new tool in the belt of engineers and designers.
-By using our model, instrument designers can predict where the strongest standing waves will form, which cavities create the strongest ripples, and know where to focus their efforts.
+By using our model, instrument designers can predict where the strongest interferences will form, which cavities create the strongest ripples, and be informed on where to focus their efforts.
+
+
+%#############################################################################
+\section*{Acknowledgements}
+I particularly wish to thank John Pearson who gave me the opportunity of working on this fascinating project, which combines the satisfying purity and clarity of mathematics with the pragmatism of physics and the fun of software development, in the astronomical context that is a childhood dream.
+%#############################################################################
+%\clearpage
+\printbibliography[heading=subbibliography]
+\end{refsection}

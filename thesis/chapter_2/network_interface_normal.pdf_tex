@@ -48,7 +48,7 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.72344478)%
+  \begin{picture}(1,0.81324189)%
     \put(0,0){\includegraphics[width=\unitlength]{network_interface_normal.pdf}}%
     \put(0.35633735,0.0769061){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{1}}}%
     \put(0.64368787,0.0769061){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{2}}}%
@@ -59,9 +59,9 @@
     \put(0.85920063,0.00506854){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{a}_2$}}}%
     \put(0.85920063,0.14874367){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{b}_2$}}}%
     \put(0.62718927,0.48890371){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectu{n}$}}}%
-    \put(0.32041849,0.5977292){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\cp{\epsilon}_A, \cp{\mu}_A$}}}%
-    \put(0.67960657,0.5977292){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\cp{\epsilon}_B, \cp{\mu}_B$}}}%
-    \put(0.32041849,0.66956676){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{medium $A$}}}%
-    \put(0.67960657,0.66956676){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{medium $B$}}}%
+    \put(0.27553247,0.65160753){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\cp{\epsilon}_A, \cp{\mu}_A$}}}%
+    \put(0.72451758,0.65160753){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\cp{\epsilon}_B, \cp{\mu}_B$}}}%
+    \put(0.27622655,0.72344509){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{medium $A$}}}%
+    \put(0.72521162,0.72344509){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{medium $B$}}}%
   \end{picture}%
 \endgroup%

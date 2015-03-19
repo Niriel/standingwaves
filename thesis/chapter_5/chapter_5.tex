@@ -1,5 +1,5 @@
 \cleardoublepage
-%\begin{refsection}
+\begin{refsection}
 \chapter{The impact of HIFI interferences on the determination of the physical parameters of the star-forming region S140}
 \chaptermark{Impact of interferences on S140 data}
 \label{sec:chapter5}
@@ -173,7 +173,7 @@ which tells us that our transitions are far from the Local Thermal Equilibrium.
 
 We scheduled two observations of S140 IRS1 with HIFI.
 They are available in the Herschel Science Archive and can be retrieved with the following observation identifiers (``obsid''):
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
     \item \transition{CO}{8}{7}, obsid 0x50015e1d;
     \item \transition{CO}{9}{8}, obsid 0x50015d89.
 \end{itemize}
@@ -338,7 +338,7 @@ This allows taking into account the reflections between both mixers, referred to
 We run about \num{36e6} simulations of the gain of the optics from the point of view of the H~mixer: two inputs (LO noise and the source signal) times two polarizations (H and V) times three pointings (sky, cold and hot) times 190 LO and diplexer settings, times the \num{16000} LSB and USB frequencies that correspond to the 8000 channels of a spectrum.
 This provides a first impression of the effect of interferences on the gain of the system, and ultimately on the line profile.
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \begin{subfigure}[b]{\textwidth}
         \centering
@@ -359,7 +359,7 @@ This provides a first impression of the effect of interferences on the gain of t
     }
     \label{fig:87_00_00_sky_lsbusbsbr}
 \end{figure}
-\begin{figure}
+\begin{figure}[b]
     \centering
     \begin{subfigure}[b]{\textwidth}
         \centering
@@ -400,7 +400,7 @@ This provides a first impression of the effect of interferences on the gain of t
 \Cref{fig:87_00_00_sky_lsbusbsbr} shows the simulated optical gain for the first spectrum of \transition{CO}{8}{7} when the chopper is pointed at the sky.
 With this optical configuration, the mixer detects between~\SI{50}{\percent} and~\SI{100}{\percent} of the power of the astronomical signal and up to~\SI{10}{\percent} of the local oscillator noise.
 These curves present several interesting features.
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
     \item The widest feature is a bell-shaped (or U-shaped for the LO) curve that spans the entire bandwidth.  It is a product of the diplexer.  Even a perfect diplexer performs optimally at a single frequency.  Its gain degrades as we move away from this frequency and the diplexer starts coupling the mixer to the local oscillator instead.
     \item A ripple of period~$\approx \SI{650}{\mega\hertz}$.
     This matches the length of the cavities formed by the mixers and the rooftop mirrors.
@@ -532,7 +532,7 @@ We obtain these values by interpolating the beam efficiency tables attached to t
 For both transitions, the \ce{CO} line is always relatively narrow ($\approx \SI{100}{\mega\hertz}$) compared to the instantaneous bandwidth of the instrument (\SI{4}{\giga\hertz}), and in the rest of this chapter we will often zoom in on the line.
 The 195 spectra that we study are all very similar to the one shown in~\cref{fig:co98_full_bandwidth}.
 The spectra of both transitions typically feature:
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
     \item a horizontal baseline of $\SI{1.8}{\kelvin}$ due to the difference of black-body emission at the On and the Off positions in the sky,
     \item a noise of standard deviation $\SI{0.2}{\kelvin}$ slightly stronger at the edges of the spectra than in the center.
     \item an emission line of~$\approx \SI{30}{\kelvin}$ located in the highest-frequency quarter of the spectrum.
@@ -554,7 +554,7 @@ In this section, we describe how we correct for this degradation of the sideband
 The diplexer units are modules of the HIFI focal plane unit that are used in Bands~3, 4, 6, and 7 for the LO injection~\parencite{jackson2002hifi}.
 They are used to align the polarization of the sky and LO signals so that the mixers, which are sensitive to one polarization only, can couple to both optimally.
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \input{diplexer.pdf_tex}
     \caption{Principle of the Martin--Puplett interferometers used in HIFI Bands~3, 4, 6 and 7.}
@@ -644,9 +644,9 @@ The equation relating~$I$, diplexer actuator current in milliampere, to~$d$, int
 \begin{equation}
     d = d_0 + 27.5 \frac{2\pi}{360}(a I^2 + b I)\text{.}
 \end{equation}
-The currents $I$ have already been given in~\cref{tab:los_and_dacs}.
+The currents $I$ are given in~\cref{tab:los_and_dacs}.
 The remaining parameters $d_0$, $a$ and $b$ are given in~\cref{tab:diplexer_params}.
-These parameters are highly reliable, they are very well known and have remained constant (sub-micrometer precision) during the entire mission \parencite{mueller2014flight}.
+These parameters are very well known and have remained constant (sub-micrometer precision) during the entire mission \parencite{mueller2014flight}.
 
 \begin{table}
     \centering
@@ -765,12 +765,12 @@ With $B$ the continuum intensity that we just calculated and $L$ the intensity o
         G_L B + G_U (B + L)
     }{
         (G_L H_L + G_U H_U) - (G_L C_L + G_U C_U)
-    }
+    }\text{,}
 \end{equation}
-We solve it for $L$, all values are known.
+which we solve for $L$.
 
 Note: this equation cannot make the difference between the noise and the astronomical signal.
-Any deviation from the baseline enters $L$.
+Any deviation from the baseline enters~$L$.
 The intensity of the noise and the line are both `corrected' equally.
 
 %...................................................................
@@ -847,19 +847,17 @@ Any residual spread is due to either thermal noise, imperfections in the diplexe
 
 
 %#############################################################################
-\FloatBarrier
+%\FloatBarrier
 \section{Noise simulations}
 \label{sec:noise_simulations}
 We wish to quantify the influence of the thermal noise on the line profiles.
 We model the noise seen on HIFI observations and use that model to generate synthetic spectra.
 This mimics an observation in which the same source is observed many times with a fixed LO and diplexer settings.
 These synthetic spectra differ only by their noise, not by variations in the optical gain.
-We proceed in three steps:
-\begin{enumerate}
-    \item construct an ideal spectrum for each transition,
-    \item model the thermal noise affecting the real spectra,
-    \item apply the modeled thermal noise to the ideal spectra.
-\end{enumerate}
+We proceed in three steps.
+First, construct an ideal spectrum for each transition.
+Then, model the thermal noise affecting the real spectra.
+Finally, apply the modeled thermal noise to the ideal spectra.
 
 
 
@@ -1013,7 +1011,7 @@ This indicates that the corresponding ripple interferes destructively during the
 It is unlikely that this feature corresponds to a cavity: the cavity would need to be~\SI{130}{\meter}-long.
 We have not determined its origin.
 Possible explanations include
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
     \item An artifact of the sampling of the WBS:
 the even and odd channels of the WBS CCD have different levels of dark currents.
 These channels are separated by about~\SI{0.5}{\mega\hertz} and an imperfect calibration of these dark currents could generate a~\SI{1}{\mega\hertz}-period ripple.
@@ -1157,8 +1155,8 @@ Superimposed on these spectra are the various components of a model.
     \label{fig:spectra_transitions}
 \end{figure}
 
-The model is constituted of three or four elements:
-\begin{itemize}
+The model is composed of three or four elements:
+\begin{itemize}[noitemsep,nolistsep]
     \item a constant horizontal continuum ($c$),
     \item a narrow Gaussian for the core emission ($a_0$, $v_0$, $\sigma_0$),
     \item a broad Gaussian for the outflow emission ($a_1$, $v_1$, $\sigma_1$),
@@ -1172,7 +1170,7 @@ For each Gaussian function, $a$ is the amplitude, $v$ the mean and $\sigma$ the 
 \subsubsection{Core and outflow velocity}
 The outflow is not as collimated as the jet that creates it; shocks, collisions and turbulence create a wide range of velocities inside the outflow.
 In comparison, the velocities in the core are more homogeneous.
-Through the Doppler effect, a wider velocity range translates into wider lines, which is why the outflow line (blue in~\cref{fig:spectra_transitions} is wider than the core line (in green).
+Through the Doppler effect, a larger velocity range translates into broader lines, which is why the outflow component (blue in~\cref{fig:spectra_transitions} is wider than the core component (in green).
 
 The \ce{CO} lines of S140~IRS1 are blue-shifted;
 the core moves towards us with a radial velocity of~\SI{-5}{\kilo\meter\per\second}.
@@ -1196,7 +1194,7 @@ or it may be absorbed by the dense circumstellar envelope before reaching the de
 %-----------------------------------------------------------------------------
 \subsubsection{Self-absorption}
 The absorption feature seen at~$v_\text{LSR}=\SI{-9}{\kilo\meter\per\second}$ attests that \transition{CO}{8}{7} is not optically thin at all frequencies.
-The absorption line and outflow line share the same central velocity:
+The absorption and outflow components have a similar velocity:
 this is a case of self-absorption, in which the photons at the line wings have a smaller re-absorption probability than the photons at the line center.
 
 %-----------------------------------------------------------------------------
@@ -1264,11 +1262,12 @@ Consequently, we claim that the structure that we observe on the residual of the
 
 %-----------------------------------------------------------------------------
 \subsubsection{Summary}
-The geometry of IRS1 presented by~\textcite{maud2013s140} is that of a source seen almost edge-on: an accretion disk around the central object that appears very elliptic (elongated in the NE-SW direction), and two large \transition{CO}{1}{0} outflows perpendicular to the disk (SE is blue-shifted, slightly in front of the core, NE is red-shifted, slightly behind the core).
+The geometry of IRS1 presented by~\textcite{maud2013s140} is that of a source seen almost edge-on: a central object circled by an accretion disk that appears very elliptic (elongated in the NE-SW direction), and two large \transition{CO}{1}{0} outflows perpendicular to the disk (SE is blue-shifted, slightly in front of the core, NE is red-shifted, slightly behind the core).
 Our HIFI observation of high-$J$ \ce{CO} lines show a different picture: only the blue outflow is visible as one would expect in the case of a face-on geometry.
 
-Both views can be reconciled if we assume that the system is seen almost edge-on and has a dense circumstellar envelope.
-The slight inclination of the polar axis is sufficient to bring the red outflow behind the envelope.
+Both views can be reconciled if we assume that the system is seen almost edge-on but has a dense circumstellar envelope.
+The slight inclination of the polar axis is sufficient to cause the extinction of the red outflow but not that of the blue one, which we would not expect from a homogeneous system.
+This suggests a considerable increase of the column density of~\ce{CO} caused by a dense layer of gas between the two outflows, which is compatible with the strong density gradient that we expect close to the central object.
 If our high-$J$ \ce{CO} lines originate very close to the center of the system,
 the envelope absorbs the emission of the red outflow.
 
@@ -1334,7 +1333,7 @@ As a result, we lack constraints to properly model the interferences in the opti
 
 
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \begin{tabular}{@{}c@{}c@{}}
     \toprule
@@ -1520,10 +1519,15 @@ We propagate the uncertainties using
 Each possible ratio has a normal distribution $c \pm \sigma_c$.
 The sum of these 9025 distributions, divided by the number of distributions, is shown in \cref{fig:ratio_core,fig:ratio_outflow}.
 The distribution of this ratio follows a normal curve.
-The mean values and their uncertainties (\textsc{fwhm}) are given in \cref{tab:line_ratios}.
+The mean values and their uncertainties are given in \cref{tab:line_ratios}.
 The calibration uncertainty is~\SI{4}{\percent} for the core and~\SI{2}{\percent} for the outflow.
 
-\begin{table}
+The uncertainty on the synthetic ratios is~\SI{60}{\percent} that of the ratios measured on the real HIFI data.
+If our noise model is correct, then \SI{40}{\percent} of the uncertainty on the line ratios is caused by non-thermal effects: interferences in the optics, intrinsic sideband ratio of the mixer or the unexplained~\SI{1.14}{\mega\hertz} ripple mentioned in~\cref{sec:noise_model_of_the_real_spectra}.
+Longer integration times can reduce the uncertainty due to the noise, but have no effect on the remaining~\SI{2.4}{\percent} of systematic uncertainty on the core line ratio.
+
+\vspace{5em}
+\begin{table}[h]
 %                        left      right    mean        -         +      fwhm
 %    corrected    core   0.9615 .. 1.0546   1.0102   -0.0487   +0.0444   0.0931
 %        noisy    core   0.9831 .. 1.0397   1.0113   -0.0282   +0.0285   0.0566
@@ -1545,9 +1549,6 @@ The calibration uncertainty is~\SI{4}{\percent} for the core and~\SI{2}{\percent
     \label{tab:line_ratios}
 \end{table}
 
-The uncertainty on the synthetic ratios is~\SI{60}{\percent} that of the ratios measured on the real HIFI data.
-If our noise model is correct, then \SI{40}{\percent} of the uncertainty on the line ratios is caused by non-thermal effects: interferences in the optics, intrinsic sideband ratio of the mixer or the unexplained~\SI{1.14}{\mega\hertz} ripple mentioned in~\cref{sec:noise_model_of_the_real_spectra}.
-Longer integration times can reduce the uncertainty due to the noise, but have no effect on the remaining~\SI{2.4}{\percent} of systematic uncertainty on the core line ratio.
 
 \begin{figure}
     \centering
@@ -1607,14 +1608,20 @@ Longer integration times can reduce the uncertainty due to the noise, but have n
 \subsection{Introduction and parameters}
 In the previous section, we have derived the integrated intensity ratio of
 \transition{CO}{8}{7} and \transition{CO}{9}{8} of S140~IRS1.
-We use the computer program \radex{} to determine the volume number density and the kinetic temperature of~\ce{H2} from this line ratio.
+We use the computer program \radex{}%
+\footnote{
+    \Radex{} is publicly available at the following address:\\
+    \url{http://www.sron.rug.nl/~vdtak/radex/index.shtml}.
+}
+to determine the volume number density and the kinetic temperature of~\ce{H2} from this line ratio.
 
 \Radex{}~\parencite{vandertak2007radex} solves radiative transfer equations for a spherical homogeneous isothermal molecular cloud without large-scale velocity field.
 \Radex{} does not assume Local Thermal Equilibrium~(LTE).
-The LTE hypothesis states that the excitation temperature and the kinetic temperature are equal, a situation that is rarely met in the interstellar medium where the densities are low.
-Away from the LTE, the energy level population does not follow the Boltzmann equation;
-some high-$J$ levels can be more populated than lower ones, a phenomenon called ``maser''.
-Instead, \radex{} uses the escape-probability method first introduced by~\textcite{sobolev1960}.
+The LTE hypothesis states that the excitation temperature $T_\text{ex}$ and the kinetic temperature $T_\text{kin}$ are equal: the energy level population follows the Boltzmann distribution.
+The LTE contition is rarely met in the interstellar medium where the densities are low:
+the radiative decays compete with collisions and~$T_\text{ex}<T_\text{kin}$, a situation called ``subthermal excitation''~\parencite{vandertak2011radiative}.
+For the level population, \radex{} assumes a statistical equilibrium: the sum of the collisional and radiative (de-)excitation rate for each level should be zero.
+To solve the radiative transfer, \radex{} uses the escape-probability method first introduced by~\textcite{sobolev1960}.
 
 \Radex{} computes the velocity-integrated intensity of molecular lines resulting from the collisions of a molecule (\ce{CO} for us) with a partner (\ce{H2} in our case).
 In addition to tables describing the frequencies, Einstein coefficients, energy levels and collision rates of the molecular transitions, \radex{} requires the line width, the background radiation temperature, the kinetic temperature and volume number density of~\ce{H2}, and the abundance of~\ce{CO} given as a column density.
@@ -1637,14 +1644,17 @@ In addition to tables describing the frequencies, Einstein coefficients, energy 
         line width (outflow)             & 14.34    & \si{\kilo\meter\per\second} \\
         \ce{H2} volume number density    & $10^{4.5}$ to $10^8$ & \si{\per\centi\meter\cubed} \\
         Kinetic temperature              & \numrange{20}{600}  & \si{\kelvin} \\
-        \ce{CO} column density           & $10^{17}$ to $10^{18}$ & \si{\per\centi\meter\squared} \\
+        \ce{CO} column density           & $10^{17}$ to $10^{19}$ & \si{\per\centi\meter\squared} \\
         \bottomrule
     \end{tabular}
     \caption{Parameters used in our \radex{} models.}
     \label{tab:radex_input}
 \end{table}
 
-\Radex{} takes a single line width for the two transition lines.
+For S140, a realistic number column density for \ce{CO} is~\SI{e19}{\per\centi\meter\squared}.
+We also explore column densities of \num{e17} and \SI{e18}{\per\centi\meter\squared} which are realistic for \ce{C^{18}O} and \ce{^{13}CO}, respectively.
+
+\Radex{} takes a single line width for the two transitions.
 We set it to the average of the two line widths, which is not a problem for the core component but less justified for the outflow where they differ by~\SI{6}{\percent}
 (see~\cref{tab:line_widths}).
 
@@ -1684,7 +1694,7 @@ We set it to the average of the two line widths, which is not a problem for the 
         \bottomrule
     \end{tabular}
     \caption{
-        Line widths (\textsc{fwhm}) of the core and outflow components of
+        Line widths (\textsc{fwhm}) in \si{\kilo\meter\per\second} of the core and outflow components of
         \transition{CO}{8}{7} and \transition{CO}{9}{8}.
     }
     \label{tab:line_widths}
@@ -1852,8 +1862,9 @@ Marc Verheijen, whose astronomical expertise is related but different, allowing 
 and finally Peter Roelfsema, who on many occasion helped me bridge the gap between engineering and astronomy.
 
 In addition, I especially wish to express my gratitude to David Teyssier, who wrote the non-standard observing mode that we use in our observations;
-to Max Avruch, who worked under a high time pressure to setup the specific observation parameters and submit them to the Mission Operation Center for the last calibration campaign of the HIFI mission;
+to Max Avruch, who worked under a high time pressure to set up the specific observation parameters and submit them to the Mission Operation Center for the last calibration campaign of the HIFI mission;
 and to Evgenia Koumpia, for her expertise of S140 which kept my data analysis on the right track.
 %#############################################################################
-%\printbibliography
-%\end{refsection}
+%\clearpage
+\printbibliography[heading=subbibliography]
+\end{refsection}

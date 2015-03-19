@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{157.83628374bp}%
+    \setlength{\unitlength}{157.83628679bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -48,28 +48,28 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,1.38794243)%
+  \begin{picture}(1,1.56753662)%
     \put(0,0){\includegraphics[width=\unitlength]{network_interface.pdf}}%
-    \put(0.35633733,0.38221591){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{1}}}%
-    \put(0.50001257,0.5079318){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{2}}}%
-    \put(0.64368785,0.38221591){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{3}}}%
-    \put(0.50001257,0.25650033){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{4}}}%
-    \put(0.32041847,0.92099826){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{k}_1$}}}%
-    \put(0.32041847,1.10059248){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{k}_2$}}}%
-    \put(0.69756595,1.0646737){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{k}_3$}}}%
-    \put(0.69756595,0.95691705){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{k}_4$}}}%
-    \put(0.55389074,0.75936328){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{a}_2$}}}%
-    \put(0.44613432,0.75936328){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{b}_2$}}}%
-    \put(0.1408244,0.31037835){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{b}_1$}}}%
-    \put(0.1408244,0.45405348){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{a}_1$}}}%
-    \put(0.55389074,0.00506854){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{b}_4$}}}%
-    \put(0.44613428,0.00506854){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{a}_4$}}}%
-    \put(0.85920063,0.31037835){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{a}_3$}}}%
-    \put(0.85920063,0.45405348){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{b}_3$}}}%
-    \put(0.62718926,1.15340136){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectu{n}$}}}%
-    \put(0.32041847,1.26222685){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\cp{\epsilon}_A, \cp{\mu}_A$}}}%
-    \put(0.67960656,1.26222685){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\cp{\epsilon}_B, \cp{\mu}_B$}}}%
-    \put(0.32041847,1.33406441){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{medium $A$}}}%
-    \put(0.67960656,1.33406441){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{medium $B$}}}%
+    \put(0.35633734,0.3822159){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{1}}}%
+    \put(0.50001258,0.50793179){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{2}}}%
+    \put(0.64368786,0.3822159){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{3}}}%
+    \put(0.50001258,0.25650032){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{4}}}%
+    \put(0.32041848,1.01079536){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{k}_1$}}}%
+    \put(0.32041848,1.2083485){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{k}_2$}}}%
+    \put(0.69756596,1.17242972){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{k}_3$}}}%
+    \put(0.69756596,1.04671414){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{k}_4$}}}%
+    \put(0.55389075,0.75936327){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{a}_2$}}}%
+    \put(0.44613433,0.75936327){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{b}_2$}}}%
+    \put(0.1408244,0.31037834){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{b}_1$}}}%
+    \put(0.1408244,0.45405347){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{a}_1$}}}%
+    \put(0.55389075,0.00506854){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{b}_4$}}}%
+    \put(0.44613433,0.00506854){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{$\vectcp{a}_4$}}}%
+    \put(0.85920063,0.31037834){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{a}_3$}}}%
+    \put(0.85920063,0.45405347){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectcp{b}_3$}}}%
+    \put(0.62718927,1.24319844){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$\vectu{n}$}}}%
+    \put(0.27553249,1.40590195){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\cp{\epsilon}_A, \cp{\mu}_A$}}}%
+    \put(0.72451757,1.40590195){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{$\cp{\epsilon}_B, \cp{\mu}_B$}}}%
+    \put(0.27622654,1.47773952){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{medium $A$}}}%
+    \put(0.72521162,1.47773952){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{medium $B$}}}%
   \end{picture}%
 \endgroup%
