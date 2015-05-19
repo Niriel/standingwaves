@@ -49,7 +49,7 @@
   \global\let\svgscale\undefined%
   \makeatother%
   \begin{picture}(1,0.93974475)%
-    \put(0,0){\includegraphics[width=\unitlength]{band45_networks.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength]{band4_layout.pdf}}%
     \put(0.51421368,0.00063683){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{LO}}}%
     \put(0.09336264,0.42148793){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{sky}}}%
     \put(0.18290542,0.7080249){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{hot load}}}%

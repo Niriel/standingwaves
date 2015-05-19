@@ -93,7 +93,7 @@ This is the case for carbon monoxide, \ce{CO}, which emits rotational lines when
 \Cref{table:co_transition_frequencies} lists the rotational transitions of~\ce{CO} that can be observed by HIFI.
 
 \ce{CO} is the most common molecule in the interstellar medium after~\ce{H2}.
-Because its high relative abundance $n_\ce{CO} / n_\ce{H2} \approx 10^{-4}$~\parencite{tielens2005physics} and its stability in molecular clouds, it is considered a tracer of~\ce{H2}.
+Because its high relative abundance $n_\text{\ce{CO}} / n_\text{\ce{H2}} \approx 10^{-4}$~\parencite{tielens2005physics} and its stability in molecular clouds, it is considered a tracer of~\ce{H2}.
 By measuring~\ce{CO}, we can infer the properties of~\ce{H2} which constitutes most of the cloud.
 
 
@@ -110,7 +110,7 @@ located in the Cepheus constellation at a distance of $746\pm\SI{27}{\parsec}$ \
     \caption{
         Map of integrated intensity of \transition{CO}{1}{0} around S140~IRS1 taken by the \SI{30}{\meter} telescope of IRAM.
         The equatorial coordinates are given for the mean equinox J2000.
-        The black circle in the center represents the position and the half-power beam width (\SI{22}{\arcsec}) of the HIFI beam used in our observation.
+        The black circle in the center represents the position and the half-power beam width (\ang{;;22}) of the HIFI beam used in our observation.
         The gray contour follows the ionization front caused by the UV radiation of the B0V star HD~211880 located \SI{7}{\arcmin} south-west of IRS1.
         This star and the two Off positions used for the background calibration are located outside the area covered by this map.
         Map credit: \textcite{koumpia2015}.
@@ -131,11 +131,11 @@ It is established that IRS1 is a young stellar object, a newly born massive star
 In addition to the dense gas cloud that still surrounds it, the young star is circled by an accretion disk which is seen almost edge-on.
 IRS1 emits two highly-collimated jets of matter in the direction of its axis of rotation, perpendicular to the accretion disk.
 The interaction of these jets with the dense interstellar medium produces large scale molecular outflows~\parencite{reipurth2001herbig} which emit in the submillimeter range.
-The~\transition{CO}{1}{0} emission of these outflows extends~\SI{30}{\arcsec} in the north-west and south-east directions~\parencite{maud2013s140}.
+The~\transition{CO}{1}{0} emission of these outflows extends~\ang{;;30} in the north-west and south-east directions~\parencite{maud2013s140}.
 
 Although S140 is extended, our observations focus on high-$J$ transitions which require high temperatures in order to be excited (see~\cref{table:co_transition_frequencies}).
 We can expect that most of the emission that we detect originates from warm regions of the cloud, close to its core.
-The beam size of HIFI is approximately~\SI{22}{\arcsec} at the frequencies of interest,
+The beam size of HIFI is approximately~\ang{;;22} at the frequencies of interest,
 it covers a radius of~\SI{0.04}{\parsec} at the distance of IRS1.
 A PDR model of S140 by \textcite{koumpia2015} predicts that the gas and dust temperatures should be lower than~\SI{100}{\kelvin} at radii greater than \SI{0.0001}{\parsec}: the high-$J$ \ce{CO} core of IRS1 is much smaller than the beam size.
 Likewise, the high-$J$ \ce{CO} emission in the outflow extends much less than the \transition{CO}{1}{0} emission, bringing our region of interest well inside our beam size.
@@ -161,9 +161,9 @@ Our calculation of the critical density underestimates the actual value;
 the method presented in \textcite{yang2010} is more accurate
 but its results remain of the same order.
 Dividing our conservative estimate of $n_\text{cr}=\num{6e5}$
-by the relative abundance $n_\ce{CO} / n_\ce{H2} \approx 10^{-4}$,
-we find that \transition{CO}{8}{7} is thermalized for $n_\ce{H2} > \SI{6e9}{\per\centi\meter\cubed}$.
-\Textcite{poelman2006line} establish that $n_\ce{H2}$ is between \num{e4} and \SI{4e5}{\per\centi\meter\cubed} for S140,
+by the relative abundance $n_\text{\ce{CO}} / n_\text{\ce{H2}} \approx 10^{-4}$,
+we find that \transition{CO}{8}{7} is thermalized for $n_\text{\ce{H2}} > \SI{6e9}{\per\centi\meter\cubed}$.
+\Textcite{poelman2006line} establish that $n_\text{\ce{H2}}$ is between \num{e4} and \SI{4e5}{\per\centi\meter\cubed} for S140,
 which tells us that our transitions are far from the Local Thermal Equilibrium.
 
 
@@ -291,9 +291,9 @@ For each transition, there is a LO frequency and a diplexer setting that match n
 The 19 diplexer settings create optical pathlength differences in the interferometer of $\pm1~\text{wavelength}$ around the nominal value.
 
 The 5 LO frequencies are very close to each other.
-They are separated by only \num{18.0} or \SI{22.5}{\megahertz}
+They are separated by only \num{18.0} or \SI{22.5}{\mega\hertz}
 which corresponds to the granularity of the tunable LO frequencies.
-For each transition, the LO frequencies cover a range of~\SI{76.5}{\megahertz}.
+For each transition, the LO frequencies cover a range of~\SI{76.5}{\mega\hertz}.
 We have chosen this range in order to sample the interferences created by the mixer--LO, mixer--hot-load and mixer--cold-load cavities.
 These cavities introduce periodic modulations of the gain, with periods between~\num{90} and \SI{100}{\mega\hertz} (see~\cref{sec:chapter4}).
 
@@ -316,7 +316,7 @@ Despite the high numbers, the technique for solving the interferences between ea
 
 \begin{figure}[b]
     \centering
-    \input{band45_networks.pdf_tex}
+    \input{band4_layout.pdf_tex}
     \caption{Networks used to model the interferences in HIFI Bands~3 and~4.}
     \label{fig:band45_networks}
 \end{figure}
@@ -1575,7 +1575,7 @@ the outer contours correspond to the total uncertainty and the inner contours to
     \centering
     \begin{tabular}{cc}
         \toprule
-        $N_\ce{CO}$ [\si{\per\centi\meter\squared}]
+        $N_\text{\ce{CO}}$ [\si{\per\centi\meter\squared}]
         &
         core velocity-integrated intensity ratio
         \\
@@ -1606,7 +1606,7 @@ the outer contours correspond to the total uncertainty and the inner contours to
     \centering
     \begin{tabular}{cc}
         \toprule
-        $N_\ce{CO}$ [\si{\per\centi\meter\squared}]
+        $N_\text{\ce{CO}}$ [\si{\per\centi\meter\squared}]
         &
         outflow velocity-integrated intensity ratio\\
         \midrule
@@ -1637,7 +1637,7 @@ of~\transition{CO}{8}{7} and \transition{CO}{9}{8} are~\SI{200}{\kelvin} and~\SI
 This confirms the assumption that we made in~\cref{sec:s140irs1} regarding the angular size of the emitting region: 
 we seem to be probing a warm region of the molecular cloud, a region close to the young stellar object at the center of IRS1.
 
-In addition to a lower-limit on the temperature, these plots give a lower-limit of the density: $n_\ce{H2} > \SI{e5}{\per\centi\meter\cubed}$.
+In addition to a lower-limit on the temperature, these plots give a lower-limit of the density: $n_\text{\ce{H2}} > \SI{e5}{\per\centi\meter\cubed}$.
 According to~\textcite{goldsmith2001}, at densities above $10^{4.5} \si{\per\centi\meter\cubed}$, the dust and the gas are collisionally coupled.
 This suggests that the dust temperature is also of the order of~\SI{200}{\kelvin} in that region, in which case out background temperature of~\SI{273}{\kelvin} may be underestimated.
 We have run our \radex{} analysis with background temperatures up to~\SI{100}{\kelvin} and confirmed that the influence of the background temperature on the interpretation of our line ratio is negligible.
@@ -1663,7 +1663,7 @@ One explanation for this discrepancy is that this study involves low-$J$ \ce{CO}
 With upper-energy levels of~\num{5.53} and~\SI{16.6}{\kelvin}, \transition{CO}{1}{0} and~\transition{CO}{2}{1} are visible in cold regions of the cloud, far away from its hot central object, their emission fills the beam.
 Combining high and low-$J$ transitions without modeling the temperature gradient can result in a slightly over-estimated large-scale temperature (a minor concern for their study) or a greatly under-estimated temperature of the small-scale core.
 
-If we compare our observation to the PDR model presented in the same article (spherical PDR, inner-radius $n_\ce{H2}=\SI{e5}{\per\centi\meter\cubed}$, radiation of~100~Drain fields), we find that our temperature of~\SI{200}{\kelvin} originates within~\SI{20}{\astronomicalunit} of the central star.
+If we compare our observation to the PDR model presented in the same article (spherical PDR, inner-radius $n_\text{\ce{H2}}=\SI{e5}{\per\centi\meter\cubed}$, radiation of~100~Drain fields), we find that our temperature of~\SI{200}{\kelvin} originates within~\SI{20}{\astronomicalunit} of the central star.
 This places us near the inner radius of the accretion disk~\parencite{maud2013resolving}.
 
 More detailed PDR models can take into account the clumpy nature of S140 reported by~\textcite{poelman2006line}.
@@ -1710,7 +1710,7 @@ We used \radex{} to predict the line ratios that we expect from a molecular clou
 In the specific case of S140 IRS1, the lines of \transition{CO}{8}{7} and \transition{CO}{9}{8} are optically thick, which makes this line ratio useless as a tracer of temperature or density.
 However, if the column density of \ce{CO} were lower, the uncertainty on the line ratio would translate almost linearly into an uncertainty on the gas kinetic temperature.
 
-Despite these uncertainties, we estimate that the emission of \transition{CO}{8}{7} and \transition{CO}{9}{8} in S140 IRS1 originates from a warm ($T_\text{kin}> \SI{200}{\kelvin}$) and dense ($n_\ce{H2} > \SI{e5}{\per\centi\meter\cubed}$) region,
+Despite these uncertainties, we estimate that the emission of \transition{CO}{8}{7} and \transition{CO}{9}{8} in S140 IRS1 originates from a warm ($T_\text{kin}> \SI{200}{\kelvin}$) and dense ($n_\text{\ce{H2}} > \SI{e5}{\per\centi\meter\cubed}$) region,
 possibly within~\SI{20}{\astronomicalunit} of the young stellar object if we neglect the clumpiness of the cloud, but not from the accretion disk itself.
 
 
