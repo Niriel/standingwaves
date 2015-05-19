@@ -52,7 +52,7 @@
     \put(0,0){\includegraphics[width=\unitlength]{band1_layout.pdf}}%
     \put(0.20364422,0.80033099){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{H mixer}}}%
     \put(0.91411384,0.72632366){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{V mixer}}}%
-    \put(0.27765151,0.00105268){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{LO}}}%
+    \put(0.27765151,0.00105268){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{LO ($\pm\SI{45}{\degree}$)}}}%
     \put(0.12963698,0.1638684){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{sky or
 load}}}%
     \put(0.21844569,0.08986131){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{grid 0 (\SI{5.7}{\degree})}}}%

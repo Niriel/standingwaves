@@ -1,28 +1,27 @@
 \cleardoublepage
-\begin{refsection}
-\chapter{The impact of HIFI interferences on the determination of the physical parameters of the star-forming region S140}
-\chaptermark{Impact of interferences on S140 data}
+%\begin{refsection}
+\chapter{Astronomy in presence of interferences}
+%\chaptermark{Impact of interferences on S140 data}
 \label{sec:chapter5}
 
 %#############################################################################
 \section{Introduction}
 
+As discussed in~\cref{sec:chapter1}, when coherent electromagnetic waves superpose they form a resultant wave of greater or lower amplitude.
+This phenomenon is called ``interference''.
+In~\cref{sec:chapter2}, we developed a model that can predict the impact of interferences on the gain of a coherent instrument.
+In~\cref{sec:chapter4}, we modeled the interferences in Band~1 of the Heterodyne Instrument for the Far Infrared (HIFI), which is a double-sideband coherent detector.
+
 In this chapter, we examine how the estimation of astrophysical parameters from submillimeter heterodyne observations is affected by interferences in the instrument.
 We attempt to derive the density and the kinetic temperature of a molecular cloud from the intensity ratios of rotational lines of the \ce{CO} molecule.
-
-When coherent electromagnetic waves superpose, they form a resultant wave of greater or lower amplitude.
-This phenomenon is called ``interference''.
-The Heterodyne Instrument for the Far Infrared (HIFI) is a double-sideband coherent detector.
-The focal plane unit of HIFI contains elements that form optical cavities, allowing the light to be reflected back and forth between them.
-The light interferes with its own reflections, which modifies the gain of the instrument in both sidebands differently.
-The effect of the interferences on the gain of the instrument is a function of the geometry of the optics, its construction materials, and the frequency of the wave.
 
 To assess the effect of interferences on astrophysical results, we have set up a special HIFI observation of the S140 region.
 We observed two rotational lines of~\ce{CO} around the source S140~IRS1.
 The \transition{CO}{8}{7} spectra were taken with Band~3b and the \transition{CO}{9}{8} spectra with Band~4a.
 Each transition was measured with 5 local oscillator frequencies and 19 diplexer settings, for a total of 95 spectra per transition.
-These different optical configurations of the instrument modify the electromagnetic interferences which modulate the noise and the gain of the instrument,
-and therefore the profile of the lines.
+These different optical configurations of the instrument modify the electromagnetic interferences.
+This modulates the noise and the gain of the instrument and therefore the profile of the lines.
+
 The bandpass calibration of HIFI cannot correct for this effect because it relies on a ``chopper wheel'' method~\parencite{kutner1981recommendations,ossenkopf2002intensity} which introduces even more interferences into the spectra.
 As a result, the 95 spectra of \transition{CO}{8}{7} are slightly different from each other, and so are the spectra of \transition{CO}{9}{8}.
 This gives 9025 line integrated-intensity ratios.
@@ -40,24 +39,8 @@ The uncertainty on the line ratios translates into uncertainties on the physical
 %=============================================================================
 
 \subsection{\texorpdfstring{\ce{CO} as a tracer of \ce{H2}}{CO as a tracer of H2}}
-In dense ($\geqslant 10^{4} \: \si{\per\centi\meter\cubed}$) regions of the interstellar medium, the bulk constituent, hydrogen, is in molecular form.
-Such regions are therefore often called molecular clouds.
-Besides gas, these clouds contain dust grains which,
-despite their low abundance (\SI{1}{\percent}) relative to hydrogen,
-strongly absorb short-wave (UV, optical, near-IR) light and prevent the observation of embedded stars at these wavelengths.
-Longer wavelengths are much less affected, which makes submillimetric spectroscopy a tool of choice to study star formation as it allows to probe deep inside dense clouds.
 
-Unfortunately, the rotational lines of \ce{H2} are in the mid-infrared range, they are dipole-forbidden and have upper-level energies above~\SI{500}{\kelvin}.
-This makes \ce{H2} invisible in cold molecular clouds.
-However, other less abundant species can interact with \ce{H2} in a measurable way.
-This is the case for carbon monoxide, \ce{CO}, which emits rotational lines when it collides with~\ce{H2}.
-\Cref{table:co_transition_frequencies} lists the rotational transitions of~\ce{CO} that can be observed by HIFI.
-
-\ce{CO} is the most common molecule in the interstellar medium after~\ce{H2}.
-Because its high relative abundance $n_\ce{CO} / n_\ce{H2} \approx 10^{-4}$~\parencite{tielens2005physics} and its stability in molecular clouds, it is considered a tracer of~\ce{H2}.
-By measuring~\ce{CO}, we can infer the properties of~\ce{H2} which constitutes most of the cloud.
-
-\begin{table}
+\begin{table}[bp]
     \centering
     \begin{tabular}{l S S c} % S is from SIunitx.
         \toprule
@@ -96,6 +79,23 @@ By measuring~\ce{CO}, we can infer the properties of~\ce{H2} which constitutes m
     \label{table:co_transition_frequencies}
 \end{table}
 
+In dense ($\ge 10^{4} \: \si{\per\centi\meter\cubed}$) regions of the interstellar medium, the bulk constituent, hydrogen, is in molecular form.
+Such regions are therefore often called molecular clouds.
+Besides gas, these clouds contain dust grains which,
+despite their low abundance (\SI{1}{\percent}) relative to hydrogen,
+strongly absorb short-wave (UV, optical, near-IR) light and prevent the observation of embedded stars at these wavelengths.
+Longer wavelengths are much less affected, which makes submillimetric spectroscopy a tool of choice to study star formation as it allows to probe deep inside dense clouds.
+
+Unfortunately, the rotational lines of \ce{H2} are in the mid-infrared range, they are dipole-forbidden and have upper-level energies above~\SI{500}{\kelvin}.
+This makes \ce{H2} invisible in cold molecular clouds.
+However, other less abundant species can interact with \ce{H2} in a measurable way.
+This is the case for carbon monoxide, \ce{CO}, which emits rotational lines when it collides with~\ce{H2}.
+\Cref{table:co_transition_frequencies} lists the rotational transitions of~\ce{CO} that can be observed by HIFI.
+
+\ce{CO} is the most common molecule in the interstellar medium after~\ce{H2}.
+Because its high relative abundance $n_\ce{CO} / n_\ce{H2} \approx 10^{-4}$~\parencite{tielens2005physics} and its stability in molecular clouds, it is considered a tracer of~\ce{H2}.
+By measuring~\ce{CO}, we can infer the properties of~\ce{H2} which constitutes most of the cloud.
+
 
 
 %=============================================================================
@@ -128,7 +128,7 @@ The brightest one IRS1, located at $\alpha = 22^\text{h} 19^\text{m} 18.21^\text
 
 S140~IRS is a well-studied object.
 It is established that IRS1 is a young stellar object, a newly born massive star of high luminosity ($\SI{8500}{L_\odot}$,~\cite{maud2013s140}).
-In addition to the dense gas cloud that still surrounds it, the young star is circled by an accretion disk which is seen almost edge-on~\parencite{maud2013s140}.
+In addition to the dense gas cloud that still surrounds it, the young star is circled by an accretion disk which is seen almost edge-on.
 IRS1 emits two highly-collimated jets of matter in the direction of its axis of rotation, perpendicular to the accretion disk.
 The interaction of these jets with the dense interstellar medium produces large scale molecular outflows~\parencite{reipurth2001herbig} which emit in the submillimeter range.
 The~\transition{CO}{1}{0} emission of these outflows extends~\SI{30}{\arcsec} in the north-west and south-east directions~\parencite{maud2013s140}.
@@ -167,6 +167,33 @@ we find that \transition{CO}{8}{7} is thermalized for $n_\ce{H2} > \SI{6e9}{\per
 which tells us that our transitions are far from the Local Thermal Equilibrium.
 
 
+
+%=============================================================================
+\subsection{HIFI, diplexers and interferences}
+
+Our observations of S140 IRS1 used the Bands~3 and 4 of HIFI.
+As described in~\vref{sec:diplexer_lo_injection},
+Bands~3, 4, 6 and 7 of HIFI use diplexers for their LO-injection.
+The purpose of the diplexers is to maximize the coupling of the mixer to both the sky and the LO.
+They do so by aligning the polarization of the sky and the LO signals with that of the mixers (see~\cref{fig:diplexer_render}).
+
+Diplexers are interferometers: the optical pathlength difference between two arms determines the output polarization for every frequency.
+For each LO frequency, there exist one and only one optimal pathlength difference.
+That pathlength difference is achieved by applying an electric current to an actuator, which translates a mirror and changes the length of one arm.
+We call this current ``diplexer actuator current'' (DAC) or simply ``diplexer setting'' in the rest of this chapter.
+
+A side-effect of moving the diplexer is that it changes the lengths of optical cavities in the receiver.
+This modifies the interferences, which modify the gain of the instrument.
+
+Another way of modifying the interferences in the instrument is to observe at a different LO frequency.
+First, each LO frequency requires its own settings for the diodes and multipliers: the reflection coeffient of the LO changes.
+Second, each LO frequency pumps the mixer differently, its reflection coefficient also changes.
+Third, the mixing process folds the lower and upper sideband on top of each other, making their interferences modulation interfere together.
+Since each LO frequency couples the mixers to different lower and upper sidebands, this also modifies the gain of the instrument.
+
+The diplexer setting and the LO frequency provide two independent parameters that allow the exploration of the effect of interferences on astronomical data.
+
+
 %#############################################################################
 \FloatBarrier
 \section{Observation}
@@ -180,16 +207,8 @@ They are available in the Herschel Science Archive and can be retrieved with the
 
 With a rest frequency of~\SI{922}{\giga\hertz}, the line of \transition{CO}{8}{7} falls in HIFI Band~3b.
 The line of \transition{CO}{9}{8} is located in Band~4a at~\SI{1037}{\giga\hertz}.
-In these two bands, the sky and the LO signals are combined by optical devices called ``diplexers'', which have an effect on the interferences of HIFI.
 
-The purpose of the diplexers is to maximize the coupling of the mixer to both the sky and the LO.
-They do so by aligning the polarization of the sky and the LO signals with that of the mixers.
-Diplexers are interferometers: the optical pathlength difference between two arms determines the output polarization for every frequency.
-For each LO frequency, there exist one and only one optimal pathlength difference.
-That pathlength difference is achieved by applying an electric current to an actuator, which translates a mirror and changes the length of one arm.
-We call this current ``diplexer actuator current'' (DAC) or simply ``diplexer setting'' in the rest of this chapter.
-
-We used a non-standard observing mode based on the standard ``dual beam switch spectral scan'', which is described in~\cite{hifiobserversmanual}.
+We used a non-standard observing mode based on the standard ``dual beam switch spectral scan'', the latter being described in~\cite{hifiobserversmanual}.
 
 ``Dual beam switch'' refers to the choice of the reference source used for subtracting the background radiation: two positions on the sky.
 \Cref{tab:on_off_positions} lists the positions of the On and the two Off.
@@ -199,7 +218,17 @@ We assume that there is no \transition{CO}{8}{7} or \transition{CO}{9}{8} emissi
 First, these transition have upper-level energies well above the kinetic temperature of the cloud at these positions.
 Second, both positions are shielded from the UV radiation emitted by HD~211880 and the three infrared sources.
 
-\begin{table}
+``Spectral scan'' means that each observation contains spectra taken at different local oscillator frequencies.
+Changing the LO frequency is one way to modulate the interferences in HIFI.
+
+The non-standard aspect of our observing mode is that, for each local oscillator frequency, there are 19 different diplexer settings instead of a single one.
+This allows us to modulate interferences for a given LO frequency.
+
+\Cref{tab:los_and_dacs} lists the five LO frequencies and the nineteen diplexer actuator currents used for each transition.
+Each transition is therefore observed $5 \times 19 = 95$ times.
+For each transition, there is a LO frequency and a diplexer setting that match nominally (gray background in \cref{tab:los_and_dacs}).
+
+\begin{table}[b]
 %dataset 11
 %334.79607197925145  63.3615103585033      22h19m11.05s  63º21'41.43729"
 %334.8260678609779   63.31298895703982     22h19m18.26s  63º18'46.76025"
@@ -225,13 +254,7 @@ Second, both positions are shielded from the UV radiation emitted by HD~211880 a
     \label{tab:on_off_positions}
 \end{table}
 
-``Spectral scan'' means that each observation contains spectra taken at different local oscillator frequencies.
-Changing the LO frequency is one way to modulate the interferences in HIFI.
-
-The non-standard aspect of our observing mode is that, for each local oscillator frequency, there are 19 different diplexer settings instead of a single one.
-This allows us to modulate interferences for a given LO frequency.
-
-\begin{table}
+\begin{table}[b]
     \centering
     \begin{tabularx}{\textwidth}{Xrrrrr}
         \toprule
@@ -258,14 +281,12 @@ This allows us to modulate interferences for a given LO frequency.
     \end{tabularx}
     \caption{
         Local oscillator frequencies and diplexer actuator currents used for each \ce{CO} transition.
+        For each LO frequency there exist an optimal diplexer current;
+        in our observation, the LO and diplexer are often mismatched.
         The cells in gray indicate the values that are the closest to an ideal match.
     }
     \label{tab:los_and_dacs}
 \end{table}
-
-\Cref{tab:los_and_dacs} lists the five LO frequencies and the nineteen diplexer actuator currents used for each transition.
-Each transition is therefore observed $5 \times 19 = 95$ times.
-For each transition, there is a LO frequency and a diplexer setting that match nominally (gray background in \cref{tab:los_and_dacs}).
 
 The 19 diplexer settings create optical pathlength differences in the interferometer of $\pm1~\text{wavelength}$ around the nominal value.
 
@@ -276,44 +297,12 @@ For each transition, the LO frequencies cover a range of~\SI{76.5}{\megahertz}.
 We have chosen this range in order to sample the interferences created by the mixer--LO, mixer--hot-load and mixer--cold-load cavities.
 These cavities introduce periodic modulations of the gain, with periods between~\num{90} and \SI{100}{\mega\hertz} (see~\cref{sec:chapter4}).
 
-If the reflection coefficients of the mixer, LO and calibration loads remains constant over this range of LO frequency, then their ripple does not change.
-By sampling this ripple at different LO frequencies, we modulate the sideband ratio, as shown in~\cref{fig:lo_scan_of_ripple}.
-Defined as
-\begin{equation}
-    \text{SBR} =
-    \frac{
-        G_\text{USB}
-    }{
-        G_\text{LSB} + G_\text{USB}
-    }
-    \text{,}
-    \label{eq:sbr_definition_chp5}
-\end{equation}
-the sideband ratio measures whether a channel of the spectrum is LSB-dominated, USB-dominated or balanced.
-
-\begin{figure}
-    \centering
-    \includegraphics{lo_scan_of_ripple}
-    \caption{
-        Interferences create periodic modulations of the optical gain of the system.
-        Changing the LO frequency changes the sideband ratio.
-        Each row of plots in this figure corresponds to a LO frequency.
-        The LSB and USB gains (left and center columns) depend on the frequency of the wave, not on the LO frequency.
-        The LSB and USB frequencies that the mixer brings to the IF are in the white
-        regions; the gray regions fall out of the IF for this LO frequency.
-        The sideband ratio (right column) measures the relative LSB and USB contributions to each intermediate frequency.
-    }
-    \label{fig:lo_scan_of_ripple}
-\end{figure}
-
-
-
 The LO frequencies are chosen so that the lines always appear in the upper sideband.
 Furthermore, the lines are not placed in the center of the spectra but close to the edge, where the effect of the interferences is stronger (a side-effect of diplexers shown later in this chapter).
 
-
-
 A hot-cold measurement is taken for each instrumental configuration: each spectrum is calibrated with its own bandpass, measured with the corresponding LO frequency and diplexer actuator current.
+
+
 
 
 %#############################################################################
@@ -325,10 +314,10 @@ In this section, we apply this technique to the system of networks shown in~\cre
 This system is made of 23~networks and 48 3D~ports for a given pointing (either sky, hot or cold).
 Despite the high numbers, the technique for solving the interferences between each port of each network along every possible optical path is exactly the same as the one solving the very simple 3-networks system of~\vref{fig:implementation_0}.
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \input{band45_networks.pdf_tex}
-    \caption{Networks used to model the interferences in HIFI Bands~3 and 4.}
+    \caption{Networks used to model the interferences in HIFI Bands~3 and~4.}
     \label{fig:band45_networks}
 \end{figure}
 
@@ -338,46 +327,40 @@ This allows taking into account the reflections between both mixers, referred to
 We run about \num{36e6} simulations of the gain of the optics from the point of view of the H~mixer: two inputs (LO noise and the source signal) times two polarizations (H and V) times three pointings (sky, cold and hot) times 190 LO and diplexer settings, times the \num{16000} LSB and USB frequencies that correspond to the 8000 channels of a spectrum.
 This provides a first impression of the effect of interferences on the gain of the system, and ultimately on the line profile.
 
-\begin{figure}[b]
+\begin{figure}[p]
     \centering
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \includegraphics{87_00_00_sky_s_lsbusbsbr}
+        \includegraphics[scale=.9]{87_00_00_sky_s_lsbusbsbr}
         \vspace{-.8em}
         \caption{Sky signal.}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \includegraphics{87_00_00_sky_l_lsbusbsbr}
+        \includegraphics[scale=.9]{87_00_00_sky_l_lsbusbsbr}
         \vspace{-.8em}
         \caption{Sky local oscillator.}
     \end{subfigure}
-    \caption{Gain and sideband ratio of the optics for the astronomical signal (top row) and the local oscillator noise (bottom row).
-    $\text{Pointing} = \text{sky}$,
-    $\text{LO frequency} = \SI{914.404500}{\giga\hertz}$,
-    $\text{Diplexer current} = \SI{0.503}{\milli\ampere}$.
-    }
-    \label{fig:87_00_00_sky_lsbusbsbr}
-\end{figure}
-\begin{figure}[b]
-    \centering
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \includegraphics{87_00_00_hbb_s_lsbusbsbr}
+        \includegraphics[scale=.9]{87_00_00_hbb_s_lsbusbsbr}
         \vspace{-.8em}
         \caption{Hot load signal.}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \centering
-        \includegraphics{87_00_00_cbb_s_lsbusbsbr}
+        \includegraphics[scale=.9]{87_00_00_cbb_s_lsbusbsbr}
         \vspace{-.8em}
         \caption{Cold load signal.}
     \end{subfigure}
-    \caption{Gain and sideband ratio of the optics for the signal of the hot load (top row) and the cold load (bottom row).
+    \caption{Gain and sideband ratio of the optics for the astronomical signal~(a),
+    the local oscillator noise~(b),
+    the hot load~(c)
+    and the cold load~(d).
     $\text{LO frequency} = \SI{914.404500}{\giga\hertz}$,
     $\text{Diplexer current} = \SI{0.503}{\milli\ampere}$.
     }
-    \label{fig:87_00_00_xbb_s_lsbusbsbr}
+    \label{fig:87_00_00_sky_lsbusbsbr}
 \end{figure}
 
 \begin{figure}
@@ -413,7 +396,7 @@ These curves present several interesting features.
 The USB gain of the signal for the sky pointing (center top plot of~\cref{fig:87_00_00_sky_lsbusbsbr}) is displayed on \cref{fig:87_interf_usG} for the 95 LO and diplexer settings of the \transition{CO}{8}{7} observation.
 This illustrates the influence of the LO and diplexer setting on the intensity and the phase of the ripples affecting the line, which is located at~$\approx \SI{921.8}{\giga\hertz}$.
 
-When the chopper points to the hot or cold calibration load, the non-zero reflectivity of this load introduces more cavities in the system, which creates additional ripples to the gain curves as shown in~\cref{fig:87_00_00_xbb_s_lsbusbsbr}.
+When the chopper points to the hot or cold calibration load, the non-zero reflectivity of this load introduces more cavities in the system, which creates additional ripples to the gain curves as shown in~\cref{fig:87_00_00_sky_lsbusbsbr} (c) and (d).
 The lengths of the mixer--LO, mixer--hot-load and mixer--cold-load cavities are all close to~\SI{1.5}{\meter}, and therefore all produce ripples with periods between~\num{90} and \SI{100}{\mega\hertz}.
 
 The bandpass calibration of HIFI involves dividing the signal measured on the sky by the signal measured on the calibration loads.
@@ -443,9 +426,7 @@ If these imaginary parts variy quickly with frequency, then we can expect the ph
 \section{Data reduction}
 \label{sec:s140_data_reduction}
 Our study focuses on spectra provided by the WBS-H backend of HIFI: the acousto-optic WideBand Spectrometer sensitive to the horizontal polarization.
-
 The WBS allows us to see the full bandwidth of the mixers while still resolving our lines.
-
 We choose the horizontal polarization because its system temperature is lower: in Bands~3 and 4, the V mixer is slightly under-pumped and therefore less sensitive (see~\cref{tab:chapter5_tsys}).
 
 \begin{table}
@@ -487,6 +468,15 @@ The HIFI pipeline produces spectra with a power scale expressed as an antenna te
 (see~\textcite{kutner1981recommendations} for details regarding the various temperature scales used in radioastronomy).
 That temperature scale is suitable for extended sources as it assumes that the emission of the source is received not only in the main beam but also in the side lobes.
 
+\begin{figure}
+    \centering
+    \includegraphics{87_00_00_tmb}
+    \caption{
+        Spectrum of \transition{CO}{8}{7} shown over its full \SI{4}{\giga\hertz} bandwidth.
+    }
+    \label{fig:co98_full_bandwidth}
+\end{figure}
+
     % a = 1.22 lambda / D with D = 3.5 and lambda = c_0 / f.
     %   fl =  921.7997000e9 => ll = 0.000325225163341 => al = 0.000113364199793 rad
     %   fu = 1036.9123930e9 => lu = 0.000289120334585 => au = 0.000100779088056 rad
@@ -518,17 +508,6 @@ We obtain these values by interpolating the beam efficiency tables attached to t
 %    T_\text{mb} = T_\text{a}^* / \eta_\text{mb}
 %\end{equation}
 
-
-
-\begin{figure}
-    \centering
-    \includegraphics{87_00_00_tmb}
-    \caption{
-        Spectrum of \transition{CO}{8}{7} shown over its full \SI{4}{\giga\hertz} bandwidth.
-    }
-    \label{fig:co98_full_bandwidth}
-\end{figure}
-
 For both transitions, the \ce{CO} line is always relatively narrow ($\approx \SI{100}{\mega\hertz}$) compared to the instantaneous bandwidth of the instrument (\SI{4}{\giga\hertz}), and in the rest of this chapter we will often zoom in on the line.
 The 195 spectra that we study are all very similar to the one shown in~\cref{fig:co98_full_bandwidth}.
 The spectra of both transitions typically feature:
@@ -554,126 +533,8 @@ In this section, we describe how we correct for this degradation of the sideband
 The diplexer units are modules of the HIFI focal plane unit that are used in Bands~3, 4, 6, and 7 for the LO injection~\parencite{jackson2002hifi}.
 They are used to align the polarization of the sky and LO signals so that the mixers, which are sensitive to one polarization only, can couple to both optimally.
 
-\begin{figure}[b]
-    \centering
-    \input{diplexer.pdf_tex}
-    \caption{Principle of the Martin--Puplett interferometers used in HIFI Bands~3, 4, 6 and 7.}
-    \label{fig:diplexer}
-\end{figure}
 
-The diplexer units of HIFI contain a Martin--Puplett interferometer~\parencite{martin1982polarizing} composed of one wire-grid polarizer and two rooftop mirrors.
-\Cref{fig:diplexer} illustrates its principle.
-The input wave (sky or LO, purple on the figure) is split in two by the wire grid polarizer.
-Each half (blue and red) carries one half of the power and travels down one arm of the interferometer where it eventually meets a rooftop mirror.
-The rooftop mirrors are oriented so that the input waves are reflected back toward the grid with their polarization rotated by~\SI{90}{\degree}: if the first encounter with the grid is reflective then the second is transmissive and vice versa.
-The two waves propagating toward the mixer can be seen as a single output wave (principle of superposition).
-The phase difference between the two waves determines the polarization of that output wave.
-On the figure, the dots on the paths of the wave represent the crests of that wave;
-we can see that the blue and red dots are not in phase when they reach the mixer.
-The phase difference depends on the the length of the mobile arm (red) and the frequency of the wave.
 
-An ideal diplexer is modeled by
-\begin{align}
-    G_\text{sky}(f)
-    &=
-    \cos
-    \left(
-        2 \pi
-        \frac{df}{c}
-    \right)^2
-    \\
-    G_\text{LO}(f)
-    &=
-    1 - G_\text{sky}(f)
-    \label{eq:diplexer_coupling_model}
-\end{align}
-with $G_\text{sky}$ and $G_\text{LO}$ the coupling of the mixer to the sky and the LO,
-$f$ the wave frequency,
-$d$ the length difference between the two arms of the interferometer,
-and $c$ the speed of light in the propagation medium (vacuum in our case).
-
-This frequency-dependence implies that the coupling of the mixer to the LO and the sky cannot be optimal over a wide range of frequencies.
-In HIFI, the nominal pathlength difference is chosen so that the mixer is maximally coupled to the LO at the LO frequency~$f_\text{LO}$,
-and to the sky at $f_\text{LO} \pm \SI{6}{\giga\hertz}$.
-This value of~\SI{6}{\giga\hertz} corresponds to the center of the bandwidth of the mixer, which ranges from \num{4} to \SI{8}{\giga\hertz}.
-As a result, the coupling of the mixer to the sky is optimal at the center of the spectrum.
-This is illustrated by the diplexer coupling model on the top plot of~\cref{fig:diplexer_ideal}.
-In that ideal case, the sideband ratio SBR defined as
-\begin{equation}
-    \text{SBR} =
-    \frac{
-        G_\text{USB}
-    }{
-        G_\text{LSB} + G_\text{USB}
-    }
-\end{equation}
-is constant over the whole bandwidth and equals \num{0.5}, which means that the mixer couples to both sidebands equally, as shown on the bottom plot of~\cref{fig:diplexer_ideal}.
-
-At the edges of the sidebands, the coupling to the sky is lower and the coupling to the LO is higher.
-Since the LO is a source of thermal noise, the signal-to-noise ratio decreases toward the edges of the spectrum.
-This can be seen on the baseline of~\cref{fig:co98_full_bandwidth}.
-
-\begin{figure}
-    \centering
-    \includegraphics{diplexer_coupling_ideal}
-    \caption*{
-        Coupling of the mixer to the LO and the sky for an optimally-tuned diplexer.
-        The mixer--LO coupling is maximal at the LO frequency
-        (black vertical line at~\SI{914.4045}{\giga\hertz}).
-        The mixer--sky coupling is maximal at the center of the lower and upper sidebands (gray vertical lines LSB and USB).
-    }
-    \bigskip
-    \includegraphics{diplexer_sbr_ideal}
-    \caption*{
-        Sideband ratio of the mixer--sky coupling for an optimally-tuned diplexer.
-        The constant sideband ratio of \num{0.5} indicates that the LSB and the USB contribute in equal measure to each channel of the spectrum.
-    }
-    \caption{
-        Model of the coupling and the sideband ratio for an optimally-tuned diplexer.
-        The green vertical lines show the rest frequency of the \transition{CO}{8}{7} transition.
-        The LO frequency is~\SI{914.4045}{\giga\hertz}.
-        The difference in length of the two arms of the diplexer is~\SI{12.5405}{\milli\meter}.
-    }
-    \label{fig:diplexer_ideal}
-\end{figure}
-
-Because each LO frequency requires its own optical pathlength difference, 
-one of the rooftop mirrors can be translated.
-This translation is commanded by an electric current applied to an actuator.
-The equation relating~$I$, diplexer actuator current in milliampere, to~$d$, interferometer arm length difference in millimeter, is
-\begin{equation}
-    d = d_0 + 27.5 \frac{2\pi}{360}(a I^2 + b I)\text{.}
-\end{equation}
-The currents $I$ are given in~\cref{tab:los_and_dacs}.
-The remaining parameters $d_0$, $a$ and $b$ are given in~\cref{tab:diplexer_params}.
-These parameters are very well known and have remained constant (sub-micrometer precision) during the entire mission \parencite{mueller2014flight}.
-
-\begin{table}
-    \centering
-    \begin{tabular}{cccc}
-        \toprule
-        mixer &
-        $a$ [\si{\degree\per\milli\ampere\squared}]
-        &
-        $b$ [\si{\degree\per\milli\ampere}]
-        &
-        $d_0$ [\si{\milli\meter}]
-        \\
-        \midrule
-        3h    &  \num{-0.003991} & 0.1976 & 12.3354\\
-        3v    &  \num{-0.004821} & 0.2155 & 12.1231\\
-        4h    &  \num{-0.004348} & 0.1722 & 12.3490\\
-        4v    &  \num{-0.003553} & 0.1791 & 12.5395\\
-        6h    &  \num{-0.002401} & 0.1735 & 21.0532\\
-        6v    &  \num{-0.005408} & 0.2100 & 20.8718\\
-        7h    &  \num{-0.002272} & 0.1661 & 20.7954\\
-        7v    &  \num{-0.002757} & 0.1586 & 20.7666\\
-        \bottomrule
-    \end{tabular}
-    \caption{Parameters used to convert diplexer actuator currents to interferometer arm length difference.
-    We use the mixers 3h and 4h in our study.}
-    \label{tab:diplexer_params}
-\end{table}
 
 In normal operations, the diplexer actuator current is adjusted to the LO frequency by interpolation of a look-up table.
 For our observations, we bypass this process and set the diplexer actuator current ourselves.
@@ -928,6 +789,7 @@ Furthermore there are at least four Fourier spectra of interest for a single dir
     $x$-axis & frequency   & $f$ & $\mathbb{R}$ & [\si{\hertz}]\\
     $y$-axis & temperature & $T$ & $\mathbb{R}$ & [\si{\kelvin}]\\
     \bottomrule
+    \\
     \toprule
     \multicolumn{5}{l}{Fourier spectra}\\
     \midrule
@@ -1866,5 +1728,5 @@ to Ian Avruch, who worked under a high time pressure to set up the specific obse
 and to Evgenia Koumpia, for her expertise of S140 which kept my data analysis on the right track.
 %#############################################################################
 %\clearpage
-\printbibliography[heading=subbibliography]
-\end{refsection}
+%\printbibliography[heading=subbibliography]
+%\end{refsection}

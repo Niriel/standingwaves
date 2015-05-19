@@ -1,5 +1,5 @@
 \cleardoublepage
-\begin{refsection}
+%\begin{refsection}
 \chapter{Modeling interferences in complex coherent instruments}
 \chaptermark{Modeling interferences}
 \label{sec:chapter2}
@@ -8,30 +8,72 @@
 \section{Introduction}
 \label{sec:chapter2_0}
 
-We propose a physically-based model for computing the gain of a coherent instrument.
-This model predicts the interferences caused by every pair of optical elements along every possible optical paths.
-This model is not iterative: it uses a closed-form mathematical representation of the system to solve directly for its steady state.
+We propose a new physically-based model for computing the frequency-dependent gain of a coherent quasi-optical instrument.
+This model predicts the interferences caused by infinite reflections between every pair of optical elements along every possible optical paths.
+One originality of this model is that is not iterative: it uses a closed-form mathematical representation of the system to solve directly for its steady state.
 
 No model is perfect: models rely on simplifications, and their predictions within these specifications can only be as accurate as our knowledge of the model parameters.
 We are working toward a zero-order description of the system that includes the complicated interactions between all the cavities via all the possible optical paths, rather than considering the higher-order effects related to the spatial distribution of the reflected fields and exchange or scattering of power between beam modes.
 For this reason, the modeling technique that we present in this chapter ignores the self-diffraction of the electromagnetic beams
-(see \textcite{goldsmith1998quasioptical} for a detailed explanation of Gaussian beams and their modes).
 The model that we propose works with plane waves.
-The current chapter relies heavily on the notations, conventions, definitions and results of
-\vref{sec:complex_harmonic_plane_waves}, \textit{\nameref{sec:complex_harmonic_plane_waves}}.
-That appendix details the mathematics and physics of complex plane waves, their propagation and their behavior at plane interfaces.
-In the current chapter, we apply the results of~\cref{sec:complex_harmonic_plane_waves} to the interferences in cavities.
+This plane-wave approach to quasi-optical interferences is justified practically and formally.
+
+Real beams have a finite extent that causes them to diffract~\parencite{goldsmith1998quasioptical}.
+That self-diffraction widens the beam and curves its phase front,
+which attenuates the power integrated over a plane apperture, as illustrated
+in~\cref{fig:self-diffraction}.
+This attenuation is cumulative, affecting the wave during each round-trip inside a cavity.
+Consequently, the interferences are weaker with finite beams than with plane waves.
+The plane-wave model presented in this chapter provides a valuable worst-case scenario.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{self_diffraction}
+    \caption{
+        These plots illustrate the effect of the self-diffraction of a Gaussian beam
+        on the power detected by an apperture.
+        Three Gaussian beams of different wavelengths
+        are propagating along the $\vectu{x}$ axis.
+        Their waist is placed at $x=0$.
+        \emph{Top}:
+            Amplitude $E(r, x)$ (color saturation) and
+            phase (color hue) of the electric field of the beam,
+            as a function of~$x$ and the distance~$r$ to the axis.
+            The black solid lines show the beam width, defined by $E(r,x)=E(0,x) / e$
+            where~$e$ is the base of the natural logarithm.
+            Distances and wavelengths are normalized to the beam width at the waist.
+            The dashed lines show the radius of a detector.
+        \emph{Bottom}:
+            Power (normalized to 1) flowing through a plane circular apperture of radius~2
+            (between the dotted lines on top-row plots),
+            placed on the beam axis, perpendicular to the beam axis, as a function of~$x$.
+    }
+    \label{fig:self-diffraction}
+\end{figure}
 
 In the particular case of HIFI, a model based on plane waves should provide a good approximation.
 First, most of the optical elements of HIFI are placed at the waist of the beams, where the wavefront is plane.
 Second, HIFI has well-designed and matched optics, so that the dominant reflections in the system always reflect power back in roughly the same beam mode.
 Third, HIFI makes use of corrugated horns to couple the optical beams to the local oscillator diodes or the mixers.
 When corrugated horns are used with properly tuned waveguides, they emit and receive single-mode beams \parencite{clarricoats1966propagation}.
-Similarly, a device designer makes sure that his microwave circuit will optimally couple to the fundamental waveguide mode by making a selection of coupling structures, device substrates, and in general by assuring an impedance match to the electromagnetic environment.
-In other words, if any energy is converted to a high-order mode by the optics, then it will not couple to the mixer and can, for any practical purpose, be modeled with a simple term of loss.
+Similarly, a device designer makes sure that his microwave circuit optimally couples to the fundamental waveguide mode by making a selection of coupling structures, device substrates, and in general by assuring an impedance match to the electromagnetic environment.
+In other words, if any energy is converted to a high-order mode by the optics, then it does not couple to the mixer.
+In that case, it is formally correct to model it with a simple term of loss.
+
+In order to keep this chapter focused solely on interferences, some more general content has been gathered into~\cref{sec:complex_harmonic_plane_waves}, \nameref{sec:complex_harmonic_plane_waves}.
+In this appendix, we derive the laws of refraction and reflection for complex harmonic plane waves: plane waves with complex fields, complex wave vectors and complex frequencies.
+This work was motivated by the desire to treat metals and dielectrics on an equal footing.
+It allows a proper treatment of materials that are lossy without being perfect conductors, for any angle of incidence.
+In this general case, the iso-phase and iso-amplitude planes of a wave do not coincide.
+By allowing the wave vector (not simply the wave number) to be complex, we decouple the direction of propagation from the direction of decay.
+By using complex frequencies, we allow my model to compute the response of a time-invariant system to a time-varying input\footnote{
+Infinitely differentiable only: a Laplace Transform could model infinite slopes (ideal switch on/off), but these are usually unphysical.
+} without having to step through time.
+The result is a much more general, elegant and useful expression of Snell's law and Fresnel's equations for plane waves in passive linear isotropic homogeneous materials.
+In the current chapter, we apply the results of~\cref{sec:complex_harmonic_plane_waves} to the interferences in cavities.
 
 We will begin this chapter with the study of a simple cavity.
-This will provide a concrete example to illustrate the more abstract second part of this chapter, in which we describe the mathematics of our model.
+This will provide a concrete example to illustrate the more abstract second part of this chapter, in which we detail the mathematics of our model.
 Next, we will describe a complete implementation of our model with algorithms that can easily be translated into any imperative programming language.
 Finally, we will provide a short catalog of typical optical elements that can be used with our model.
 
@@ -43,7 +85,7 @@ Finally, we will provide a short catalog of typical optical elements that can be
 \FloatBarrier
 
 
-\section{Cavities modulate the gain of coherent receivers}
+\section{Gain modulation}
 \label{sec:from_cavity_to_ripple}
 \label{sec:fabry_perot_example}
 
@@ -94,23 +136,6 @@ This will show how a cavity in the optical path of a coherent instrument can pro
 
 \subsection{Reflection and transmission coefficients of a cavity}
 
-\begin{figure}
-    \centering
-    \input{cavity.pdf_tex}
-    \caption{Fabry-Pérot etalon, notations.}
-    \caption*{
-       The vertical dotted lines represent the interfaces between the propagation media $A$, $B$ and~$C$.
-       The solid arrows represent coefficients of reflection, transmission and propagation.
-       $\cp{r}$ is a coefficient of reflection.
-       $\cp{t}$ is a coefficient of transmission.
-       The dotted arrows represent the direction of propagation of plane waves.
-       $\cp{a}$ is the electric phasor of a wave propagating toward an interface and
-       $\cp{b}$ that of a wave propagating away from an interface.
-       $\cp{d}$ is the coefficient of propagation for the distance~$L$ in the medium~$B$.
-    }
-    \label{fig:cavity_notations}
-\end{figure}
-
 We consider three linear homogeneous and isotropic propagation media $A$, $B$ and $C$
 delimited by two plane and parallel interfaces, as illustrated in~\cref{fig:cavity_notations}.
 In~\cref{sec:complex_harmonic_plane_waves}, we have shown how the interface between two propagation media partially reflects and transmits electromagnetic waves.
@@ -144,6 +169,23 @@ The plane wave of phasor~$\cp{b}_4$ at the interface $BC$ propagates towards a d
 The plane wave of phasor~$\cp{b}_1$ at the interface $AB$ propagates back to the source.
 
 Finally, we call $\cp{d}$ the coefficient of propagation for the distance~$L$ in the medium~$B$.
+
+\begin{figure}
+    \centering
+    \input{cavity.pdf_tex}
+    \caption{Fabry-Pérot etalon, notations.}
+    \caption*{
+       The vertical dotted lines represent the interfaces between the propagation media $A$, $B$ and~$C$.
+       The solid arrows represent coefficients of reflection, transmission and propagation.
+       $\cp{r}$ is a coefficient of reflection.
+       $\cp{t}$ is a coefficient of transmission.
+       The dotted arrows represent the direction of propagation of plane waves.
+       $\cp{a}$ is the electric phasor of a wave propagating toward an interface and
+       $\cp{b}$ that of a wave propagating away from an interface.
+       $\cp{d}$ is the coefficient of propagation for the distance~$L$ in the medium~$B$.
+    }
+    \label{fig:cavity_notations}
+\end{figure}
 
 All these quantities are linked by the following equations.
 \begin{subequations}
@@ -224,6 +266,7 @@ The reflection and transmission coefficients $\cp{r}$ and $\cp{t}$ of our cavity
 \end{align}
 \end{subequations}
 
+\begin{samepage}
 Both equations have a term in $\frac{1}{1 - \cp{d}^2 \cp{r}_2 \cp{r}_3}$.
 This fraction has the shape of $\frac{1}{1 - \cp{q}}$
 with $\cp{q}=\cp{d}^2 \cp{r}_2 \cp{r}_3$.
@@ -239,7 +282,7 @@ The quantity $\frac{1}{1 - \cp{q}}$ is the limit of the sum of the infinite seri
 as long as $\abs{\cp{q}} < 1$.
 In our case $\cp{q}=\cp{d}^2 \cp{r}_2 \cp{r}_3$ represents the effect on the phase and the amplitude of a complete round-trip inside the cavity: $\cp{r}_2$ and $\cp{r}_3$ model the reflections on both interfaces and $\cp{d}^2$ models crossing the space between these interfaces twice.
 The term $\frac{1}{1 - \cp{d}^2 \cp{r}_2 \cp{r}_3}$ models the effect of an infinite amount of round-trips of the electromagnetic wave inside the cavity.
-
+\end{samepage}
 
 
 
@@ -250,43 +293,44 @@ The term $\frac{1}{1 - \cp{d}^2 \cp{r}_2 \cp{r}_3}$ models the effect of an infi
 
 We define the reflection gain~$R$ and the transmission gains~$T$ of the cavity with
 \begin{align}
-    R &\equaldef \frac{P_{b_1}}{P_{a_1}} \\
-    T &\equaldef \frac{P_{b_4}}{P_{a_1}}
+    R &\equaldef \frac{\power{P}_{b_1}}{\power{P}_{a_1}} \\
+    T &\equaldef \frac{\power{P}_{b_4}}{\power{P}_{a_1}}
 \end{align}
-in which $P_{a_1}$, $P_{b_1}$ and $P_{b_4}$ are the active power carried by the waves of phasor $\cp{a}_1$, $\cp{b}_1$ and $\cp{b}_4$.
+in which $\power{P}_{a_1}$, $\power{P}_{b_1}$ and $\power{P}_{b_4}$ are the active power carried by the waves of phasor $\cp{a}_1$, $\cp{b}_1$ and $\cp{b}_4$.
 
 In~\cref{sec:time_averaged_complex_poynting_vector} we derived the expression of the time-averaged active Poynting vector of a homogeneous plane wave in a linear uniform isotropic medium,
 \cref{eq:complex_poynting_homogeneous_real},
 which we reproduce here:
-%\begin{equation}
-%    \Timeavg{\vect{\mathcal{P}}}
-%    =
-%    \frac{1}{2}
-%    \exp(2\omega_i t)
-%    Y_r
-%    \norm{\vect{e}_1}^2
-%    \vectu{k}
-%    \tag{\ref{eq:complex_poynting_homogeneous_real}}
-%\end{equation}
-with
-\begin{equation}
-    Y_r = \Re\left( \sqrt{\frac{\cp{\epsilon}}{\cp{\mu}}} \right)
+\begin{align}
+    \Re\left( \Timeavg{\vectcp{\power{S}}} \right)
+    &=
+    \frac{1}{2}
+    \exp(2\omega_\im t)
+    Y_\re % \Re\left(\sqrt{\frac{\cp{\epsilon}}{\cp{\mu}}}\right)
+    \norm{\vect{e}_1}^2
+    \vectu{k}
+    %
+    &
+    %
+    \text{with }
+    Y_\re = \Re\left( \sqrt{\frac{\cp{\epsilon}}{\cp{\mu}}} \right)    
     \text{.}
-\end{equation}
+    \tag{\ref{eq:complex_poynting_homogeneous_real}}
+\end{align}
 In this equation,
-$\omega_i$ is the imaginary part of the angular frequency,
+$\omega_\im$ is the imaginary part of the angular frequency,
 $t$ is the time coordinate,
-$Y_r$ is the real part of the admittance (also called conductance),
+$Y_\re$ is the real part of the admittance (also called conductance),
 $\cp{\epsilon}$ the electric permittivity,
 $\cp{\mu}$ the magnetic permeability,
 $\vectcp{e}_1$ the phasor of the electric field at the location of interest, and
 $\vectu{k}$ the unit vector pointing in the direction of the wave vector.
 
 This time-averaged active Poynting vector $\timeavg{\vect{\mathcal{P}}}$ is a directional irradiance, in watt per square meter.
-We want a scalar power~$P$ in watt.
+We want the scalar power~$\power{P}_\Sigma$ flowing through an aperture $\Sigma$.
 Both quantities are linked by
 \begin{equation}
-    P
+    \power{P}_\Sigma
     =
     \iint_\Sigma
     \!
@@ -297,24 +341,27 @@ Both quantities are linked by
     \dif\sigma
     \tag{\ref{eq:active_reactive_power_from_poynting_vector}}
 \end{equation}
-which is an integration over a surface~$\Sigma$, where $\vectu{n}_\sigma$ is the unit vector normal to the surface element~$\dif\sigma$.
+where $\vectu{n}_\sigma$ is the unit vector normal to the surface element~$\dif\sigma$.
+
+\begin{samepage}
 We define two surfaces:
 \begin{itemize}
     \item 
-        $\Sigma_s$, of area $\mathcal{A}_s$,
+        $\Sigma_s$, of area $\mathcal{A}_{\Sigma_s}$,
         is the aperture by which the power emitted by the source enters the system
         and the power reflected by the cavity exits the system.
     \item
-        $\Sigma_m$, of area $\mathcal{A}_m$,
+        $\Sigma_m$, of area $\mathcal{A}_{\Sigma_m}$,
         is the surface of the mixer (our detector) receiving the power transmitted by the cavity.
 \end{itemize}
+\end{samepage}
 Both surfaces are plane and normal to the direction of propagation,
 which implies that $\vectu{k}\cdot\vectu{n}_\sigma=\pm1$.
-It also implies that $\timeavg{\vect{\mathcal{P}}}$ is uniform on the surfaces and be factored out of the integrals, which reduce to the areas:
+It also implies that $\timeavg{\vect{\power{P}}}$ is uniform on the surfaces and be factored out of the integrals, which reduce to the areas:
 \begin{equation}
-    P
+    \power{P}_\Sigma
     =
-    \timeavg{\vect{\mathcal{P}}}
+    \timeavg{\vect{\power{P}}}
     % start integral
     \iint_\Sigma
     \!
@@ -329,40 +376,42 @@ It also implies that $\timeavg{\vect{\mathcal{P}}}$ is uniform on the surfaces a
     \exp(2\omega_i t)
     Y_r
     \norm{\vect{e}_1}^2
-    \mathcal{A}
+    \mathcal{A}_\Sigma
     \text{.}
 \end{equation}
 We also need a factor~$\eta$ to account for the alignment of our two surfaces;
 $\eta=1$ means that the surfaces are optimally aligned, maximizing power transfer,
 while $\eta=0$ means that the mixer does not see any power from the source.
-The expressions of the input and output powers $P_{a_1}$, $P_{b_1}$ and $P_{b_4}$ are
+We assume that the power that does not couple to the mixer (case $\eta<1$) is lost: the wave impedes on the arbitrary surface located behind the mixer and is scattered/absorbed randomly.
+The expressions of the input and output powers
+$\power{P}_{a_1}$, $\power{P}_{b_1}$ and $\power{P}_{b_4}$ are
 \begin{align}
-    P_{a_1}
+    \power{P}_{a_1}
     &=
     \phantom{\mathrel{-}}
     \frac{1}{2}
     \exp(2\omega_i t)
     Y_{Ar}
     \norm{\vectcp{a}_1}^2
-    \mathcal{A}_s
+    \mathcal{A}_{\Sigma_s}
     \\%-------------
-    P_{b_1}
+    \power{P}_{b_1}
     &=
     -
     \frac{1}{2}
     \exp(2\omega_i t)
     Y_{Ar}
     \norm{\vectcp{b}_1}^2
-    \mathcal{A}_s
+    \mathcal{A}_{\Sigma_s}
     \\%-------------
-    P_{b_4}
+    \power{P}_{b_4}
     &=
     \phantom{\mathrel{-}}
     \frac{1}{2}
     \exp(2\omega_i t)
     Y_{Cr}
     \norm{\vectcp{b}_4}^2
-    \mathcal{A}_m
+    \mathcal{A}_{\Sigma_m}
     \eta
 \end{align}
 Since $\norm{\vectcp{b}_1}^2 = \abs{\cp{r}}^2 \norm{\vectcp{a}_1}^2$
@@ -377,7 +426,7 @@ the gains~$R$ and~$T$ are
     T
     &=
     \eta
-    \frac{\mathcal{A}_m}{\mathcal{A}_s}
+    \frac{\mathcal{A}_{\Sigma_m}}{\mathcal{A}_{\Sigma_s}}
     \frac{Y_{Cr}}{Y_{Ar}}
     \abs{\cp{t}}^2
     \text{.}
@@ -472,7 +521,7 @@ Periodic function: $f$ is periodic if $\exists T, T \ne 0, \forall t, f(t)=f(t+T
 Almost-periodic function: the function is periodic within a defined level of accuracy, its regularity increases over multiple periods.  Example: planetary orbits.\\
 Quasiperiodic function: the periodicity of $f$ is irregular and unpredictable.  Example: El Ni\~no (`period' varies between 4 and 12 years, spectral density peaks at 5 years).\\
 Pseudo-periodic function: function of several variables that has a period for each variable.\\
-Oscillating function: the function moves between extremes.  Examples: $x \rightarrow sin(1/x)$, $x \rightarrow sin(x)/x$.
+Oscillating function: the function moves between extremes.  Examples: $x \mapsto \sin(1/x)$ or $x \mapsto \sin(x)/x$.
 }
 rather than periodic: the period itself may be a function of frequency and can therefore be defined only locally.
 
@@ -570,7 +619,12 @@ In a more realistic system, the materials are dispersive (their electric permitt
 
 \subsubsection{Energy conservation}
 
-When the interferences are destructive on the detector-side of the cavity, they are constructive on the source-side: the power is sent back to the source.
+When the interferences are destructive on the detector-side of the cavity, they are constructive on the source-side: the power is sent back to the source%
+\footnote{
+    This actually could cause the source to be influenced,
+    for example if a laser (that is a cavity in itself) is coupled to an external cavity,
+    the effective frequency of the laser could be changed.
+}.
 This is illustrated by~\cref{fig:cavity_energy_conservation}.
 \begin{figure}
     \centering
@@ -604,7 +658,7 @@ To do that, we model the optical system with a set of linear equations and solve
 At its core, our method relies on an abstraction of an optical system that we call ``network''.
 A network can represent either a concrete optical element such as a mirror, or an arbitrarily complex configuration of interconnected elements such as the entire focal plane unit of HIFI described by~\textcite{jackson2002hifi}.
 
-In electrical engineering, the term ``network'' refers to an interconnection of discrete electrical components.
+In electrical engineering, the term ``network'' refers to an interconnection of discrete electrical components, potentially degenerated to a single component.
 Transmission-line theory extends the meaning of ``network'' to include non-discrete elements such as an arbitrary length of cable.
 Applying the notion of networks to optics is not a new idea,
 it can be found in~\textcite{siegman1986lasers},
@@ -634,6 +688,11 @@ at high frequencies, it is easier to measure the power of a wave, or its intensi
 Indeed, the scattering parameters convey the ideas of incident, reflected and transmitted wave intensity.
 In our model, we model networks with scattering matrices.
 
+The vocabulary may be confusing.
+The word ``network'' commonly refers to several distinct entities and their relations.
+In this chapter, the word ``network'' refers to anything that has a scattering matrix.
+
+
 From a list of scattering matrices representing each network, and a description of how the ports of these networks are connected, our solver determines the reflection coefficient of each port, and the transmissions coefficients between each port and every other port.
 We will now describe the mathematics that solve for these coefficients.
 
@@ -655,7 +714,7 @@ Following the conventional notations for scattering matrices,
 the input to the port number $i$ is noted $\cp{a}_i$ and its output is noted~$\cp{b}_i$.
 The inputs and outputs of a network are complex numbers.
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \input{scattering_matrix_notations.pdf_tex}
     \caption{A 4-port network showing four inputs $\cp{a}_i$ and four outputs $\cp{b}_i$.}%
@@ -785,6 +844,7 @@ a polarized electric field is seen as the superposition of a horizontal and a ve
 The amplitude and phase difference between these components determines the handedness and the ellipticity of the polarization of the field.
 If the horizontal and vertical components are in phase, then the field is linearly polarized; if their phase difference is~\SI{90}{\degree} then the field is circularly polarized.
 
+\begin{samepage}
 The linearity of the system allows us to use he same Jones matrix to relate the phasors of the two fields:
 \begin{equation}
     \begin{pmatrix}
@@ -804,6 +864,7 @@ The linearity of the system allows us to use he same Jones matrix to relate the 
 in which~$\cp{e}^a_h$, $\cp{e}^a_v$, $\cp{e}^b_h$ and $\cp{e}^b_h$ are scalar phasors
 representing~$\vectcp{E}^a$ and $\vectcp{E}^b$ in specific reference frames.
 We described phasors in~\vref{sec:phasor_notation}.
+\end{samepage}
 
 \paragraph{Jones calculus and unpolarized waves.}
 \label{sec:jones_unpolarized}
@@ -914,12 +975,15 @@ To free ourselves from these limitations we express all the fields in a common g
     \text{.}
     \label{eq:jones_matrix_3d}
 \end{equation}
+
+\begin{samepage}
 In phasor notation, this reduces to
 \begin{equation}
     \vectcp{e}^b = \matrcp{J} \vectcp{e}^a
     \text{.}
 \end{equation}
 in which~$\vectcp{e^a}$ and $\vectcp{e}^b$ are vector phasors of the type we used in all of~\cref{sec:phasor_notation}.
+\end{samepage}
 
 When extended to three dimensions, Jones calculus deals not only with the amplitude and the phase of a wave, but also its direction.
 In that light, the reflection and transmission matrices for an interface that we derived in~\vref{sec:fresnel_matrix} are Jones matrices.
@@ -1153,7 +1217,7 @@ If two networks G and H are connected by their port $g$ and $h$ (see~\cref{fig:o
     \text{.}
 \end{equation}
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \input{output_g_is_input_h.pdf_tex}
     \caption{Two networks connected by one port: the output of one is the input of the other.}
@@ -1187,10 +1251,12 @@ $\vectcp{b}^o$ the outputs to the outside world,~$\vectcp{a}^i$ the inputs insid
     \end{pmatrix}
     \label{eq:s_outside_inside}
 \end{equation}
-The four blocks of~$\matrcp{S}$ have the following physical meaning:
-\begin{table}[H]
+The meaning of the four blocks of~$\matrcp{S}$ is given in~\cref{tab:four_blocks_meaning}.
+
+\begin{table}
     \centering
     \begin{tabularx}{\textwidth}{l l X}
+        \toprule
         $\matrcp{S}^{oo}$ & from outside to outside &
         Models the fraction of the signal that is outside the system and that never enters the system because it is reflected by the outside ports.
         \\
@@ -1203,7 +1269,11 @@ The four blocks of~$\matrcp{S}$ have the following physical meaning:
         $\matrcp{S}^{oi}$ & from inside to outside &
         Models the fraction of signal that exits the system by the outside ports.
         \\
+        \bottomrule
     \end{tabularx}
+    \caption{Physical meaning of the four blocks of the scattering matrix
+    of an entire system after sorting the ports.}
+    \label{tab:four_blocks_meaning}
 \end{table}
 
 Of $\vectcp{a}$ and $\vectcp{b}$, only~$\vectcp{a}^o$ is known: this corresponds to the external input to the system.
@@ -1494,7 +1564,7 @@ The whole system is modeled with a~$n$--by--$n$ scattering matrix, where~$n$ is 
 In our example, $n=4+1+2=7$.
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \input{implementation_1.pdf_tex}
     \caption{Each network has its ports numbered.}
@@ -1516,7 +1586,7 @@ The port~$j$ of the network~$i$ corresponds to the port~$k$ of the whole system,
 \end{equation}
 The resulting port numbers for our example are shown in~\cref{fig:implementation_2}.
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \input{implementation_2.pdf_tex}
     \caption{Numbering of the ports of the whole system.}
@@ -2518,6 +2588,7 @@ That means that if both conditions are false, you flip the sign twice, the two m
     \label{tab:fresnel_implementation_N}
 \end{table}
 
+\begin{samepage}
 We call $\matrcp{r}_j$ and $\matrcp{t}_j$ the coefficients of reflection and transmission of the wave incident to the Port number $j$.
 All these coefficients of reflection and transmission are matrices.
 The block scattering matrix of that network is given by
@@ -2531,6 +2602,7 @@ The block scattering matrix of that network is given by
     \end{pmatrix}
     \text{.}
 \end{equation}
+\end{samepage}
 
 Each coefficient can be computed by using the matrix expression of Fresnel's equations given in~\cref{sec:fresnel_matrix} using the correct indices.
 These are listed in~\cref{tab:fresnel_implementation_indices}.
@@ -2726,6 +2798,7 @@ In the other direction, the three contributions to the wave are added together.
     \label{fig:rooftop_networks}
 \end{figure}
 
+\begin{samepage}
 For example, the imperfection couples~\SI{1}{\percent} of the incoming power and scatters another \SI{3}{\percent} out of the system.
 The remaining~\SI{96}{\percent} are shared evenly between the two oblique surfaces.
 Under these conditions, the block scattering matrix of the network is
@@ -2733,24 +2806,62 @@ Under these conditions, the block scattering matrix of the network is
     \matrcp{S}
     =
     \begin{pmatrix}
-        0                    & \matr{I}_3 & \matr{I}_3 & \matr{I}_3\\
+        0 & \matr{I}_3 & \matr{I}_3 & \matr{I}_3\\
         \sqrt{.48}\,\matr{I}_3 & 0 & 0 & 0\\ 
         \sqrt{.01}\,\matr{I}_3 & 0 & 0 & 0\\
         \sqrt{.48}\,\matr{I}_3 & 0 & 0 & 0
     \end{pmatrix}
 \end{equation}
 in which~$\matr{I}_3$ is the identity matrix of rank~3.
-
-
+\end{samepage}
 
 
 
 %=============================================================================
+
+\subsection{Distributed interface}
+
+The interfaces described in the previous sections are clearly localized, they are are planar and their reflection coefficient matches that of the material.
+
+Some components, on the other hand, have their reflection coefficient distributed over a more complicated shape.
+For example, \cref{fig:distributed_interface} presents the geometry of a corrugated horn.
+Those are used in the mixer sub-assemblies of HIFI, they smooth the impedance transition between the optical and the microwave sides of the instrument.
+The HIFI mixers are located at the apex of the horn (``antenna'' on the figure).
+
+A simple way to model such a complex element is to consider its ``effective reflection coefficient''.
+The effective reflection coefficient is the reflection coefficient that a plane interface would need to have in order to have the same scattering matrix.
+This effective reflection coefficient depends on the location of this effective interface.
+We are free to choose any convenient location;
+for example, in the case of a horn, one can choose to locate the effective interface at the mouth or the apex.
+
+\begin{figure}
+    \centering
+    \input{distributed_itnterface.pdf_tex} % Yup, typo in the file name
+    \caption{
+        Every point of the surface of a corrugated horn might reflect the electric field
+        that it receives.
+        The arrows illustrate that the total reflection coefficient of the horn
+        is a contribution of several (or even many) local reflection coefficients.
+        The arrows do not represent rays or paths.
+    }
+    \label{fig:distributed_interface}
+\end{figure}
+
+The effective reflection coefficient of a distributed interface could be calculated by performing a finite-element analysis.
+Alternatively, it can be left as a free parameter and determined by fitting the model to experimental data.
+
+The effective reflection coefficient of a distributed interface is likely to be frequency-dependent.
+Without an accurate model for every frequency, one should expect to see slight disagreements between the simulations and reality.
+
+
+
+%=============================================================================
+
 \subsection{Wire grid polarizer}
 \label{sec:wire_grid_polarizer}
 \Textcite{houde_2001} present a set of equations modeling the effect of a wire-grid polarizer on the intensity, polarization, phase and direction of a plane wave.
 That work makes the following assumptions:
-\begin{itemize}
+\begin{itemize}[noitemsep]
     \item The surrounding propagation medium is vacuum.
     \item The incident wave is plane and homogeneous.
     \item The grid contains an infinite amount of infinitely long wires, all parallel and coplanar.
@@ -3724,13 +3835,17 @@ For a grid at normal incidence, we use the same technique as the one described i
 \subsection{Gray body}
 \label{sec:gray_body}
 A black body absorbs all incoming radiation, it reflects nothing.
-In thermal equilibrium, a black body of temperature $T$ emits a spectral radiance of
+In thermal equilibrium, a black body of temperature $\theta$%
+\footnote{
+    We use $\theta$ for temperature because we reserve $T$ for transmission gain.
+}
+emits a spectral radiance of
 \begin{equation}
-    B(f, T) =
+    B(f, \theta) =
     \frac{2 h f^3}{c^2}
     \frac{1}{
         \exp \left(
-            \frac{h f}{k_B T}
+            \frac{h f}{k_B \theta}
         \right)
         -1
     }
@@ -3739,7 +3854,7 @@ in which $f$ the frequency, $h$ is the Planck constant, $k_B$ the Boltzmann cons
 The SI unit of $B$ is \si{\watt\per\meter\squared\per\steradian\per\hertz}.
 The total surface power density emitted by a black body is given by the Stefan--Boltzmann law
 \begin{equation}
-    j^\star = \sigma T^4
+    j^\star = \sigma \theta^4
 \end{equation}
 in which $\sigma$ is the Stefan--Boltzmann constant and
 $j^\star$ is expressed in \si{\watt\per\meter\squared}.
@@ -3751,7 +3866,7 @@ Gray bodies emit and reflect at the same time,
 but the more they reflect, the less they emit.
 For a gray body, the Stefan--Boltzmann law becomes
 \begin{equation}
-    j^\star = \epsilon(f) \sigma T^4
+    j^\star = \epsilon(f) \sigma \theta^4
 \end{equation}
 in which $\epsilon \in [0,1]$ is called the ``emissivity'' and is function of the frequency.
 
@@ -3761,7 +3876,7 @@ The reflection gain $R$, transmission gain $T$ and absorption gain $A$ of a body
 \end{equation}
 which states that energy is conserved.
 Kirchhoff's law of thermal radiation states that the emissivity of a body equals its absorption: $\epsilon = A$.
-If the body is opaque, then $T=0$ and therefore $R=1-A=1-\epsilon$.
+If the body is opaque, then $\T=0$ and therefore $R=1-A=1-\epsilon$.
 When we express this in field and not in power, we get
 \begin{equation}
     \alpha = \sqrt{ 1 - \abs{\cp{r}}^2 } \text{.}
@@ -3779,10 +3894,11 @@ Using the notations of the figure,
 Here, the input $\cp{a}_1$ is the electric field emitted by an ideal black body.
 The reflection and emission coefficients $\cp{r}$ and $\alpha$ transform this black body emission into a gray body emission.
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \input{gray_body.pdf_tex}
-    \caption{Model of a gray body.}
+    \caption{Model of a gray body.
+    $\alpha$ is a emission coefficient.}
     \label{fig:gray_body}
 \end{figure}
 
@@ -3803,6 +3919,461 @@ This is likely to partly depolarize the light upon reflection.
 As we stated in~\cref{sec:jones_unpolarized}, Jones calculus cannot deal with that effect.
 Our model considers depolarized light as absorbed.
 
+
+%=============================================================================
+\clearpage
+\subsection{Mixer}
+Accurately modeling the reflection coefficient of a superconductor--insulator--superconductor tunnel junction (SIS) is outside of the scope of this chapter.
+\Textcite{tucker1985quantum} describe the theory of mixing from quantum principles.
+Applications to HIFI can be found in \textcite{kooi2008}.
+
+%-----------------------------------------------------------------------------
+\subsubsection{Mixer output, general expression}
+
+A mixer is a non-linear device.
+As such the phasor notation is not sufficient.
+We must expand
+each    input phasor $\vectcp{a}_j$
+into an input field  $\vectcp{A}_j$
+according to~\cref{eq:cos_exps,eq:phasor,eq:conj_props}.
+\begin{align}
+    \vectcp{A}_j
+    &=
+    \frac{1}{2}
+    \Big(
+              \vectcp{a}_j \exp(-i \cp{\omega}_j t)
+        +
+        \big( \vectcp{a}_j \exp(-i \cp{\omega}_j t) \big)^*
+    \Big) \notag
+    \\
+    &=
+    \frac{1}{2}
+    \Big(
+              \vectcp{a}_j \exp(-i \cp{\omega}_j t)
+        +
+              \vectcp{a}_j^* \exp(i \cp{\omega}_j^* t)
+    \Big)
+\end{align}
+The mixer input $\vectcp{A}$ is simply the sum of all the $\vectcp{A}_j$ (theorem of superposition).
+The non-linear response of the mixer produces an output $\vectcp{B}$ that can be described with a Taylor series.
+\begin{align}
+    \vectcp{A} &= \sum_{j  }          \vectcp{A}_j
+    \\
+    \vectcp{B} &= \sum_{k=0}^{\infty} \cp{\alpha}_k \vectcp{A}^k
+\end{align}
+In fact, $\vectcp{B}$ is not a ``power series'' but a ``formal power series'': the terms that are raised to the power $k$ are not scalars.
+In this case, the terms are vectors of~$\mathbb{C}^3$.
+
+We can raise a vector to an integer power by adding a scalar component to our vectors,
+a construction similar to that of the complex numbers, quaternions \parencite{hamilton1866elements} and other hypercomplex numbers.
+Then, we define a new product on that space that is consistent both with the conventional dot product and the scalar product%
+\footnote{
+   In a few words:
+   we apply the substitution $\vectcp{u} \mapsto 0 + \vectcp{u}$
+   and construct the product
+   $(\cp{\alpha} + \vectcp{u}) \star (\cp{\beta} + \vectcp{v})
+   \mapsto
+   \cp{\alpha}\cp{\beta} + \vectcp{u} \cdot \vectcp{v}
+   +
+   \cp{\alpha} \vectcp{v} + \cp{\beta} \vectcp{u}
+   $
+   by assuming its distributivity over the addition.
+}.
+Finally, we say that raising to the power~$k$ is like composing this new product~$k$ times.
+That elegant technique has applications in the study of the Lorentz contraction in special relativity.
+Nevertheless, the mixers of HIFI are sensitive to one polarization only, which lets us work with scalars.
+
+In practice, one particular signal carries considerably more power than the others: it is the signal produced by the local oscillator, to which I give the index $j=0$.
+By pulling this particular $\cp{A}_0$ out of the sum and by using the binomial theorem, we get this exact general formula for the mixer input
+\[
+    \cp{A}^k
+    =
+    \Bigg(
+        \cp{A}_0
+        +
+        \sum_{j \ne 0}
+        \cp{A}_j
+    \Bigg)^k
+    =
+    \sum_{n=0}^{k}
+    \left[
+    \binom{k}{n} 
+    \cp{A}_0^n 
+    \Bigg(
+        \sum_{j \ne 0}
+        \cp{A}_j
+    \Bigg)^{k-n}
+    \right]
+\]
+in which $\binom{k}{n}$ is the binomial coefficient from Pascal's triangle and combinatronics.
+
+To reduce the number of terms, we can state that the LO power is not only much greater than the power of each individual signal, but is also greater than their combined power.
+\[
+    \abs{\cp{A}_0} \gg \abs{\sum_{j \ne 0} \cp{A}_j}
+\]
+It is therefore reasonable to start the summation not from $n=0$ but from $n=k'$ with $k'$ very close to $k$: these terms dominate at the order~$k$.
+\[
+    \cp{A}^k
+    \approx
+    \sum_{n=k'}^{k}
+    \left[
+    \binom{k}{n} 
+    \cp{A}_0^n 
+    \Bigg(
+        \sum_{j \ne 0}
+        \cp{A}_j
+    \Bigg)^{k-n}
+    \right]
+\]
+In particular we can choose $k' = k-1$, which means that the only mixing that we consider is that between a small signal $\cp{A}_j$ and the strong LO signal $\cp{A}_0$: the mixing between the small signals is totally neglected.
+\begin{equation}
+    \cp{A}^k
+    \approx
+    \cp{A}_0^k
+    +
+    k
+    \cp{A}_0^{k-1}
+    \sum_{j \ne 0}
+    \cp{A}_j
+\end{equation}
+The sum of all $\cp{A}_j$ for $j \ne 0$ does not depend on~$k$ and can therefore be factored out of the sums on~$k$ in $\cp{B}$.
+The mixer output~$\cp{B}$ is given by
+\begin{equation}
+    \cp{B}
+    %
+    \approx
+    %
+    \Bigg(
+            \sum_{k=0}^{\infty}
+            \alpha_k
+            \cp{A}_0^k
+    \Bigg)
+    +
+    \Bigg(
+            \sum_{k=0}^{\infty}
+            \alpha_k
+            k
+            \cp{A}_0^{k-1}
+    \Bigg)
+    \Bigg(
+        \sum_{j \ne 0}
+        \cp{A}_j
+    \Bigg)
+    \text{.}
+    \label{eq:mixer_output}
+\end{equation}
+
+
+
+%-----------------------------------------------------------------------------
+\subsubsection{Mixer output as a function of frequency}
+
+\Cref{eq:mixer_output} does not explicitly show its frequency dependence.
+We want to express the mixer output as a function of frequency~$\omega_\text{IF}$, where ``IF'' stands for ``intermediate frequency'', the name given to the frequency range output by a mixer.
+
+Injecting
+\begin{equation}
+    \cp{A}_j
+    =
+    \frac{1}{2}
+    \Big(
+        \cp{a}_j \exp(-i \cp{\omega}_j t)
+        +
+        \cp{a}_j^* \exp(i \cp{\omega}_j^* t)
+    \Big)
+\end{equation}
+into the term of $\cp{B}$ at order $k=2$ shows that the mixing creates new frequencies:
+\begin{equation}
+\begin{split}
+    \cp{A}_0 \cp{A}_{j}
+    =
+    \tfrac{1}{4}
+    \exp \Big((\omega_{\im,0}+\omega_{\im,j})t \Big)
+    \Big[
+    &\cp{a}_0   \cp{a}_{j}   \exp \Big(\!                    -i (\omega_{\re,0} + \omega_{\re,j}) t \Big) + \\
+    &\cp{a}_0   \cp{a}_{j}^* \exp \Big(\!                    -i (\omega_{\re,0} - \omega_{\re,j}) t \Big) + \\
+    &\cp{a}_0^* \cp{a}_{j}   \exp \Big(\!\mathrel{\phantom{-}}i (\omega_{\re,0} - \omega_{\re,j}) t \Big) + \\
+    &\cp{a}_0^* \cp{a}_{j}^* \exp \Big(\!\mathrel{\phantom{-}}i (\omega_{\re,0} + \omega_{\re,j}) t \Big)
+    \Big]
+    \text{.}
+\end{split}
+\label{eq:four_frequencies}
+\end{equation}
+In this equation, $\omega_\re$ and $\omega_\im$ refer to the real and imaginary parts of the angular frequency.
+
+If the mixer outputs a signal at a frequency $\omega_\text{IF}$, there are four possibilities for the origin of the detected signal.
+\begin{equation*}
+    \begin{cases}
+        \omega_\text{IF} = \phantom{-} \omega_{\re, 0} + \omega_{\re, j} \enskip \text{or} \\
+        \omega_\text{IF} = \phantom{-} \omega_{\re, 0} - \omega_{\re, j} \enskip \text{or} \\
+        \omega_\text{IF} = -           \omega_{\re, 0} + \omega_{\re, j} \enskip \text{or} \\
+        \omega_\text{IF} = -           \omega_{\re, 0} - \omega_{\re, j} \text{.}
+    \end{cases}
+\end{equation*}
+Typically, $\omega_\text{IF}$ is in the gigahertz range, while $\omega_{\re, 0}$ and $\omega_{\re, j}$ are in the terahertz range.
+Consequently the two frequencies $\pm(\omega_{\re, 0} + \omega_{\re, j})$ cannot contribute to~$\omega_\text{IF}$.
+The two contributors to the output signal at $\omega_\text{IF}$ are the LSB frequency $\omega_{\re, 0} - \omega_{\re, j}$ and the USB frequency $\omega_{\re, 0} + \omega_{\re, j}$.
+
+The most important point to take from~\cref{eq:four_frequencies} is that, from a phasor point of view, each output is proportional to its input.
+The frequency has changed, but the amplitudes and phases are transformed linearly.
+Since the LO signal is stable, monochromatic, and phase-locked, its phasor $\cp{a}_0$ is a mere constant that multiplies the phasor $\cp{a}_j$ of the input.
+
+To summarize, it is legitimate to consider the mixer as a linear device.
+The output phasor for the IF signal is a linear combination of the LSB and USB input phasors.
+\begin{equation}
+    \cp{b} \approx \cp{t}_\text{LSB} \cp{a}_\text{LSB} + \cp{t}_\text{USB} \cp{a}_\text{USB}
+\end{equation}
+The terms $t_\text{LSB}$ and $t_\text{USB}$ contain the mixer transmission coefficient at order~2 (that we noted $\alpha_2$ earlier) and the LO phasor, which does not depend on the sky frequency that is observed.
+This equation is scalar, but it can also be written with vector phasors, in which case the transmission coefficients are 3D Jones matrices.
+\begin{equation}
+    \vectcp{b} \approx 
+    \matrcp{t}_\text{LSB} \vectcp{a}_\text{LSB}
+    +
+    \matrcp{t}_\text{USB} \vectcp{a}_\text{USB}
+\end{equation}
+
+%-----------------------------------------------------------------------------
+\subsubsection{Sidebands treated separately}
+We have established that the phasor output by a mixer is a linear combination of its LSB and USB input phasors.
+It might seem natural to implement the mixer as a 3-port network such as
+\begin{equation*}
+% Probably not the cleanest use of xypics but it works, give me a break.
+\xymatrix@R=0pt@C=48pt{
+    % Row 1: LSB
+    *+++\txt{LSB}
+    \ar@<1ex>[r]^-{\vectcp{a}_1}
+    &
+    *+++\txt{\phantom{mixer}}
+    \ar@<1ex>[l]^-{\vectcp{b}_1}
+    \\
+    % Row 2: IF
+    &
+    *+++\txt{mixer}
+    \ar@<1ex>[r]^-{\vectcp{b}_3}
+    &
+    *+++\txt{IF}
+    \ar@<1ex>[l]^-{\vectcp{a}_3}
+    \\
+    % Row 3: USB
+    *+++\txt{USB}
+    \ar@<1ex>[r]^-{\vectcp{a}_2}
+    &
+    *+++\txt{\phantom{mixer}}
+    \ar@<1ex>[l]^-{\vectcp{b}_2}
+    % Frame the mixer.
+    \save "1,2"."3,2" *[F]\frm {}
+    \restore
+}
+\end{equation*}
+but this would be incorrect.
+A 3-port model of the sort corresponds to the assumption that the LSB and USB signals are phase-locked, which is false.
+The LSB and USB signals are stochastic in nature, the signals coming from the sky, the calibration loads or any source of thermal radiation act like noise.
+The instrument is coherent at each frequency, but there is no coherence between two different frequencies.
+
+Since the LSB and USB signals are not phase-locked they must be treated separately.
+In that case, modeling the mixer with a 2-port network is more appropriate.
+For each IF frequency, we run the model twice: once for each sideband.
+
+%-----------------------------------------------------------------------------
+\subsubsection{Two-port network and scattering matrix}
+
+Treating the sidebands separately reduces the mixer to a two-port network that does the conversion between the radio-frequency side (RF) and the intermediate-frequency side (IF) of the instrument.
+\begin{equation*}
+\xymatrix@R=0pt@C=48pt{
+        *+++\txt{RF}
+        \ar@<1ex>[r]^-{\vectcp{a}_1}
+        &
+        *+++[F]\txt{mixer}
+        \ar@<1ex>[l]^-{\vectcp{b}_1}
+        \ar@<1ex>[r]^-{\vectcp{b}_2}
+        &
+        *+++\txt{IF}
+        \ar@<1ex>[l]^-{\vectcp{a}_2} \\
+    }
+\end{equation*}
+
+The behavior of a mixer can be decomposed into three distinct parts:
+there are interactions with interfaces on both sides of the mixer, and there is the RF--to--IF conversion (``heterodyning'') part between those interfaces.
+\begin{equation*}
+    \entrymodifiers={+++[F]}
+    \xymatrix{
+        *+++\txt{RF}
+        \ar@<1ex>[r]
+        &
+        \txt{mixer\\RF-side\\interface}
+        \ar@<1ex>[l]
+        \ar@<1ex>[r]^-{\vectcp{a}_1}
+        &
+        \txt{heterodyning}
+        \ar@<1ex>[l]^-{\vectcp{b}_1}
+        \ar@<1ex>[r]^-{\vectcp{b}_2}
+        &
+        \txt{mixer\\IF-side\\interface}
+        \ar@<1ex>[l]^-{\vectcp{a}_2}
+        \ar@<1ex>[r]
+        &
+        *+++\txt{IF}
+        \ar@<1ex>[l]
+    }
+\end{equation*}
+Since we have already covered how an interface behaves, we set them aside and focus on the scattering matrix that represents the heterodyning process itself.
+The scattering matrix of a two-port network is
+\begin{equation}
+    \matrcp{S}
+    =
+    \begin{pmatrix}
+        \matrcp{r}_{1,1} & \matrcp{t}_{2,1} \\
+        \matrcp{t}_{1,2} & \matrcp{r}_{2,2}
+    \end{pmatrix}
+    \text{.}
+\end{equation}
+
+\begin{samepage}
+The reflection and transmission Jones matrices, elements of the scattering matrix, are
+\begin{itemize}%[nolistsep,noitemsep]
+    \item $\matrcp{t}_{1,2}$ is the transmission from the IF-side to the RF-side, a phenomenon known as ``IF feedback'',
+    \item $\matrcp{t}_{2,1}$ is the ``useful'' transmission coefficient, which brings the sky signal down in frequency so that it can be detected, and
+    \item $\matrcp{r}_{1,1}$ and $\matrcp{r}_{2,2}$ are reflection terms.
+\end{itemize}
+\end{samepage}
+
+\paragraph{Value of $\matrcp{r}_{1,1}$ and $\matrcp{r}_{2,2}$.}
+The reflection coefficients of a mixer could in principle be modeled with all their frequency-dependent subtleties from Tucker's Theory \parencite{tucker1985quantum}.
+Without a Tucker model of the instrument, the reflection on the RF and IF sides are free parameters that we factor into the scattering matrices of the RF-side and IF-side interfaces.
+The scattering matrix representing the heterodyning process itself has no reflection.
+\begin{equation}
+    \matrcp{r}_{1,1} = \matrcp{r}_{2,2} = 0
+\end{equation}
+
+\paragraph{Value of $\matrcp{t}_{1,2}$.}
+At the first order, we can assume that there is no IF feedback: the IF power does not come back to the RF side.
+This is justified in the case of HIFI were care was taken to minimize it \parencite{dieleman2008hifi}.
+\begin{equation}
+    \matrcp{t}_{1,2}=0
+\end{equation}
+
+\paragraph{Value of $\matrcp{t}_{2,1}$.}
+This is the useful part of the mixer.
+The transmission from the RF to the IF has two components.
+\begin{gather}
+    \matrcp{t}_{2,1} =
+    \matrcp{g}_\text{LO} \;
+    \matrcp{g}_\text{frequency}
+    %
+    \\
+    %
+    \xymatrix{
+        \ar[r]
+        &
+        *+++[F]{\matrcp{t}_\text{interface}}
+        \ar[r]
+        &
+        *+++[F]{\matrcp{g}_\text{LO}}
+        \ar[r]
+        &
+        *+++[F]{\matrcp{g}_\text{frequency}}
+        \ar[r]
+        &
+    }\notag
+\end{gather}
+
+\subparagraph{Frequency-dependent gain $\matrcp{g}_\text{frequency}$.}
+This parameter handles the conversion from the free-space environment on the RF-side
+to the waveguide environment on the IF-side.
+It also contains the mixer sensitivity, which is a frequency-dependent parameter related to its bandpass.
+This could be modeled with Tucker's theory once again, or it could be measured.
+This parameters impacts the sideband ratio of the instrument if it differs for the LSB and USB frequencies.
+If one is solely interested in modeling interferences, one can set this parameter to the identity matrix.
+
+\subparagraph{Frequency-independent gain $\matrcp{g}_\text{LO}$.}
+\Cref{eq:four_frequencies} shows that the RF phasor is multiplied by the LO phasor (noted~$\cp{a}_0$ in the equation).
+The LO phasor is the amplitude and phase of the electric field produced by the local oscillator, that enters the mixer chip.
+It is determined by the behavior of the system at the LO frequency, which is a fixed parameter, and is independent of the RF frequency of the astronomical signal.
+
+The LO phasor $\vectcp{a}_\text{LO}$ is a vector, not a matrix, and therefore cannot multiply the input RF phasor $\vectcp{a}_1$.
+The conversion from vector to matrix is straightforward:
+\begin{equation}
+    \matrcp{g}_\text{LO}
+    =
+    \begin{pmatrix}
+                \cp{a}_{\text{LO}, x} & 0 & 0 \\
+            0 & \cp{a}_{\text{LO}, y} & 0 \\
+        0 & 0 & \cp{a}_{\text{LO}, z}
+    \end{pmatrix}
+    \text{.}
+    \label{eq:LO_phasor_to_gain}
+\end{equation}
+
+One can compute~$\matrcp{g}_\text{LO}$ once, and use it to determine the gain of the instrument in the entire RF range covered by the mixer.
+It needs to be determined \emph{before} we can model the response of the instrument to the RF signals.
+
+%-----------------------------------------------------------------------------
+\subsubsection{Two-pass modeling}
+Since the LO signal appears in the mixer gain,
+we must determine how much of the LO signal couples to the mixer before we can calculate the response of the system to the entire RF range.
+
+A heterodyne system can be seen as three networks.
+\begin{equation*}
+    \entrymodifiers={+[F]}
+    \xymatrix{
+        *+++\txt{any\\source}
+        \ar@<1ex>[r]
+        &
+        \txt{entire\\RF\\optics}
+        \ar@<1ex>[l]
+        \ar@<1ex>[r]^-{\vectcp{a}_1}
+        &
+        \txt{heterodyning}
+        \ar@<1ex>[l]^-{\vectcp{b}_1}
+        \ar@<1ex>[r]^-{\vectcp{b}_2}
+        &
+        \txt{entire\\IF\\electronics}
+        \ar@<1ex>[l]^-{\vectcp{a}_2}
+        \ar@<1ex>[r]
+        &
+        *+++\txt{detected}
+        \ar@<1ex>[l]
+    }
+\end{equation*}
+
+\paragraph{Pass~1: LO signal.}
+In a first pass, we compute the value of the phasor $\vectcp{a}_1$, input to the heterodyning network, at the LO frequency.
+This is done by modeling only the optical part of the system at the LO frequency.
+On the following diagram, the unused networks are grayed out.
+\begin{equation*}
+    \entrymodifiers={+[F]}
+    \xymatrix{
+        *+++\txt{LO at\\$\omega_\text{LO}$}
+        \ar@<1ex>[r]
+        &
+        \txt{entire\\RF\\optics}
+        \ar@<1ex>[l]
+        \ar@<1ex>[r]^-{\vectcp{a}_1}
+        &
+        \txt{\color{gray}heterodyning}
+        \ar@<1ex>[l]^-{\color{gray}\vectcp{b}_1}
+        \ar@<1ex>[r]^-{\color{gray}\vectcp{b}_2}
+        &
+        \txt{\color{gray}entire\\\color{gray}IF\\\color{gray}electronics}
+        \ar@<1ex>[l]^-{\color{gray}\vectcp{a}_2}
+        \ar@<1ex>[r]
+        &
+        *+++\txt{\color{gray}detected}
+        \ar@<1ex>[l]
+    }
+\end{equation*}
+The value of $\vectcp{a}_1$ obtained this way corresponds to the value of $\vectcp{a}_\text{LO}$ that enters $\matrcp{g}_\text{LO}$ via~\cref{eq:LO_phasor_to_gain}.
+
+If the system contains several mixers, the method remains the same: model the optics only, get one phasor for each mixer, convert them into their corresponding mixer gain.
+
+\paragraph{Pass~2: RF signals.}
+After Pass~1, we are ready to model the response of the system for any RF signal.
+We proceed as usual, with the full system (optics + mixers + electronics).
+
+
+
+
+
 %#############################################################################
 \FloatBarrier
 \section{Conclusion}
@@ -3820,7 +4391,7 @@ This is possible because our model makes the assumption that every optical eleme
 Affine is an improvement over purely linear systems: the output of every optical element is a linear function of its inputs, plus a constant term (which may equal~0).
 This constant term allows us to have sources of electromagnetic radiations inside our system, which is useful to model the thermal noise of some components.
 
-We model optical elements as networks that are interconnected by ports.
+We model optical elements as networks (as in ''network analysis'' of electrical circuits) that are interconnected by ports.
 We use scattering matrices and Jones matrices (that we extend to three dimensions) to model the transfer of amplitude, phase, polarization and orientation of the electric field between these ports.
 This mathematical formalism can represent a system of arbitrary complexity, including all its internal reflections, with one single set of linear equations (a matrix) for which there exist an analytical closed-form solution.
 
@@ -3838,25 +4409,53 @@ This chapter also details how to implement and solve numerically our model in an
    Python, SciPy, Octave and GDL are distributed either under the General Public License or a license compatible with it.
 }).
 
+\begin{samepage}
+\noindent
 Modeling optical interferences involves five steps:
-\begin{enumerate}
-    \item build the scattering matrix of each network of the system,
-    \item compute the scattering matrix of the entire system,
-    \item reorder the rows and columns of that matrix to extract the block responsible for the infinite internal reflections,
-    \item solve the infinite reflections for a given set of inputs,
-    \item solve the output of the system for that same set of inputs.
+\begin{enumerate}[noitemsep]
+    \item Build the scattering matrix of each network of the system.
+    \item Compute the scattering matrix of the entire system.
+    \item Reorder the rows and columns of that matrix to extract the block responsible for the infinite internal reflections.
+    \item Solve the infinite reflections for a given set of inputs.
+    \item Solve the output of the system for that same set of inputs.
 \end{enumerate}
-This must be done for each frequency of interest and for each source separately (unless they are phase-locked).
+This must be done separately for the LO signal, for each frequency of interest and for each source separately (unless they are phase-locked).
+\end{samepage}
 
 It is trivial to parallelize the code in order to compute one frequency per computer core and speed up the calculations when modeling an entire spectrum.
+In Python for example, one can simply use \texttt{pool.map} from the \texttt{multiprocessing} module (see~\cref{algo:para_python}) instead of the builtin \texttt{map} function: this transparently spawns one subprocess per CPU code, share the load between them and join the results.
 The ``embarrassingly parallel'' nature of the computations may even make this model a good candidate for being implemented on Graphics Processing Units
 with OpenGL Compute Shaders~\parencite{opengl44},
 OpenCL~\parencite{opencl2}
 or CUDA~\parencite{cuda}.
 
+\begin{algorithm}
+\lstset{language=Python}
+\begin{lstlisting}   
+if __debug__:
+    # The standard `serial' case is more
+    # convenient for debugging.
+    pmap = map
+else:
+    # Parallel is better in production: faster.
+    import multiprocessing
+    pmap = multiprocessing.pool().map
+
+def runModel(freq):
+    # Do all the maths for one frequency.
+    return result
+
+freqs = [1000, 1001, 1002, 1003, 1004]  # GHz.
+results = pmap(runModel, freqs)    
+\end{lstlisting}
+\caption{Parallelism in Python is trivial when the code is well-designed.}
+\label{algo:para_python}
+\end{algorithm}
+
 
 
 %=============================================================================
+\clearpage
 \subsection{Beyond plane waves?}
 The work that we present in this chapter focuses on (potentially inhomogeneous) plane waves.
 Plane waves can be good approximations of real electromagnetic beams.
@@ -3881,7 +4480,7 @@ However, when the cavity is unstable, radius and width are not constant, they ca
 If the reflection and transmission coefficients do not depend on the width and the radius then we can still apply our model, but if these coefficients are function of the geometry of the beam, then our system is not linear anymore.
 It may still have a closed-form expression, but not in the form of a matrix.
 
-\begin{figure}
+\begin{figure}[b]
     \centering
     \footnotesize
     \input{cavity_stability.pdf_tex}
@@ -3917,8 +4516,8 @@ By using our model, instrument designers can predict where the strongest interfe
 
 %#############################################################################
 \section*{Acknowledgements}
-I particularly wish to thank John Pearson who gave me the opportunity of working on this fascinating project, which combines the satisfying purity and clarity of mathematics with the pragmatism of physics and the fun of software development, in the astronomical context that is a childhood dream.
+I particularly wish to thank John Pearson who gave me the opportunity of working on this fascinating project, which combines the elegance of mathematics with the pragmatism of physics and the fun of software development, in an astronomical context that is a childhood dream.
 %#############################################################################
 %\clearpage
-\printbibliography[heading=subbibliography]
-\end{refsection}
+%\printbibliography[heading=subbibliography]
+%\end{refsection}

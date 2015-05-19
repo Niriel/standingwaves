@@ -9,12 +9,13 @@
 
 \setcounter{secnumdepth}{3}
     % Number the subsubsections too, as the default stops at subsections.
-\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{2}
     % Table of content goes down to the subsubsections.
 
 \title{
     The effect of interferences\\
-    on the calibration of heterodyne receivers.\\
+    on the calibration of\\
+    submillimeter heterodyne receivers.\\
 }
 \author{Bertrand Delforge}
 
@@ -23,45 +24,51 @@
 
 \DeclareGraphicsExtensions{.pdf,.jpg,.jpeg,.png}
 
+%#############################################################################
 \begin{document}
+\pagestyle{fancy}
+
+%=============================================================================
 \frontmatter
-%\maketitle
+
+\maketitle
+
 \ifDraft
     \renewcommand*\contentsname{Content \today}
 \fi
+
+%\subimport{front/}{dedication}
+%\subimport{front/}{epigraph}
 \tableofcontents
+\subimport{front/}{preface}
+\subimport{front/}{acknowledgements}
 
-%\listoffigures
-%\listofalgorithms
-\newpage
-
-%\subimport{abstract/}{abstract}
-%\subimport{acknowledgements/}{acknowledgements}
-
+%=============================================================================
 \mainmatter
 
 \subimport{chapter_1/}{chapter_1}
 
 %\setcounter{chapter}{1}
-%\subimport{chapter_2/}{chapter_2}
+\subimport{chapter_2/}{chapter_2}
 
 %\setcounter{chapter}{2}
 %\subimport{chapter_3/}{chapter_3}
 
 %\setcounter{chapter}{3}
-%\subimport{chapter_4/}{chapter_4}
+\subimport{chapter_4/}{chapter_4}
 
 %\setcounter{chapter}{4}
-%\subimport{chapter_5/}{chapter_5}
+\subimport{chapter_5/}{chapter_5}
 
 %\setcounter{chapter}{5}
-%\subimport{chapter_6/}{chapter_6}
+\subimport{chapter_6/}{chapter_6}
 
-%\begin{appendices}
-    %\subimport{appendix_a/}{appendix_a}
-%    \subimport{appendix_b/}{appendix_b}
-%\end{appendices}
+\begin{appendices}
+   \subimport{appendix_b/}{appendix_b}
+   \subimport{appendix_a/}{appendix_a}
+\end{appendices}
 
+%=============================================================================
 \backmatter
 
 %\input{summary_dutch}
@@ -70,8 +77,8 @@
 %\addcontentsline{toc}{chapter}{Index}
 %\printindex
 
-%\cleardoublepage
-%\addcontentsline{toc}{chapter}{Bibliography}
-%\printbibliography
+\cleardoublepage
+\addcontentsline{toc}{chapter}{Bibliography}
+\printbibliography
 
 \end{document}

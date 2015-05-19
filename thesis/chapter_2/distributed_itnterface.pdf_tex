@@ -1,6 +1,6 @@
 %% Creator: Inkscape inkscape 0.48.2, www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'band1_layout.pdf' (pdf, eps, ps)
+%% Accompanies image file 'distributed_itnterface.pdf' (pdf, eps, ps)
 %%
 %% To include the image in your LaTeX document, write
 %%   \input{<filename>.pdf_tex}
@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{191.51132813bp}%
+    \setlength{\unitlength}{163.71760801bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -48,15 +48,9 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.84798078)%
-    \put(0,0){\includegraphics[width=\unitlength]{band1_layout.pdf}}%
-    \put(0.20364422,0.80033099){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{H mixer}}}%
-    \put(0.91411384,0.72632366){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{V mixer}}}%
-    \put(0.27765151,0.00105268){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{LO}}}%
-    \put(0.12963698,0.1638684){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{sky or
-load}}}%
-    \put(0.21844569,0.08986131){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{grid 0 (\SI{5.7}{\degree})}}}%
-    \put(0.52927613,0.1342655){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{H grid (\SI{90}{\degree}) + dump}}}%
-    \put(0.24804857,0.44509614){\color[rgb]{0,0,0}\makebox(0,0)[rb]{\smash{V grid (\SI{0}{\degree}) + dump}}}%
+  \begin{picture}(1,0.55406302)%
+    \put(0,0){\includegraphics[width=\unitlength]{distributed_itnterface.pdf}}%
+    \put(0.90034044,0.38091331){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{antenna}}}%
+    \put(0.60567352,0.48777605){\color[rgb]{0,0,0}\makebox(0,0)[b]{\smash{corrugated horn}}}%
   \end{picture}%
 \endgroup%

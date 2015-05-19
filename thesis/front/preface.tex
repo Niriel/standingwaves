@@ -1,0 +1,115 @@
+\cleardoublepage
+%\begin{refsection}
+\chapter{Preface}
+\label{sec:preface}
+
+Advances in imaging and spectroscopy technology are always eagerly welcomed.
+Two groups in particular are quick to adopt and improve upon new techniques: the military, who look down and keep secrets, and astronomers, who look up and share knowledge.
+
+For example, Willard S.\ Boyle and George E.\ Smith invented the CCD in~1969%
+\footnote{
+   They were awarded the Nobel Prize in Physics 2009 for its invention~\parencite{nobel2009}.
+}%
+.
+This ``charge-coupled devive'' was a semiconductor circuit that converts photons to electric charges and was intended to be used as a memory cell.
+In 1976, only seven years later,
+Caltech submitted the proposal of the Wide Field and Planetary Camera,
+based on CCD technology,
+to be part of the Hubble Space Telescope (HST)~\parencite{leckrone1980space}.
+In December of the same year, a $800\times800$~pixels CCD camera was orbiting Earth: the American National Reconnaissance Office launched the KH-11 Kennan, a spy satellite similar in design to the HST~\parencite[see references in][]{wiki:kh11kennan}.
+
+Astronomers, for whom every single photon matters, have worked with manufacturers to reduce the noise of CCD down to its minimal quantum-limited level: CCD technology is now virtually perfect~\parencite{mackay2010}.
+CCD and related technologies such as CMOS-based Active-Pixel Sensors are nowadays ubiquitous, embedded inside mobile phones, computers, security cameras, medical devices and bar-code readers.
+Nevertheless, CCD technology suffers from one considerable limitation: it is sensitive only to photons whose wavelength is between~\SI{0.2}{\micro\meter} (mid-ultraviolet) and~\SI{1.0}{\micro\meter} (near-infrared) and operates best at visible wavelengths.
+
+There is much more to electromagnetic radiation than visible light.
+Since electromagnetic radiation is almost the only way to get data from beyond the solar system%
+\footnote{
+    Astronomers also measure cosmic rays (relativistic protons and electrons) and neutrinos from supernovae, the sun or other objects.
+    Gravitational waves may soon become a new source of information;
+    there is indirect evidence of their existence (from the spin-down of double pulsars) and missions like LISA Pathfinder may detect them directly before~2017.
+}%
+, astronomers are resolved to explore its entire spectrum.
+
+A significant fraction of the universe consists of gas and dust that is too cold to radiate visible light.
+This cold material is associated with the earliest stages of galaxy evolution, star formation, protoplanetary disks and the atmosphere of comets.
+%
+The far-infrared region of the electromagnetic spectrum covers wavelengths
+between \SI{30}{\micro\meter} and \SI{300}{\micro\meter},
+which correspond to frequencies
+between \SI{1}{\tera\hertz} and \SI{10}{\tera\hertz}.
+Atoms and ions have most of their fine-structure transitions within that range.
+%
+The submillimeter region extends from~\SI{300}{\micro\meter} to~\SI{3}{\milli\meter} (\num{0.1} to \SI{1}{\terahertz}) and contains many molecular transition lines.
+%
+In addition, Planck's law peaks in the far-infrared and submillimeter for temperatures below a few hundred kelvin.
+%
+Consequently, these are regions of choice to study the chemistry and dynamics of the cold universe.
+
+%\begin{figure}
+%    \centering
+%    \begin{tikzpicture}[scale = 0.7]
+%        \draw[->] (0,0) -- (10.5,0) node[anchor=west] {frequency [\si{\tera\hertz}]};
+%        \foreach \x in {0,1,...,10} {
+%            \draw (\x,0) -- (\x,-0.3) node[anchor=north] {$10^{\x}$};
+%        }
+%    \end{tikzpicture}
+%    \caption{The terahertz gap.}
+%    \label{fig:terahertzgap}
+%\end{figure}
+
+The far-infrared and submillimeter domain resides between
+the optical world of mirrors and lenses on one side,
+and the microwave world of waveguides and antennas on the other side.
+Optical systems can often be modeled with refractive indices and infinitely-thin rays carrying power%
+\footnote{
+    Except when phase matters, as it does for interferometry,
+    lasers, and consequently holography and optical-fiber communication.
+}
+while microwave devices are best understood with concepts like hybrid modes, impedance matching and voltage.
+Optics and microwave do not mix,
+a problem which is more fundamental than a paradigm clash as it is rooted in the very structure of physical materials.
+In 2015 still, useful power generation and receiver technologies are inefficient and impractical at terahertz frequencies;
+mass production of devices in this range and operation at room temperature remains mostly unfeasible.
+
+Despite the considerable difficulties, astronomers were determined to fill this so-called ``Terahertz Gap''.
+Terahertz astronomy became a priority in the early 1980's.
+In 1985, ESA selected FIRST (who would be later known as the Herschel Space Observatory) as a ``cornerstone'' mission of its ``horizon 2000'' program.
+In 1988, NASA established a ``Center for Space Terahertz Technology'' at the University of Michigan.
+In 1989, the Cosmic Background Explorer (COBE) was launched.
+In 1990 was organized the first ``International Symposium on Space Terahertz Technology'' (ISSTT).
+This ISSTT has been held every year since and has maintained the synergy between astronomers, space engineers and all terahertz scientists worldwide.
+The ISSTT proceedings are published on the NRAO website~\parencite{nrao:isstt}.
+In 1990, stratospheric or space missions like IRTS, ISO, PRONAOS, SIRTF (Spitzer), SMMM, SOFIA and SWAS were either ready to launch or on in their design phase.
+The research and development for the most ambitious projects took decades.
+
+I was granted the honor to present my work during the 24\textsuperscript{th}
+edition of the ISSTT in 2013%
+\footnote{
+    Unfortunately, ISSTT did not publish proceedings that year.
+}%
+, which was held in Groningen (The Netherlands) and organized by the University of Groningen (RUG) and the Netherlands Institute for Space Research (SRON).
+The date and the place were wisely chosen:
+2013 coincided with the end of the four-year flight of the Herschel Space Observatory, nearly \SI{30}{years} after its inception;
+and SRON-Groningen was the Principal Investigator institute for Herschel's high-resolution spectrometer, HIFI~\parencite{AA_518_L6}.
+SRON coordinated the efforts of~25 institutes over a dozen countries, which created the technology that gave the astronomical community an instrument that could cover four frequency octaves (from \num{480} to \SI{1910}{\gigahertz}) with a spectral resolution between \num{0.5e6} and \num{15e6} and a near-quantum-limited sensitivity.
+
+The problem of standing waves and optical interferences in HIFI, which motivated my work, is not the result of an oversight or a poor design; precautions were taken from the very beginning of the project to minimize them.
+On the contrary, worrying about these remaining interferences is a luxury only made possible by the low noise and high stability of the system~\parencite{AA_537_A17}.
+
+Research and development are going on.
+One can find examples both on the front of spectroscopy
+--- sideband-separating mixers performing at \SI{700}{\giga\hertz} are now available~\parencite{khudchenko2011first} --- and imaging --- with the tenfold increase in the sensitivity of Transition Edge Sensors~\parencite{jackson2012spica}.
+
+
+The terahertz gap may still not be filled today, but astronomers have bridged it.
+
+
+
+
+
+
+%#############################################################################
+%\clearpage
+%\printbibliography[heading=subbibliography]
+%\end{refsection}

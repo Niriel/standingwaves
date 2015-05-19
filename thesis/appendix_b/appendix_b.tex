@@ -1,13 +1,13 @@
 \cleardoublepage
-\begin{refsection}
+%\begin{refsection}
 \chapter{Complex harmonic plane waves}
 \label[appsec]{sec:complex_harmonic_plane_waves}
 
-In this chapter, we derive the laws of reflection and refraction for electromagnetic harmonic plane waves at the interface between two linear homogeneous isotropic propagation media.
+In this chapter, I derive the laws of reflection and refraction for electromagnetic harmonic plane waves at the interface between two linear homogeneous isotropic propagation media.
 
-The originality of this chapter relies in the assumptions that we do not make.
-We do not assume that the propagation media are dielectric or perfect conductors, nor do we assume that the magnetic permeability equals~1.
-More importantly: we do not assume that the waves are homogeneous.
+The originality of this chapter relies in the assumptions that I do not make.
+I do not assume that the propagation media are dielectric or perfect conductors, nor do I assume that the magnetic permeability equals~1.
+More importantly: I do not assume that the waves are homogeneous.
 A plane wave has a direction of propagation and a direction of decay.
 When both directions are equal, the wave is said to be ``homogeneous'';
 when they differ, the wave is ``heterogeneous''.
@@ -25,14 +25,18 @@ the refracted wave is heterogeneous.
     \label{fig:homo_hetero_wave}
 \end{figure}
 
-We use complex wave vectors to model both homogeneous and heterogeneous waves.
+I use complex wave vectors to model both homogeneous and heterogeneous waves.
 The real part of the wave vector determines the direction of propagation of the wave while its imaginary part determines the direction of decay.
-Because we allow arbitrary complex wave vectors, familiar concepts such as the wavenumber or the refractive index are either undefined or useless.
+Because I allow arbitrary complex wave vectors, familiar concepts such as the wavenumber or the refractive index are either undefined or useless.
 
-Finally, our expressions for the laws of reflection and refraction do not contain any trigonometric function.
-Indeed, the intuitive notion of angle of incidence becomes less intuitive when said angle is complex due to a complex wave vector.
-The axes of rotations themselves become complex, and although we can give meaning to rotations by complex angles around complex axes, we do not have to.
-Instead, we use only vector calculus and algebra.
+Finally, these expressions for the laws of reflection and refraction do not contain any trigonometric function.
+The traditional formulations of Snell's law and Fresnel's equations rely on trigonometry.
+While it is relatively easy to make sense of complex rotation angles, intuition breaks down when we consider complex rotation axes.
+Indeed, while traditional rotations are distance-preserving maps between metric spaces (isometries), rotations around complex axes introduce some scaling and cannot be represented with quaternions or biquaternions.
+Therefore, I rederived the laws of reflection and refraction using only endomorphisms on $\mathbb{C}^3$ and its usual inner product, norm and metric.
+
+
+
 
 
 %#############################################################################
@@ -40,9 +44,45 @@ Instead, we use only vector calculus and algebra.
 
 
 \section{Complex algebra}
-We list in~\cref{tab:notations} the principal notations that we will use throughout this chapter.
+\subsection{Introduction}
+In his famous article \citetitle{wigner1995unreasonable}, \textcite{wigner1995unreasonable} writes the following about the Hilbert space of quantum mechanics (emphasis mine):
+\begin{quotation}
+Surely to the unpreoccupied mind, \emph{complex numbers} are far from natural or simple and they \emph{cannot be suggested by physical observations}.
+Furthermore, the use of complex numbers is in this case not a calculational trick of applied mathematics but comes close to being a necessity in the formulation of the laws of quantum mechanics.
+\end{quotation}
+\Citeauthor{wigner1995unreasonable} could have gone further and say the very same thing about real numbers:
+all the numeric values ever measured in science have been rational numbers.
+Indeed, the precision of any measurement device is ultimately limited by the uncertainty principle of quantum mechanics and/or the holographic principle of string theory.
+The latter even suggests that most irrational numbers are unphysical and that real numbers are a convenient approximation of a reality that is fundamentally discrete~\parencite[][for instance]{hooft2014cellular}.
+Whether irrational or complex numbers `exist' in reality or not has no influence on their usefulness.
 
-\begin{table}
+\subsubsection{Euler's formula}
+\Cref{tab:notations} lists the principal notations that I will use throughout this chapter.
+Euler's formula
+\begin{equation}
+    \exp(i \theta) = \cos(\theta) + i \sin(\theta)    \label{eq:euler_formula}
+\end{equation}
+is the key to switching between the real and the complex domain.
+Assuming that a real phenomenon is described by~$\cos(\theta)$, Euler's formula and $i^2=-1$ give the following equality:
+\begin{equation}
+    \cos(\theta) = \frac{1}{2}(\exp(i \theta) + \exp(-i \theta)) \text{.}
+    \label{eq:cos_exps}
+\end{equation}
+We replace one trigonometric function by two complex exponentials.
+We can then perform all the calculations in~$\mathbb{C}$, and convert the final result back to a real number at the very end.
+\begin{equation*}
+    \xymatrix@M=4pt{
+        \txt{measurement\\in $\mathbb{R}$}
+        \ar[rr]^-*\txt{\cref{eq:cos_exps}}
+        &&
+        \txt{theory\\in $\mathbb{C}$}
+        \ar[rr]^-*\txt{\cref{eq:cos_exps}}
+        &&
+        \txt{prediction\\in $\mathbb{R}$}
+    }
+\end{equation*}
+
+\begin{table}[b]
     \centering
     \begin{tabular}{lll}
         \toprule
@@ -71,19 +111,42 @@ We list in~\cref{tab:notations} the principal notations that we will use through
     \label{tab:notations}
 \end{table}
 
-A complex scalar has a unique decomposition into a real and an imaginary part:
+\subsubsection{Linear case}
+When all the calculations are linear, then the two complex exponentials are always affected in the same way:
+\begin{align*}
+    \cos(\theta_1) + \cos(\theta_2)
+    &=
+    \frac{1}{2}(\exp(i \theta_1) + \exp(i \theta_2))
+    +
+    \frac{1}{2}(\exp(-i \theta_1) + \exp(-i \theta_2))
+    \\
+    \alpha \cos(\theta)
+    &=
+    \frac{1}{2}(\alpha\exp(i \theta))
+    +
+    \frac{1}{2}(\alpha\exp(-i \theta))
+    \text{.}
+\end{align*}
+In this linear case, it is sufficient to restrict our computations to $\exp(i \theta)$ or $\exp(-i \theta)$: keeping them both is redundant as they carry the same information.
+To go from $\mathbb{R}$ to $\mathbb{C}$ in the linear case, we apply the substitution\footnote{In mathematical logic, a substitution is a syntactic transformation on formal expressions.}
 \begin{equation}
-    \cp{z} = \Re(\cp{z}) + i \Im(\cp{z})
+    \cos(\theta) \mapsto \exp(\pm i \theta)
+    \label{eq:cos_exp}
 \end{equation}
-with $\Re(\cp{z}) \in \mathbb{R}$ the real part and $\Im(\cp{z}) \in \mathbb{R}$ the imaginary part of $\cp{z}$.
-We will often use subscripts ``$\re$'' and ``$\im$'' to refer to the real and imaginary parts of a scalar: $\cp{z} = z_\re + i z_\im$.
-If $\Re(\cp{z})=0$, then $\cp{z}$ is said to be ``purely imaginary''.
+and to go from $\mathbb{C}$ back to $\mathbb{R}$ we simply takes the real part.
+\begin{equation*}
+    \xymatrix@M=4pt{
+        \txt{measurement\\in $\mathbb{R}$}
+        \ar[rr]^-*\txt{\cref{eq:cos_exp}}
+        &&
+        \txt{theory\\in $\mathbb{C}$}
+        \ar[rr]^-*{\Re}
+        &&
+        \txt{prediction\\in $\mathbb{R}$}
+    }
+\end{equation*}
 
-In this study, all our vectors are three-dimensional unless stated otherwise.
-This means that they have three components.
-We assume that the components of these vectors are given in a Cartesian reference frame.
-
-Unit real vectors, that is vectors with real components and a norm equal to~$1$, are represented with a dot: $\vectu{n}$.
+This is the reason why we use complex numbers to solve real problems involving periodic signals, especially with linear transformations: trigonometry is reduced to algebra.
 
 
 
@@ -94,13 +157,25 @@ Unit real vectors, that is vectors with real components and a norm equal to~$1$,
 
 %-----------------------------------------------------------------------------
 \subsubsection{Definition}
-A complex vector is a vector with complex components.
+In this study, a vector is a list of numbers called ``components'' or ``coordinates''%
+\footnote{
+    For the mathematically-enclined reader:
+    our vector spaces are 3-dimensional coordinate spaces over a field~$F$ ($F=\mathbb{R}$ or $F=\mathbb{C}$) equipped with their natural inner product, norm and metric.
+    In the previous sentence, the word ``field'' refers to the algebraic structure (ring with multiplicative inverse).
+    In the rest of this chapter, the word ``field'' can also refer to a physical quantity that can be represented as a function of time and space.
+    The context should make the meaning obvious.
+}
+that can either be real ($\mathbb{R}$) or complex ($\mathbb{C}$).
+
+We work in three dimensions, therefore our vectors have three coordinates.
 We note
 $\mathbb{R}^3$ the set of three-dimensional real vectors and
 $\mathbb{C}^3$ the set of three-dimensional complex vectors.
 
 A complex vector, like a complex scalar, has a real and an imaginary part.
 \begin{equation}
+    \vectcp{v} \in \mathbb{C}^3,
+    \quad
     \vectcp{v}
     =
     \begin{pmatrix}
@@ -131,7 +206,7 @@ both belong to $\mathbb{R}^3$.
 %-----------------------------------------------------------------------------
 \subsubsection{Transposition}
 Transposing a column vector produces a row vector and vice versa.
-We use the symbol $\transp$ to indicate transposition.
+The symbol $\transp$ indicates transposition.
 
 If we have the vectors
 \begin{align}
@@ -156,7 +231,7 @@ then we have the equalities
 \end{align}
 
 When we expand a vector into its components, then its orientation (row or column) matters.
-In particular, when we write the expansion of a vector in the text such as
+In particular, when I write the expansion of a vector in the text such as
 $\vect{r}= (x \: y \: z)$,
 then it is a row vector because we write it as a row;
 but
@@ -175,8 +250,8 @@ such that $\vect{u} = \alpha \vect{v}$.
 Furthermore, the zero vector is collinear to every other vector.
 
 When we work in $\mathbb{C}^3$, we must specify whether the scalar is real or complex, independently of the real or complex nature of the vectors.
-If the scalar is real, we will keep using the term ``collinear'';
-but if the scalar is complex, we will use the term ``complex-collinear''.
+If the scalar is real, I will keep using the usual term ``collinear''.
+I introduce the term ``complex-collinear'' for the case where the scalar is complex.
 \begin{align}
     &\text{collinearity}
     &
@@ -195,23 +270,26 @@ If two vectors are collinear, then they are also complex-collinear.
 If two vectors are complex-collinear, and if the complex scalar has its imaginary part equal to~0, then the two vectors are collinear.
 
 %-----------------------------------------------------------------------------
-\subsubsection{Self-aligned complex vectors}
+\subsubsection{Self-collinear complex vectors}
 The real and imaginary parts of a complex vector are not necessarily collinear.
 
-%\begin{thdef}
-Definition: A complex vector is ``self-aligned'' if and only if its real and imaginary parts are collinear.
-%\end{thdef}
+Definition:
+A complex vector is ``self-collinear''%
+\footnote{
+    The word ``self-collinear'' is not a conventional term in mathematics or physics.
+    I could have used the word ``homogeneous'', to match the ``homogeneous wave'', but that word is also used to describe the propagation medium and I wish to avoid confusion.
+}
+if and only if its real and imaginary parts are collinear.
 
-%\begin{thcor}
-    A vector~$\vectcp{v}$ is self-aligned if and only if there exists a complex scalar~$\cp{v}$ and a unit vector~$\vectu{v}$ such that
-    \begin{equation}
-        \vectcp{v} = \cp{v} \vectu{v}
-        \text{.}
-        \label{eq:theorem_sa_unit}
-    \end{equation}
-%\end{thcor}
-%\begin{proof}
-    To prove it, let~$\vectcp{v}$ be a complex vector.
+Theorem:
+A vector~$\vectcp{v}$ is self-collinear if and only if there exists a complex scalar~$\cp{v}$ and a unit vector~$\vectu{v}$ such that
+\begin{equation}
+    \vectcp{v} = \cp{v} \vectu{v}
+    \text{.}
+    \label{eq:theorem_sa_unit}
+\end{equation}
+
+Proof\footnote{Formal proofs in sequent calculus are beautiful but tedious to write and read.  In this chapter, my proofs lack rigor and must be understood as quick summaries of the layout of a formal proof using first-order logic.}: Let~$\vectcp{v}$ be a complex vector.
     \begin{equation}
         \vectcp{v}
         =
@@ -219,7 +297,7 @@ Definition: A complex vector is ``self-aligned'' if and only if its real and ima
         =
         v_\re \vectu{v}_\re + i v_\im \vectu{v}_\im
     \end{equation}
-    By definition, $\vectcp{v}$ is self-aligned if and only if $\vectu{v}_\re = \vectu{v}_\im = \vectu{v}$.
+    By definition, $\vectcp{v}$ is self-collinear if and only if $\vectu{v}_\re = \vectu{v}_\im = \vectu{v}$.
     In that case,
     \begin{equation}
         \vectu{v}_\re = \vectu{v}_\im = \vectu{v}
@@ -227,13 +305,13 @@ Definition: A complex vector is ``self-aligned'' if and only if its real and ima
         \vectcp{v} = (v_\re + i v_\im) \vectu{v} = \cp{v} \vectu{v}
     \end{equation}
     which matches~\cref{eq:theorem_sa_unit}.
-%\end{proof}
+
 
 Some particular cases:
 \begin{itemize}
-    \item the null vector is self-aligned: $0 = 0 \vectu{v}$ for any unit vector $\vectu{v}$;
-    \item real vectors are self-aligned: $\vect{v} = v \vectu{v}$.
-    \item purely imaginary vectors are self-aligned: $\vectcp{v} = iv \vectu{v}$.
+    \item the null vector is self-collinear: $0 = 0 \vectu{v}$ for any unit vector $\vectu{v}$;
+    \item real vectors are self-collinear: $\vect{v} = v \vectu{v}$.
+    \item purely imaginary vectors are self-collinear: $\vectcp{v} = iv \vectu{v}$.
 \end{itemize}
 
 
@@ -245,9 +323,41 @@ Some particular cases:
 \subsection{Complex conjugation}
 The complex conjugate $\cp{z}^*$ of a scalar $\cp{z}$ is defined by
 \begin{equation}
-    \cp{z} = a + ib \iff \cp{z}^* = a - ib
+    \cp{z} = a + ib \iff \cp{z}^* = a - ib    \label{eq:conj_rect}
 \end{equation}
 with $a$ and $b$ real scalars.
+With this definition and Euler's Formula, it is easy to prove the following useful properties.
+\begin{subequations}
+\begin{align}
+    \text{involution     } \quad &
+    \left\lbrace
+        \begin{aligned}
+            (\cp{z}^*)^* &= \cp{z}
+        \end{aligned}
+    \right.
+    \\
+    \text{commutativity } \quad &
+    \left\lbrace
+        \begin{aligned}
+            \exp(\cp{z})^* &= \exp(\cp{z}^*) \\
+            \ln (\cp{z})^* &= \ln (\cp{z}^*) \\
+        \end{aligned}
+    \right.
+    \\
+    \text{distributivity } \quad &
+    \left\lbrace
+        \begin{aligned}
+            (\cp{z}_1 + \cp{z}_2)^* &= \cp{z}_1^* + \cp{z}_2^* \\
+            (\cp{z}_1 - \cp{z}_2)^* &= \cp{z}_1^* - \cp{z}_2^* \\
+            (\cp{z}_1   \cp{z}_2)^* &= \cp{z}_1^*   \cp{z}_2^* \\
+            (\cp{z}_1 / \cp{z}_2)^* &= \cp{z}_1^* / \cp{z}_2^* \\
+            \left(\cp{z}_1^{\cp{z}_2}\right)^* &= (\cp{z}_1^*)^{\cp{z}_2^*}
+        \end{aligned}
+    \right.
+\end{align}
+    \label{eq:conj_props}
+\end{subequations}
+
 Multiplying a complex by its conjugate yields a real number.
 \begin{align}
     \cp{z}\cp{z}^* = (a + ib)(a - ib) = a^2 + b^2 + i\underbrace{(ab-ab)}_{=0}
@@ -302,10 +412,22 @@ The result of the dot product of two complex vectors is a complex scalar.
 The dot product over the complex field is not positive-definite.
 Indeed, the dot product of a complex vector by itself can be any complex number.
 This is different from the real case, in which the dot product of a vector by itself is a positive number that is the square of the length of the vector.
-On the field of reals, $\vect{v} \cdot \vect{v}=0 \implies \vect{v}=0$.
-None of this is true over the complex field.
+On the field of reals, $\vect{v} \cdot \vect{v}=0 \implies \vect{v}=0$,
+but this is not true for the complex field.
 
-However, the dot product of a vector by its complex conjugate is a real number.
+However, the dot product of a vector by its complex conjugate is a real number%
+\footnote{
+    Some authors~\parencite[][for example]{lipschutz2009linear} define the dot product on~$\mathbb{C}$ with $\vectcp{u} \cdot \vectcp{v} = \sum_j \cp{u}_j \cp{v}^*_j$
+    in which case the dot product is a map
+    $\morph{\cdot}{F^n \times F^n}{\mathbb{R}}$ (with $F \subseteq \mathbb{C}$ a field);
+    this makes ``dot product'' and ``inner product'' synonym on $\mathbb{C}^n$ like they are on~$\mathbb{R}^n$.
+    I believe that merging the two notions is misguided, as both are useful on~$\mathbb{C}$.
+    With my definition,
+    the dot product on $F^n$ is a map $\morph{\cdot}{F^n \times F^n}{F}$
+    and the inner product on a vector space $V$ is a map $\morph{\innerprodd{-}}{V \times V}{\mathbb{R}}$.
+    Inner products are useful to define the notion of angle but in this chapter we try to avoid trigonometry.
+    Since this chapter focuses on $\mathbb{R}^3$ and $\mathbb{C}^3$, I prefer to keep the dot product simple and the complex-conjugation explicit.
+}.
 \begin{equation}
     \vectcp{v} \cdot \vectcp{v}^* \in \mathbb{R}
 \end{equation}
@@ -315,20 +437,23 @@ $\vectcp{u} \cdot \vectcp{v} = \vectcp{v} \cdot \vectcp{u}$.
 The complex conjugation distributes over the dot product:
 $(\vectcp{u} \cdot \vectcp{v})^* = \vectcp{u}^* \cdot \vectcp{v}^*$.
 
-We will sometimes note $\vectcp{v}^2$ the dot product $\vectcp{v} \cdot \vectcp{v}$.
+I will sometimes note $\vectcp{v}^2$ the dot product $\vectcp{v} \cdot \vectcp{v}$.
 
 %-----------------------------------------------------------------------------
 \subsubsection{Dot product and normality}
 
 The dot product defines the notion of normality for vectors.
-%\begin{thdef}
 Definition: A vector is normal to another vector if and only if their dot product equals~$0$.
-%\end{thdef}
-This definition still applies to complex vectors.
 \begin{equation}
     \vectcp{u} \perp \vectcp{v}
     \iff
     \vectcp{u} \cdot \vectcp{v} = 0
+    \iff
+    \begin{cases}
+        \vect{u}_\re \cdot \vect{v}_\re = \vect{u}_\im \cdot \vect{v}_\im \\
+        \vect{u}_\re \cdot \vect{v}_\im = \vect{u}_\im \cdot \vect{v}_\re
+    \end{cases}
+    \label{eq:dot_perp}
 \end{equation}
 
 %-----------------------------------------------------------------------------
@@ -346,7 +471,7 @@ The matrix representing the dot product of $\vectcp{u}$ by a vector is $\vectcp{
 Another useful operation is the `projection' of a vector onto another.
 The `projection' of $\vectcp{u}$ on $\vectcp{v}$
 is $(\vectcp{u} \cdot \vectcp{v})\vectcp{v}$.
-I put the word `projection' in quotes because the word usually implies that the vector onto which we project is a real unit vector: $\vectcp{v}=\vectu{v}$.
+I put the word `projection' in quotes because the word usually implies that the vector onto which we project is a real unit vector ($\vectcp{v}=\vectu{v}$), which I do not require.
 \begin{subequations}  
     \label{eq:projection_matrix}
     \begin{align}
@@ -386,17 +511,17 @@ The cross-product is defined by
     \vectcp{u} \times \vectcp{v}
     =
     \begin{pmatrix}
-        \cp{a} \\ \cp{b} \\ \cp{c}
+        \cp{u}_x \\ \cp{u}_y \\ \cp{u}_z
     \end{pmatrix}
     \times
     \begin{pmatrix}
-        \cp{x} \\ \cp{y} \\ \cp{z}
+        \cp{v}_x \\ \cp{v}_y \\ \cp{v}_z
     \end{pmatrix}
     \equaldef
     \begin{pmatrix}
-        \cp{b}\cp{z} - \cp{c}\cp{y}\\
-        \cp{c}\cp{x} - \cp{a}\cp{z}\\
-        \cp{a}\cp{y} - \cp{b}\cp{x}
+        \cp{u}_y \cp{v}_z - \cp{u}_z \cp{v}_y\\
+        \cp{u}_z \cp{v}_x - \cp{u}_x \cp{v}_z\\
+        \cp{u}_x \cp{v}_y - \cp{u}_y \cp{v}_x
     \end{pmatrix}
     \text{.}
 \end{equation}
@@ -410,27 +535,69 @@ $(\vectcp{u} \times \vectcp{v})^* = \vectcp{u}^* \times \vectcp{v}^*$.
 %-----------------------------------------------------------------------------
 \subsubsection{Cross product and collinearity}
 
-%\begin{ththe}
-    Two complex vectors are complex-collinear if and only if their cross product is zero.
+Theorem: Two complex vectors are complex-collinear if and only if their cross product is zero.
 \begin{equation}
     \vectcp{u} \;\cp{\parallel}\; \vectcp{v}  \iff   \vectcp{u} \times \vectcp{v} = 0
 \end{equation}
-%\end{ththe}
+The proof is tedious to write formally but easy to grasp.
+We start with
+\begin{equation*}
+    \vectcp{w} = 0
+    \iff
+    (\cp{w}_x = 0)   \land   (\cp{w}_y = 0)   \land   (\cp{w}_z = 0)
+\end{equation*}
+to reduce the problem to three scalar equations.
+The first scalar equation gives
+\begin{equation*}
+    \cp{w}_x = 0
+    \iff
+    \cp{u}_y \cp{v}_z - \cp{u}_z \cp{v}_y = 0
+    \iff
+    \cp{u}_y \cp{v}_z = \cp{u}_z \cp{v}_y
+\end{equation*}
+Assuming that we can divide, we have
+\begin{equation*}
+    (\cp{u}_y \cp{v}_z = \cp{u}_z \cp{v}_y)
+    \land (\cp{v}_y \ne 0)
+    \land (\cp{v}_z \ne 0)
+    \implies
+    \frac{\cp{u}_y}{\cp{v}_y} = \frac{\cp{u}_z}{\cp{v}_z}
+\end{equation*}
+from which we infer a coefficient of proportionality $\cp{\alpha}$ between the $y$ and $z$ components of the two vectors.
+\begin{equation*}
+    \frac{\cp{u}_y}{\cp{v}_y} = \frac{\cp{u}_z}{\cp{v}_z}
+    \implies
+    \exists \cp{\alpha} \big(
+        (\cp{\alpha} \in \mathbb{C})
+        \land
+        (\cp{u}_y = \cp{\alpha} \cp{v}_y)
+        \land
+        (\cp{u}_z = \cp{\alpha} \cp{v}_z)
+    \big)
+\end{equation*}
+Repeating the operation for the two other scalar equations produces two other proportionality coefficients.
+By transitivity of equality, the three proportionality coefficients are equal and
+$\vectcp{u} = \cp{\alpha} \vectcp{v}$ which is equivalent to $\vectcp{u} \;\cp{\parallel}\; \vectcp{v}$.
+When any component equals~0, then the whole vector equals~0 or the corresponding component of the other vector equals~0: the proportionality remains.  QED.
+
+
 
 
 %-----------------------------------------------------------------------------
 \subsubsection{Cross product and normality}
 
-%\begin{ththe}
-    The cross product of two vectors is normal to these vectors.
-\begin{subequations}
-    \begin{align}
-        (\vectcp{u} \times \vectcp{v}) \cdot \vectcp{u} &= 0
-        \\
-        (\vectcp{u} \times \vectcp{v}) \cdot \vectcp{v} &= 0
-    \end{align}
-\end{subequations}
-%\end{ththe}
+Theorem:
+The cross product of two vectors is normal to these vectors.
+\begin{equation}
+        \forall \vectcp{u}, \vectcp{v}
+        \Big(
+            \big( (\vectcp{u} \times \vectcp{v}) \perp \vectcp{u} \big)
+            \: \land \:
+            \big( (\vectcp{u} \times \vectcp{v}) \perp \vectcp{v} \big)
+        \Big)
+    \label{eq:cross_perp}
+\end{equation}
+Proof: combine~\cref{eq:dot_perp,eq:cross_perp,eq:scalar_triple_product}.
 
 %-----------------------------------------------------------------------------
 \subsubsection{Matrix representation of cross product operations}
@@ -517,7 +684,7 @@ We use~\cref{eq:projection_matrix} to determine~$\matrcp{d}_n$.
     \matrcp{d}_n = \frac{1}{\vectcp{d} \cdot \vectcp{d}} \vectcp{d} \vectcp{d}\transp
     \label{eq:matrix_decomposition_normal}
 \end{equation}
-To determine~$\matrcp{d}_a$, we use the identity matrix of rank 3, which we note~$\matr{I}_3$.
+To determine~$\matrcp{d}_a$, we use the identity matrix of rank 3, which I note~$\matr{I}_3$.
 \begin{equation}
     \matrcp{d}_a = \frac{1}{\vectcp{d} \cdot \vectcp{d}} \matr{I}_3 - \matrcp{d}_n
     \label{eq:matrix_decomposition_along}
@@ -592,7 +759,7 @@ Its demonstration fits in a single line.
 
 Maxwell's macroscopic equations for complex fields are identical to those for real fields.
 We can find them in~\textcite{jackson1998classical}.
-We should not forget to mention the immense contribution of Oliver Heaviside after James Clerk Maxwell's work.
+I would like to mention the immense contribution of Oliver Heaviside after James Clerk Maxwell's work.
 It is Heaviside who, by developing vector analysis, reduced the twenty equations of Maxwell into the four that we now know~\parencite{nahin2002oliver}.
 
 \begin{subequations}
@@ -617,7 +784,7 @@ The meaning of each symbol is summarized in~\cref{tab:maxwell_symbols}.
 \Cref{eq:maxwell_div_d,eq:maxwell_div_b} are not independent from
 \cref{eq:maxwell_curl_e,eq:maxwell_curl_h}: they derive from them and the postulate that charges are conserved~\parencite{stratton1941electromagnetic}.
 
-\begin{table}
+\begin{table}[b]
     \centering
     \begin{tabular}{@{}cll@{}}
     \toprule
@@ -686,8 +853,8 @@ Most media are dispersive.
 %=============================================================================
 \subsection{Harmonic plane waves in linear homogeneous isotropic media}
 
-In this section we consider linear homogeneous and isotropic propagation media.
-Furthermore, we assume that the media are electrically neutral ($\cp{\rho}_f = 0$) and that there are no external sources of current ($\vectcp{J}_e=0$).
+In this section I consider linear homogeneous and isotropic propagation media.
+Furthermore, I assume that the media are electrically neutral ($\cp{\rho}_f = 0$) and that there are no external sources of current ($\vectcp{J}_e=0$).
 
 Harmonic plane waves are a solution to Maxwell's equations~\parencite{stratton1941electromagnetic}.
 Plane waves have a constant frequency and their wavefronts (iso-phase surfaces) are all parallel.
@@ -742,10 +909,10 @@ or the complex exponential function
     \text{,}
 \end{equation}
 both of which describe the same real physical phenomenon.
-In this chapter, and in the rest of this book, we extend the notion of phasor to allow complex angular frequencies.
+In this chapter, and in the rest of this book, I extend the notion of phasor to allow complex angular frequencies.
 The phasor $\cp{g}$ represents the complex exponential function
 \begin{equation}
-    \cp{G}(t) = \cp{g} \exp(-i \cp{\omega} t)
+    \cp{G}(t) = \cp{g} \exp(-i \cp{\omega} t) \label{eq:phasor}
 \end{equation}
 where $\cp{\omega} = \omega_\re + i \omega_\im$ is a complex angular frequency.
 The real part of $\cp{G}(t)$ gives the real function
@@ -786,9 +953,9 @@ It can also be interpreted as two amplitudes and two directions
     i
     g_\im \vectu{g}_\im
 \end{equation}
-and, if the vector is self-aligned, it can also be interpreted as one amplitude, one phase and one direction:
+and, if the vector is self-collinear, it can also be interpreted as one amplitude, one phase and one direction:
 \begin{equation}
-    \vectcp{g} = \cp{g} \vectu{g}
+    \vectcp{g} = (g \angle \phi_g) \vectu{g}
 \end{equation}
 
 An advantage of the phasor notation is that the frequency term, generally common to all the harmonic functions of a system, can be factored out, which lightens the equations.
@@ -832,11 +999,11 @@ Complex wave vectors can model both homogeneous and heterogeneous waves with the
 \end{equation}
 The wave propagates in the direction of $\vect{k}_\re$
 and decays in the direction of $\vect{k}_\im$.
-These directions do not have to be collinear: $\vectcp{k}$ does not have to be self-aligned.
+These directions do not have to be collinear: $\vectcp{k}$ does not have to be self-collinear.
 When the directions of propagation and decay are the same, the wave is said to be ``homogeneous''.
 When these directions differ, the wave is ``heterogeneous''.
 This is independent of the homogeneity of the propagation media: heterogeneous waves can exist in homogeneous media.
-There are as many ways for a wave to be homogeneous as there are ways for its wave vector to be self-aligned, as summarized in~\cref{tab:types_homo_hetero_waves}.
+There are as many ways for a wave to be homogeneous as there are ways for its wave vector to be self-collinear, as summarized in~\cref{tab:types_homo_hetero_waves}.
 \begin{table}
     \centering
     \rowcolors{1}{}{gray!20}
@@ -1079,8 +1246,8 @@ From Maxwell's equations for complex harmonic plane waves, we can give these exp
 \label{sec:wavenumber_squared}
 In the real case, the wavenumber (in one word) $k$ is defined by~$\vect{k}=k \vectu{k}$.
 We could try to expand it to the complex case by writing~$\vectcp{k}=\cp{k} \vectu{k}$
-but this is possible only if $\vectcp{k}$ is self-aligned.
-When a complex wave vector is not self-aligned, the notion of wavenumber is not defined.
+but this is possible only if $\vectcp{k}$ is self-collinear.
+When a complex wave vector is not self-collinear, the notion of wavenumber is not defined.
 However, we can still calculate a scalar quantity from an arbitrary complex wave vector.
 We can do this using the formula for the vector triple product.
 \begin{subequations}
@@ -1107,7 +1274,7 @@ We can do this using the formula for the vector triple product.
 \end{subequations}
 We get exactly the same value if we start with $\vectcp{h}$ instead of $\vectcp{e}$.
 
-$\cp{\omega}^2 \cp{\epsilon} \cp{\mu}$ is equal to the square of what we would call the wavenumber if the wave vector were self-aligned.
+$\cp{\omega}^2 \cp{\epsilon} \cp{\mu}$ is equal to the square of what we would call the wavenumber if the wave vector were self-collinear.
 
 %-----------------------------------------------------------------------------
 \subsubsection{Impedance and admittance}
@@ -1232,7 +1399,7 @@ Named after the British physicist John Henry Poynting (1852--1914),
 the Poynting vector represents the directional irradiance (the rate of energy transfer per unit area) of an electromagnetic field.
 In SI units, it is expressed in Watt per square meter, \si{\watt\per\meter\squared}.
 
-The Poynting vector~$\vect{P}$ is the solution to Poynting's theorem
+The Poynting vector~$\vect{\power{P}}$ is the solution to Poynting's theorem
 \begin{equation}
     \frac{1}{2}\frac{\partial}{\partial t}
     \left(
@@ -1241,12 +1408,12 @@ The Poynting vector~$\vect{P}$ is the solution to Poynting's theorem
     =
     \vect{J}_f \cdot \vect{E}
     +
-    \nabla \cdot \vect{P}
+    \nabla \cdot \vect{\power{P}}
     \label{eq:poynting_theorem}
 \end{equation}
 which states that the rate of energy transfer per unit volume (the time derivative)
 equals the work done on the free charges ($\vect{J}_f \cdot \vect{E}$)
-plus the energy flux leaving the volume ($\nabla \cdot \vect{P}$).
+plus the energy flux leaving the volume ($\nabla \cdot \vect{\power{P}}$).
 It is a real vector defined for real electromagnetic fields.
 %$\vect{E}=\Re(\vectcp{E})$,
 %$\vect{D}=\Re(\vectcp{D})$,
@@ -1255,7 +1422,7 @@ It is a real vector defined for real electromagnetic fields.
 
 In the case of linear homogeneous propagation media,
 \begin{equation}
-    \vect{P} = \vect{E} \times \vect{H}
+    \vect{\power{P}} = \vect{E} \times \vect{H}
     \text{.}
     \label{eq:poynting_vector}
 \end{equation}
@@ -1278,7 +1445,7 @@ Since harmonic waves are periodic, we can compute their time-averaged Poynting v
     \\
     \vect{H} &= \vect{h} \cos(\vect{k}\cdot\vect{r} - \omega t + \varphi_h)
     \\
-    \vect{P} &=
+    \vect{\power{P}} &=
     \frac{1}{2}
     \Big[
         \cos(\varphi_e - \varphi_h)
@@ -1288,7 +1455,7 @@ Since harmonic waves are periodic, we can compute their time-averaged Poynting v
     \,
     \vect{e} \times \vect{h}
     \\
-    \Timeavg{\vect{P}}
+    \Timeavg{\vect{\power{P}}}
     &=
     \frac{1}{2} \cos(\varphi_e - \varphi_h) \, \vect{e} \times \vect{h}
 \end{align}
@@ -1326,7 +1493,7 @@ Because~$\vect{e}$ is real, $\vect{e}^*=\vect{e}$.
 The dot product $\vect{e}\cdot\vect{e}$ equals $\vect{e}\cdot\vect{e}^*$, which we recognize as~$\norm{\vect{e}}^2$.
 Finally, by noticing that $\sqrt{\epsilon/\mu}$ equals the wave admittance~$Y$ (real in that case),
 \begin{equation}
-    \Timeavg{\vect{P}}
+    \Timeavg{\vect{\power{P}}}
     =
     \frac{1}{2} \cos(\varphi_e - \varphi_h) 
     Y %\sqrt{\frac{\epsilon}{\mu}}
@@ -1351,7 +1518,7 @@ Finally, by noticing that $\sqrt{\epsilon/\mu}$ equals the wave admittance~$Y$ (
 \subsubsection{Definition}
 The time-averaged complex Poynting vector is defined by
 \begin{equation}
-    \Timeavg{\vectcp{\mathcal{S}}}
+    \Timeavg{\vectcp{\power{S}}}
     \equaldef
     \frac{1}{2} \vectcp{E} \times \vectcp{H}^*
     \text{.}
@@ -1373,7 +1540,7 @@ We are interested in the value of that vector at a specific location $\vect{r}_1
 \end{align}
 which gives
 \begin{equation}
-    \Timeavg{\vectcp{\mathcal{S}}} =
+    \Timeavg{\vectcp{\power{S}}} =
     \frac{1}{2}
     \,
     \cp{T}\cp{T}^*
@@ -1383,7 +1550,7 @@ which gives
 with $\cp{T} = \exp\left(-i \cp{\omega} t \right)$.
 We can then give the expression of the time-averaged complex Poynting vector of a complex harmonic plane wave in a linear homogeneous isotropic medium at an instant~$t$ as a function of the electric and magnetizing phasors.
 \begin{equation}
-    \Timeavg{\vectcp{\mathcal{S}}}
+    \Timeavg{\vectcp{\power{S}}}
     =
     \frac{1}{2}
     \exp(2\omega_\im t)
@@ -1398,7 +1565,7 @@ We can then give the expression of the time-averaged complex Poynting vector of 
 \subsubsection{Comparison with the real Poynting vector}
 
 The reason for conjugating the magnetizing field and putting a factor $1/2$ is made clear when we take the real part of the time-averaged complex Poynting vector.
-Indeed, the real part of the time-averaged complex Poynting vector $\timeavg{\vectcp{\mathcal{S}}}$ equals the time-averaged real Poynting vector~$\timeavg{\vect{P}}$.
+Indeed, the real part of the time-averaged complex Poynting vector $\timeavg{\vectcp{\power{S}}}$ equals the time-averaged real Poynting vector~$\timeavg{\vect{\power{P}}}$.
 This justifies using imaginary numbers, which are a mathematical construct, to solve problems of the real world.
 \begin{subequations}
     \begin{align}
@@ -1430,7 +1597,7 @@ This justifies using imaginary numbers, which are a mathematical construct, to s
             \vect{e}_{1\im} \times \vect{h}_{1\im}
         )
         \\
-        \Re\left( \Timeavg{\vectcp{\mathcal{S}}} \right)
+        \Re\left( \Timeavg{\vectcp{\power{S}}} \right)
         &=
         \frac{1}{2}
         \exp(2\omega_\im t)
@@ -1441,7 +1608,7 @@ This justifies using imaginary numbers, which are a mathematical construct, to s
         )
     \end{align}
 \end{subequations}
-If we assume that the wave is homogeneous, then the wave vector is self-aligned.
+If we assume that the wave is homogeneous, then the wave vector is self-collinear.
 This means that the wavenumber~$\cp{k}$ is defined by $\vectcp{k} = \cp{k} \vectu{k}$ and its value is $\cp{k}=\cp{\omega} \sqrt{\cp{\epsilon} \cp{\mu}}$.
 We can therefore express $\vectcp{h}_1$ as
 \begin{equation}
@@ -1486,7 +1653,7 @@ Using the vector triple product, we find
 \end{subequations}
 Our final expression for the real part of the time-averaged complex Poynting vector in the case of homogeneous waves is
 \begin{equation}
-    \Re\left( \Timeavg{\vectcp{\mathcal{S}}} \right)
+    \Re\left( \Timeavg{\vectcp{\power{S}}} \right)
     =
     \frac{1}{2}
     \exp(2\omega_\im t)
@@ -1496,7 +1663,7 @@ Our final expression for the real part of the time-averaged complex Poynting vec
     \text{.}
     \label{eq:complex_poynting_homogeneous_real}
 \end{equation}
-This equation looks similar to that of $\timeavg{\vect{P}}$ given in~\cref{eq:poynting_real}, except for two differences.
+This equation looks similar to that of $\timeavg{\vect{\power{P}}}$ given in~\cref{eq:poynting_real}, except for two differences.
 \begin{itemize}
     \item 
 In~\cref{eq:poynting_real} we assumed a real angular frequency, so if we do the same here, the exponential disappears from \cref{eq:complex_poynting_homogeneous_real}.
@@ -1506,7 +1673,7 @@ it is taken into account by the imaginary part of the admittance in~\cref{eq:h_y
 \end{itemize}
 These two differences explained, we can conclude that
 \begin{equation}
-    \Re\left( \Timeavg{\vectcp{\mathcal{S}}} \right) = \timeavg{\vect{P}}
+    \Re\left( \Timeavg{\vectcp{\power{S}}} \right) = \timeavg{\vect{\power{P}}}
     \text{.}
 \end{equation}
 
@@ -1517,30 +1684,30 @@ These two differences explained, we can conclude that
 
 We can draw a parallel between
 $
-    \timeavg{\vectcp{\mathcal{S}}}
+    \timeavg{\vectcp{\power{S}}}
     =
-    \timeavg{\vect{\mathcal{P}}}
+    \timeavg{\vect{\power{P}}}
     +
     i
-    \timeavg{\vect{\mathcal{Q}}}
+    \timeavg{\vect{\power{Q}}}
 $
 and the equation
 $
-    \cp{S} = P + iQ
+    \cp{\power{S}} = \power{P} + i\power{Q}
 $
 from electrical engineering, which links the various kinds of electric powers in a circuit.
 \Textcite{IEEE2002dictionary} defines the terms and SI units listed in~\cref{tab:complex_powers}.
-By analogy, we call $\timeavg{\vectcp{\mathcal{S}}}$,
-$\timeavg{\vect{\mathcal{P}}}$ and
-$\timeavg{\vect{\mathcal{Q}}}$ ``time averaged complex, active and reactive Poynting vectors''.
+By analogy, I call $\timeavg{\vectcp{\power{S}}}$,
+$\timeavg{\vect{\power{P}}}$ and
+$\timeavg{\vect{\power{Q}}}$ ``time averaged complex, active and reactive Poynting vectors''.
 
-We get $\cp{S}$ by integrating $\timeavg{\vectcp{\mathcal{S}}}$ over a surface $\Sigma$.
+We get the scalar $\cp{\power{S}}$ by integrating the vector $\timeavg{\vectcp{\power{S}}}$ through a surface $\Sigma$.
 \begin{equation}
-    \cp{S}
+    \cp{\power{S}}
     =
     \iint_\Sigma
     \!
-    \Timeavg{\vectcp{\mathcal{S}}}
+    \Timeavg{\vectcp{\power{S}}}
     \cdot
     \vectu{n}_\sigma
     \,
@@ -1548,21 +1715,21 @@ We get $\cp{S}$ by integrating $\timeavg{\vectcp{\mathcal{S}}}$ over a surface $
     \label{eq:complex_power_from_poynting_vector}
 \end{equation}
 In this equation, $\vectu{n}_\sigma$ is the unit vector normal to the surface element~$\dif\sigma$.
-Because of the linearity of the integral, we can identify~$P$ and~$Q$
-to integrals of~$\Timeavg{\vect{\mathcal{P}}}$ and~$\Timeavg{\vect{\mathcal{Q}}}$
+Because of the linearity of the integral, we can identify~$\power{P}$ and~$\power{Q}$
+to integrals of~$\Timeavg{\vect{\power{P}}}$ and~$\Timeavg{\vect{\power{Q}}}$
 over the same surface~$\Sigma$.
 \begin{equation}
-    \cp{S}
+    \cp{\power{S}}
     =
     \underbrace{
         \iint_\Sigma
         \!
-        \Timeavg{\vect{\mathcal{P}}}
+        \Timeavg{\vect{\power{P}}}
         \cdot
         \vectu{n}_\sigma
         \,
         \dif\sigma
-    }_{P}
+    }_{\power{P}}
     \:
     +
     \:
@@ -1571,12 +1738,12 @@ over the same surface~$\Sigma$.
     \underbrace{
         \iint_\Sigma
         \!
-        \Timeavg{\vect{\mathcal{Q}}}
+        \Timeavg{\vect{\power{Q}}}
         \cdot
         \vectu{n}_\sigma
         \,
         \dif\sigma
-    }_{Q}
+    }_{\power{Q}}
     \label{eq:active_reactive_power_from_poynting_vector}
 \end{equation}
 
@@ -1586,13 +1753,13 @@ over the same surface~$\Sigma$.
         \toprule
         name & symbol & unit\\
         \midrule
-        complex power     & $\cp{S} = P + iQ$\quad & \si{\volt\ampere} (volt-ampere) \\
-        active/real power & $P \in \mathbb{R} = \Re(\cp{S})$\quad & \si{\watt} (watt) \\
-        reactive power    & $Q \in \mathbb{R} = \Im(\cp{S})$\quad & \si{var} (volt-ampere-reactive) \\
-        apparent power    & $\abs{\hat{S}} = \sqrt{P^2 + Q^2}$\quad & \si{\volt\ampere} (volt-ampere) \\
+        complex power     & $\cp{\power{S}} = \power{P} + i\power{Q}$\quad & \si{\volt\ampere} (volt-ampere) \\
+        active/real power & $\power{P} \in \mathbb{R} = \Re(\cp{\power{S}})$\quad & \si{\watt} (watt) \\
+        reactive power    & $\power{Q} \in \mathbb{R} = \Im(\cp{\power{S}})$\quad & \si{var} (volt-ampere-reactive) \\
+        apparent power    & $\abs{\cp{\power{S}}} = \sqrt{\power{P}^2 + \power{Q}^2}$\quad & \si{\volt\ampere} (volt-ampere) \\
         \bottomrule
     \end{tabular}
-    \caption{The four types of powers with complex signals.}
+    \caption{The four types of scalar powers with complex signals.}
     \label{tab:complex_powers}
 \end{table}
 
@@ -1609,10 +1776,10 @@ The medium can store energy in the position of its bound charges: the electric f
 \section{Transmission and reflection at an interface}
 \label{sec:transmission_reflection_interface}
 
-We are considering a plane interface~$\mathcal{I}$ separating two linear homogeneous propagation media $a$ and $b$.
-Each medium has an electric permittivity and a magnetic permeability that we note $\cp{\epsilon}_a$, $\cp{\epsilon}_b$, $\cp{\mu}_a$ and $\cp{\mu}_b$.
+Let us consider a plane interface~$\mathcal{I}$ separating two linear homogeneous propagation media $a$ and $b$.
+Each medium has an electric permittivity and a magnetic permeability that I note $\cp{\epsilon}_a$, $\cp{\epsilon}_b$, $\cp{\mu}_a$ and $\cp{\mu}_b$.
 
-We assume
+Let us assume
 an incident wave in the medium~$a$ ($\vectcp{k}_\I$, $\vectcp{E}_\I$, $\vectcp{H}_\I$),
 a reflected wave in the medium~$a$ ($\vectcp{k}_\R$, $\vectcp{E}_\R$, $\vectcp{H}_\R$)
 and a transmitted wave in the medium~$b$ ($\vectcp{k}_\T$, $\vectcp{E}_\T$, $\vectcp{H}_\T$).
@@ -1633,7 +1800,7 @@ In these equations, $\vectcp{J}_s$ the a surface current density;
 it equals~0, except on the surface of a perfect conductor~\parencite{stratton1941electromagnetic}.
 $\cp{\rho}_s$ is the surface charge density.
 
-Since in our case there are no surface charges and no surface currents (beyond the ones generated by our waves themselves), $\vectcp{J}_s=0$ and $\cp{\rho}_s=0$.
+Since in our case there are no surface charges and no surface currents (beyond the ones generated by the waves themselves), $\vectcp{J}_s=0$ and $\cp{\rho}_s=0$.
 In that case, the direction of the normal does not matter, we can use $\vectu{n}=\vectu{n}_{ab}$ or $\vectu{n}=\vectu{n}_{ba}$.
 \begin{align}
     &\vectu{n} \times (\vectcp{E}_b - \vectcp{E}_a) = 0 \\
@@ -1652,7 +1819,7 @@ If we use the constitutive equations $\vectcp{D}=\cp{\epsilon} \, \vectcp{E}$ an
     &\vectu{n} \cdot  (\cp{\mu}_b      \vectcp{H}_b - \cp{\mu}_a      \vectcp{H}_a) = 0
 \end{align}
 
-We apply these continuity equations to our three waves.
+We apply these continuity equations to the three waves.
 \begin{align}
     &\vectu{n} \times (\vectcp{E}_\I + \vectcp{E}_\R) = \vectu{n} \times \vectcp{E}_\T \\
     &\vectu{n} \times (\vectcp{H}_\I + \vectcp{H}_\R) = \vectu{n} \times \vectcp{H}_\T \\
@@ -1695,7 +1862,7 @@ This leads to the following condition for any point $\vect{r}$ of the interface.
 
 If we place the origin of the reference frame somewhere on the interface,
 then $\vect{r} \in \mathcal{I} \iff \vect{r} \cdot \vectu{n}=0$.
-This condition ``the origin of the reference frame belongs to the interface'' is only temporary; it is useful only when $\vect{r}$ appears in our equations.
+This condition ``the origin of the reference frame belongs to the interface'' is only temporary; it is useful only when $\vect{r}$ appears in the equations.
 
 Since
 $
@@ -1798,18 +1965,18 @@ $n_a \sin{\theta_\I} = n_b \sin{\theta_\T}$.
 The formula that we derived is much stronger and more general than the one limited to the real scalar case: it works with complex vectors and does not require trigonometry.
 
 Furthermore, this equation proves that the four vectors $\vectu{n}$, $\vectcp{k}_\I$, $\vectcp{k}_\R$ and $\vectcp{k}_\T$ are coplanar.
-We call the plane that contains these vectors the ``plane of incidence''.
+Following the convention, I call the plane that contains these vectors the ``plane of incidence''.
 The vector~$\vectcp{s}$ is normal to this plane of incidence.
 
 %-----------------------------------------------------------------------------
 \subsubsection{Snell's law in the case of homogeneous incident wave}
-Here, we derive the familiar trigonometric form of Snell's law from our algebraic one.
-We start with the extremely limited situation in which all the angles are real, then we introduce the case of total internal reflection in dielectrics, a very simple case, to show how the trigonometric form of Snell's law is already not the most convenient form to solve this simple problem.
+Here, I derive the familiar trigonometric form of Snell's law from the algebraic one.
+I start with the extremely limited situation in which all the angles are real, then I introduce the case of total internal reflection in dielectrics, a very simple case, to show how the trigonometric form of Snell's law is already not the most convenient form to solve this simple problem.
 
 If the incident wave is homogeneous, then its
 wave vector~$\vectcp{k}_\I$ can be expressed in terms of a complex wavenumber~$\cp{k}_\I$ and a unit vector~$\vectu{k}_\I$: $\vectcp{k}_\I = \cp{k}_\I \vectu{k}_\I$.
 
-In that case, the vector normal to the plane of incidence is self-aligned:
+In that case, the vector normal to the plane of incidence is self-collinear:
 \begin{subequations}
     \begin{align}
         \vectcp{s}
@@ -1899,11 +2066,11 @@ We can still try to interpret this complex $\vectu{k}_\T$.
 Its imaginary part indicates that the evanescent wave propagates in the $\vectu{x}$ direction, that is tangentially to the interface.
 The real part of $\vectu{k}_\T$ indicates that the evanescent wave decays in the $\vectu{z}$ direction, which is the direction of the normal $\vectu{n}$.
 
-This example illustrates why we decided to stay away from trigonometry.
+This example illustrates why I decided to stay away from trigonometry.
 Angles and unit vectors have intuitive geometrical representation when they are real, but they are not so intuitive anymore when they are complex.
 The geometric interpretation is already getting convoluted in this simple situation in which both refractive indices are real and the incident wave is homogeneous.
 In the general case, it is easier to solve the problem without any trigonometry.
-Furthermore, our algebraic expression of Snell's law does not require that we define the notions of refractive indices, wavenumbers, or that we can find real unit vectors.
+Furthermore, our algebraic expression of Snell's law does not require the notions of refractive indices, wavenumbers, or real unit vectors.
 
 %-----------------------------------------------------------------------------
 \subsubsection{Applying Snell's law}
@@ -2157,14 +2324,14 @@ When a wave is incident to the interface between two homogeneous propagation med
 Snell's law gave us the wave vectors for these transmitted and reflected waves.
 We now need to know the amplitude, the phase and the direction of the fields.
 
-We will use the term ``transmission'' instead of ``refraction'' because it starts with a ``t'', we reserve the letter ``r'' for reflections.
+I will use the term ``transmission'' instead of ``refraction'' because it starts with a ``t'', I reserve the letter ``r'' for reflections.
 
 Fresnel's equations give the expression of reflection and transmission coefficients~\parencite{hecht2002optics}.
 We need only to know them for the electric field.
 We can deduce the magnetizing field from the electric field and the wave vector.
 
-We are going to derive Fresnel's equations for complex harmonic plane waves in linear homogeneous isotropic propagation media.
-Unlike some of the litterature on the subject, we allow for a complex electric permittivity, we allow for the magnetic permeability to differ from 1, and we allow for wave vectors that are not self-aligned.
+I am going to derive Fresnel's equations for complex harmonic plane waves in linear homogeneous isotropic propagation media.
+Unlike some of the litterature on the subject, I allow for a complex electric permittivity, I allow for the magnetic permeability to differ from 1, and I allow for wave vectors that are not self-collinear.
 
 Let us write again the continuity equations at the interface.
 We now know that they are valid in any point of the interface so we do not need the time and space scalar fields.
@@ -2703,7 +2870,7 @@ Finally, the reflection and transmission matrices $\matrcp{r}$ and $\matrcp{t}$ 
 
 \Cref{eq:fresnel_reflection_matrix,eq:fresnel_transmission_matrix} conclude our determination of the reflection and transmission coefficients for a complex harmonic plane wave incident on a plane interface between two linear homogeneous isotropic propagation media.
 They are valid for media with complex permittivity and/or permeability.
-They are valid for heterogeneous waves (wave vector not self-aligned).
+They are valid for heterogeneous waves (wave vector not self-collinear).
 They are independent of the orientation of the reference frame.
 
 %=============================================================================
@@ -2849,44 +3016,46 @@ Once again, the notion of refractive index seems unnecessary; and in this case, 
 %#############################################################################
 \FloatBarrier
 \section{Conclusion}
-In this chapter, we have derived the laws of reflection and transmission (refraction) for complex harmonic plane waves at the plane interface between two linear homogeneous isotropic media.
+In this chapter, I have derived the laws of reflection and transmission (refraction) for complex harmonic plane waves at the plane interface between two linear homogeneous isotropic media.
 
 The expression of these laws is more general than the ones found in most textbooks.
 Chapter~9 of \textcite{stratton1941electromagnetic} got close but the reliance on real trigonometry limits the equations to the case of homogeneous incident waves, even though the outgoing waves may be heterogeneous.
-In our study, we removed this limitation by avoiding all trigonometry.
-Our expressions for the laws of reflection and transmission are purely algebraic.
+In this study, I removed this limitation by avoiding all trigonometry.
+Consequently, the expressions for the laws of reflection and transmission are purely algebraic.
 This makes them able to deal with heterogeneous waves as well as homogeneous waves.
 Furthermore, they require no particular reference frame.
 
-One remarkable feature of our equations is that they do not feature any refractive index.
+One remarkable feature of these equations is that they do not feature any refractive index.
 The refractive index of a material is actually not a fundamental property of this material; it is a property of a homogeneous plane wave propagating in that material.
 When the wave is not plane, or plane but inhomogeneous, the refractive index loses its meaning.
-Instead, our equations feature the more fundamental electric permittivities, magnetic permeabilities, and wave vectors.
+Instead, these equations feature the more fundamental electric permittivities, magnetic permeabilities, and wave vectors.
 
 Premature `simplifications' of equations can lead to an increased complexity and confusion down the line.
-We hope that we have proven that it is easy to unify conductors and dielectrics:
+I hope that I have proven that it is easy to unify conductors and dielectrics:
 without trigonometry, there is no need for specific reference frames;
 without refractive indices, there is no restriction to homogeneous waves.
-We encourage the reader to do the same and keep their equations as general as possible.
+I would like to encourage the reader to do the same and keep their equations as general as possible.
 
 
-%#############################################################################
-%\clearpage
-\printbibliography[heading=subbibliography]
-\begin{figure}[b!]
+\begin{figure}[b]
     \centering
     \begin{subfigure}[t]{.47\textwidth}
         \centering
-        \includegraphics[height=7cm]{oheaviside}
+        \includegraphics[height=6.5cm]{oheaviside}
         \caption*{Photograph of Oliver Heaviside, circa 1900.}
         \caption*{Credit Smithsonian Libraries, public domain.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}[t]{.47\textwidth}
         \centering
-        \includegraphics[height=7cm]{jamesclerkmaxwell}
+        \includegraphics[height=6.5cm]{jamesclerkmaxwell}
         \caption*{Engraving of James Clerk Maxwell by G. J. Stodart from a photograph by Fergus of Greenock.}
         \caption*{G. J. Stodart - Frontpiece in James Maxwell, The Scientific Papers of James Clerk Maxwell. Ed: W. D. Niven. New York: Dover, 1890.  Public domain.}
     \end{subfigure}%
 \end{figure}
-\end{refsection}
+
+%#############################################################################
+%\clearpage
+%\FloatBarrier
+%\printbibliography[heading=subbibliography]
+%\end{refsection}

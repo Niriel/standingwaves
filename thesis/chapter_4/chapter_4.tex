@@ -1,5 +1,5 @@
 \cleardoublepage
-\begin{refsection}
+%\begin{refsection}
 \chapter{Interference model of HIFI Band~1}
 \label{sec:chapter4}
 
@@ -11,7 +11,7 @@ This chapter compares our model to observational data from the HIFI instrument~\
 Our goal is to validate our model and to derive parameters several system parameters for the HIFI instrument that are only approximately known from its design and commissioning.
 
 We choose to model HIFI Band~1.
-Bands~1, 2 and 5 of HIFI have fewer optical elements than Bands~3, 4, 6 and 7, making them easier to model by reducing the number of free parameters (see~\cref{sec:hifi_bands}).
+Bands~1, 2 and 5 of HIFI have fewer optical elements than Bands~3, 4, 6 and 7, making them easier to model by reducing the number of free parameters.
 Indeed, Bands~3, 4, 6 and 7 use rooftop mirrors to form Martin--Puplett interferometers in order to maximize the coupling of the mixer to the sky and the local oscillator at the same time.
 In Bands~1, 2 and 5, the LO power is high enough and there is no need to maximize its coupling to the mixer, allowing for a simpler design with less side-effects.
 The coupling of the LO to the mixer is very weak in Band~1, which means that the LO--mixer cavities produce almost no interference;
@@ -725,15 +725,19 @@ channels that are USB-dominated have a sideband ratio greater than~\num{0.5}.
 \begin{figure}
     \centering
     \includegraphics{mars_25_interf_dsb_gain_cold}
+    \vspace{-1.1em}
     \caption*{Gain: what the mixer detects if the cold load emits a power of~1.}
-    \bigskip
+    \medskip
     \includegraphics{mars_25_interf_dsb_temp_cold}
+    \vspace{-1.1em}
     \caption*{Cold load power seen by the mixer before being folded.}
-    \bigskip
+    \medskip
     \includegraphics{mars_25_interf_fld_temp_cold}
+    \vspace{-1.1em}
     \caption*{Cold load power seen by the mixer after being folded.}
-    \bigskip
+    \medskip
     \includegraphics{mars_25_interf_sbr_cold}
+    \vspace{-1.1em}
     \caption*{Sideband ratio: USB gain / (LSB gain + USB gain).}
     \caption{Three stages of the interference modeling for the cold load, and the sideband ratio.}
     \label{fig:mars_interf_stages_cold}
@@ -974,5 +978,5 @@ We encourage instrument designers to allocate some time to measure the complex r
 Matching the physically-based model to the real data would allow to correct the calibration by properly taking into account the ripples caused by the interferences in the optics.
 %#############################################################################
 %\clearpage
-\printbibliography[heading=subbibliography]
-\end{refsection}
+%\printbibliography[heading=subbibliography]
+%\end{refsection}
