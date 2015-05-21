@@ -1,31 +1,84 @@
 \chapter{Diplexer}
 \label[appendix]{sec:annex_a}
 
+Each diplexer unit of HIFI contains a Martin--Puplett interferometer~\parencite{martin1982polarizing}.
+\Cref{fig:diplexer} illustrates its principle.
+
+\begin{figure}[h]
+    \centering
+    \input{diplexer.pdf_tex}
+    \caption{Schematic representation of a Martin--Puplett interferometer.}
+    \label{fig:diplexer}
+\end{figure}
+
+\begin{enumerate}
+    \item
+    A wire-grid polarizer splits an input wave (purple) in two.
+    \item
+    The reflected (blue) and transmitted (red) waves follow two different paths
+    \item
+    The mirror
+    The grid is oriented to satisfy three conditions:
+    the reflected and transmitted waves must
+    \begin{itemize}[nolistsep,noitemsep]
+        \item propagate at right angle from each other,
+        \item 
+        \item carry the same power.
+    \end{itemize}
+    The first condition relates the plane of the grid to the direction of propagation of the wave: the angle of incidence must be~\SI{45}{\degree}.
+    The second condition relates the orientation of the wires inside that plane to the polarization of the incoming wave: the 
+\end{enumerate}
+carries one half of the original power, and 
+
+The rooftop mirrors are oriented so that the input waves are reflected back toward the grid with their polarization rotated by~\SI{90}{\degree} (see~\cref{fig:rooftop_polar}): if the first encounter with the grid is reflective then the second is transmissive and vice versa.
+
+The two waves propagating toward the mixer can be seen as two components of a single output wave (principle of superposition).
+On the figure, the dots on the paths of a wave represent the crests of that wave;
+we can see that the blue and red dots are not in phase when they reach the mixer.
+The phase difference is a function of the length of the mobile arm (red path on~\cref{fig:diplexer}) and the wave frequency.
+
+The phase difference between the two components of the output wave determines the polarization of that output wave.
+If the phase difference is~\SI{0}{\degree} or \SI{180}{\degree}, the output wave is linearly polarized; \SI{90}{\degree} and \SI{270}{\degree} give a circular polarization, and in all the other cases the polarization is elliptic.
+
+
 
 \begin{figure}[b]
     \centering
     \includegraphics[width=\textwidth]{rooftop_polar_lowres}
-    \caption{Rooftop mirrors flip the direction of one polarization and keep the other constant.}
+    \caption{
+        Rooftop mirrors flip the direction of one polarization and keep the other constant.
+        What is shown in purple is not the beam: the beam (not represented)
+        has a circular cross-section and shines on both planes of the rooftop mirror equally and simultaneously.
+        Instead, the purple path represents both the direction of propagation and the plane of polarization of a particular beam.
+        The blue and red arrows follow a reference frame attached to a beam before (top), during (middle), and after (bottom) reflection, shown in a global reference frame.
+        Upon reflection, but blue direction is not modified but the red direction has flipped.
+        Consequently, if a beam is linearly polarized at~\SI{+45}{\degree} in the global
+        frame (which is the case illustrated by the purple path),
+        then its reflection is polarized at~\SI{-45}{\degree} in the same global frame.
+        In effect, the rooftop mirror has rotated the polarization of that beam by
+        \SI{90}{\degree}.
+        If the beam had been polarized along the red or blue axis, the rooftop mirror would have had no effect on the polarization plane of the beam.
+    }
     \label{fig:rooftop_polar}
 \end{figure}
 
 \begin{figure}[b]
     \centering
-    \input{diplexer.pdf_tex}
-    \caption{Principle of the Martin--Puplett interferometers used in HIFI Bands~3, 4, 6 and 7.}
-    \label{fig:diplexer}
+    \includegraphics[width=\textwidth]{diplexer_render_lowres}
+    \caption{
+        Schematic 3D representation of the diplexer units in HIFI.
+        The blue beam represents the signal from the sky, the red beam is the LO signal,
+        and the purple beams are a superposition of the two.
+        \emph{First}, the LO and sky signal are split in two by a wire-grid polarizer.
+        The polarization of the beams is represented by their tilt.
+        \emph{Second}, the LO and sky beams have their polarizations lined-up by the diplexers.
+        Each diplexer is made of one wire-grid polarizer and two rooftop mirrors.
+        \emph{Finally}, the combined beams of the LO and the sky enter the horns to be mixed.
+    }
+    \label{fig:diplexer_render_appendix}
 \end{figure}
 
-The diplexer units of HIFI contain a Martin--Puplett interferometer~\parencite{martin1982polarizing} composed of one wire-grid polarizer and two rooftop mirrors.
-\Cref{fig:diplexer} illustrates its principle.
-The input wave (sky or LO, purple on the figure) is split in two by the wire grid polarizer.
-Each half (blue and red) carries one half of the power and travels down one arm of the interferometer where it eventually meets a rooftop mirror.
-The rooftop mirrors are oriented so that the input waves are reflected back toward the grid with their polarization rotated by~\SI{90}{\degree}: if the first encounter with the grid is reflective then the second is transmissive and vice versa.
-The two waves propagating toward the mixer can be seen as a single output wave (principle of superposition).
-The phase difference between the two waves determines the polarization of that output wave.
-On the figure, the dots on the paths of the wave represent the crests of that wave;
-we can see that the blue and red dots are not in phase when they reach the mixer.
-The phase difference depends on the the length of the mobile arm (red) and the frequency of the wave.
+
 
 An ideal diplexer is modeled by
 \begin{align}

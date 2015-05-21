@@ -22,7 +22,7 @@ Each transition was measured with 5 local oscillator frequencies and 19 diplexer
 These different optical configurations of the instrument modify the electromagnetic interferences.
 This modulates the noise and the gain of the instrument and therefore the profile of the lines.
 
-The bandpass calibration of HIFI cannot correct for this effect because it relies on a ``chopper wheel'' method~\parencite{kutner1981recommendations,ossenkopf2002intensity} which introduces even more interferences into the spectra.
+The bandpass calibration of HIFI cannot correct for this effect because it relies on a ``chopper wheel'' method~\parencite{kutner1981recommendations,ossenkopf2002intensity} which actually introduces additional interferences into the spectra.
 As a result, the 95 spectra of \transition{CO}{8}{7} are slightly different from each other, and so are the spectra of \transition{CO}{9}{8}.
 This gives 9025 line integrated-intensity ratios.
 
@@ -74,7 +74,7 @@ The uncertainty on the line ratios translates into uncertainties on the physical
         critical densities ($n_\text{cr}$) at~\SI{100}{\kelvin}
         of
         the collisional rotation lines of \ce{CO} detectable by HIFI.
-        Credit: Leiden Atomic and Molecular Database \parencite{schoier2004leidenmoldb}.
+        Credit for $E_\text{up}$ and $n_\text{cr}$: Leiden Atomic and Molecular Database \parencite{schoier2004leidenmoldb}.
     }
     \label{table:co_transition_frequencies}
 \end{table}
@@ -93,7 +93,7 @@ This is the case for carbon monoxide, \ce{CO}, which emits rotational lines when
 \Cref{table:co_transition_frequencies} lists the rotational transitions of~\ce{CO} that can be observed by HIFI.
 
 \ce{CO} is the most common molecule in the interstellar medium after~\ce{H2}.
-Because its high relative abundance $n_\text{\ce{CO}} / n_\text{\ce{H2}} \approx 10^{-4}$~\parencite{tielens2005physics} and its stability in molecular clouds, it is considered a tracer of~\ce{H2}.
+Because its high relative abundance $n_\text{\ce{CO}} / n_\text{\ce{H2}} \approx 10^{-4}$~\parencite{tielens2005physics} and its stability in molecular clouds, it is considered a good tracer of~\ce{H2}.
 By measuring~\ce{CO}, we can infer the properties of~\ce{H2} which constitutes most of the cloud.
 
 
@@ -103,6 +103,7 @@ By measuring~\ce{CO}, we can infer the properties of~\ce{H2} which constitutes m
 \label{sec:s140irs1}
 S140 is a high-mass star-forming region in the molecular cloud L1204,
 located in the Cepheus constellation at a distance of $746\pm\SI{27}{\parsec}$ \parencite{hirota2008}.
+\Cref{fig:12CO10_moment0} shows a map of the intensity of the \transition{CO}{1}{0} line in S140.
 
 \begin{figure}
     \centering
@@ -120,20 +121,20 @@ located in the Cepheus constellation at a distance of $746\pm\SI{27}{\parsec}$ \
 
 The south-western part of S140 is ionized by the ultraviolet radiation of the B0V star HD~211880.
 The resulting ionization front is represented on \cref{fig:12CO10_moment0} by the gray line.
-It corresponds to a photon-dominated region~\parencite{hollenbach1997dense}, a region in which the temperature and the chemistry of the gas is mainly driven by the UV radiation from the star.
+That ionization front corresponds to a photon-dominated region~\parencite{hollenbach1997dense}, a region in which the temperature and the chemistry of the gas is mainly driven by the UV radiation from the star.
 HD~211880 is not visible on the map, it is located~\SI{7}{\arcmin} away from the center.
 
 Deep inside the cloud, shielded from the UV radiation of HD~211880, S140 hosts several infrared sources.
-The brightest one IRS1, located at $\alpha = 22^\text{h} 19^\text{m} 18.21^\text{s}$ $\delta = \ang{63;18;46.9}$ (J2000).
+The brightest one, called IRS1, is located at $\alpha = 22^\text{h} 19^\text{m} 18.21^\text{s}$ $\delta = \ang{63;18;46.9}$ (J2000).
 
 S140~IRS is a well-studied object.
-It is established that IRS1 is a young stellar object, a newly born massive star of high luminosity ($\SI{8500}{L_\odot}$,~\cite{maud2013s140}).
-In addition to the dense gas cloud that still surrounds it, the young star is circled by an accretion disk which is seen almost edge-on.
+It is well established that IRS1 is a young stellar object, a newly born massive star of high luminosity ($\SI{8500}{L_\odot}$,~\cite{maud2013s140}).
+In addition to the dense gas cloud that still surrounds it, the young star is encircled by an accretion disk which is seen almost edge-on.
 IRS1 emits two highly-collimated jets of matter in the direction of its axis of rotation, perpendicular to the accretion disk.
 The interaction of these jets with the dense interstellar medium produces large scale molecular outflows~\parencite{reipurth2001herbig} which emit in the submillimeter range.
 The~\transition{CO}{1}{0} emission of these outflows extends~\ang{;;30} in the north-west and south-east directions~\parencite{maud2013s140}.
 
-Although S140 is extended, our observations focus on high-$J$ transitions which require high temperatures in order to be excited (see~\cref{table:co_transition_frequencies}).
+Our observations focus on high-$J$ transitions which require high temperatures in order to be excited (see~\cref{table:co_transition_frequencies}).
 We can expect that most of the emission that we detect originates from warm regions of the cloud, close to its core.
 The beam size of HIFI is approximately~\ang{;;22} at the frequencies of interest,
 it covers a radius of~\SI{0.04}{\parsec} at the distance of IRS1.
@@ -333,30 +334,32 @@ This provides a first impression of the effect of interferences on the gain of t
         \centering
         \includegraphics[scale=.9]{87_00_00_sky_s_lsbusbsbr}
         \vspace{-.8em}
-        \caption{Sky signal.}
+        \caption{Sky pointing, sky power.}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[scale=.9]{87_00_00_sky_l_lsbusbsbr}
         \vspace{-.8em}
-        \caption{Sky local oscillator.}
+        \caption{Sky pointing, LO power.}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[scale=.9]{87_00_00_hbb_s_lsbusbsbr}
         \vspace{-.8em}
-        \caption{Hot load signal.}
+        \caption{Hot load pointing, hot load power.}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[scale=.9]{87_00_00_cbb_s_lsbusbsbr}
         \vspace{-.8em}
-        \caption{Cold load signal.}
+        \caption{Cold load pointing, cold load power.}
     \end{subfigure}
-    \caption{Gain and sideband ratio of the optics for the astronomical signal~(a),
-    the local oscillator noise~(b),
+    \caption{Gain and sideband ratio of the optics for three pointings:
+    the sky~(a and b)
     the hot load~(c)
     and the cold load~(d).
+    For each pointing, the mixer receives power from the object pointed at, and also from the LO.
+    Here, the LO gain is shown only for the sky pointing (b).
     $\text{LO~frequency} = \SI{914.404500}{\giga\hertz}$,
     $\text{Diplexer current} = \SI{0.503}{\milli\ampere}$.
     }
@@ -994,7 +997,7 @@ the synthetic spectra that simulate an observation that is affected only by ther
 \subsection{Gaussian fit of the spectra}
 \label{sec:chp5_gaussian_model}
 \Cref{fig:spectra_transitions} shows the real diplexer-corrected spectra for an arbitrary LO and diplexer setting, one for each transition.
-Superimposed on these spectra are the various components of a model.
+Superimposed on these spectra are the various components of a Gaussian fit.
 
 \begin{figure}
     \centering
@@ -1012,19 +1015,21 @@ Superimposed on these spectra are the various components of a model.
     \end{subfigure}
     \caption{
         HIFI WBS-H spectra of S140 IRS1 for \transition{CO}{8}{7} and \transition{CO}{9}{8}.
-        For each transition, the the top plot shows the data in black and the model in color, where the full model is the sum of the others; and the bottom plot shows the difference between the data and the full model.
+        For each transition, the the top plot shows the data in black and the model (simple Gaussian fit) in color, where the full model is the sum of the others; and the bottom plot shows the difference between the data and the full model.
     }
     \label{fig:spectra_transitions}
 \end{figure}
 
-The model is composed of three or four elements:
+\begin{samepage}
+We fit three or four components with Gaussian functions:
 \begin{itemize}[noitemsep,nolistsep]
     \item a constant horizontal continuum ($c$),
     \item a narrow Gaussian for the core emission ($a_0$, $v_0$, $\sigma_0$),
     \item a broad Gaussian for the outflow emission ($a_1$, $v_1$, $\sigma_1$),
-    \item and optionally a third negative Gaussian for a self-absorption component
+    \item and optionally a third negative Gaussian for a self-absorption
      ($a_2$, $v_2$, $\sigma_2$).
 \end{itemize}
+\end{samepage}
 Both transitions show a self-absorption, but in the case \transition{CO}{9}{8} the self-absorption is barely visible in the noise, which makes it difficult to fit.
 For each Gaussian function, $a$ is the amplitude, $v$ the mean and $\sigma$ the standard deviation.
 
@@ -1043,7 +1048,7 @@ Our high-$J$ lines are emitted near the core, the jet had little time to acceler
 On the other hand, the \transition{CO}{1}{0} outflow is observed much farther and has been accelerated by the jet much longer.
 
 The line profiles do not show any evidence of a bimodal distribution of velocities as one could expect from a rotating disk seen edge-on.
-We conclude that the emission that we observe does not originate (solely) from the accretion disk orbitting the young stellar object.
+We conclude that the emission that we observe does not originate (solely) from the accretion disk orbiting the young stellar object.
 
 %-----------------------------------------------------------------------------
 \subsubsection{Missing red outflow}
@@ -1061,10 +1066,10 @@ this is a case of self-absorption, in which the photons at the line wings have a
 
 %-----------------------------------------------------------------------------
 \subsubsection{Structure of the residual}
-The difference between the data and our model (``residuals'' on the plots) shows some structure.
+The difference between the data and our fit (``residuals'' on the plots) shows some structure.
 In particular, the blue wing of the line is systematically underestimated: the residual at~\SI{-25}{\kilo\meter\per\second} reaches~\SI{0.5}{\kelvin}.
-We have attempted to model the outflow with a second Gaussian component in the hope that it would reveal an emission from the red outflow and increase the velocity of the blue one.
-These attempts were unsatisfactory: the models converged to an ad hoc solution that fitted the blue tail with a very wide and flat Gaussian and showed no evidence of emission from the red outflow.
+We have attempted to fit the outflow with a second Gaussian component in the hope that it would reveal an emission from the red outflow and increase the velocity of the blue one.
+These attempts were unsatisfactory: the fitter converged to an ad hoc solution that fitted the blue tail with a very wide and flat Gaussian and showed no evidence of emission from the red outflow.
 
 The three peaks in the residual show that Gaussian profiles are not a perfect fit for this spectrum.
 This structure may be astronomical or it can be an instrumental artifact.
@@ -1085,16 +1090,16 @@ The result is shown in~\cref{fig:87_00_00_interf}.
 The interferences modulate the gains and create ripples on the spectrum, which appear on the residual of its Gaussian fit.
 
 
-The small-scale structure located at the frequencies on the line could correspond to that seen on the real spectra, only with a different intensity.
+The small-scale structure located at the frequencies of the line could correspond to that seen on the real spectra, only with a different intensity.
 If the real small-scale structure is caused by interferences, then our interference model underestimates them, at least for this specific LO and diplexer setting.
 
 The large-scale structure that modulates the wings of the line does not match that of the real spectra: the interference model creates a long negative red tail that does not exist in the real spectra.
 Here, our interference model overestimates the amplitude of that ripple.
 
-It is unlikely that the residual structure is solely caused by interferences in the optics.
+It is unlikely that the residual structure observed on real data is solely caused by interferences in the optics.
 Wavelet analysis (\cref{fig:wavelet}) indicates that the periods of the residual structure do not match that of the ripples caused by interferences in known cavities.
 They do not match harmonics of these ripples either, harmonics which are anyway unlikely to matter because of the low reflection coefficients in the cavities.
-\Cref{fig:wavelet} shows only two scaleograms out of~190.
+\Cref{fig:wavelet} shows only two scaleograms\footnote{A scaleogram is to wavelets what a spectrogram is to the short-time Fourier Transform.  The vertical axis of a scaleogram represents scale, that of a spectrogram represents frequency.} out of~190.
 These scaleograms vary greatly from one spectrum to another.
 Most reveal traces of the expected ripple at~\SI{640}{\mega\hertz} that originates from the mixer--rooftop-mirrors cavities, but the indication of a ripple of period between~\num{90} and \SI{100}{\mega\hertz} centered on the line is unclear.
 
