@@ -178,20 +178,20 @@ The purpose of the diplexers is to maximize the coupling of the mixer to both th
 They do so by aligning the polarization of the sky and the LO signals with that of the mixers (see~\cref{fig:diplexer_render}).
 
 Diplexers are interferometers: the optical pathlength difference between two arms determines the output polarization for every frequency.
-For each LO frequency, there exist one and only one optimal pathlength difference.
+For each LO~frequency, there exist one and only one optimal pathlength difference.
 That pathlength difference is achieved by applying an electric current to an actuator, which translates a mirror and changes the length of one arm.
 We call this current ``diplexer actuator current'' (DAC) or simply ``diplexer setting'' in the rest of this chapter.
 
 A side-effect of moving the diplexer is that it changes the lengths of optical cavities in the receiver.
 This modifies the interferences, which modify the gain of the instrument.
 
-Another way of modifying the interferences in the instrument is to observe at a different LO frequency.
-First, each LO frequency requires its own settings for the diodes and multipliers: the reflection coeffient of the LO changes.
-Second, each LO frequency pumps the mixer differently, its reflection coefficient also changes.
+Another way of modifying the interferences in the instrument is to observe at a different LO~frequency.
+First, each LO~frequency requires its own settings for the diodes and multipliers: the reflection coeffient of the LO changes.
+Second, each LO~frequency pumps the mixer differently, its reflection coefficient also changes.
 Third, the mixing process folds the lower and upper sideband on top of each other, making their interferences modulation interfere together.
-Since each LO frequency couples the mixers to different lower and upper sidebands, this also modifies the gain of the instrument.
+Since each LO~frequency couples the mixers to different lower and upper sidebands, this also modifies the gain of the instrument.
 
-The diplexer setting and the LO frequency provide two independent parameters that allow the exploration of the effect of interferences on astronomical data.
+The diplexer setting and the LO~frequency provide two independent parameters that allow the exploration of the effect of interferences on astronomical data.
 
 
 %#############################################################################
@@ -219,14 +219,14 @@ First, these transition have upper-level energies well above the kinetic tempera
 Second, both positions are shielded from the UV radiation emitted by HD~211880 and the three infrared sources.
 
 ``Spectral scan'' means that each observation contains spectra taken at different local oscillator frequencies.
-Changing the LO frequency is one way to modulate the interferences in HIFI.
+Changing the LO~frequency is one way to modulate the interferences in HIFI.
 
 The non-standard aspect of our observing mode is that, for each local oscillator frequency, there are 19 different diplexer settings instead of a single one.
-This allows us to modulate interferences for a given LO frequency.
+This allows us to modulate interferences for a given LO~frequency.
 
-\Cref{tab:los_and_dacs} lists the five LO frequencies and the nineteen diplexer actuator currents used for each transition.
+\Cref{tab:los_and_dacs} lists the five LO~frequencies and the nineteen diplexer actuator currents used for each transition.
 Each transition is therefore observed $5 \times 19 = 95$ times.
-For each transition, there is a LO frequency and a diplexer setting that match nominally (gray background in \cref{tab:los_and_dacs}).
+For each transition, there is a LO~frequency and a diplexer setting that match nominally (gray background in \cref{tab:los_and_dacs}).
 
 \begin{table}[b]
 %dataset 11
@@ -258,7 +258,7 @@ For each transition, there is a LO frequency and a diplexer setting that match n
     \centering
     \begin{tabularx}{\textwidth}{Xrrrrr}
         \toprule
-        transition & \multicolumn{5}{c}{LO frequencies [\si{\giga\hertz}]} \\
+        transition & \multicolumn{5}{c}{LO~frequencies [\si{\giga\hertz}]} \\
         \midrule
         \Jlevel{8}{7} &  914.4045 &  914.4225 &  914.4450 &                     914.4630 &  \cellcolor{gray!40}914.4810 \\
         \Jlevel{9}{8} & 1029.4830 & 1029.5010 & 1029.5190 & \cellcolor{gray!40}1029.5415 &                    1029.5595 \\
@@ -281,7 +281,7 @@ For each transition, there is a LO frequency and a diplexer setting that match n
     \end{tabularx}
     \caption{
         Local oscillator frequencies and diplexer actuator currents used for each \ce{CO} transition.
-        For each LO frequency there exist an optimal diplexer current;
+        For each LO~frequency there exist an optimal diplexer current;
         in our observation, the LO and diplexer are often mismatched.
         The cells in gray indicate the values that are the closest to an ideal match.
     }
@@ -290,17 +290,17 @@ For each transition, there is a LO frequency and a diplexer setting that match n
 
 The 19 diplexer settings create optical pathlength differences in the interferometer of $\pm1~\text{wavelength}$ around the nominal value.
 
-The 5 LO frequencies are very close to each other.
+The 5 LO~frequencies are very close to each other.
 They are separated by only \num{18.0} or \SI{22.5}{\mega\hertz}
-which corresponds to the granularity of the tunable LO frequencies.
-For each transition, the LO frequencies cover a range of~\SI{76.5}{\mega\hertz}.
+which corresponds to the granularity of the tunable LO~frequencies.
+For each transition, the LO~frequencies cover a range of~\SI{76.5}{\mega\hertz}.
 We have chosen this range in order to sample the interferences created by the mixer--LO, mixer--hot-load and mixer--cold-load cavities.
 These cavities introduce periodic modulations of the gain, with periods between~\num{90} and \SI{100}{\mega\hertz} (see~\cref{sec:chapter4}).
 
-The LO frequencies are chosen so that the lines always appear in the upper sideband.
+The LO~frequencies are chosen so that the lines always appear in the upper sideband.
 Furthermore, the lines are not placed in the center of the spectra but close to the edge, where the effect of the interferences is stronger (a side-effect of diplexers shown later in this chapter).
 
-A hot-cold measurement is taken for each instrumental configuration: each spectrum is calibrated with its own bandpass, measured with the corresponding LO frequency and diplexer actuator current.
+A hot-cold measurement is taken for each instrumental configuration: each spectrum is calibrated with its own bandpass, measured with the corresponding LO~frequency and diplexer actuator current.
 
 
 
@@ -357,7 +357,7 @@ This provides a first impression of the effect of interferences on the gain of t
     the local oscillator noise~(b),
     the hot load~(c)
     and the cold load~(d).
-    $\text{LO frequency} = \SI{914.404500}{\giga\hertz}$,
+    $\text{LO~frequency} = \SI{914.404500}{\giga\hertz}$,
     $\text{Diplexer current} = \SI{0.503}{\milli\ampere}$.
     }
     \label{fig:87_00_00_sky_lsbusbsbr}
@@ -367,16 +367,16 @@ This provides a first impression of the effect of interferences on the gain of t
     \centering
     \includegraphics{87_interf_usG}
     \caption{USB gain for the signal of the sky pointing, for the 95 LO and diplexer settings of the~\transition{CO}{8}{7} observation.
-    Top: sorted by LO frequency then diplexer setting.
-    Bottom: sorted by diplexer setting then LO frequency.}
+    Top: sorted by LO~frequency then diplexer setting.
+    Bottom: sorted by diplexer setting then LO~frequency.}
     \label{fig:87_interf_usG}
 \end{figure}
 \begin{figure}
     \centering
     \includegraphics{87_interf_usB}
     \caption{USB gain for the signal of the sky pointing, divided by the bandpass, for the 95 LO and diplexer settings of the~\transition{CO}{8}{7} observation.
-    Top: sorted by LO frequency then diplexer setting.
-    Bottom: sorted by diplexer setting then LO frequency.}
+    Top: sorted by LO~frequency then diplexer setting.
+    Bottom: sorted by diplexer setting then LO~frequency.}
     \label{fig:87_interf_usB}
 \end{figure}
 
@@ -415,10 +415,10 @@ We choose values that we think are reasonable but we expect that the spectra mea
 
 Several parameters have not been included in our simulation.
 In particular, the phase of the reflection coefficients.
-The reflection coefficients of the mixers and local oscillator are likely to have an imaginary part which may depend on the LO frequency: they are neither perfect conductors not perfect dielectrics.
-The electronics of the local oscillator requires different settings for different LO frequencies; which change the properties of the diode on which the electromagnetic wave reflects.
+The reflection coefficients of the mixers and local oscillator are likely to have an imaginary part which may depend on the LO~frequency: they are neither perfect conductors not perfect dielectrics.
+The electronics of the local oscillator requires different settings for different LO~frequencies; which change the properties of the diode on which the electromagnetic wave reflects.
 Likewise, each LO setting pumps the mixers with a specific power level and we can expect the surface of a mixer to reflect differently according to its pumping.
-If these imaginary parts variy quickly with frequency, then we can expect the phase and the periods of the corresponding ripples to change in accordingly.
+If these imaginary parts vary quickly with frequency, then we can expect the phase and the periods of the corresponding ripples to change in accordingly.
 
 
 %#############################################################################
@@ -433,7 +433,7 @@ We choose the horizontal polarization because its system temperature is lower: i
     \centering
     \begin{tabular}{ccc}
         \toprule
-        LO frequency [\si{\giga\hertz}] &
+        LO~frequency [\si{\giga\hertz}] &
         $T_\text{sys, H}$ [\si{\kelvin}] &
         $T_\text{sys, V}$ [\si{\kelvin}]\\
         \midrule
@@ -442,7 +442,7 @@ We choose the horizontal polarization because its system temperature is lower: i
         \bottomrule
     \end{tabular}
     \caption{
-        System temperatures of the H and V mixers at the LO frequencies of our observation, at the intermediate frequency of our line.
+        System temperatures of the H and V mixers at the LO~frequencies of our observation, at the intermediate frequency of our line.
         Source: Herschel Science Archive, calibration observations 0x50003ac9
         and 0x500037f1.
     }
@@ -501,7 +501,7 @@ It assumes that the source fills the main beam but not the sidelobes.
 
 We bring the data to the main-beam temperature scale by dividing our spectra by the main-beam efficiencies $\eta_\text{mb}$ of
 \num{0.744} for \transition{CO}{8}{7} and \num{0.740} for \transition{CO}{9}{8}.
-We obtain these values by interpolating the beam efficiency tables attached to the HIFI observations for our LO frequencies.
+We obtain these values by interpolating the beam efficiency tables attached to the HIFI observations for our LO~frequencies.
 %These tables have a higher granularity that the one presented in fou~\parencite{AA_537_A17}.
 \Cref{fig:co98_full_bandwidth} shows one of the 95 spectra of \transition{CO}{8}{7} on the $T_\text{mb}$~scale.
 %\begin{equation}
@@ -526,7 +526,7 @@ The spectra of both transitions typically feature:
 %-----------------------------------------------------------------------------
 \subsubsection{Motivation}
 For our experiment, we use the diplexer as a way of modulating the interferences inside the optics of HIFI.
-However, for each LO frequency there exist one and only one diplexer tuning that guarantees ideal couplings and a balanced sideband gain ratio.
+However, for each LO~frequency there exist one and only one diplexer tuning that guarantees ideal couplings and a balanced sideband gain ratio.
 By mis-tuning the diplexer, we do modulate the interferences, but we also deteriorate the sideband ratio in a way that is irrelevant for our study.
 In this section, we describe how we correct for this degradation of the sideband ratio.
 
@@ -536,10 +536,10 @@ They are used to align the polarization of the sky and LO signals so that the mi
 
 
 
-In normal operations, the diplexer actuator current is adjusted to the LO frequency by interpolation of a look-up table.
+In normal operations, the diplexer actuator current is adjusted to the LO~frequency by interpolation of a look-up table.
 For our observations, we bypass this process and set the diplexer actuator current ourselves.
 As a result, the diplexer is not optimally tuned.
-This is illustrated in~\cref{fig:diplexer_0503}, for which the diplexer actuator current of~\SI{0.503}{\milli\ampere} for a LO frequency of~\SI{914.4045}{\giga\hertz} results in an arm length mis-tuned by \SI{158}{\micro\meter}, approximately half a wavelength.
+This is illustrated in~\cref{fig:diplexer_0503}, for which the diplexer actuator current of~\SI{0.503}{\milli\ampere} for a LO~frequency of~\SI{914.4045}{\giga\hertz} results in an arm length mis-tuned by \SI{158}{\micro\meter}, approximately half a wavelength.
 The coupling is not symmetrical (top plot) and the sideband ratio does not equal \num{0.5} everywhere.
 This distorts the line profile.
 We must correct for it.
@@ -561,7 +561,7 @@ We must correct for it.
     \caption{
     Model of the coupling and the sideband ratio for a mis-tuned diplexer.
     The green vertical lines show the rest frequency of the \transition{CO}{8}{7} transition.
-    The LO frequency is~\SI{914.4045}{\giga\hertz}.
+    The LO~frequency is~\SI{914.4045}{\giga\hertz}.
     The difference in length of the two arms of the diplexer is~\SI{12.3826}{\milli\meter}.
     }
     \label{fig:diplexer_0503}
@@ -991,7 +991,7 @@ the synthetic spectra that simulate an observation that is affected only by ther
 
 %=============================================================================
 \FloatBarrier
-\subsection{Gaussian model of the spectra}
+\subsection{Gaussian fit of the spectra}
 \label{sec:chp5_gaussian_model}
 \Cref{fig:spectra_transitions} shows the real diplexer-corrected spectra for an arbitrary LO and diplexer setting, one for each transition.
 Superimposed on these spectra are the various components of a model.
@@ -1064,7 +1064,7 @@ this is a case of self-absorption, in which the photons at the line wings have a
 The difference between the data and our model (``residuals'' on the plots) shows some structure.
 In particular, the blue wing of the line is systematically underestimated: the residual at~\SI{-25}{\kilo\meter\per\second} reaches~\SI{0.5}{\kelvin}.
 We have attempted to model the outflow with a second Gaussian component in the hope that it would reveal an emission from the red outflow and increase the velocity of the blue one.
-These attempts were unsatisfactory: the models converged to an ad-hoc solution that fitted the blue tail with a very wide and flat Gaussian and showed no evidence of emission from the red outflow.
+These attempts were unsatisfactory: the models converged to an ad hoc solution that fitted the blue tail with a very wide and flat Gaussian and showed no evidence of emission from the red outflow.
 
 The three peaks in the residual show that Gaussian profiles are not a perfect fit for this spectrum.
 This structure may be astronomical or it can be an instrumental artifact.
@@ -1075,14 +1075,14 @@ This structure may be astronomical or it can be an instrumental artifact.
     \caption{
         Interference model of HIFI Band~3 applied to a perfectly Gaussian source.
         The interferences introduce ripples the spectrum.
-        A Gaussian model of this spectrum leaves a residual that shows some ripples.
+        A Gaussian fit of this spectrum leaves a residual that shows some ripples.
     }
     \label{fig:87_00_00_interf}
 \end{figure}
 
 We apply the interference model of Band~3 from~\cref{sec:s141_interf} to an input that is made of three perfect Gaussian.
 The result is shown in~\cref{fig:87_00_00_interf}.
-The interferences modulate the gains and create ripples on the spectrum, which appear on the residual of its Gaussian model.
+The interferences modulate the gains and create ripples on the spectrum, which appear on the residual of its Gaussian fit.
 
 
 The small-scale structure located at the frequencies on the line could correspond to that seen on the real spectra, only with a different intensity.
@@ -1094,7 +1094,7 @@ Here, our interference model overestimates the amplitude of that ripple.
 It is unlikely that the residual structure is solely caused by interferences in the optics.
 Wavelet analysis (\cref{fig:wavelet}) indicates that the periods of the residual structure do not match that of the ripples caused by interferences in known cavities.
 They do not match harmonics of these ripples either, harmonics which are anyway unlikely to matter because of the low reflection coefficients in the cavities.
-\Cref{fig:wavelet} shows only two scaleograms out of 190.
+\Cref{fig:wavelet} shows only two scaleograms out of~190.
 These scaleograms vary greatly from one spectrum to another.
 Most reveal traces of the expected ripple at~\SI{640}{\mega\hertz} that originates from the mixer--rooftop-mirrors cavities, but the indication of a ripple of period between~\num{90} and \SI{100}{\mega\hertz} centered on the line is unclear.
 
@@ -1110,7 +1110,7 @@ Most reveal traces of the expected ripple at~\SI{640}{\mega\hertz} that originat
     \end{subfigure}
     \caption{
         Scaleogram of the continuous wavelet transform
-        of the residual of two spectra after subtraction of their Gaussian model.
+        of the residual of two spectra after subtraction of their Gaussian fit.
         The wavelet used is a Morlet wavelet with a time/frequency compromise of 10.
         Colors fade on the edges due to the wavelet sampling 0 outside the defined spectrum.
     }
@@ -1135,14 +1135,14 @@ the envelope absorbs the emission of the red outflow.
 
 Our lines are not everywhere optically thin, as demonstrated by the visible self-absorption on the blue outflow and the total absence of visible red outflow.
 This skews the lines profiles.
-Our Gaussian models fit them imperfectly, which can explain the structure of the residual.
+Gaussian functions fit them imperfectly, which can explain the structure of the residual.
 In addition, interferences in the optics of the instrument can bring additional distortions to the line profiles.
 
 
 %=============================================================================
 \FloatBarrier
 \subsection{Line statistics}
-We apply the Gaussian model described in the previous section to the 190 spectra of our observation and the 190 synthetic spectra.
+We apply the Gaussian fit described in the previous section to the 190 spectra of our observation and the 190 synthetic spectra.
 With a least-square Levenberg-Marquardt algorithm, we fit the parameters
 $c$,
 $a_0$, $v_0$, $\sigma_0$,
@@ -1152,20 +1152,70 @@ $a_2$, $v_2$ and $\sigma_2$, for each spectrum independently.
 From these fits, we can derive velocity-integrated intensities, then velocity-integrated intensity ratios.
 
 %-----------------------------------------------------------------------------
-\subsubsection{Gaussian model parameters}
+\subsubsection{Gaussian fit results}
 
-\Cref{fig:fit_core_87,fig:fit_core_98,fig:fit_outf_87,fig:fit_outf_98,fig:fit_sabs_87,fig:fit_base} present the fitted parameters.
+\Cref{fig:fit_87} presents a fraction of the result of the Gaussian fit applied to the the real the synthetic spectra; in this case, the \transition{CO}{8}{7} outflow amplitude.
 The horizontal axis of each plot corresponds to the spectrum number.
 There are 95 spectra for each transition, therefore 95 points on each plot.
-The spectra are ordered by LO frequency first (slow-moving index), then by diplexer setting (fast-moving index).
+The spectra are ordered by LO~frequency first (slow-moving index), then by diplexer setting (fast-moving index); the vertical dotted lines of the grid mark the transition between LO~frequencies.
 
-For the Gaussian components, we plot the Full Width at Half Maximum (\textsc{fwhm}) instead of the standard deviation $\sigma$, for its interpretation as a line width is more visual and intuitive; both quantities are linked by
-\begin{equation}
-    \textsc{fwhm} = 2 \sigma \sqrt{2 \ln(2)}\text{.}    \label{eq:fwhm_sigma}
-\end{equation}
-
-The error bars on these plots are fitting errors.
+The error bars on these plots show the uncertainties calculated during the fit.
 They are calculated by multiplying the diagonal of the covariance matrix by the noise variance (assumed to be that of the baseline) and taking its square root.
+
+\begin{figure}[bp]
+    \centering
+    \begin{tabular}{@{}c@{}c@{}}
+        \toprule
+        \multicolumn{2}{c}{\quad\quad\transition{CO}{8}{7} outflow} \\
+        \quad\quad diplexer-corrected & \quad\quad synthetic \\
+        \midrule
+        \includegraphics{spread_87_outf_ampl_corrected}&
+        \includegraphics{spread_87_outf_ampl_noisy}    \\
+        \bottomrule
+    \end{tabular}\\
+    \bigskip
+    \begin{tabular}{@{}c@{}c@{}}
+        \toprule
+        \multicolumn{2}{c}{\quad\quad\transition{CO}{8}{7} core} \\
+        \quad\quad diplexer-corrected & \quad\quad synthetic \\
+        \midrule
+        \includegraphics{spread_87_core_ampl_corrected}&
+        \includegraphics{spread_87_core_ampl_noisy}    \\
+%        \bottomrule
+%    \end{tabular}\\
+%    \bigskip
+%    \begin{tabular}{@{}c@{}c@{}}
+%        \toprule
+%        \multicolumn{2}{c}{\quad\quad\transition{CO}{8}{7} core} \\
+%        \quad\quad diplexer-corrected & \quad\quad synthetic \\
+%        \midrule
+        \includegraphics{spread_87_core_iint_corrected}&
+        \includegraphics{spread_87_core_iint_noisy}    \\
+        \bottomrule
+    \end{tabular}
+    \caption{
+        Line amplitude and integrated intensities determined by Gaussian fit of the
+        \transition{CO}{8}{7} spectra.
+        \emph{Top}: outflow amplitude.
+        \emph{Middle}: core amplitude.
+        \emph{Bottom}: core integrated intensity.
+        \emph{Left}:  the 95 real HIFI spectra, corrected for irrelevant diplexer mis-tuning.
+        \emph{Right}: the 95 spectra with synthetic noise.
+    }
+    \label{fig:fit_87}
+\end{figure}
+
+The distribution of points on~\cref{fig:fit_87} is wider for the real spectra (left) than on the synthetic spectra, which is expected:
+the synthetic spectra are affected only by random errors, while the real ones also suffer from the systematic errors introduced by interferences.
+
+The distribution of outflow amplitudes (\cref{fig:fit_87}, top) shows no clear structure and is well described by a normal distribution.
+However, the distribution of core amplitudes (\cref{fig:fit_87}, middle) does present some structure:
+they cluster around different values for each LO~frequency.
+%The same is true for the amplitude the~\transition{CO}{9}{7} outflow.
+Obviously the LO~frequency influences the sideband ratio in ways that our diplexer mis-tuning correction does not predict.
+Within a LO~frequency, however, the effect of the diplexer is almost drowned in the noise
+whose effect is Gaussian.
+Overall, the Gaussian fit parameters (amplitude, width, central velocity) of the real and synthetic spectral lines follow a Gaussian distribution.
 
 When the amplitude and the standard deviation of a Gaussian are known, it is easy to compute the area under that Gaussian, called ``integrated intensity'':
 \begin{equation}
@@ -1175,192 +1225,11 @@ When the amplitude and the standard deviation of a Gaussian are known, it is eas
     \text{.}
     \label{eq:gaussian_integral}
 \end{equation}
-We integrate the Gaussian models of the lines over all velocities to produce velocity-integrated intensities in~\si{\kelvin \kilo\meter\per\second}.
-
-The amplitude of the core components for both transitions (\cref{fig:fit_core_87,fig:fit_core_98}) presents some structure:
-they cluster around different values for each LO frequency.
-The same is true for the amplitude the~\transition{CO}{9}{7} outflow.
-The \transition{CO}{8}{7} outflow seems to follow a linear trend, which may be a particular case of the clustering seen on the other plots.
-Obviously the LO frequency influences the sideband ratio in ways that our diplexer mis-tuning correction does not predict.
-Within a LO frequency, however, the effect of the diplexer is almost drowned in the noise.
-
-In~\cref{sec:s141_interf} we simulated the interferences in optics of HIFI for values that we considered ``reasonable''.
-In particular, we used coefficients of reflection that are particularly low: only~\SI{1}{\percent} in power, which means that a single round trip in a cavity results in an attenuation by $0.0001$.
-Despite these low reflections, our interference model predicts ripples that are stronger than the ones observed on our data.
-Nevertheless, we cannot claim that the reflection coefficients that we used in our model are too high:
-when the mixer folds the LSB gain on top of the USB gain, the LSB ripple interferes with the USB ripple (\cref{fig:lo_scan_of_ripple}).
-The amplitude and phase of the LSB and USB ripples become degenerated when folded.
-Strong ripples can interfere destructively with themselves and weak ripples can interfere constructively.
-As a result, we lack constraints to properly model the interferences in the optics of HIFI.
+We integrate the Gaussian fits of the lines over all velocities to produce velocity-integrated intensities in~\si{\kelvin \kilo\meter\per\second}.
+As~\cref{fig:fit_87} shows, any structure present on the amplitude plot (middle) disappears when it is combined with the error on the line width (bottom) by~\cref{eq:gaussian_integral}.
 
 
 
-\begin{figure}[b]
-    \centering
-    \begin{tabular}{@{}c@{}c@{}}
-    \toprule
-        \multicolumn{2}{c}{\transition{CO}{8}{7} continuum} \\
-        diplexer-corrected & synthetic                 \\
-    \midrule
-        \includegraphics{spread_87_base_ampl_corrected}&
-        \includegraphics{spread_87_base_ampl_noisy}        \\
-    \bottomrule
-    \toprule
-        \multicolumn{2}{c}{\transition{CO}{9}{8} continuum} \\
-        diplexer-corrected & synthetic                 \\
-    \midrule
-        \includegraphics{spread_98_base_ampl_corrected}&
-        \includegraphics{spread_98_base_ampl_noisy}            \\
-    \bottomrule
-    \end{tabular}
-    \caption{
-        Continuum fitted on the real (left) and synthetic (right) spectra for the two transitions.
-    }
-    \label{fig:fit_base}
-\end{figure}
-
-%\afterpage{% Make sure the two figures appear on even/odd pages for comparison.
-%    \clearpage% flush all other floats
-%    \ifodd\value{page}
-%    %\else% uncomment this else to get odd/even instead of even/odd
-%        \expandafter\afterpage% put it on the next page if this one is odd
-%    \fi
-%    {%
-    \begin{figure}[p]
-        \centering
-        \begin{tabular}{@{}c@{}c@{}}
-            \toprule
-            \multicolumn{2}{c}{\transition{CO}{8}{7} core} \\
-            diplexer-corrected & synthetic                 \\
-            \midrule
-            \includegraphics{spread_87_core_velo_corrected}&
-            \includegraphics{spread_87_core_velo_noisy}    \\
-            \includegraphics{spread_87_core_vfwh_corrected}&
-            \includegraphics{spread_87_core_vfwh_noisy}    \\
-            \includegraphics{spread_87_core_ampl_corrected}&
-            \includegraphics{spread_87_core_ampl_noisy}    \\
-            \includegraphics{spread_87_core_iint_corrected}&
-            \includegraphics{spread_87_core_iint_noisy}    \\
-            \bottomrule
-        \end{tabular}
-        \caption{
-            Comparison of the \transition{CO}{8}{7} core component parameters
-            for the real HIFI data (left column)
-            and the synthetic noisy data (right column).
-        }
-        \label{fig:fit_core_87}
-    \end{figure}
-%    \clearpage
-    \begin{figure}[p]
-        \centering
-        \begin{tabular}{@{}c@{}c@{}}
-            \toprule
-            \multicolumn{2}{c}{\transition{CO}{9}{8} core} \\
-            diplexer-corrected & synthetic                 \\
-            \midrule
-            \includegraphics{spread_98_core_velo_corrected}&
-            \includegraphics{spread_98_core_velo_noisy}    \\
-            \includegraphics{spread_98_core_vfwh_corrected}&
-            \includegraphics{spread_98_core_vfwh_noisy}    \\
-            \includegraphics{spread_98_core_ampl_corrected}&
-            \includegraphics{spread_98_core_ampl_noisy}    \\
-            \includegraphics{spread_98_core_iint_corrected}&
-            \includegraphics{spread_98_core_iint_noisy}    \\
-            \bottomrule
-        \end{tabular}
-        \caption{
-            Comparison of the \transition{CO}{9}{8} core component parameters
-            for the real HIFI data (left column)
-            and the synthetic noisy data (right column).
-    }
-        \label{fig:fit_core_98}
-    \end{figure}
-%    \clearpage
-%    }%
-%}
-
-%\afterpage{% Make sure the two figures appear on even/odd pages for comparison.
-%    \clearpage% flush all other floats
-%    \ifodd\value{page}
-%    %\else% uncomment this else to get odd/even instead of even/odd
-%        \expandafter\afterpage% put it on the next page if this one is odd
-%    \fi
-%    {%
-    \begin{figure}[p]
-        \centering
-        \begin{tabular}{@{}c@{}c@{}}
-            \toprule
-            \multicolumn{2}{c}{\transition{CO}{8}{7} outflow} \\
-            diplexer-corrected & synthetic                 \\
-            \midrule
-            \includegraphics{spread_87_outf_velo_corrected}&
-            \includegraphics{spread_87_outf_velo_noisy}    \\
-            \includegraphics{spread_87_outf_vfwh_corrected}&
-            \includegraphics{spread_87_outf_vfwh_noisy}    \\
-            \includegraphics{spread_87_outf_ampl_corrected}&
-            \includegraphics{spread_87_outf_ampl_noisy}    \\
-            \includegraphics{spread_87_outf_iint_corrected}&
-            \includegraphics{spread_87_outf_iint_noisy}    \\
-            \bottomrule
-        \end{tabular}
-        \caption{
-            Comparison of the \transition{CO}{8}{7} outflow component parameters
-            for the real HIFI data (left column)
-            and the synthetic noisy data (right column).
-        }
-        \label{fig:fit_outf_87}
-    \end{figure}
-%    \clearpage
-    \begin{figure}[p]
-        \centering
-        \begin{tabular}{@{}c@{}c@{}}
-            \toprule
-            \multicolumn{2}{c}{\transition{CO}{9}{8} outflow} \\
-            diplexer-corrected & synthetic                 \\
-            \midrule
-            \includegraphics{spread_98_outf_velo_corrected}&
-            \includegraphics{spread_98_outf_velo_noisy}    \\
-            \includegraphics{spread_98_outf_vfwh_corrected}&
-            \includegraphics{spread_98_outf_vfwh_noisy}    \\
-            \includegraphics{spread_98_outf_ampl_corrected}&
-            \includegraphics{spread_98_outf_ampl_noisy}    \\
-            \includegraphics{spread_98_outf_iint_corrected}&
-            \includegraphics{spread_98_outf_iint_noisy}    \\
-            \bottomrule
-        \end{tabular}
-        \caption{
-            Comparison of the \transition{CO}{9}{8} outflow component parameters
-            for the real HIFI data (left column)
-            and the synthetic noisy data (right column).
-        }
-        \label{fig:fit_outf_98}
-    \end{figure}
-%    \clearpage
-%    }%
-%}
-
-\begin{figure}
-    \centering
-    \begin{tabular}{@{}c@{}c@{}}
-    \toprule
-        \multicolumn{2}{c}{\transition{CO}{8}{7} self-absorption} \\
-        diplexer-corrected & synthetic                 \\
-    \midrule
-        \includegraphics{spread_87_sabs_velo_corrected}&
-        \includegraphics{spread_87_sabs_velo_noisy}    \\
-        \includegraphics{spread_87_sabs_vfwh_corrected}&
-        \includegraphics{spread_87_sabs_vfwh_noisy}    \\
-        \includegraphics{spread_87_sabs_ampl_corrected}&
-        \includegraphics{spread_87_sabs_ampl_noisy}    \\
-        \includegraphics{spread_87_sabs_iint_corrected}&
-        \includegraphics{spread_87_sabs_iint_noisy}    \\
-    \bottomrule
-    \end{tabular}
-    \caption{
-        Comparison of the \transition{CO}{8}{7} self-absorption component parameters for the real HIFI data (left column) and the synthetic noisy data (right column).
-    }
-    \label{fig:fit_sabs_87}
-\end{figure}
 
 
 %-----------------------------------------------------------------------------
@@ -1369,7 +1238,7 @@ As a result, we lack constraints to properly model the interferences in the opti
 \label{sec:line_ratios}
 With 95 integrated intensities per transition, there are $95 \times 95 = 9025$ possible line ratios for the core and as many for the outflow.
 
-We calculate the ratio of \transition{CO}{8}{7} over \transition{CO}{9}{8}.
+We calculate the ratios of \transition{CO}{8}{7} over \transition{CO}{9}{8}.
 We propagate the uncertainties using
 \begin{equation}
     \frac{a \pm \sigma_a}{b \pm \sigma_b}
@@ -1378,18 +1247,22 @@ We propagate the uncertainties using
     = c \pm \sigma_c
     \text{.}
 \end{equation}
-Each possible ratio has a normal distribution $c \pm \sigma_c$.
-The sum of these 9025 distributions, divided by the number of distributions, is shown in \cref{fig:ratio_core,fig:ratio_outflow}.
-The distribution of this ratio follows a normal curve.
-The mean values and their uncertainties are given in \cref{tab:line_ratios}.
-The calibration uncertainty is~\SI{4}{\percent} for the core and~\SI{2}{\percent} for the outflow.
+Each of the 9025 line ratios has a normal distribution $c \pm \sigma_c$.
+\Cref{fig:ratio_core} shows the average mean and average uncertainty of the line ratio for the core component of the real HIFI data.
+The profile is similar for the outflow and the synthetic data.
+The average means and uncertainties are summarized in \cref{tab:line_ratios}.
 
-The uncertainty on the synthetic ratios is~\SI{60}{\percent} that of the ratios measured on the real HIFI data.
-If our noise model is correct, then \SI{40}{\percent} of the uncertainty on the line ratios is caused by non-thermal effects: interferences in the optics, intrinsic sideband ratio of the mixer or the unexplained~\SI{1.14}{\mega\hertz} ripple mentioned in~\cref{sec:noise_model_of_the_real_spectra}.
-Longer integration times can reduce the uncertainty due to the noise, but have no effect on the remaining~\SI{2.4}{\percent} of systematic uncertainty on the core line ratio.
-
-\vspace{5em}
-\begin{table}[h]
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=\textwidth]{ratios_core_corrected}
+    \caption{
+        Average of the 9025 distributions of integrated intensity ratios
+        for the core component of the diplexer-corrected spectra.
+        $\text{mean}=1.0102$, $\text{FWHM}=0.0931$, $\sigma=0.0395$.
+    }
+    \label{fig:ratio_core}
+\end{figure}
+\begin{table}[b]
 %                        left      right    mean        -         +      fwhm
 %    corrected    core   0.9615 .. 1.0546   1.0102   -0.0487   +0.0444   0.0931
 %        noisy    core   0.9831 .. 1.0397   1.0113   -0.0282   +0.0285   0.0566
@@ -1400,8 +1273,8 @@ Longer integration times can reduce the uncertainty due to the noise, but have n
         \toprule
                 & diplexer-corrected   & synthetic \\
         \midrule
-        core    & $1.01 \pm 0.04$ & $1.01 \pm 0.02$ \\
-        outflow & $1.01 \pm 0.02$ & $1.00 \pm 0.01$ \\
+        core    & $1.010 \pm 0.046$ & $1.011 \pm 0.028$ \\
+        outflow & $1.003 \pm 0.023$ & $1.002 \pm 0.015$ \\
         \bottomrule
     \end{tabular}
     \caption{
@@ -1412,49 +1285,25 @@ Longer integration times can reduce the uncertainty due to the noise, but have n
 \end{table}
 
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[0]{\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{ratios_core_corrected}
-        \caption{Diplexer-corrected spectra;
-        $\text{mean}=1.0102$, $\text{FWHM}=0.0931$, $\sigma=0.0395$.}
-    \end{subfigure}
-    \\
-    \begin{subfigure}[0]{\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{ratios_core_noisy}
-        \caption{Synthetic-noise spectra;
-        $\text{mean}=1.0113$, $\text{FWHM}=0.0566$, $\sigma=0.0240$.}
-    \end{subfigure}
-    \caption{
-        Core integrated intensity ratios for the real diplexer-corrected spectra (top)
-        and the synthetic spectra (bottom).
-    }
-    \label{fig:ratio_core}
-\end{figure}
+From the left column of \cref{tab:line_ratios} we conclude that for this HIFI observation, the calibration uncertainty
+is~\SI{4.6}{\percent} for the core
+and~\SI{2.3}{\percent} for the outflow.
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[0]{\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{ratios_outflow_corrected}
-        \caption{Diplexer-corrected spectra;
-        $\text{mean}=1.0029$, $\text{FWHM}=0.0469$, $\sigma=0.0199$.}
-    \end{subfigure}
-    \\
-    \begin{subfigure}[0]{\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{ratios_outflow_noisy}
-        \caption{Synthetic-noise spectra;
-        $\text{mean}=1.0016$, $\text{FWHM}=0.0299$, $\sigma=0.0127$.}
-    \end{subfigure}
-    \caption{
-        Outflow integrated intensity ratios for the real diplexer-corrected spectra (top)
-        and the synthetic spectra (bottom).
-    }
-    \label{fig:ratio_outflow}
-\end{figure}
+The uncertainties are smaller for the synthetic spectra:
+	\SI{2.8}{\percent} for the core
+and~\SI{1.5}{\percent} for the outflow.
+The ratio of the synthetic uncertainties over the real uncertainties is~\SI{60}{\percent}.
+In other words,
+\begin{itemize}
+    \item \SI{60}{\percent} of the uncertainty measured on the real data can be attributed to random errors.
+    \item The remaining \SI{40}{\percent} come from systematic errors introduced by
+          interferences in the optics,
+          intrinsic sideband gain ratio of the mixer,
+          or the unexplained~\SI{1.14}{\mega\hertz} ripple mentioned
+          in~\cref{sec:noise_model_of_the_real_spectra}.
+\end{itemize}
+Longer integration times could reduce the random uncertainties but would have no effect on the systematic ones.
+
 
 
 
@@ -1712,6 +1561,16 @@ However, if the column density of \ce{CO} were lower, the uncertainty on the lin
 
 Despite these uncertainties, we estimate that the emission of \transition{CO}{8}{7} and \transition{CO}{9}{8} in S140 IRS1 originates from a warm ($T_\text{kin}> \SI{200}{\kelvin}$) and dense ($n_\text{\ce{H2}} > \SI{e5}{\per\centi\meter\cubed}$) region,
 possibly within~\SI{20}{\astronomicalunit} of the young stellar object if we neglect the clumpiness of the cloud, but not from the accretion disk itself.
+
+
+\todo[inline]{
+In~\cref{sec:s141_interf} we simulated the interferences in optics of HIFI for values that we considered ``reasonable''.
+In particular, we used coefficients of reflection that are particularly low: only~\SI{1}{\percent} in power, which means that a single round trip in a cavity results in an attenuation by $0.0001$.
+Despite these low reflections, our interference model predicts ripples that are stronger than the ones observed on our data.
+Nevertheless, we cannot claim that the reflection coefficients that we used in our model are too high:
+when the mixer folds the LSB gain on top of the USB gain, the LSB ripple interferes with the USB ripple (\vref{fig:lo_scan_of_ripple}).
+As a result, we lack constraints to properly model the interferences in the optics of HIFI.
+}
 
 
 %#############################################################################

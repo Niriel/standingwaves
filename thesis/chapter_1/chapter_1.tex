@@ -719,7 +719,7 @@ when the LO power is not abundant enough, another configuration is required.
 The LO power available in Band~3, 4, 6 and 7 is so low that we cannot afford dumping half of it with a beam-splitter injection system.
 Instead, the HIFI uses the optical layout illustrated in~\cref{fig:diplexer_layout,fig:diplexer_render}.
 This layout can couple~\SI{100}{\percent} of the LO power and~\SI{100}{\percent} of the sky power simultaneously.
-Its principle can be seen as an improvement over the beams-splitter layout:
+Its principle can be seen as an improvement over the beam-splitter layout:
 instead of dumping whatever power Grid~H and Grid~V happen to transmit, we send it back into the system with a mirror.
 
 \begin{figure}
@@ -734,12 +734,13 @@ instead of dumping whatever power Grid~H and Grid~V happen to transmit, we send 
 \end{figure}
 
 Using a conventional mirror would be of little help: the power that was about to be dumped would go through the grid again and travel back toward the LO, not the mixer.
-Therefore, we flip the direction of the grid and use two rooftop mirrors that rotate the polarization by~\SI{90}{\degree}: the power that arrived on the mirror after transmission through the grid is now going to reflect onto the grid, and vice versa.
+Therefore, we flip the direction of the grid and use two rooftop mirrors that rotate the polarization by~\SI{90}{\degree} (see~\vref{fig:rooftop_polar}): the power that arrived on the mirror after transmission through the grid is now going to reflect onto the grid, and vice versa.
 
 Coupling \SI{100}{\percent} of the LO signal at the LO frequency comes with a price: we also couple \SI{100}{\percent} of its thermal noise in the IF.
 This can be avoided: by translating one rooftop mirror, we introduce a pathlength difference and turn the system into a Martin-Puplett interferometer~\parencite{martin1982polarizing}.
 In HIFI, they are called ``diplexers''.
 With an adequate pathlength difference we can maximize the LO coupling at the LO frequency and minimize it in the IF.
+Diplexers are presented in more details in~\cref{sec:annex_a}.
 
 \begin{figure}
     \centering
@@ -1023,6 +1024,7 @@ from the four spectra $c_s$, $c_r$, $c_h$ and $c_l$, one needs to know the gain 
 Without that knowledge, one is forced to make assumptions.
 Typically, the HIFI calibration pipeline assumes that the gain of the system is the same in both sidebands: it ignores interferences in the optics and IF-dependence of the mixer gain.
 
+%\begin{samepage}
 We define the ``sideband gain ratio'' $\text{SBR}$ of the system with
 \begin{equation}
     \text{SBR} = \frac{a_u}{a_l + a_u} \label{eq:sbr}
@@ -1031,13 +1033,16 @@ where $a_l$ and $a_u$ are the LSB and USB system gains.
 The ideal value of the sideband gain ratio is~\num{0.5}, indicating a balanced receiver.
 Deviations from~\num{0.5} indicate a ``sideband imbalance''.
 A channel of a HIFI spectrum is USB-dominated if the sideband ratio of this channel is greater than~\num{0.5}, LSB-dominated otherwise.
+%\end{samepage}
 \Cref{fig:lo_scan_of_ripple} presents a simple simulation of the sideband ratio over the IF for a few LO frequencies.
+It illustrates that the amplitude and the phase of the LSB and USB ripples become degenerated when folded \footnote{This results from the sum--to--product trigonometric identity~$\cos(a)+\cos(b) \equiv 2 \cos(\nicefrac{a+b}{2}) \cos(\nicefrac{a-b}{2})$.}.
+Strong ripples can interfere destructively with themselves and weak ripples can interfere constructively.
 
 \begin{figure}[bp]
     \centering
     \includegraphics{lo_scan_of_ripple}
     \caption{
-        LO-frequency dependence of the sideband gain ratio.
+        Simple simulation of the LO-frequency dependence of the sideband gain ratio.
         \emph{Rows}:
             Each row corresponds to one~LO frequency.
         \emph{Left and center columns}:
