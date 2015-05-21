@@ -32,6 +32,9 @@
 *.tdo
 # Something created by biblatex I think.
 *-blx.bib
+*.dep
+
+main.pdf
 
 
 # Backup files generated bu gedit.
