@@ -42,7 +42,12 @@ The uncertainty on the line ratios translates into uncertainties on the physical
 
 \begin{table}[bp]
     \centering
-    \begin{tabular}{l S S c} % S is from SIunitx.
+    \begin{tabular}{l S[tabformat=4.7] S[tabformat=3.2] c}
+        % S is from SIunitx.
+        % S tabformat is from its version 1.3, quite old.
+        % I can't use S[tabformat=1.1e1] for the last column,
+        % if I do it does not write the powers of ten properly,
+        % it puts "e" instead :(.
         \toprule
         \multicolumn{1}{c}{transition} &
         % Use multicolumn to protect the header from the influence of S.
@@ -53,16 +58,16 @@ The uncertainty on the line ratios translates into uncertainties on the physical
         \multicolumn{1}{c}{$n_\text{cr}$ at \SI{100}{\kelvin} [\si{\per\centi\meter\cubed}]}
         \\
         \midrule
-        \transition{CO}{5}{4}   &  576.2679305 &  82.97 & \num{1.7e5} \\
+        \transition{CO}{5}{4}   &  576.2679305 &  82.97 & \num{1.6e5} \\
         \transition{CO}{6}{5}   &  691.4730763 & 116.16 & \num{2.8e5} \\
         \transition{CO}{7}{6}   &  806.6518060 & 154.87 & \num{4.3e5} \\
-        \transition{CO}{8}{7}   &  921.7997000 & 199.11 & \num{6.3e5} \\
+        \transition{CO}{8}{7}   &  921.7997000 & 199.11 & \num{6.2e5} \\
         \transition{CO}{9}{8}   & 1036.9123930 & 248.88 & \num{8.5e5} \\
         \transition{CO}{10}{9}  & 1151.9854520 & 304.16 & \num{1.1e6} \\
         \transition{CO}{11}{10} & 1267.0144860 & 364.97 & \num{1.4e6} \\
         \transition{CO}{12}{11} & 1381.9951050 & 431.29 & \num{1.8e6} \\
         \transition{CO}{13}{12} & 1496.9229090 & 503.13 & \num{2.1e6} \\
-        \transition{CO}{14}{13} & 1611.7935180 & 580.49 & \num{2.6e6} \\
+        \transition{CO}{14}{13} & 1611.7935180 & 580.49 & \num{2.5e6} \\
         \transition{CO}{15}{14} & 1726.6025057 & 663.35 & \num{3.0e6} \\
         \transition{CO}{16}{15} & 1841.3455060 & 751.72 & \num{3.5e6} \\
         \bottomrule
@@ -156,7 +161,7 @@ and $k(T)$ the collisional rate coefficient (in~\si{\centi\meter\cubed\per\secon
 of the \Jlevel{j}{j'} transition at the temperature~$T$.
 We find these parameters in the data files of the Leiden Atomic and Molecular Database \parencite{schoier2004leidenmoldb}.
 That database lists different collision rates for the ortho and para forms of~\ce{H2}.
-Since they are close, we averaged them\todo{Floris asked ``assuming which o/p ratio for H2?''.  I averaged with (o+p)/2 but Floris' question seems to suggest that a weighted average makes sense.  Check and proceed}.
+Since they are close, we averaged them assuming an $\nicefrac{\text{ortho}}{\text{para}}$ ratio of \num{1.6}.
 
 \Textcite{yang2010} present a more accurate method for calculating the critical density,
 which consists in summing over all possible collisional and radiative transitions.
