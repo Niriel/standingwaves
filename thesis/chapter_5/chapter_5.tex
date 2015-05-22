@@ -16,7 +16,7 @@ In this chapter, we examine how the estimation of astrophysical parameters from 
 We attempt to derive the density and the kinetic temperature of a molecular cloud from the intensity ratios of rotational lines of the \ce{CO} molecule.
 
 To assess the effect of interferences on astrophysical results, we have set up a special HIFI observation of the S140 region.
-We observed two rotational lines of~\ce{CO} around the source S140~IRS1.
+We observed two rotational lines of~\ce{CO} toward the source S140~IRS1.
 The \transition{CO}{8}{7} spectra were taken with Band~3b and the \transition{CO}{9}{8} spectra with Band~4a.
 Each transition was measured with 5 local oscillator frequencies and 19 diplexer settings, for a total of 95 spectra per transition.
 These different optical configurations of the instrument modify the electromagnetic interferences.
@@ -82,7 +82,7 @@ The uncertainty on the line ratios translates into uncertainties on the physical
 In dense ($\ge 10^{4} \: \si{\per\centi\meter\cubed}$) regions of the interstellar medium, the bulk constituent, hydrogen, is in molecular form.
 Such regions are therefore often called molecular clouds.
 Besides gas, these clouds contain dust grains which,
-despite their low abundance (\SI{1}{\percent}) relative to hydrogen,
+despite their low abundance (\SI{1}{\percent} by mass) relative to hydrogen,
 strongly absorb short-wave (UV, optical, near-IR) light and prevent the observation of embedded stars at these wavelengths.
 Longer wavelengths are much less affected, which makes submillimetric spectroscopy a tool of choice to study star formation as it allows to probe deep inside dense clouds.
 
@@ -141,42 +141,45 @@ it covers a radius of~\SI{0.04}{\parsec} at the distance of IRS1.
 A PDR model of S140 by \textcite{koumpia2015} predicts that the gas and dust temperatures should be lower than~\SI{100}{\kelvin} at radii greater than \SI{0.0001}{\parsec}: the high-$J$ \ce{CO} core of IRS1 is much smaller than the beam size.
 Likewise, the high-$J$ \ce{CO} emission in the outflow extends much less than the \transition{CO}{1}{0} emission, bringing our region of interest well inside our beam size.
 
-Two nearby infrared sources could contaminate our observations.
+Two nearby infrared sources could influence our observations.
 The luminosity of IRS2 and IRS3 are respectively \SI{2000}{L_\odot} and \SI{1300}{L_\odot}~\parencite{koumpia2015}.
 Our beam couples half of the power emitted by IRS3 but IRS3 is~\SI{85}{\percent} less bright than IRS1.
 IRS2 is slightly brighter than IRS3 but barely couples to our beam.
-Because of their relatively low temperatures and their distance from the center of the beam, we assume that the \transition{CO}{8}{7} and \transition{CO}{9}{8} emission of IRS2 and IRS3 is negligible.
+Because of their relatively low temperatures and their distance from the center of the beam, we assume that the influence of IRS2 and IRS3 on our measurements is negligible.
 
 The two emission lines that we are observing allow us to probe the conditions of the gas deep inside the core of IRS1, where the pressure and the temperature are high.
-The critical densities given in~\cref{table:co_transition_frequencies} correspond to the volume number density of the molecule that is required for a given energy level to be thermalized.
+The critical densities given in~\cref{table:co_transition_frequencies} correspond to the volume number density of the \ce{H2} that is required for a given energy level to be thermalized.
 In first approximation
 $n_\text{cr} = A_{j\!\rightarrow\!j'} / k_{j\!\rightarrow\!j'}(T)$
 where $A$ is the rate of spontaneous decay (in \si{\per\second})
-and $k(T)$ the collisional rate (in~\si{\centi\meter\cubed\per\second})
+and $k(T)$ the collisional rate coefficient (in~\si{\centi\meter\cubed\per\second})
 of the \Jlevel{j}{j'} transition at the temperature~$T$.
 We find these parameters in the data files of the Leiden Atomic and Molecular Database \parencite{schoier2004leidenmoldb}.
-That database lists different collision rates for the two isomers of~\ce{H2}.
-Since they are close, we averaged them.
+That database lists different collision rates for the ortho and para forms of~\ce{H2}.
+Since they are close, we averaged them\todo{Floris asked ``assuming which o/p ratio for H2?''.  I averaged with (o+p)/2 but Floris' question seems to suggest that a weighted average makes sense.  Check and proceed}.
 
-Our calculation of the critical density underestimates the actual value;
-the method presented in \textcite{yang2010} is more accurate
-but its results remain of the same order.
-Dividing our conservative estimate of $n_\text{cr}=\num{6e5}$
-by the relative abundance $n_\text{\ce{CO}} / n_\text{\ce{H2}} \approx 10^{-4}$,
-we find that \transition{CO}{8}{7} is thermalized for $n_\text{\ce{H2}} > \SI{6e9}{\per\centi\meter\cubed}$.
-\Textcite{poelman2006line} establish that $n_\text{\ce{H2}}$ is between \num{e4} and \SI{4e5}{\per\centi\meter\cubed} for S140,
-which tells us that our transitions are far from the Local Thermal Equilibrium.
+\Textcite{yang2010} present a more accurate method for calculating the critical density,
+which consists in summing over all possible collisional and radiative transitions.
+This method would bring down our first approximation by a factor of a few.
+However, since \textcite{poelman2006line} establish that $n_\text{\ce{H2}}$ is between \num{e4} and \SI{4e5}{\per\centi\meter\cubed} for S140,
+we can be confident that our transitions are far from Local Thermal Equilibrium.
 
 
 
 %=============================================================================
 \subsection{HIFI, diplexers and interferences}
+\label{sec:hifi_diplexers_interferences}
 
-Our observations of S140 IRS1 used the Bands~3 and 4 of HIFI.
+HIFI is a heterodyne high-resolution spectrometer.
+Heterodyne detection is a method of detecting radiation by non-linear mixing with radiation of a reference frequency.
+That reference frequency is provided by a local oscillator (LO).
+The LO signal is not only monochromatic and stable, it is also powerful enough to pump the mixers, that is to bring them to their operating point.
+
+We observed S140 IRS1 with Bands~3 and 4 of HIFI.
 As described in~\vref{sec:diplexer_lo_injection},
 Bands~3, 4, 6 and 7 of HIFI use diplexers for their LO-injection.
 The purpose of the diplexers is to maximize the coupling of the mixer to both the sky and the LO.
-They do so by aligning the polarization of the sky and the LO signals with that of the mixers (see~\cref{fig:diplexer_render}).
+They do so by aligning the polarization of the sky and the LO signals with that of the mixers (see~\cref{sec:diplexer_lo_injection,sec:annex_a}).
 
 Diplexers are interferometers: the optical pathlength difference between two arms determines the output polarization for every frequency.
 For each LO~frequency, there exist one and only one optimal pathlength difference.
@@ -189,7 +192,7 @@ This modifies the interferences, which modify the gain of the instrument.
 Another way of modifying the interferences in the instrument is to observe at a different LO~frequency.
 First, each LO~frequency requires its own settings for the diodes and multipliers: the reflection coeffient of the LO changes.
 Second, each LO~frequency pumps the mixer differently, its reflection coefficient also changes.
-Third, the mixing process folds the lower and upper sideband on top of each other, making their interferences modulation interfere together.
+Third, the mixing process folds the lower and upper sideband on top of each other, making their interferences modulation interfere together (see~\vref{fig:lo_scan_of_ripple}).
 Since each LO~frequency couples the mixers to different lower and upper sidebands, this also modifies the gain of the instrument.
 
 The diplexer setting and the LO~frequency provide two independent parameters that allow the exploration of the effect of interferences on astronomical data.
@@ -197,123 +200,13 @@ The diplexer setting and the LO~frequency provide two independent parameters tha
 
 %#############################################################################
 \FloatBarrier
-\section{Observation}
-
-We scheduled two observations of S140 IRS1 with HIFI.
-They are available in the Herschel Science Archive and can be retrieved with the following observation identifiers (``obsid''):
-\begin{itemize}[noitemsep,nolistsep]
-    \item \transition{CO}{8}{7}, obsid 0x50015e1d;
-    \item \transition{CO}{9}{8}, obsid 0x50015d89.
-\end{itemize}
-
-With a rest frequency of~\SI{922}{\giga\hertz}, the line of \transition{CO}{8}{7} falls in HIFI Band~3b.
-The line of \transition{CO}{9}{8} is located in Band~4a at~\SI{1037}{\giga\hertz}.
-
-We used a non-standard observing mode based on the standard ``dual beam switch spectral scan'', the latter being described in~\cite{hifiobserversmanual}.
-
-``Dual beam switch'' refers to the choice of the reference source used for subtracting the background radiation: two positions on the sky.
-\Cref{tab:on_off_positions} lists the positions of the On and the two Off.
-The On position is centered on~IRS1.
-The two Off positions are~\SI{3}{\arcmin} away from IRS1 in the north-west and south-east directions.
-We assume that there is no \transition{CO}{8}{7} or \transition{CO}{9}{8} emission in the Off positions.
-First, these transition have upper-level energies well above the kinetic temperature of the cloud at these positions.
-Second, both positions are shielded from the UV radiation emitted by HD~211880 and the three infrared sources.
-
-``Spectral scan'' means that each observation contains spectra taken at different local oscillator frequencies.
-Changing the LO~frequency is one way to modulate the interferences in HIFI.
-
-The non-standard aspect of our observing mode is that, for each local oscillator frequency, there are 19 different diplexer settings instead of a single one.
-This allows us to modulate interferences for a given LO~frequency.
-
-\Cref{tab:los_and_dacs} lists the five LO~frequencies and the nineteen diplexer actuator currents used for each transition.
-Each transition is therefore observed $5 \times 19 = 95$ times.
-For each transition, there is a LO~frequency and a diplexer setting that match nominally (gray background in \cref{tab:los_and_dacs}).
-
-\begin{table}[b]
-%dataset 11
-%334.79607197925145  63.3615103585033      22h19m11.05s  63º21'41.43729"
-%334.8260678609779   63.31298895703982     22h19m18.26s  63º18'46.76025"
-%334.8259243886195   63.31303201092469     22h19m18.22s  63º18'46.91524"
-%334.7956101137214   63.361555679611314    22h19m10.95s  63º21'41.60045"
-%
-%dataset 15
-%334.8263617781845   63.31300182715389     22h19m18.32s  63º18'46.80658"
-%334.8563340071168   63.26442869962732     22h19m25.52s  63º15'51.94332"
-%334.85622353208436  63.26443044144398     22h19m25.49s  63º15'51.94959"
-%334.82593558348606  63.312952587111134    22h19m18.22s  63º18'46.62931"
-    \centering
-    \begin{tabular}{lll}
-        \toprule
-        pointing  & right ascension & declination \\
-        \midrule
-        Off left  & $22^\text{h}19^\text{m}11.0^\text{s}$ & \ang{63;21;41.5}\\
-        On        & $22^\text{h}19^\text{m}18.2^\text{s}$ & \ang{63;18;46.8}\\
-        Off right & $22^\text{h}19^\text{m}25.5^\text{s}$ & \ang{63;15;51.9}\\
-        \bottomrule
-    \end{tabular}
-    \caption{Equatorial coordinates (mean equinox J2000) of the three pointings used in our observations.}
-    \label{tab:on_off_positions}
-\end{table}
-
-\begin{table}[b]
-    \centering
-    \begin{tabularx}{\textwidth}{Xrrrrr}
-        \toprule
-        transition & \multicolumn{5}{c}{LO~frequencies [\si{\giga\hertz}]} \\
-        \midrule
-        \Jlevel{8}{7} &  914.4045 &  914.4225 &  914.4450 &                     914.4630 &  \cellcolor{gray!40}914.4810 \\
-        \Jlevel{9}{8} & 1029.4830 & 1029.5010 & 1029.5190 & \cellcolor{gray!40}1029.5415 &                    1029.5595 \\
-        \bottomrule
-        \toprule
-        transition & \multicolumn{5}{c}{horizontal diplexer actuator currents [\si{\milli\ampere}]} \\
-        \midrule
-        \multirow{4}{*}{\Jlevel{8}{7}}
-        & 0.503 & 0.499 & 0.493 & 0.488 & 0.481 \\
-        & 0.476 & 0.471 & 0.465 & 0.458 & 0.453 \\
-        & 0.447 & \cellcolor{gray!40}0.442 & 0.435 & 0.430 & 0.425 \\
-        & 0.419 & 0.412 & 0.407 & 0.401 & \\
-        \midrule
-        \multirow{4}{*}{\Jlevel{9}{8}}
-        & 1.336 & 1.332 & 1.325 & 1.318 & 1.313 \\
-        & 1.306 & 1.300 & 1.293 & 1.288 & 1.281 \\
-        & \cellcolor{gray!40}1.275 & 1.269 & 1.263 & 1.256 & 1.251 \\
-        & 1.244 & 1.237 & 1.232 & 1.225 & \\
-        \bottomrule
-    \end{tabularx}
-    \caption{
-        Local oscillator frequencies and diplexer actuator currents used for each \ce{CO} transition.
-        For each LO~frequency there exist an optimal diplexer current;
-        in our observation, the LO and diplexer are often mismatched.
-        The cells in gray indicate the values that are the closest to an ideal match.
-    }
-    \label{tab:los_and_dacs}
-\end{table}
-
-The 19 diplexer settings create optical pathlength differences in the interferometer of $\pm1~\text{wavelength}$ around the nominal value.
-
-The 5 LO~frequencies are very close to each other.
-They are separated by only \num{18.0} or \SI{22.5}{\mega\hertz}
-which corresponds to the granularity of the tunable LO~frequencies.
-For each transition, the LO~frequencies cover a range of~\SI{76.5}{\mega\hertz}.
-We have chosen this range in order to sample the interferences created by the mixer--LO, mixer--hot-load and mixer--cold-load cavities.
-These cavities introduce periodic modulations of the gain, with periods between~\num{90} and \SI{100}{\mega\hertz} (see~\cref{sec:chapter4}).
-
-The LO~frequencies are chosen so that the lines always appear in the upper sideband.
-Furthermore, the lines are not placed in the center of the spectra but close to the edge, where the effect of the interferences is stronger (a side-effect of diplexers shown later in this chapter).
-
-A hot-cold measurement is taken for each instrumental configuration: each spectrum is calibrated with its own bandpass, measured with the corresponding LO~frequency and diplexer actuator current.
-
-
-
-
-%#############################################################################
-\FloatBarrier
 \section{Expectations from interference modeling}
 \label{sec:s141_interf}
 In~\cref{sec:chapter2} we present a technique to model and predict interferences in a coherent optical receiver.
-In this section, we apply this technique to the system of networks shown in~\cref{fig:band45_networks}, which models the optics of the HIFI Bands~3 and~4.
-This system is made of 23~networks and 48 3D~ports for a given pointing (either sky, hot or cold).
-Despite the high numbers, the technique for solving the interferences between each port of each network along every possible optical path is exactly the same as the one solving the very simple 3-networks system of~\vref{fig:implementation_0}.
+In this section, we apply this technique to the system of networks\footnote{The term ``network'' refers to a mathematical abstraction of an optical or electrical component.
+ A network can be as elementary as a mirror or as complex as an entire telescope (see \vref{sec:chapter2_3}).} shown in~\cref{fig:band45_networks}, which models the optics of the HIFI Bands~3 and~4.
+This system is made of 23~networks and 48 3D~ports for a given pointing (either sky, hot load or cold load).
+Despite the high numbers, the technique for solving the interferences between each port of each network along every possible optical path is exactly the same as the one solving the very simple 3-network system of~\vref{fig:implementation_0}.
 
 \begin{figure}[b]
     \centering
@@ -383,8 +276,7 @@ This provides a first impression of the effect of interferences on the gain of t
     \label{fig:87_interf_usB}
 \end{figure}
 
-\Cref{fig:87_00_00_sky_lsbusbsbr} shows the simulated optical gain for the first spectrum of \transition{CO}{8}{7} when the chopper is pointed at the sky.
-With this optical configuration, the mixer detects between~\SI{50}{\percent} and~\SI{100}{\percent} of the power of the astronomical signal and up to~\SI{10}{\percent} of the local oscillator noise.
+\Cref{fig:87_00_00_sky_lsbusbsbr} shows the simulated optical gain for a spectrum of \transition{CO}{8}{7} when the chopper is pointed at the sky.
 These curves present several interesting features.
 \begin{itemize}[noitemsep,nolistsep]
     \item The widest feature is a bell-shaped (or U-shaped for the LO) curve that spans the entire bandwidth.  It is a product of the diplexer.  Even a perfect diplexer performs optimally at a single frequency.  Its gain degrades as we move away from this frequency and the diplexer starts coupling the mixer to the local oscillator instead.
@@ -396,25 +288,25 @@ These curves present several interesting features.
     \item A slope in the sideband ratio, which reveals a non-optimal diplexer tuning.
 \end{itemize}
 
-The USB gain of the signal for the sky pointing (center top plot of~\cref{fig:87_00_00_sky_lsbusbsbr}) is displayed on \cref{fig:87_interf_usG} for the 95 LO and diplexer settings of the \transition{CO}{8}{7} observation.
-This illustrates the influence of the LO and diplexer setting on the intensity and the phase of the ripples affecting the line, which is located at~$\approx \SI{921.8}{\giga\hertz}$.
-
 When the chopper points to the hot or cold calibration load, the non-zero reflectivity of this load introduces more cavities in the system, which creates additional ripples to the gain curves as shown in~\cref{fig:87_00_00_sky_lsbusbsbr} (c) and (d).
 The lengths of the mixer--LO, mixer--hot-load and mixer--cold-load cavities are all close to~\SI{1.5}{\meter}, and therefore all produce ripples with periods between~\num{90} and \SI{100}{\mega\hertz}.
 
-The bandpass calibration of HIFI involves dividing the signal measured on the sky by the signal measured on the calibration loads.
+The USB gain of the signal for the sky pointing (center top plot of~\cref{fig:87_00_00_sky_lsbusbsbr}) is displayed on \cref{fig:87_interf_usG} for the 95 LO and diplexer settings of the \transition{CO}{8}{7} observation.
+This illustrates the influence of the LO and diplexer setting on the intensity and the phase of the ripples affecting the line, which is located at~$\approx \SI{921.8}{\giga\hertz}$.
+
+The bandpass calibration of HIFI involves dividing the signal measured on the sky by the signal measured on the calibration loads~(see \cref{sec:intensity_calibration}).
 The USB gain of the sky signal divided by the bandpass, as measured on the hot and cold loads, is shown in~\cref{fig:87_interf_usB}.
 The comparison of~\cref{fig:87_interf_usG} and~\cref{fig:87_interf_usB} clarifies the effect of the bandpass calibration: the bell-shaped curve caused by the diplexer (red region in the center of~\cref{fig:87_interf_usG}) is canceled by the bandpass division.
 In reality, the bandpass corrects more than the variable optical gain, it also corrects the frequency-dependent gain of the IF chain (the electronics between the mixer and the detector).
 The cost of the bandpass calibration is the injection into the spectrum of the ripples created by interferences in the mixer--load cavities.
 
-In order to produce these models, we have to assume values for the coefficients of reflection of the various networks of the system.
+In order to produce these models, we have to assume values for the coefficients of reflection and transmission of the various networks of the system.
 In particular, we set the reflectivity of the calibration loads to~\SI{1}{\percent} in power and that of the LO to~\SI{5}{\percent}.
 The mixer reflectivity depends on the polarization: it is low in the polarization that it couples but high in the other; we choose \SI{1}{\percent} and \SI{100}{\percent}.
 The wires of the grids have a radius of~\SI{1}{\micro\meter} and are separated (axis-to-axis) by~\SI{4}{\micro\meter}; their conductivity is set to~\SI{e7}{\siemens\per\meter}, the order of the conductivity of aluminum.
 We assume that~\SI{2}{\percent} of the power incident on the rooftop mirrors is reflected without its polarization rotated.
 Finally, we set the LO attenuation to~\SI{-6}{\decibel}.
-We choose values that we think are reasonable but we expect that the spectra measured by HIFI can provide constraints on these values.
+These values are estimations based on the knowledge of HIFI's optical design~\parencite[][for example]{jellema2003csa}, instrument test results and experimentations with previous models (see~\cref{sec:chapter4}).
 
 Several parameters have not been included in our simulation.
 In particular, the phase of the reflection coefficients.
@@ -422,6 +314,118 @@ The reflection coefficients of the mixers and local oscillator are likely to hav
 The electronics of the local oscillator requires different settings for different LO~frequencies; which change the properties of the diode on which the electromagnetic wave reflects.
 Likewise, each LO setting pumps the mixers with a specific power level and we can expect the surface of a mixer to reflect differently according to its pumping.
 If these imaginary parts vary quickly with frequency, then we can expect the phase and the periods of the corresponding ripples to change in accordingly.
+
+
+%#############################################################################
+\FloatBarrier
+\section{Observation}
+
+We scheduled two observations of S140 IRS1 with HIFI.
+They are available in the Herschel Science Archive and can be retrieved with the following observation identifiers (``obsid''):
+\begin{itemize}[noitemsep,nolistsep]
+    \item \transition{CO}{8}{7}, obsid 0x50015e1d;
+    \item \transition{CO}{9}{8}, obsid 0x50015d89.
+\end{itemize}
+
+A non-standard observing mode, based on the standard ``dual beam switch spectral scan'', was developped specifically for this observation.
+The standard observing modes of HIFI are described in~\textcite{hifiobserversmanual}.
+
+``Dual beam switch'' refers to the choice of the reference source used for subtracting the background radiation: two positions on the sky.
+\Cref{tab:on_off_positions} lists the positions of the On and the two Off.
+The On position is centered on~IRS1.
+The two Off positions are~\SI{3}{\arcmin} away from IRS1 in the north-west and south-east directions.
+We assume that there is no \transition{CO}{8}{7} or \transition{CO}{9}{8} emission in the Off positions.
+First, these transition have upper-level energies well above the kinetic temperature of the cloud at these positions.
+Second, both positions are shielded from the UV radiation emitted by HD~211880 and the three infrared sources.
+
+``Spectral scan'' means that each observation contains spectra taken at different local oscillator frequencies.
+Changing the LO~frequency is one way to modulate the interferences in HIFI.
+
+The non-standard aspect of our observing mode is that, for each local oscillator frequency, there are 19 different diplexer settings instead of a single one.
+This allows us to modulate interferences for a given LO~frequency.
+
+\Cref{tab:los_and_dacs} lists the five LO~frequencies and the nineteen diplexer actuator currents used for each transition.
+Each transition is observed 95~times.
+In principle, each LO~frequency corresponds to one and only one ideal diplexer setting
+(see~\cref{sec:hifi_diplexers_interferences}).
+Consequently, most of the LO/diplexer combinations of our observation are not ideal.
+The closest matches for each \ce{CO} transition are indicated by the gray background in~\cref{tab:los_and_dacs}.
+
+\begin{table}[b]
+%dataset 11
+%334.79607197925145  63.3615103585033      22h19m11.05s  63º21'41.43729"
+%334.8260678609779   63.31298895703982     22h19m18.26s  63º18'46.76025"
+%334.8259243886195   63.31303201092469     22h19m18.22s  63º18'46.91524"
+%334.7956101137214   63.361555679611314    22h19m10.95s  63º21'41.60045"
+%
+%dataset 15
+%334.8263617781845   63.31300182715389     22h19m18.32s  63º18'46.80658"
+%334.8563340071168   63.26442869962732     22h19m25.52s  63º15'51.94332"
+%334.85622353208436  63.26443044144398     22h19m25.49s  63º15'51.94959"
+%334.82593558348606  63.312952587111134    22h19m18.22s  63º18'46.62931"
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        pointing  & right ascension & declination \\
+        \midrule
+        Off left  & $22^\text{h}19^\text{m}11.0^\text{s}$ & \ang{63;21;41.5}\\
+        On        & $22^\text{h}19^\text{m}18.2^\text{s}$ & \ang{63;18;46.8}\\
+        Off right & $22^\text{h}19^\text{m}25.5^\text{s}$ & \ang{63;15;51.9}\\
+        \bottomrule
+    \end{tabular}
+    \caption{Equatorial coordinates (mean equinox J2000) of the three pointings used in our observations.}
+    \label{tab:on_off_positions}
+\end{table}
+
+\begin{table}[b]
+    \centering
+    \begin{tabularx}{\textwidth}{Xrrrrr}
+        \toprule
+        transition & \multicolumn{5}{c}{LO~frequencies [\si{\giga\hertz}]} \\
+        \midrule
+        \Jlevel{8}{7} &  914.4045 &  914.4225 &  914.4450 &                     914.4630 &  \cellcolor{gray!40}914.4810 \\
+        \Jlevel{9}{8} & 1029.4830 & 1029.5010 & 1029.5190 & \cellcolor{gray!40}1029.5415 &                    1029.5595 \\
+        \bottomrule
+        \toprule
+        transition & \multicolumn{5}{c}{horizontal diplexer actuator currents [\si{\milli\ampere}]} \\
+        \midrule
+        \multirow{4}{*}{\Jlevel{8}{7}}
+        & 0.503 & 0.499 & 0.493 & 0.488 & 0.481 \\
+        & 0.476 & 0.471 & 0.465 & 0.458 & 0.453 \\
+        & 0.447 & \cellcolor{gray!40}0.442 & 0.435 & 0.430 & 0.425 \\
+        & 0.419 & 0.412 & 0.407 & 0.401 & \\
+        \midrule
+        \multirow{4}{*}{\Jlevel{9}{8}}
+        & 1.336 & 1.332 & 1.325 & 1.318 & 1.313 \\
+        & 1.306 & 1.300 & 1.293 & 1.288 & 1.281 \\
+        & \cellcolor{gray!40}1.275 & 1.269 & 1.263 & 1.256 & 1.251 \\
+        & 1.244 & 1.237 & 1.232 & 1.225 & \\
+        \bottomrule
+    \end{tabularx}
+    \caption{
+        Local oscillator frequencies and diplexer actuator currents used for each \ce{CO} transition.
+        For each LO~frequency there exist an optimal diplexer current;
+        in our observation, the LO and diplexer are often mismatched.
+        The cells in gray indicate the values that are the closest to an ideal match.
+    }
+    \label{tab:los_and_dacs}
+\end{table}
+
+The 19 diplexer settings create optical pathlength differences in the interferometer of $\pm1~\text{wavelength}$ around the nominal value.
+
+The 5 LO~frequencies are very close to each other.
+They are separated by only \num{18.0} or \SI{22.5}{\mega\hertz}
+which corresponds to the smallest possible steps of the tunable LO~frequencies.
+For each transition, the LO~frequencies cover a range of~\SI{76.5}{\mega\hertz}.
+We have chosen this range in order to sample the interferences created by the mixer--LO, mixer--hot-load and mixer--cold-load cavities.
+
+The LO~frequencies are chosen so that the lines always appear in the upper sideband.
+Furthermore, the lines are not placed in the center of the spectra but close to the edge, where the effect of the interferences is stronger.
+
+A hot-cold measurement is taken for each instrumental configuration: each spectrum is calibrated with its own bandpass, measured with the corresponding LO~frequency and diplexer actuator current.
+
+
+
 
 
 %#############################################################################
