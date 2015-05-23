@@ -790,6 +790,7 @@ By averaging, we reduce the noise by a factor~$\sqrt{95} \approx 10$ but we do n
         \includegraphics{87_avera_corrected_tmb}
         \vspace{-.8em}
         \caption{Average of the 95 \transition{CO}{8}{7} diplexer-corrected spectra.}
+        \label{fig:corrected_averaged_87}
     \end{subfigure}
     \\
     \begin{subfigure}[b]{\textwidth}
@@ -797,6 +798,7 @@ By averaging, we reduce the noise by a factor~$\sqrt{95} \approx 10$ but we do n
         \includegraphics{98_avera_corrected_tmb}
         \vspace{-.8em}
         \caption{Average of the 95 \transition{CO}{9}{8} diplexer-corrected spectra.}
+        \label{fig:corrected_averaged_98}
     \end{subfigure}
     \caption{Average of the spectra corrected for diplexer mix-tuning.}
     \label{fig:corrected_averaged}
@@ -943,7 +945,7 @@ In any case, this feature is non-thermal and its region is masked during the fit
         \includegraphics{noise_dft_87_correctedavg}
         \vspace{-.8em}
         \caption{Noise of the average of 95 \transition{CO}{8}{7} diplexer-corrected spectra.}
-        %\label{fig:noise_dft_87_correctedavg}
+        \label{fig:noise_dft_87_correctedavg}
     \end{subfigure}
     \\
     \bigskip
@@ -952,7 +954,7 @@ In any case, this feature is non-thermal and its region is masked during the fit
         \includegraphics{noise_dft_87_original}
         \vspace{-.8em}
         \caption{Averaged noise of 95 \transition{CO}{8}{7} original spectra.}
-        %\label{fig:noise_dft_87_original}
+        \label{fig:noise_dft_87_original}
     \end{subfigure}
     \\
     \bigskip
@@ -961,7 +963,7 @@ In any case, this feature is non-thermal and its region is masked during the fit
         \includegraphics{noise_dft_87_noisy}
         \vspace{-.8em}
         \caption{Averaged noise of 95 \transition{CO}{8}{7} synthetic noisy spectra.}
-        %\label{fig:noise_dft_87_noisy}
+        \label{fig:noise_dft_87_noisy}
     \end{subfigure}
     \caption{Noise modeling of the~\transition{CO}{8}{7} spectra.}
     \label{fig:noise_model_87}
@@ -974,6 +976,7 @@ In any case, this feature is non-thermal and its region is masked during the fit
         \includegraphics{noise_dft_98_correctedavg}
         \vspace{-.8em}
         \caption{Noise of the average of 95 \transition{CO}{9}{8} diplexer-corrected spectra.}
+        \label{fig:noise_model_98_correctedavg}
     \end{subfigure}
     \\
     \bigskip
@@ -982,6 +985,7 @@ In any case, this feature is non-thermal and its region is masked during the fit
         \includegraphics{noise_dft_98_original}
         \vspace{-.8em}
         \caption{Averaged noise of 95 \transition{CO}{9}{8} original spectra.}
+        \label{fig:noise_model_98_original}
     \end{subfigure}
     \\
     \bigskip
@@ -990,6 +994,7 @@ In any case, this feature is non-thermal and its region is masked during the fit
         \includegraphics{noise_dft_98_noisy}
         \vspace{-.8em}
         \caption{Averaged noise of 95 \transition{CO}{9}{8} synthetic noisy spectra.}
+        \label{fig:noise_model_98_noisy}
     \end{subfigure}
     \caption{Noise modeling of the~\transition{CO}{9}{8} spectra.}
     \label{fig:noise_model_98}
@@ -1054,6 +1059,7 @@ Superimposed on these spectra are the various components of a Gaussian fit.
         \includegraphics{87_00_00_corrected}
         \vspace{-.8em}
         \caption{\transition{CO}{8}{7}, rest frequency \SI{ 921.7997000}{\giga\hertz}.}
+        \label{fig:spectra_transitions_87}
     \end{subfigure}
     \\
     \bigskip
@@ -1061,6 +1067,7 @@ Superimposed on these spectra are the various components of a Gaussian fit.
         \includegraphics{98_00_00_corrected}
         \vspace{-.8em}
         \caption{\transition{CO}{9}{8}, rest frequency \SI{1036.9123930}{\giga\hertz}.}
+        \label{fig:spectra_transitions_98}
     \end{subfigure}
     \caption{
         HIFI WBS-H spectra of S140 IRS1 for \transition{CO}{8}{7} and \transition{CO}{9}{8}.
@@ -1153,15 +1160,26 @@ These scaleograms vary greatly from one spectrum to another.
 Most reveal traces of the expected ripple at~\SI{640}{\mega\hertz} that originates from the mixer--rooftop-mirrors cavities, but the indication of a ripple of period between~\num{90} and \SI{100}{\mega\hertz} centered on the line is unclear.
 
 \begin{figure}[p]
-    \centering
     \begin{subfigure}[b]{\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{50015e1d_WBS-H-USB_04-16_fit_wavelet}
-    \end{subfigure}\\
-    \begin{subfigure}[b]{\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{50015d89_WBS-H-USB_00-12_fit_wavelet}
+        \includegraphics[width=\textwidth]{50015e1d_WBS-H-USB_04-16_fit_wavelet}%
+        \vskip 1em
+        \begin{minipage}{.85\linewidth}%
+            \caption{\transition{CO}{8}{7}}%
+            \label{fig:wavelet_87}
+        \end{minipage}%
     \end{subfigure}
+
+    \bigskip
+
+    \begin{subfigure}[b]{\textwidth}
+        \includegraphics[width=\textwidth]{50015d89_WBS-H-USB_00-12_fit_wavelet}
+        \vskip 1em
+        \begin{minipage}{.85\linewidth}%
+            \caption{\transition{CO}{9}{8}}%
+            \label{fig:wavelet_98}
+        \end{minipage}%
+    \end{subfigure}
+
     \caption{
         Scaleogram of the continuous wavelet transform
         of the residual of two spectra after subtraction of their Gaussian fit.
@@ -1266,7 +1284,7 @@ The distribution of outflow amplitudes (\cref{fig:fit_87}, top) shows no clear s
 However, the distribution of core amplitudes (\cref{fig:fit_87}, middle) does present some structure:
 they cluster around different values for each LO~frequency.
 %The same is true for the amplitude the~\transition{CO}{9}{7} outflow.
-Obviously the LO~frequency influences the sideband ratio in ways that our diplexer mis-tuning correction does not predict.
+Obviously the LO~frequency influences the sideband gain ratio in ways that our diplexer mis-tuning correction does not predict.
 Within a LO~frequency, however, the effect of the diplexer is almost drowned in the noise
 whose effect is Gaussian.
 Overall, the Gaussian fit parameters (amplitude, width, central velocity) of the real and synthetic spectral lines follow a Gaussian distribution.
