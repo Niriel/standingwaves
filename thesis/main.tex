@@ -7,22 +7,13 @@
 
 \input{packages}
 
-\setcounter{secnumdepth}{3}
-    % Number the subsubsections too, as the default stops at subsections.
-\setcounter{tocdepth}{2}
-    % Table of content goes down to the subsubsections.
+\DeclareGraphicsExtensions{.pdf,.jpg,.jpeg,.png}
 
-\title{
-    The effect of interferences\\
-    on the calibration of\\
-    submillimeter heterodyne receivers.\\
-}
-\author{Bertrand Delforge}
-
+% For backmatter.
 \makeindex
 \addbibresource{bibliography.bib}
 
-\DeclareGraphicsExtensions{.pdf,.jpg,.jpeg,.png}
+% CHECK ALSO GLOSSARY PACKAGE
 
 %#############################################################################
 \begin{document}
@@ -30,52 +21,68 @@
 
 %=============================================================================
 \frontmatter
-
-%\maketitle
-
-\ifDraft
-    \renewcommand*\contentsname{Content \today}
-\fi
-
-%\subimport{front/}{dedication}
-%\subimport{front/}{epigraph}
-\tableofcontents
-\subimport{front/}{preface}
-%\subimport{front/}{acknowledgements}
-
+    \pagenumbering{roman}
+%-----------------------------------------------------------------------------
+    \title{
+        The effect of interferences\\
+        on the calibration of\\
+        submillimeter heterodyne receivers.\\
+    }
+    \author{Bertrand Delforge}
+    % \maketitle
+%-----------------------------------------------------------------------------
+    %\subimport{front/}{dedication}
+    %\subimport{front/}{epigraph}
+%-----------------------------------------------------------------------------
+    %level -1: part, 0: chapter, 1: section, etc.
+    \setcounter{secnumdepth}{3}
+    \setcounter{tocdepth}{2}
+    \ifDraft
+       \renewcommand*\contentsname{Content \today}
+    \fi
+    \tableofcontents
+    \addcontentsline{toc}{chapter}{\contentsname}
+%-----------------------------------------------------------------------------
+%     \clearpage
+%     \listoffigures
+%     \addcontentsline{toc}{chapter}{\listfigurename}
+%-----------------------------------------------------------------------------
+    % \subimport{front/}{preface}
+    % \subimport{front/}{acknowledgements}
 %=============================================================================
 \mainmatter
+    \pagenumbering{arabic}
 
-\subimport{chapter_1/}{chapter_1}
+    % \subimport{chapter_1/}{chapter_1}
 
-%\setcounter{chapter}{1}
-\subimport{chapter_2/}{chapter_2}
+    %\setcounter{chapter}{1}
+    % \subimport{chapter_2/}{chapter_2}
 
-%\setcounter{chapter}{2}
-\subimport{chapter_4/}{chapter_4}
+    %\setcounter{chapter}{2}
+    % \subimport{chapter_4/}{chapter_4}
 
-%\setcounter{chapter}{3}
-\subimport{chapter_5/}{chapter_5}
+    \setcounter{chapter}{3}
+    \subimport{chapter_5/}{chapter_5}
 
-%\setcounter{chapter}{4}
-\subimport{chapter_6/}{chapter_6}
+    %\setcounter{chapter}{4}
+    %\subimport{chapter_6/}{chapter_6}
 
-\begin{appendices}
-   \subimport{appendix_b/}{appendix_b}
-   \subimport{appendix_a/}{appendix_a}
-\end{appendices}
+    %\begin{appendices}
+    %    \subimport{appendix_b/}{appendix_b}
+    %   \subimport{appendix_a/}{appendix_a}
+    %\end{appendices}
 
 %=============================================================================
 \backmatter
 
-%\input{summary_dutch}
+    \printbibliography[
+        heading=bibintoc,
+        %title={References},
+        ]
 
-%\cleardoublepage
-%\addcontentsline{toc}{chapter}{Index}
-%\printindex
+    %\input{summary_dutch}
 
-\cleardoublepage
-\addcontentsline{toc}{chapter}{Bibliography}
-\printbibliography
-
+    %\cleardoublepage
+    %\addcontentsline{toc}{chapter}{Index}
+    %\printindex
 \end{document}

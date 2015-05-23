@@ -1,4 +1,5 @@
 %=============================  Font selection  ==============================
+
 \usepackage[T1]{fontenc}
     % Defines the encoding of the characters output by LaTeX.  With T1,
     % characters are encoded with 8 bits, allowing many accented European
@@ -9,8 +10,11 @@
     %    https://en.wikipedia.org/wiki/Cork_encoding
     % It's kind of old though: it's LaTeX that's lagging behind.
     % XeTeX and LuaTex are UTF-8 all the way.
-    
+
+
+
 %=======================  UTF-8 support in the source  =======================
+
 \usepackage[utf8]{inputenc}
     % Allows me to input accented characters directly from my keyboard instead
     % of having to type G\"odel.
@@ -19,101 +23,45 @@
 
 \usepackage{lmodern}
 
+
+
 %===============================  DEPENDENCIES  ==============================
-\RequirePackage{snapshot}
+
+%\RequirePackage{snapshot}
     % Generates a .dep files that contains all the files (pictures and stuff)
-    % on which a document depends.
+    % on which a document depends.  Very useful to know what I can safely
+    % delete.
 
-%==================================  FLOATS  =================================
 
-% According to
-% http://tex.stackexchange.com/questions/96350/problem-with-algorithmic-and-hyperref
-% if I want to have hyperref working with algorithm, I must
-% first load float, then hyperref, then algorithm.
-% Putting float here solves the TOC links to the algorithms, otherwise they'd
-% all point to page 1.
-% Also, putting float-algo-hyper creates a massive amount of warnings for pretty much
-% every algo command like \State.
-\usepackage{float}
 
-\usepackage{placeins}
-    % Brings \FloatBarrier command. It forces Tex to typeset all remaining floats
-    % at that point and doesn't include a \clearpage afterwards.
-    % Nice to flush all the floats before beginning a new section.
+%==============================  SUBDIRECTORIES  =============================
 
-\usepackage[font=footnotesize,labelfont=bf,margin=1cm]{caption}
-    % So that I can add long captions under figures.
-    
-    % It provides me with \caption* that does not appear in the list of
-    % figures but formats the text like \caption does.  It also lets me
-    % use line breaks in the caption, and even bullet/enumerated lists.
-    
-    % The margin of 1 cm makes it easier to see what's caption and what's
-    % main-body text when there's a float on top of a page.
+\usepackage{import}
+    % Facilitates the organization of the book.  I can place each chapter
+    % in its own directory, along with its images.
+    % Brings /subimport{directory}{tex_file_name_without_extension}.
 
-\usepackage{subcaption}
-    % Lets me have labels such as a) b) c) inside a figure environment.
-    % Unfortunately something is broken, I cannot give labels to these
-    % subcaptions when hyperef is active, the pdf compiler hangs forever.
-    % Seems to be a common problem.
+    % Note that this confuses snapshot a bit sometimes.
+    % I have a lot of figures that use two files, one TEX and one PDF.
+    % You \input the tex, which \includegraphics the pdf.
+    % Snapshot sees that the pdf is in a subdirectory bot not the tex
+    % (or the other way around).  That would probably prevent me from
+    % using snapshot for its intended purpose but I don't care.
 
-\usepackage{rotating}
-    % Used to display long tables in landscape mode.
 
-%http://tex.stackexchange.com/questions/38972/how-to-forbid-latex-to-put-text-between-figures
-\renewcommand\topfraction{0.70}
-\renewcommand\bottomfraction{0.70}
-\renewcommand\textfraction{0.20}
-%http://www-rohan.sdsu.edu/~aty/bibliog/latex/floats.html
-% Alter some LaTeX defaults for better treatment of figures:
-    % See p.105 of "TeX Unbound" for suggested values.
-    % See pp. 199-200 of Lamport's "LaTeX" book for details.
-    %   General parameters, for ALL pages:
-%    \renewcommand{\topfraction}{0.9}	% max fraction of floats at top
-%    \renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
-    %   Parameters for TEXT pages (not float pages):
-\setcounter{totalnumber}{4} % default 3    % 2 may work better
-\setcounter{topnumber}{4} % default 2
-\setcounter{bottomnumber}{4} % default 1
-%    \setcounter{dbltopnumber}{2}    % for 2-column pages
-%    \renewcommand{\dbltopfraction}{0.9}	% fit big float above 2-col. text
-%    \renewcommand{\textfraction}{0.07}	% allow minimal text w. figs
-    %   Parameters for FLOAT pages (not text pages):
-%    \renewcommand{\floatpagefraction}{0.7}	% require fuller float pages
-	% N.B.: floatpagefraction MUST be less than topfraction !!
-%    \renewcommand{\dblfloatpagefraction}{0.7}	% require fuller float pages
 
-	% remember to use [htp] or [htpb] for placement
 
-%===============================  BACKMATTER  ================================
 
-\usepackage{makeidx}
-    % Needed to build the index.
 
-\usepackage[toc,page]{appendix}
-    % Brings \begin{appendices}.
-    % toc option creates an "appendices" entry in the table of content.
-    % page option creates a page before the first appendix chapter.
-
-%\usepackage[sorting=nyt,citestyle=authoryear,backref=false,]{biblatex}
-\usepackage[backend=bibtex,style=authoryear,sorting=nyt]{biblatex}
-    % Fantastic bibliography manager that I'll use just for its
-    % \citetitle command.
-    % For sorting orders, see
-    % https://www.sharelatex.com/blog/2013/07/31/getting-started-with-biblatex.html
-    % backref does not work with hyperref.
-\DefineBibliographyStrings{english}{%
-    backrefpage  = {see p.}, % for single page number
-    backrefpages = {see pp.} % for multiple page numbers
-}
-\newcommand{\citeformula}[1]{\text{\citetitle{#1}}}
 
 %===========================  HEADERS AND FOOTERS  ===========================
+
+
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\let\originalchaptermark\chaptermark
 
 \makeatletter
+    \let\originalchaptermark\chaptermark%
     \renewcommand{\chaptermark}[1]{%
         \if@mainmatter
             \originalchaptermark{#1}%
@@ -123,14 +71,14 @@
     }
 \makeatother
 
-% Note: Even pages (E) are on the left, odd (O) pages on the right.
+% Stupid default header height creates warnings, it's famous.
 \addtolength{\headheight}{\baselineskip}
+
 \fancyhf{}  % First, start with a clean slate.
 \fancyhead[LE,RO]{\thepage}
 \fancyhead[RE]{\slshape\nouppercase\leftmark}
 \fancyhead[LO]{\slshape\nouppercase\rightmark}
 %\renewcommand{\headrulewidth}{\iffloatpage{0pt}{0.4pt}}
-
 
 \fancypagestyle{plain}{%
     \fancyhf{}
@@ -155,36 +103,170 @@
 \makeatother
 
 
-%=================================  TESTING  =================================
-\usepackage{lipsum}
+
+%===========================  WIDOWS AND ORPHANS  ============================
+
+\widowpenalty10000
+\clubpenalty10000
+    % I hate having a paragraph that has only one line on a page.
+    % It's made even worse when there's a float cutting the paragraph in two.
+    % Here, I am telling LaTeX that windows and orphans are infinitely bad.
+    % http://tex.stackexchange.com/questions/4152/how-do-i-prevent-widow-orphan-lines
+
+% Things that LaTeX does not detect as widows and orphans: a line break
+% to start an equation, or to start a item list.  For these cases,
+% the environment \begin{samepage} \end{samepage} is useful.
 
 
-%==============================  SUBDIRECTORIES  =============================
 
-\usepackage{import}
-    % Facilitates the organization of the book.  I can place each chapter in its own
-    % directory, along with its images.
-    % Brings /subimport{directory}{tex_file_name_without_extension}.
+%===============================  BACKMATTER  ================================
 
-%===================================  COLOR  =================================
+\usepackage{makeidx}
+    % Needed to build the index.
+
+\usepackage[toc,page]{appendix}
+    % Brings \begin{appendices}.
+    % toc option creates an "appendices" entry in the table of content.
+    % page option creates a page before the first appendix chapter.
+
+\usepackage[backend=bibtex,style=authoryear,sorting=nyt,backref=true]{biblatex}
+
+% \DefineBibliographyStrings{english}{%
+%     backrefpage  = {see p.}, % for single page number
+%     backrefpages = {see pp.} % for multiple page numbers
+% }
+
+
+
+%==================================  LISTS  ==================================
+
+\usepackage{enumitem}
+    % Allows customization of bullet-lists and numbered-lists.
+    % In particular, allows removing the insane amount of vertical space that
+    % latex injects in these lists by default.
+    % Usage: \begin{itemize}[noitemsep,nolistsep]
+    % noitemsep removes the spacing between the items.
+    % nolistsep removes the spacing between the paragraph and the list.
+    % Global usage: \setlist[itemize]{noitemsep}
+    % Except that this global usage doesn't work on my old installation.
+
+
+
+%=================================  TABLES  ==================================
+
+\usepackage{booktabs}
+    % For professional-looking tables.
+    % Brings the \toprule, \midrule and \bottomrule.
+    % Remember not to use vertical rules in tables: they look cheap.
+
+\usepackage{multirow}
+    % Duh.
+
+\usepackage{tabularx}
+    % The default column type "p" requires a hard-coded width to deal with
+    % paragraphs in tables.
+    % tabularx brings the X column type, which auto expand to fill the page.
+
+\usepackage{array}
+    % Brings >{} and <{} column modifiers to wrap the content into stuff.
+    % And this is convenient too because it allows me to set the width of a
+    % column, like p does, but with left/right/center justification.
+    \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+    \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+    \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+
+
+%==================================  COLOR  ==================================
+
+% Must be loaded before todonotes: todonotes loads color without [table].
 
 \usepackage[table]{xcolor}
-    % The 'table' parameter loads another package that lets me set
-    % alternating colors for the rows of a table.
-    % xcolor also imports color, which is useful for importing figures saved as
-    % PDF+TEX files generated by inkscape.
-    
-    % Must be loaded before todonotes: todonotes loads color without the [table]
-    % option.
 
-%=================================  DRAFTING  ================================
+    % The 'table' parameter loads another package that lets me set alternating
+    % colors for the rows of a table.
+    % xcolor also imports color, which is useful for importing figures saved
+    % as PDF+TEX files generated by inkscape.
+    
+    % Check out options fixpdftex, hyperref.
+
+
+
+%=================================  PICTURES  ================================
+
+\usepackage{graphicx}
+    % Can't have pictures/photos/figures from files without that.
+    % Note that vanilla latex will only accept eps while tex2pdf accepts
+    % anything except eps.  Go figure...
+
+
+
+%================================  DRAWINGS  =================================
+
+\usepackage[all]{xy}  % I will stop using that one soon.
+\usepackage{tikz}
+\usepackage{pgfkeys}
+
+
+
+%=========================  DRAFTING AND DEBUGGING  ==========================
+
+%\hfuzz = 30pt
+    % The bigger the number, the worse a badbox has to be in order to trigger
+    % a warning.  Useful to focus on the big things first.
+
+\usepackage{lipsum}
 
 \ifDraft
-    \usepackage{todonotes}
-        % Big post-its, handy while writing.
+    \usepackage{todonotes}         % Big post-its, handy while writing.
 \else
     \usepackage[disable]{todonotes}
 \fi
+
+
+
+%=================================  FLOATS  ==================================
+
+% Alter some LaTeX defaults for better treatment of figures.
+    % Taken from http://www-rohan.sdsu.edu/~aty/bibliog/latex/floats.html
+    % See p.  105     of "TeX Unbound" for suggested values.
+    % See pp. 199-200 of Lamport's "LaTeX" book for details.
+    % General parameters, for ALL pages.
+        \renewcommand\topfraction{0.70}    % Default 0.9.
+        \renewcommand\bottomfraction{0.70} % Default 0.8.
+    % Parameters for TEXT pages (not float pages).
+        \setcounter{totalnumber}{4}  % Default 3.
+        \setcounter{topnumber}{4}    % Default 2.
+        \setcounter{bottomnumber}{4} % Default 1.
+        % \setcounter{dbltopnumber}{2}         % For 2-column pages.
+        % \renewcommand{\dbltopfraction}{0.9}  % For 2-column pages.
+        \renewcommand\textfraction{0.20}
+    % Parameters for FLOAT pages (not text pages).
+    % N.B.: floatpagefraction MUST be less than topfraction !!
+        % \renewcommand{\floatpagefraction}{0.7}
+        % \renewcommand{\dblfloatpagefraction}{0.7}
+  
+\usepackage{algorithm}
+    % New float: algorithm.  Uses the "float" package under the hood.
+    % That "float" package must be loaded before hyperref.  If not,
+    % clicking on the link teleports you always to page 1.
+
+\usepackage{placeins}
+    % Brings \FloatBarrier command.  It forces Tex to typeset all remaining
+    % floats at that point and doesn't include a \clearpage afterwards.
+    % Nice to flush all the floats before beginning a new section.
+
+\usepackage{rotating}
+    % Used to display long tables or other floats in landscape mode.
+
+
+
+%==============================  ALGO AND CODE  ==============================
+
+\usepackage{algpseudocode}   % For pseudocode.
+\usepackage{listings}        % For real code.
+
+
 
 %===============================  MATHEMATICS  ===============================
 
@@ -192,7 +274,11 @@
 \usepackage{amsmath}
     % Brings the align environment for lining up equations on the =.
 
+% CONSIDER MATHTOOLS and showonlyrefs
+
 \usepackage{nicefrac}
+    % Brings \nicefrac{a}{b} which typesets a/b,
+    % with raised a, lowered b, and slanted bar.
 
 \usepackage{bm}
     % For bold mathematics.
@@ -218,6 +304,7 @@
 
 % Macro to wrap something between top corners, useful for Gödel number
 % or litteral predicates.
+% Use \cornered{blah}.
 \newbox\gnBoxA
 \newdimen\gnCornerHgt
 \setbox\gnBoxA=\hbox{$\ulcorner$}
@@ -230,7 +317,6 @@
 \else \advance \gnArgHgt by -\gnCornerHgt%
 \fi \raise\gnArgHgt\hbox{$\ulcorner$} \box\gnBoxA %
 \raise\gnArgHgt\hbox{$\urcorner$}}
-% Use \cornered{blah}.
 
 % Class theory.
 \newcommand{\classname}[1]{\mathcal{#1}}
@@ -247,19 +333,18 @@
 \DeclareMathOperator{\cod}{cod}                  % Codomain.
 \DeclareMathOperator{\apply}{\$}                 % Arrow application. 
 
-
 % Set theory.
 \newcommand{\innerprod}[2]{\langle #1, #2 \rangle}
 \newcommand{\innerprodd}[1]{\innerprod{#1}{#1}}
 \newcommand{\Innerprod}[2]{\left\langle #1, #2 \right\rangle}
 \newcommand{\Innerprodd}[1]{\Innerprod{#1}{#1}}
-%\newcommand{\inprod}[2]{\langle #1, #2 \rangle}  % Inner product of two vectors.
-%\newcommand{\vangle}[2]{\left(#1, #2\right)}     % Angle between vectors.
-\DeclareMathOperator{\spanset}{Sp}               % Span, in the linear algebra sense.
-\DeclareMathOperator{\Over}{over}                % (V, *) over F is a vector field.
-\DeclareMathOperator{\End}{End}                  % End(X) = set of endomorphisms of X.
-\DeclareMathOperator{\Aut}{Aut}                  % Aut(X) = set of automorphisms of X.
-\newcommand{\card}[1]{\left\lvert #1 \right\rvert}         % Cardinal of a set.
+%\newcommand{\inprod}[2]{\langle #1, #2 \rangle}   % Inner product of two vectors.
+%\newcommand{\vangle}[2]{\left(#1, #2\right)}      % Angle between vectors.
+\DeclareMathOperator{\spanset}{Sp}                 % Span, in the linear algebra sense.
+\DeclareMathOperator{\Over}{over}                  % (V, *) over F is a vector field.
+\DeclareMathOperator{\End}{End}                    % End(X) = set of endomorphisms of X.
+\DeclareMathOperator{\Aut}{Aut}                    % Aut(X) = set of automorphisms of X.
+\newcommand{\card}[1]{\left\lvert #1 \right\rvert} % Cardinal of a set.
 %
 % This command writes a function in the form
 %
@@ -281,17 +366,17 @@
 
 
 % Scalars.
-\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}          % Absolute value of a scalar.
-\newcommand{\cp}[1]{\hat{#1}}                    % Complex object.
-    % Used as indices:
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}  % Absolute value of a scalar.
+\newcommand{\cp}[1]{\hat{#1}}                      % Complex object.
+% Used as indices:
 \newcommand{\re}{r} % Real part.
 \newcommand{\im}{i} % Imaginary part.
 
 % Vectors.
-\newcommand{\norm}[1]{\left\| #1 \right\|}       % Norm of a vector.
-\newcommand{\vect}[1]{\bm{#1}}                   % Real vector.
-\newcommand{\vectcp}[1]{\cp{\vect{#1}}}          % Complex vector.
-\newcommand{\vectu}[1]{\dot{\vect{#1}}}          % Unit (real) vectors.
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert} % Norm of a vector.
+\newcommand{\vect}[1]{\bm{#1}}                     % Real vector.
+\newcommand{\vectcp}[1]{\cp{\vect{#1}}}            % Complex vector.
+\newcommand{\vectu}[1]{\dot{\vect{#1}}}            % Unit (real) vectors.
 
 % Matrices.
 \newcommand{\matr}[1]{\mathrm{#1}}               % Real matrix.
@@ -343,7 +428,7 @@
     % No decibel though, I need to make this one myself.
     
     % My version of siunitx is too old so I cannot use \DeclareSIUnit to create
-    % new units.
+    % new units.  I have \newunit, but it's not valid on more recent machines.
 \newcommand{\decibel}{dB}  % \DeclareSIunit doesn't work with my version.
 \newcommand{\parsec}{pc}
 \newcommand{\astronomicalunit}{au}  % Was ua until 2014.
@@ -366,98 +451,64 @@
 \usepackage[version=3]{mhchem}
     % For chemical formulas.
     % Brings \ce.
+    % For some reason, you cannot have $n_\ce{CO}$ with recent versions, you
+    % must wrap it in \text{}.
 
 \newcommand{\Jlevel}[2]{$J=#1\!\rightarrow\!#2$}
 \newcommand{\transition}[3]{\ce{#1}~\Jlevel{#2}{#3}}
 
-%================================  DIAGRAMS  =================================
-
-\usepackage[all]{xy}
-\usepackage{tikz}
-\usepackage{pgfkeys}
-
-%==================================  LISTS  ==================================
-
-\usepackage{enumitem}
-    % Allows customization of bullet-lists and numbered-lists.
-    % In particular, allows removing the insane amount of vertical space that latex
-    % injects in these lists by default.
-    % Usage: \begin{itemize}[noitemsep,nolistsep]
-    % noitemsep removes the spacing between the items.
-    % nolistsep removes the spacing between the paragraph and the list.
-    % Global usage: \setlist[itemize]{noitemsep}
-    % Except that this global usage doesn't work on my old installation.
 
 
-%=================================  PICTURES  ================================
+%=============================  Cross-references  ============================
 
-\usepackage{graphicx}
-    % Can't have pictures/photos/figures from files without that.
-    % Note that vanilla latex will only accept eps while tex2pdf accepts
-    % anything except eps.  Go figure...
+% Varioref, hyperref and cleveref must be imported in a specific order.
+% In addition, some other packages (float, subcatption) must be imported
+% either before or after importing the cross-reference packages.
+% Failure to do so can result in compilation errors, compilation hanging
+% forever, links pointing to the wrong pages, unsolvable references and
+% poor reference typesetting.
 
-
-
-%=================================  TABLES  ==================================
-
-\usepackage{booktabs}
-    % For professional-looking tables.
-    % Brings the \toprule, \midrule and \bottomrule.
-    % Remember not to use vertical rules in tables: they look cheap.
-
-\usepackage{multirow}
-    % How isn't that even standard?
-
-\usepackage{tabularx}
-    % Brings the X column type, auto expand to fill the page.
-
-\usepackage{array}
-    % Brings >{} and <{} column modifiers to wrap the content into stuff.
-
-% And this is convenient too because it allows me to set the width of a column,
-% like p does, but with left/right/center justification.
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
-\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
-\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
-
-%=============================  CROSS REFERENCES  ============================
-
-% As a rule of thumb, hyperref goes last.  Only a few packages go after.
-% cleveref is a well known one.  bookmark is another one.
-
-% According to
-% http://tex.stackexchange.com/questions/53191/impact-of-hyperref-when-varioref-and-cleveref-are-used/53193#53193
-% one must first load varioref, then hyperref, then cleveref.
-% Failure to do so results in lots of hyperrefs warnings and links that do not point to the right place.
+% Ideal result of \vref:
+%    Table [1] on the following page
+% with "Table 1" determined by cleveref,
+%      [1] the link created by hyperref, and
+%      "the following page" a prettification from varioref.
+%
+% Hyperref(H) must come before cleveref(C), so there are three
+% possibilities for the position of varioref(V)
+%     -------------------------------------------------
+%     order             result
+%     -------------------------------------------------
+%     V then H then C   Table [1] on the following page
+%     H then V then C   Table [1] on page 2
+%     H then C then V   [1 on the following page]
+%     -------------------------------------------------
+% The correct order is V then H then C.
 \usepackage{varioref}
-    % For fancier references that also tell the page number.
 
-\ifPrint
-    \usepackage[draft]{hyperref}
-\else
-    \usepackage[plainpages=false, hypertexnames=false]{hyperref}
+% Hyperref MUST appear vefore cleveref, otherwise cleveref does not
+% manage to process subfigure references and just prints ??.
+\usepackage{hyperref}
     % Requires direct pdf output, therefore all figures should be pdf too.
     % This creates hyperlinks all over the place to jump to figures, references,
     % chapters and all.
     % hypertexnames=false makes the package dumber, allowing it to work even if
     % there are several chapter 1 in the document.
-    \hypersetup{
-        colorlinks,
-        linkcolor={red!50!black},
-        citecolor={green!40!black},
-        urlcolor={blue!80!black}
-    }
-\fi
-    
-%\usepackage[capitalize,noabbrev]{cleveref}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={green!40!black},
+    urlcolor={blue!80!black}
+}
+% \newcommand{\texorpdfstring}[2]{#2}
+
+% Cleveref MUST appear before caption, otherwise, any subcaption with
+% a label makes the latex compiler enter an infinite loop.
 \usepackage[capitalize]{cleveref}
     % Should make the typesetting of cross references more consistent.
     % Note that I needed to install a recent version of this package, the one I had
     % was too old to handle algorithms properly.
-    % NOTE that cleveref is confused by the subcaption package.  Whenever you place
-    % a label in a subfigure, cleveref hangs forever.  The label at the figure level
-    % works fine though.  So, no labeling of subfigures :(.
-    %
     % Interesting options:
     %    noabbrev
     %    capitalize
@@ -468,40 +519,26 @@
 \crefname{thmthm}{theorem}{theorems}
 \Crefname{thmthm}{Theorem}{Theorems}
 
-%=============================  ALGOS AND CODE  ==============================
 
-% According to
-% http://tex.stackexchange.com/questions/113719/cleveref-fails-to-reference-algorithms
-% Algorithm must be loaded before hyperref.  Well, it is not true.
-\usepackage[chapter]{algorithm}
-    % To float algorithms.
-\usepackage{algpseudocode}
-    % For pseudocode.
-\usepackage{listings}
-    % For real code.
+
+%==============================  FLOAT CAPTIONS  ==============================
+
+% caption and subcaption must be loaded after cleveref.
+% Otherwise, compilation enters an infinite loop when a subcaption has a label.
+ 
+\usepackage[font=footnotesize,
+            labelfont=bf,
+            margin=1cm,
+            parskip=5pt,
+            ]{caption}
+    % So that I can add long captions under figures and style them.
+
+\usepackage{subcaption}
+    % Lets me have labels such as a) b) c) inside a figure environment.
+\newcommand{\parensubref}[1]{(\subref{#1})}
 
 %===============================  SPECIAL TEXT  ==============================
 
 \hyphenation{aniso-tro-pic iso-tro-pic impe-dance va-cuum algo-rithm algo-rithms col-linear pe-rio-dic tera-hertz}
 \newcommand{\radex}{\textsc{radex}}
 \newcommand{\Radex}{\textsc{Radex}}
-
-%===========================  WIDOWS AND ORPHANS  ============================
-
-% I hate having a paragraph that has only one line on a page.
-% It's made even worse when there's a float cutting the paragraph in two.
-% Here, I am telling LaTeX that windows and orphans are infinitely bad.
-% http://tex.stackexchange.com/questions/4152/how-do-i-prevent-widow-orphan-lines
-\widowpenalty10000
-\clubpenalty10000
-
-%===============================  WEIRD THINGS  ==============================
-
-% This thing helps filtering some warnings during debugging.  There often are
-% warnings caused by very small overfull hboxes and they `pollute' the log,
-% drowning the more critical warnings.  Although I believe that a document
-% should compile with zero warning, it also makes sense to solve the big
-% problems first.  The following command is supposed to make LaTeX stop
-% complaining when the boxes are only slightly overfull.
-% Ref: http://tex.stackexchange.com/questions/183972/package-biblatex-warning-data-encoding-is-utf8-use-backend-biber
-%\hfuzz = 30pt
