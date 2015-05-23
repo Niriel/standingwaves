@@ -368,11 +368,17 @@ If these imaginary parts vary quickly with frequency, then we can expect the pha
 \section{Observation}
 
 We scheduled two observations of S140 IRS1 with HIFI.
-They are available in the Herschel Science Archive and can be retrieved with the following observation identifiers (``obsid''):
+They are available in the Herschel Science Archive~\parencite{herschelsciencearchive2015} under the following observation identifiers (``obsid''):
 \begin{itemize}[noitemsep,nolistsep]
     \item \transition{CO}{8}{7}, obsid 0x50015e1d;
     \item \transition{CO}{9}{8}, obsid 0x50015d89.
 \end{itemize}
+These observations can be retrieved with HIPE~\parencite{ott2010herschel}, the data processing system and user front-end of HCSS
+(Herschel Common Software System, \textcite{riedinger2009making})%
+\footnote{
+    HCSS and HIPE are joint developments by the Herschel Science Ground Segment Consortium, consisting of ESA, the NASA Herschel Science Center, and the HIFI, PACS and SPIRE consortia.
+}%
+.
 
 A non-standard observing mode, based on the standard ``dual beam switch spectral scan'', was developped specifically for this observation.
 The standard observing modes of HIFI are described in~\textcite{hifiobserversmanual}.
@@ -549,18 +555,16 @@ That temperature scale is suitable for extended sources as it assumes that the e
 
 Our sources are probably much smaller than our beam size and an absolute calibration of their intensity requires knowing their apparent diameter.
 This does not matter for measuring our line ratios:
-our two lines originate from the same regions, the ratio cancels their apparent diameter.
+if the lines originate from the same regions, the ratio cancels their apparent diameter.
 For our purpose, the main-beam temperature scale ($T_\text{mb}$) is appropriate.
 It assumes that the source fills the main beam but not the sidelobes.
 
-We bring the data to the main-beam temperature scale by dividing our spectra by the main-beam efficiencies $\eta_\text{mb}$ of
-\num{0.744} for \transition{CO}{8}{7} and \num{0.740} for \transition{CO}{9}{8}.
-We obtain these values by interpolating the beam efficiency tables attached to the HIFI observations for our LO~frequencies.
-%These tables have a higher granularity that the one presented in fou~\parencite{AA_537_A17}.
+The antenna and main-beam temperatures are related by $T_\text{mb} = T_\text{a} / \eta_\text{mb}$ where $\eta_\text{mb}$ is the main-beam efficiency.
+\Textcite{AA_537_A17} provides a table of main-beam efficiencies for each HIFI band.
+In addition, each HIFI data product present in the Herschel Science Archive contains a table of main-beam efficiencies that is more accurate and up-to-date.
+Interpolating this table for the relevent LO frequencies yields
+$\eta_\text{mb}=\num{0.744}$ for \transition{CO}{8}{7} and $\eta_\text{mb}=\num{0.740}$ for \transition{CO}{9}{8}.
 \Cref{fig:co98_full_bandwidth} shows one of the 95 spectra of \transition{CO}{8}{7} on the $T_\text{mb}$~scale.
-%\begin{equation}
-%    T_\text{mb} = T_\text{a}^* / \eta_\text{mb}
-%\end{equation}
 
 For both transitions, the \ce{CO} line is always relatively narrow ($\approx \SI{100}{\mega\hertz}$) compared to the instantaneous bandwidth of the instrument (\SI{4}{\giga\hertz}), and in the rest of this chapter we will often zoom in on the line.
 The 195 spectra that we study are all very similar to the one shown in~\cref{fig:co98_full_bandwidth}.
