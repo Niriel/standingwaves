@@ -10,10 +10,21 @@
 As discussed in~\cref{sec:chapter1}, when coherent electromagnetic waves superpose they form a resultant wave of greater or lower amplitude.
 This phenomenon is called ``interference''.
 In~\cref{sec:chapter2}, we developed a model that can predict the impact of interferences on the gain of a coherent instrument.
-In~\cref{sec:chapter4}, we modeled the interferences in Band~1 of the Heterodyne Instrument for the Far Infrared (HIFI), which is a double-sideband coherent detector.
-
+In~\cref{sec:chapter4}, we applied this model to the Heterodyne Instrument for the Far Infrared (HIFI) of the Herschel Space Observatory%
+\footnote{
+    % Apparently, I am legally required to put this sentence right here.
+    Herschel is an ESA space observatory with science instruments provided by European-led Principal Investigator consortia and with important participation from NASA.
+    % Proof: http://www.cosmos.esa.int/web/herschel/publishing-rules-guidelines .
+}
 In this chapter, we examine how the estimation of astrophysical parameters from submillimeter heterodyne observations is affected by interferences in the instrument.
 We attempt to derive the density and the kinetic temperature of a molecular cloud from the intensity ratios of rotational lines of the \ce{CO} molecule.
+
+All measurements of physical quantities are affected by uncertainty.
+This uncertainty must be properly taken into account in order to make correct assessments regarding the degree of accuracy of a model, the validity of a theory or the behavior of a technological device.
+It is essential to understand the origin of uncertainty and evaluate its magnitude.
+In HIFI, the uncertainty results from random errors and systematic errors.
+Thermal noise, with its stochastic nature, contributes to the random errors.
+Optical interferences, which are predictable but not actually predicted, contribute to the systematic error.
 
 To assess the effect of interferences on astrophysical results, we have set up a special HIFI observation of the S140 region.
 We observed two rotational lines of~\ce{CO} toward the source S140~IRS1.
@@ -182,9 +193,9 @@ The LO signal is not only monochromatic and stable, it is also powerful enough t
 
 We observed S140 IRS1 with Bands~3 and 4 of HIFI.
 As described in~\vref{sec:diplexer_lo_injection},
-Bands~3, 4, 6 and 7 of HIFI use diplexers for their LO-injection.
-The purpose of the diplexers is to maximize the coupling of the mixer to both the sky and the LO.
-They do so by aligning the polarization of the sky and the LO signals with that of the mixers (see~\cref{sec:diplexer_lo_injection,sec:annex_a}).
+the diplexer units are modules of the HIFI focal plane unit that are used in Bands~3, 4, 6, and 7 for the LO injection~\parencite{jackson2002hifi}.
+They are used to align the polarization of the sky and LO signals so that the mixers, which are sensitive to one polarization only, can couple to both optimally
+(see~\cref{sec:diplexer_lo_injection,sec:annex_a}).
 
 Diplexers are interferometers: the optical pathlength difference between two arms determines the output polarization for every frequency.
 For each LO~frequency, there exist one and only one optimal pathlength difference.
@@ -233,31 +244,36 @@ This provides a first impression of the effect of interferences on the gain of t
         \includegraphics[scale=.9]{87_00_00_sky_s_lsbusbsbr}
         \vspace{-.8em}
         \caption{Sky pointing, sky power.}
+        \label{fig:lsbusbsbr_skysky}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[scale=.9]{87_00_00_sky_l_lsbusbsbr}
         \vspace{-.8em}
         \caption{Sky pointing, LO power.}
+        \label{fig:lsbusbsbr_skylo}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[scale=.9]{87_00_00_hbb_s_lsbusbsbr}
         \vspace{-.8em}
         \caption{Hot load pointing, hot load power.}
+        \label{fig:lsbusbsbr_hothot}
     \end{subfigure}
     \begin{subfigure}[b]{\textwidth}
         \centering
         \includegraphics[scale=.9]{87_00_00_cbb_s_lsbusbsbr}
         \vspace{-.8em}
         \caption{Cold load pointing, cold load power.}
+        \label{fig:lsbusbsbr_coldcold}
     \end{subfigure}
-    \caption{Gain and sideband ratio of the optics for three pointings:
-    the sky~(a and b)
-    the hot load~(c)
-    and the cold load~(d).
-    For each pointing, the mixer receives power from the object pointed at, and also from the LO.
-    Here, the LO gain is shown only for the sky pointing (b).
+    \caption{Gain and sideband gain ratio of the optics for three pointings:
+    the sky
+    (\parensubref{fig:lsbusbsbr_skysky} and \parensubref{fig:lsbusbsbr_skylo})
+    the hot load~\parensubref{fig:lsbusbsbr_hothot}
+    and the cold load~\parensubref{fig:lsbusbsbr_coldcold}.
+    For each pointing, the mixer receives power from the target and the LO.
+    Here, the LO gain is shown only for the sky pointing \parensubref{fig:lsbusbsbr_skylo}.
     $\text{LO~frequency} = \SI{914.404500}{\giga\hertz}$,
     $\text{Diplexer current} = \SI{0.503}{\milli\ampere}$.
     }
@@ -265,20 +281,46 @@ This provides a first impression of the effect of interferences on the gain of t
 \end{figure}
 
 \begin{figure}
-    \centering
-    \includegraphics{87_interf_usG}
-    \caption{USB gain for the signal of the sky pointing, for the 95 LO and diplexer settings of the~\transition{CO}{8}{7} observation.
-    Top: sorted by LO~frequency then diplexer setting.
-    Bottom: sorted by diplexer setting then LO~frequency.}
-    \label{fig:87_interf_usG}
-\end{figure}
-\begin{figure}
-    \centering
-    \includegraphics{87_interf_usB}
-    \caption{USB gain for the signal of the sky pointing, divided by the bandpass, for the 95 LO and diplexer settings of the~\transition{CO}{8}{7} observation.
-    Top: sorted by LO~frequency then diplexer setting.
-    Bottom: sorted by diplexer setting then LO~frequency.}
-    \label{fig:87_interf_usB}
+    \begin{subfigure}[t]{\linewidth}
+        \includegraphics{87_interf_usG}
+        \begin{minipage}{.82\linewidth}%
+            \caption{USB sky target gain.}
+            \label{fig:87_interf_usG}
+        \end{minipage}
+    \end{subfigure}%
+
+    \begin{subfigure}[t]{\linewidth}
+        \includegraphics{87_interf_usB}
+        \begin{minipage}{.82\linewidth}%
+            \caption{USB sky target gain divided by bandpass.}
+            \label{fig:87_interf_usB}
+        \end{minipage}
+    \end{subfigure}%
+
+    \caption{
+        Effect of the bandpass calibration on the gain.
+        Each plot shows 95 \transition{CO}{8}{7} spectra stacked vertically, sorted
+        either by LO then diplexer setting
+            (\parensubref{fig:87_interf_usG} and
+             \parensubref{fig:87_interf_usB} top)
+        or     by diplexer then LO setting
+            (\parensubref{fig:87_interf_usG} and
+             \parensubref{fig:87_interf_usB} bottom).
+        %
+        The frequency-dependence of the diplexer causes the
+        optical gain~\parensubref{fig:87_interf_usG} to be higher at the center of the
+        spectra
+        ($\text{red}=1$).
+        %
+        In~\parensubref{fig:87_interf_usB}, that gain is normalized
+        ($\text{green}=1$)
+        by being divided by the bandpass as measured from the hot and cold calibration
+        loads.
+        This approximation corrects the overall first-order effect of the diplexer but
+        does not correct the effect of interferences.
+        It even introduces short-period ripples that do not exist in~\parensubref{fig:87_interf_usG}.
+    }
+    \label{fig:87_interf_usGusB}
 \end{figure}
 
 \Cref{fig:87_00_00_sky_lsbusbsbr} shows the simulated optical gain for a spectrum of \transition{CO}{8}{7} when the chopper is pointed at the sky.
@@ -290,13 +332,13 @@ These curves present several interesting features.
     This is caused by imperfections in the grids (they leak power to the `wrong' polarization) and the rooftop mirrors (a small fraction of the incoming power is reflected without its polarization being rotated).
     \item A ripple of period~$\approx \SI{100}{\mega\hertz}$ that is stronger at the edge of the spectrum and weaker at the center.
     This ripple is caused by the LO--mixer cavity and is modulated by the LO coupling of the diplexer.
-    \item A slope in the sideband ratio, which reveals a non-optimal diplexer tuning.
+    \item A slope in the sideband gain ratio, which reveals a non-optimal diplexer tuning.
 \end{itemize}
 
-When the chopper points to the hot or cold calibration load, the non-zero reflectivity of this load introduces more cavities in the system, which creates additional ripples to the gain curves as shown in~\cref{fig:87_00_00_sky_lsbusbsbr} (c) and (d).
+When the chopper points to the hot or cold calibration load, the non-zero reflectivity of this load introduces more cavities in the system, which creates additional ripples to the gain curves as shown in~\cref{fig:lsbusbsbr_hothot,fig:lsbusbsbr_coldcold}.
 The lengths of the mixer--LO, mixer--hot-load and mixer--cold-load cavities are all close to~\SI{1.5}{\meter}, and therefore all produce ripples with periods between~\num{90} and \SI{100}{\mega\hertz}.
 
-The USB gain of the signal for the sky pointing (center top plot of~\cref{fig:87_00_00_sky_lsbusbsbr}) is displayed on \cref{fig:87_interf_usG} for the 95 LO and diplexer settings of the \transition{CO}{8}{7} observation.
+The USB gain of the signal for the sky pointing (\cref{fig:lsbusbsbr_skysky} center) is displayed on \cref{fig:87_interf_usG} for the 95 LO and diplexer settings of the \transition{CO}{8}{7} observation.
 This illustrates the influence of the LO and diplexer setting on the intensity and the phase of the ripples affecting the line, which is located at~$\approx \SI{921.8}{\giga\hertz}$.
 
 The bandpass calibration of HIFI involves dividing the signal measured on the sky by the signal measured on the calibration loads~(see \cref{sec:intensity_calibration}).
