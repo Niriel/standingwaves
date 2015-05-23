@@ -585,42 +585,35 @@ The spectra of both transitions typically feature:
 \subsubsection{Motivation}
 For our experiment, we use the diplexer as a way of modulating the interferences inside the optics of HIFI.
 However, for each LO~frequency there exist one and only one diplexer tuning that guarantees ideal couplings and a balanced sideband gain ratio.
-By mis-tuning the diplexer, we do modulate the interferences, but we also deteriorate the sideband ratio in a way that is irrelevant for our study.
-In this section, we describe how we correct for this degradation of the sideband ratio.
-
-The diplexer units are modules of the HIFI focal plane unit that are used in Bands~3, 4, 6, and 7 for the LO injection~\parencite{jackson2002hifi}.
-They are used to align the polarization of the sky and LO signals so that the mixers, which are sensitive to one polarization only, can couple to both optimally.
-
-
-
+By mis-tuning the diplexer, we do modulate the interferences, but we also deteriorate the sideband gain ratio in a way that is irrelevant for our study.
+This section describes how we correct for this degradation of the sideband gain ratio.
 
 In normal operations, the diplexer actuator current is adjusted to the LO~frequency by interpolation of a look-up table.
 For our observations, we bypass this process and set the diplexer actuator current ourselves.
 As a result, the diplexer is not optimally tuned.
-This is illustrated in~\cref{fig:diplexer_0503}, for which the diplexer actuator current of~\SI{0.503}{\milli\ampere} for a LO~frequency of~\SI{914.4045}{\giga\hertz} results in an arm length mis-tuned by \SI{158}{\micro\meter}, approximately half a wavelength.
-The coupling is not symmetrical (top plot) and the sideband ratio does not equal \num{0.5} everywhere.
-This distorts the line profile.
-We must correct for it.
+This is illustrated in~\cref{fig:diplexer_0503}, for which the diplexer actuator current of~\SI{0.503}{\milli\ampere} for a LO~frequency of~\SI{914.4045}{\giga\hertz} results in an arm length mis-tuned by \SI{158}{\micro\meter}, approximately half a wavelength (the details of this calculation are in~\cref{sec:annex_a}).
+Consequently, the gain is not symmetrical (top plot) and the sideband gain ratio does not equal \num{0.5} everywhere.
+This distorts the line profile and must be corrected.
 
 \begin{figure}
     \centering
     \includegraphics{diplexer_coupling_0503}
     \caption*{
-        Coupling of the mixer by the LO and the sky for a mis-tuned diplexer.
+        Gain of the LO and sky signals for an ideal, albeit mis-tuned, diplexer.
         In this specific case, the coupling is shifted \SI{53}{\mega\hertz} to the left of its optimal position.
     }
     \bigskip
     \includegraphics{diplexer_sbr_0503}
     \caption*{
-        Sideband ratio of the mixer--sky coupling for a mis-tuned diplexer.
+        Sideband gain ratio of the sky signal for a mis-tuned ideal diplexer.
         The left part of the spectrum is USB-dominated, the right part is LSB-dominated.
         The intensity of the \transition{CO}{8}{7} line is underestimated by about~\SI{10}{\percent}.
     }
     \caption{
-    Model of the coupling and the sideband ratio for a mis-tuned diplexer.
-    The green vertical lines show the rest frequency of the \transition{CO}{8}{7} transition.
-    The LO~frequency is~\SI{914.4045}{\giga\hertz}.
-    The difference in length of the two arms of the diplexer is~\SI{12.3826}{\milli\meter}.
+        Model of the coupling and the sideband gain ratio for a mis-tuned diplexer.
+        The green vertical lines show the rest frequency of the \transition{CO}{8}{7} transition.
+        The LO~frequency is~\SI{914.4045}{\giga\hertz}.
+        The difference in length of the two arms of the diplexer is~\SI{12.3826}{\milli\meter}.
     }
     \label{fig:diplexer_0503}
 \end{figure}
@@ -646,12 +639,13 @@ The calibration equation of HIFI produces $T_\text{mb}$ from the measured powers
     }\text{.}
 \end{equation}
 In this equation, $\Delta T$ is a scaling factor converting the dimensionless ratio to a temperature.
-Without loss of generality, let us assume $R_L = R_U = 0$: there is no emission from the Off.
+Without loss of generality, we may assume $R_L = R_U = 0$: there is no emission from the Off.
 
 %...................................................................
 \paragraph{Step 1: find the continuum.}
-We assume that parts of the spectrum show only a continuum emission and no line.
-Furthermore, we assume that the amplitude of the continuum is constant.
+We assume that parts of the spectrum show only continuum emission and no line.
+Furthermowe, we assume that the continuum is emitted by a homogeneous black body:
+its amplitude (in units of temperature) is constant.
 The signal in both sidebands equals this constant: $S_L = S_U = B$.
 We get
 \begin{equation}
@@ -664,7 +658,7 @@ We get
         (G_L H_L + G_U H_U) - (G_L C_L + G_U C_U)
     }
 \end{equation}
-In this equation, $G_L$ and $G_U$ are known: we calculate them from a known diplexer displacement with~\cref{eq:diplexer_coupling_model}.
+In this equation, $G_L$ and $G_U$ are known: we can use a diplexer model (see~\cref{eq:diplexer_coupling_model} in \cref{sec:annex_a}) to calculate these terms from the known diplexer arm displacement.
 We also know $H$ and $C$, the emission from the hot and cold calibration loads: we know their physical temperature $T_h$ and $T_c$, their coupling coefficient and Planck's law.
 Finally, $\Delta T = T_h - T_c$ is known as well.
 We can therefore easily solve this equation for $B$.
@@ -675,21 +669,21 @@ We simply take their average.
 \paragraph{Step 2: solve for the line.}
 We know that our emission lines are located in the upper sideband.
 The lower sideband sees only the continuum.
-With $B$ the continuum intensity that we just calculated and $L$ the intensity of the line, we have
+With $B$ the continuum intensity that we just calculated and $J$ the intensity of the line, we have
 \begin{equation}
     T_\text{mb}
     =
     \Delta T
     \frac{
-        G_L B + G_U (B + L)
+        G_L B + G_U (B + J)
     }{
         (G_L H_L + G_U H_U) - (G_L C_L + G_U C_U)
     }\text{,}
 \end{equation}
-which we solve for $L$.
+which we solve for $J$.
 
 Note: this equation cannot make the difference between the noise and the astronomical signal.
-Any deviation from the baseline enters~$L$.
+Any deviation from the baseline enters~$J$.
 The intensity of the noise and the line are both `corrected' equally.
 
 %...................................................................
@@ -709,37 +703,14 @@ The two situations are described by the equations
     \frac{L}{(H_L + H_U) - (C_L + C_U)} \text{\quad with the line only.}
 \end{align}
 
-In the rest of this chapter, we use the $T_\text{mb}''$ scale.
+The rest of this chapter uses the $T_\text{mb}''$ scale.
 
 %-----------------------------------------------------------------------------
 \subsubsection{Result of the diplexer mis-tuning correction}
-\Cref{fig:diplexer_correction} shows the result of correcting the sideband imbalance with this simple method.
-The bottom plot for each transition shows the line only, the continuum is removed.
+The 190 spectra of our S140 observation were corrected for diplexer mis-tuning.
+\Cref{fig:diplexer_correction,tab:diplexer_correction} illustrate the line profiles and peak intensities before and after correction.
+The the spread of the peak intensity, listed in~\cref{tab:diplexer_correction}, is considerably reduced by correcting for the diplexer mis-tuning.
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[b]{\textwidth}
-        \centering
-        \includegraphics{correction_87}
-        \vspace{-.8em}
-        \caption{\transition{CO}{8}{7} spectra before and after sideband correction.}
-    \end{subfigure}
-    \\
-    \bigskip
-    \begin{subfigure}[b]{\textwidth}
-        \centering
-        \includegraphics{correction_98}
-        \vspace{-.8em}
-        \caption{\transition{CO}{9}{8} spectra before and after sideband correction.}
-    \end{subfigure}
-    \caption{
-        Correction of the sideband imbalance due to mis-tuning the mixer.
-    }
-    \label{fig:diplexer_correction}
-\end{figure}
-
-
-For both transitions, the spread of the peak intensity is considerably reduced.
 \begin{table}
     %87 Before correction 31.5146912873 +/- 1.31935031215
     %87 After  correction 32.3597611286 +/- 0.27093631469
@@ -757,7 +728,30 @@ For both transitions, the spread of the peak intensity is considerably reduced.
         \bottomrule
     \end{tabular}
     \caption{Peak intensities before and after correcting for the diplexer mis-tuning.}
+    \label{tab:diplexer_correction}
 \end{table}
+
+\begin{figure}
+    \centering
+    \begin{tabular}{c}
+        \includegraphics{correction_87}
+        \\
+        \footnotesize{\transition{CO}{8}{7} profiles before (top) and after (bottom) correction.}
+        \\
+        \\
+        \includegraphics{correction_98}
+        \\
+        \footnotesize{\transition{CO}{9}{8} profiles before (top) and after (bottom) correction.}
+        \\
+    \end{tabular}
+    \caption{
+        This figure illustrates how the profile of spectral lines measured by HIFI is impacted by
+        a mismatch between LO frequency and diplexer tuning.
+        Each plot shows the superposition of 95 spectra of S140 IRS1.
+    }
+    \label{fig:diplexer_correction}
+\end{figure}
+
 
 Any residual spread is due to either thermal noise, imperfections in the diplexers and interferences in the optics.
 
