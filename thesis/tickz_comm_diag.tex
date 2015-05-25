@@ -1,0 +1,76 @@
+% Tikz style for commutative diagrams.
+\usetikzlibrary{scopes,arrows,backgrounds,fit,calc,matrix}
+\tikzset{
+    % Commutative diagram.
+    cd/.style={
+        auto=right, % Labels outside counter-clockwise paths.
+    },
+    cdEquation/.style={
+        cd,
+        baseline=-.6ex,
+    },
+    %######  NODES  ######
+    cdZeroNode/.style={
+        every node/.style={inner sep=0, outer sep=0, minimum size=0},
+    },
+    cdNonZeroNode/.style={
+        every node/.style={inner sep=3pt},
+    },
+    cdObjectNode/.style={
+        cdNonZeroNode,
+        every node/.style={shape=circle,fill=black!20,minimum size=2em},
+    },
+    cdLongObjectNode/.style={
+        cdNonZeroNode,
+        every node/.style={
+            align=center, % For line breaks.
+            shape=rectangle,
+            fill=black!20,
+            minimum width=4cm,
+            minimum height=1cm,
+        },
+    },
+    cdArrowSideNode/.style={
+        cdNonZeroNode,
+        every node/.style={shape=rectangle,auto=true},
+    },
+    cdArrowCoveringNode/.style={
+        cdNonZeroNode,
+        every node/.style={shape=rectangle,auto=false,fill=white},
+    },
+    %######  EDGES  ######
+    cdArrowEdge/.style={
+        every path/.style={rounded corners},
+    },
+    cdMorph/.style={ % General morphism.
+        arrows=-to,
+    },
+    cdMono/.style={ % Monomorphism.
+        arrows=left hook-to,
+    },
+    cdEndo/.style={ % Endomorphism.
+        arrows=left hook-to,
+    },
+    cdEpi/.style={ % Epimorphism.
+        arrows=left hook-to,
+    },
+    cdAuto/.style={ % Automorphism.
+        arrows=left hook-to,
+    },
+    cdIso/.style={ % Isomorphism.
+        arrows=left hook-to,
+    },
+    cdMaybe/.style={ % Isomorphism.
+        dashed,
+    },
+    cdLoop/.style={
+        every to/.style={
+            to path={.. controls +(-30:1) and +(30:1) .. (\tikztostart) \tikztonodes},
+        },
+    },
+    %######  FRAMES  ######
+    cdFrame/.style={
+        on background layer,
+        every node/.style={draw=black!30, rounded corners},
+    },
+}

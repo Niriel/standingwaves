@@ -214,6 +214,8 @@ Since each LO~frequency couples the mixers to different lower and upper sideband
 The diplexer setting and the LO~frequency provide two independent parameters that allow the exploration of the effect of interferences on astronomical data.
 
 
+
+
 %#############################################################################
 \FloatBarrier
 \section{Expectations from interference modeling}
@@ -367,6 +369,8 @@ If these imaginary parts vary quickly with frequency, then we can expect the pha
 \FloatBarrier
 \section{Observation}
 
+\subsection{Description}
+
 We scheduled two observations of S140 IRS1 with HIFI.
 They are available in the Herschel Science Archive~\parencite{herschelsciencearchive2015} under the following observation identifiers (``obsid''):
 \begin{itemize}[noitemsep,nolistsep]
@@ -478,6 +482,141 @@ Furthermore, the lines are not placed in the center of the spectra but close to 
 A hot-cold measurement is taken for each instrumental configuration: each spectrum is calibrated with its own bandpass, measured with the corresponding LO~frequency and diplexer actuator current.
 
 
+%=============================================================================
+\subsection{Analysis layout}
+
+The analysis performed in this chapter can be summarized by the diagram of~\cref{fig:analysis_flow}.
+The four main blocks are data reduction, noise modeling, line analysis, and astronomical modeling.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}[
+            cdEquation,
+            action/.style={
+                anchor=mid,
+                align=center,
+                font=\footnotesize,
+                draw=black,
+                text width=3cm,
+                minimum height=3ex,
+                outer sep=1pt,
+                },
+            data/.style={
+                anchor=mid,
+                align=center,
+                font=\scriptsize,
+                fill=white,
+                auto=false,
+                inner sep=2pt,
+                outer sep=1pt,
+                },
+            frame/.style={
+                draw=black,
+                thick,
+                rounded corners,
+                inner sep=6pt,
+                },
+            shl/.style={xshift=-4pt},
+            shr/.style={xshift= 4pt},
+            shd/.style={yshift=-4pt},
+            shu/.style={yshift= 4pt},
+            ->,
+        ]
+        %----- Beginning of matrix.
+        \matrix (m)[
+            matrix of nodes,
+            every odd row/.style={nodes=data},
+            every even row/.style={nodes=action},
+            nodes in empty cells=false,
+            column sep={1cm,between borders},
+            row sep={5mm,between borders},
+            outer sep=0,
+            inner sep=0,
+            ]{
+            raw data               &                        \\ %  1
+            reduce data            &                        \\ %  2
+            spectra                &                        \\ %  3
+                                   & model noise            \\ %  4
+                                   & noise model            \\ %  5
+                                   & synthetize spectra     \\ %  6
+                                   & spectra                \\ %  7
+            fit profiles           & fit profiles           \\ %  8
+            integrated intensities & integrated intensities \\ %  9
+            divide                 & divide                 \\ % 10
+            line ratios            & line ratios            \\ % 11
+            analyze statistics     & analyze statistics     \\ % 12
+            total uncertainty      & random uncertainty     \\ % 13
+        };
+        %----- End of matrix.
+        \path (m-1-1.north) +(0,0.5) node[data,anchor=south] (input)
+              {\transition{CO}{8}{7}\ \ \transition{CO}{9}{8}};
+        \path (m.south) + (0,-0.5)
+            node[
+                name=n,
+                anchor=north,
+                matrix of nodes,
+                every even row/.style={nodes=data},
+                every odd row/.style={nodes=action},
+                nodes in empty cells=false,
+                column sep={1cm,between borders},
+                row sep={5mm,between borders},
+                outer sep=0,
+                inner sep=0,
+            ]{
+                combine\\
+                systematic uncertainty on line ratio\\
+                \radex \\
+                systematic uncertainty on physical parameters\\
+            };
+        %----- Frames.
+        {[on background layer,
+          every node/.style=frame]
+            \node[fit=(m-2-1)] {};
+            \node[fit=(m-4-2) (m-5-2) (m-6-2)] {};
+            \node[fit=(m-8-1) (m-9-1) (m-10-1) (m-11-1) (m-12-1)
+                      (m-8-2) (m-9-2) (m-10-2) (m-11-2) (m-12-2)
+                      (n-1-1)] {};
+            \node[fit=(n-3-1)] {};
+        }
+        %----- Edges.
+        {[on background layer]
+            \draw ([shl]input.south) -- ([shl]m-2-1.north);
+            \draw ([shr]input.south) -- ([shr]m-2-1.north);
+            %
+            \draw ([shl]m-2-1.south) -- ([shl]m-8-1.north);
+            \draw ([shr]m-2-1.south) -- ([shr]m-8-1.north);
+            \draw ([shl]m-8-1.south) -- ([shl]m-10-1.north);
+            \draw ([shr]m-8-1.south) -- ([shr]m-10-1.north);
+            %
+            \draw ([shl]m-2-1.south) to[out=south,in=west] ([shd]m-4-2.west);
+            \draw ([shr]m-2-1.south) to[out=south,in=west] ([shu]m-4-2.west);
+            %
+            \draw ([shl]m-4-2.south) -- ([shl]m-6-2.north);
+            \draw ([shr]m-4-2.south) -- ([shr]m-6-2.north);
+            \draw ([shl]m-6-2.south) -- ([shl]m-8-2.north);
+            \draw ([shr]m-6-2.south) -- ([shr]m-8-2.north);
+            \draw ([shl]m-8-2.south) -- ([shl]m-10-2.north);
+            \draw ([shr]m-8-2.south) -- ([shr]m-10-2.north);
+            %
+            \draw (m-10-1) -- (m-12-1);
+            \draw (m-10-2) -- (m-12-2);
+            \draw (m-12-1) |- (n-1-1);
+            \draw (m-12-2) |- (n-1-1);
+            \draw (n-1-1) -- (n-3-1);
+            \draw (n-3-1) -- (n-4-1.south) -- +(0,-0.2);
+            %
+          }
+    \end{tikzpicture}
+    \caption{
+        Flow of the data analysis performed in this chapter.
+        First, the raw data for both transitions is reduced into usable spectra.
+        Second, we analyze the properties of the noise of these spectra in order to create synthetic spectra, which are affected by noise but not by interferences.
+        Third, we apply the same analysis to both the real and the synthetic spectra, which yields the total uncertainty on the line ratio and that due to random errors only.
+        From these two values we recover the line ratio uncertainty caused by systematic errors.
+        Finally, we translate this line ratio uncertainty into an uncertainty on the physical parameters of S140 IRS1.
+    }
+    \label{fig:analysis_flow}
+\end{figure}
 
 
 
@@ -763,6 +902,38 @@ Any residual spread is due to either thermal noise, imperfections in the diplexe
 %\FloatBarrier
 \section{Noise simulations}
 \label{sec:noise_simulations}
+
+
+
+Each channel of a HIFI spectrum is a measurement $X_\text{m}$ of a physical quantity whose true value $X_\text{t}$ is unknown.
+The difference $\Delta X = X_\text{m} - X_\text{t}$, unknown as well, is called ``measurement error''.
+As detailed in~\vref{sec:error_budget} (\nameref{sec:error_budget}),
+this error is a function of many parameters such as thermal background radiation, mixer intrinsic sideband ratio, optical interferences, electrical interferences%
+\footnote{
+    Electromagnetic interferences are not limited to the optical part (between the sky and the mixer) of HIFI, they can also occur in the waveguides of its electronics (between the mixer and the detector).
+    These ``electrical interferences'' are not an issue in Band~3 or 4 but often dominate in Band~6 and 7~\autocite{higgins2011}.
+}%
+, LO purity, or LO stability.
+
+
+The total error $\Delta X$ on the measurement of a variable $X$ results from systematic and statistical errors $\Delta X_\text{systematic}$ and $\Delta X_\text{statistical}$.
+
+
+\begin{equation}
+    \Delta X_\text{total}
+    =
+    \sqrt{
+        \Delta X_\text{systematic}^2
+        +
+        \Delta X_\text{statistical}^2
+    }
+\end{equation}
+This equation holds because systematic and statistical errors are independant and uncorrelated.
+
+In the case of HIFI, the effect of electromagnetic interferences is sytematic,
+while the thermal background radiation is random in nature.
+
+
 We wish to quantify the influence of the thermal noise on the line profiles.
 We model the noise seen on HIFI observations and use that model to generate synthetic spectra.
 This mimics an observation in which the same source is observed many times with a fixed LO and diplexer settings.
@@ -777,8 +948,8 @@ Finally, apply the modeled thermal noise to the ideal spectra.
 %=============================================================================
 
 \subsection{Ideal spectra}
-For our ideal hopefully-noiseless spectra, we choose to average the 95~spectra of each transition.
-The averaged spectra are shown in~\cref{fig:corrected_averaged}.
+To obtain almost noiseless spectra, we average the 95~spectra of each transition.
+These averaged spectra are shown in~\cref{fig:corrected_averaged}.
 We do not claim that these averaged spectra are closer to the astronomical reality than any individual spectrum: averaging reduces the noise but may leave systematic instrumental effects in the bandpass.
 
 By averaging, we reduce the noise by a factor~$\sqrt{95} \approx 10$ but we do not completely eliminate it.
