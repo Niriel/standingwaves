@@ -2,7 +2,7 @@
 
 \newif\ifDraft
 \newif\ifPrint
-\Drafttrue % Comment out to set to false.
+%\Drafttrue % Comment out to set to false.
 %\Printtrue % Comment out to set to false.
 
 \input{packages}
@@ -30,7 +30,7 @@
         submillimeter heterodyne receivers.\\
     }
     \author{Bertrand Delforge}
-    % \maketitle
+    \maketitle
 %-----------------------------------------------------------------------------
     %\subimport{front/}{dedication}
     %\subimport{front/}{epigraph}
@@ -42,36 +42,36 @@
        \renewcommand*\contentsname{Content \today}
     \fi
     \tableofcontents
-    \addcontentsline{toc}{chapter}{\contentsname}
+    %\addcontentsline{toc}{chapter}{\contentsname}
 %-----------------------------------------------------------------------------
 %     \clearpage
 %     \listoffigures
 %     \addcontentsline{toc}{chapter}{\listfigurename}
 %-----------------------------------------------------------------------------
-    % \subimport{front/}{preface}
+    \subimport{front/}{preface}
     % \subimport{front/}{acknowledgements}
 %=============================================================================
 \mainmatter
     \pagenumbering{arabic}
 
-    % \subimport{chapter_1/}{chapter_1}
+    \subimport{chapter_1/}{chapter_1}
 
     %\setcounter{chapter}{1}
-    % \subimport{chapter_2/}{chapter_2}
+    \subimport{chapter_2/}{chapter_2}
 
     %\setcounter{chapter}{2}
-    % \subimport{chapter_4/}{chapter_4}
+    \subimport{chapter_4/}{chapter_4}
 
-    \setcounter{chapter}{3}
+    %\setcounter{chapter}{3}
     \subimport{chapter_5/}{chapter_5}
 
     %\setcounter{chapter}{4}
     %\subimport{chapter_6/}{chapter_6}
 
-    %\begin{appendices}
-    %    \subimport{appendix_b/}{appendix_b}
-    %   \subimport{appendix_a/}{appendix_a}
-    %\end{appendices}
+    \begin{appendices}
+        \subimport{appendix_b/}{appendix_b}
+        \subimport{appendix_a/}{appendix_a}
+    \end{appendices}
 
 %=============================================================================
 \backmatter
