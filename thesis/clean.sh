@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
-latexmk -c main
+latexmk -C -bibtex main
 
