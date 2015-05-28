@@ -50,7 +50,10 @@
 
 
 
+%===============================  TITLE PAGE  ================================
 
+\usepackage{titling}
+    % Provides \thetitle, \theauthor, etc.
 
 
 
@@ -422,7 +425,9 @@
 
 %================================  QUANTITIES  ===============================
 
-\usepackage[version-1-compatibility]{siunitx}
+% I don't know how to test the version of siunitx programmatically.
+% \usepackage[version-1-compatibility]{siunitx}
+\usepackage{siunitx}
     % Otherwise I can't write the mu symbol for micrometers.
     % It also brings me the \degree symbol, woo!
     % No decibel though, I need to make this one myself.
@@ -488,7 +493,7 @@
 
 % Hyperref MUST appear vefore cleveref, otherwise cleveref does not
 % manage to process subfigure references and just prints ??.
-\usepackage{hyperref}
+\usepackage[bookmarks=true]{hyperref}
     % Requires direct pdf output, therefore all figures should be pdf too.
     % This creates hyperlinks all over the place to jump to figures, references,
     % chapters and all.
@@ -501,7 +506,6 @@
     citecolor={green!40!black},
     urlcolor={blue!80!black}
 }
-% \newcommand{\texorpdfstring}[2]{#2}
 
 % Cleveref MUST appear before caption, otherwise, any subcaption with
 % a label makes the latex compiler enter an infinite loop.
@@ -519,8 +523,6 @@
 \crefname{thmthm}{theorem}{theorems}
 \Crefname{thmthm}{Theorem}{Theorems}
 
-
-
 %==============================  FLOAT CAPTIONS  ==============================
 
 % caption and subcaption must be loaded after cleveref.
@@ -536,6 +538,13 @@
 \usepackage{subcaption}
     % Lets me have labels such as a) b) c) inside a figure environment.
 \newcommand{\parensubref}[1]{(\subref{#1})}
+
+%============================  CONVENIENT STUFF  =============================
+
+\newcommand{\removelinebreaks}[1]{\begingroup\def\\{ }#1\endgroup}
+    % This replaces line breaks with spaces.
+    % Useful to set both the book title and the PDF-meta-data title from the
+    % same string.
 
 %===============================  SPECIAL TEXT  ==============================
 
