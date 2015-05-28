@@ -24,20 +24,33 @@
 \frontmatter
     \pagenumbering{roman}
 %-----------------------------------------------------------------------------
-    \title{
+    \title{%
         The effect of interferences\\
         on the calibration of\\
         submillimeter heterodyne receivers.\\
     }
     \author{Bertrand Delforge}
-    % \maketitle
+    \hypersetup{
+        pdftitle=\thetitle,
+        pdfauthor=\theauthor,
+        pdfsubject={Ph.D.\ thesis},
+        pdfkeywords={% Taken from IEEE taxonomy.
+            Astrochemistry;%
+            Calibration;%
+            Electromagnetic interference;%
+            Electromagnetic modeling;%
+            Radio astronomy;%
+            Submillimeter wave propagation;%
+        },
+    }
+%     \maketitle
 %-----------------------------------------------------------------------------
     %\subimport{front/}{dedication}
     %\subimport{front/}{epigraph}
 %-----------------------------------------------------------------------------
     %level -1: part, 0: chapter, 1: section, etc.
     \setcounter{secnumdepth}{3}
-    \setcounter{tocdepth}{2}
+    \setcounter{tocdepth}{3}
     \ifDraft
        \renewcommand*\contentsname{Content \today}
     \fi
@@ -48,30 +61,30 @@
 %     \listoffigures
 %     \addcontentsline{toc}{chapter}{\listfigurename}
 %-----------------------------------------------------------------------------
-    % \subimport{front/}{preface}
-    % \subimport{front/}{acknowledgements}
+%     \subimport{front/}{preface}
+%     \subimport{front/}{acknowledgements}
 %=============================================================================
 \mainmatter
     \pagenumbering{arabic}
 
-    % \subimport{chapter_1/}{chapter_1}
+%     \subimport{chapter_1/}{chapter_1}
 
-    %\setcounter{chapter}{1}
-    % \subimport{chapter_2/}{chapter_2}
+%     \setcounter{chapter}{1}
+%     \subimport{chapter_2/}{chapter_2}
 
-    %\setcounter{chapter}{2}
-    % \subimport{chapter_4/}{chapter_4}
+%     \setcounter{chapter}{2}
+%     \subimport{chapter_4/}{chapter_4}
 
     \setcounter{chapter}{3}
     \subimport{chapter_5/}{chapter_5}
 
-    %\setcounter{chapter}{4}
-    %\subimport{chapter_6/}{chapter_6}
+%     \setcounter{chapter}{4}
+%     \subimport{chapter_6/}{chapter_6}
 
-    %\begin{appendices}
-    %    \subimport{appendix_b/}{appendix_b}
-    %   \subimport{appendix_a/}{appendix_a}
-    %\end{appendices}
+    \begin{appendices}
+%         \subimport{appendix_b/}{appendix_b}
+        \subimport{appendix_a/}{appendix_a}
+    \end{appendices}
 
 %=============================================================================
 \backmatter
