@@ -36,9 +36,8 @@ These reflections create interferences that impact the bandpass calibration of t
     \label{fig:mars_25_original}
 \end{figure}
 
-The spectrum that we choose is shown in~\cref{fig:mars_25_original}.
-It is an observation of the planet Mars recorded in Band~1 by the WBS-H backend, the wide-band spectrometer, horizontally polarized.
-This spectrum shows a continuum modulated by ripples.
+\Cref{fig:mars_25_original} shows a HIFI observation of the planet Mars recorded in Band~1 by the WBS-H backend, the wide-band spectrometer, horizontally polarized.
+This spectrum has no line, and its continuum is modulated by ripples.
 Atmospheric models of Mars predict a flat continuum, therefore we can attribute these ripples to an instrumental artifact that the calibration does not correct: interferences.
 We choose this spectrum to validate our model because the ripples are relatively strong compared to the thermal noise present in the observation.
 In this chapter, we use these ripples to derive the position of the loads, their reflection coefficient, and that of the mixer.
@@ -194,7 +193,7 @@ With its linear axis, the top plot shows that most of the power is concentrated 
 The resolution of the Fourier Transform is low at these periods, one would need spectra with a much broader frequency coverage to resolve these peaks.
 The bottom plot is interesting because it shows no evidence of harmonics.
 The fundamentals are located at~\SI{91}{\mega\hertz} and \SI{98}{\mega\hertz}, we could expect harmonics peaking at half these periods, and even weak harmonics would stand out on a logarithmic scale.
-The lack of visible harmonics suggests that the cavities that create the ripple are very lossy (see~\cref{sec:fabry_gain}), unless the resolution of the DFT is too low.
+The lack of visible harmonics suggests that the cavities that create the ripple are very lossy (see~\cref{sec:fabry_gain}).
 
 These plots in the Fourier domain bring evidence that we can model the ripples as two perfect sinusoids.
 
@@ -204,7 +203,7 @@ These plots in the Fourier domain bring evidence that we can model the ripples a
 
 \subsection{Perfect-sines model}
 \label{sec:perfect_sines_model}
-Examining the Direct Fourier Transform of the spectrum shows evidence of two sinusoidal ripples but offers only a very crude approximation of their period.
+Examining the Direct Fourier Transform of the spectrum shows evidence of two sinusoidal ripples but offers only a crude approximation of their period.
 
 To determine the periods of the ripples more accurately, we model the smoothed spectrum with three components: a polynomial of degree 1 for the baseline and two sinusoidal functions.
 
@@ -219,7 +218,7 @@ This model gives us a much better estimate of the periods of the ripples than th
 \Cref{fig:mars_sine_fit} illustrates the differences between the smoothed spectrum of Mars and its model using perfect sines.
 
 
-\begin{table}
+\begin{table}[b]
 % Cont result ['7.211908771679127', '-1.262493598126238e-11']
 % Cont errors ['5.614822816527074e-05', '4.7109413498749796e-14']
     \centering
@@ -238,7 +237,7 @@ This model gives us a much better estimate of the periods of the ripples than th
             $\num{7.21191} \pm \num{5.6e-05}$
             \\
         \bottomrule
-    \end{tabularx}
+    \end{tabularx}\\
     \bigskip
 % Hot  result ['-0.024374668042950198', '-0.084177761411197496', '90964727.019958138']
 % Hot  error  ['0.032581863729936822', '0.0094248123566952492', '1025.6247261452409']
@@ -468,7 +467,7 @@ In other words, we can completely ignore the IF chain.
 %=============================================================================
 
 \subsection{Mixing}
-Although mixers are non-linear devices, their useful output phasor is proportional to their input phasor in the case of small signals.
+Although mixers are non-linear devices, their useful output phasor is proportional to their input phasor in the case of small signals (see~\vref{sec:mixer_model}).
 \begin{equation}
     \begin{aligned}
     \cp{e}_\text{mixer output}
@@ -658,8 +657,12 @@ Experiments with the model show that setting it to a more realistic~\SI{120}{\ke
 Ignoring the LO completely speeds up the calculations.
 
 Setting the blank sky temperature to~\SI{0}{\kelvin} is justified by the $T_a^*$ scale of the original spectrum.
-A more correct treatment would require to know the extension of Mars and its position inside the telescope beam.
-This is not required because the spectrum of Mars that we are trying to reproduce has its temperature axis in $T_a^*$: it ignores pointing and extension and assumes that Mars is a point source in the middle of the beam.
+A more correct treatment would require to know the extent of Mars and its position inside the telescope beam.
+This is not required because the spectrum of Mars that we are trying to reproduce has its temperature axis in $T_a^*$: it ignores pointing and extent and assumes that Mars is a point source in the middle of the beam\footnote{
+   The HIFI pipeline officially produces spectra on the $T_a$ scale.
+   The $T_a^*$ scale corresponds to the $T_a$ scale corrected for atmospheric absorption.
+   HIFI being in space, that correction is always~1.
+}.
 As a result, the background radiation completely disappears in the power subtraction $P_\text{src}-P_\text{ref}$ and we can ignore it.
 
 Our optical model does not operate on powers but on electric fields.
@@ -694,7 +697,7 @@ In the next section, we confront that model to the original data taken by HIFI.
 Fitting periodic pattern is notoriously problematic:
 when the objective function is a~$\chi^2$, then is has many local extrema in which the fitter can get stuck.
 To avoid that problem, we fit our model in two steps.
-\begin{enumerate}
+\begin{enumerate}[noitemsep,nolistsep]
     \item match the period and the phase of the ripples, and
     \item match the rest.
 \end{enumerate}
@@ -719,7 +722,7 @@ The second plot shows the optical gain multiplied by the actual power emitted by
 the slope results from a combination of Planck's law and Rayleigh--Jeans' law.
 The third plot shows the effect of the mixer folding the spectrum;
 this spectrum is the one that we compare to the perfect-sine model.
-Finally, the bottom plot shows the sideband radio defined as $G_\text{USB}/(G_\text{LSB}+G_\text{USB})$;
+Finally, the bottom plot shows the sideband radio defined as $G_\text{USB}/(G_\text{LSB}+G_\text{USB})$ (\vref{eq:sbr});
 channels that are USB-dominated have a sideband ratio greater than~\num{0.5}.
 
 \begin{figure}
@@ -742,14 +745,8 @@ channels that are USB-dominated have a sideband ratio greater than~\num{0.5}.
     \caption{Three stages of the interference modeling for the cold load, and the sideband ratio.}
     \label{fig:mars_interf_stages_cold}
 \end{figure}
-
-
-\Cref{tab:interf_vs_perfectsine} lists the parameters of the interference model that best reproduce the perfect-sine model of the hot and the cold load.
-The corresponding ripples are shown in~\cref{fig:mars_25_interf_distance_fit_cold,fig:mars_25_interf_distance_fit_hot}.
-The vertical axis is arbitrary because the ripples are normalized.
-Neither the hot and cold best interference models match the perfect-sine model perfectly.
-This is due to the fact that some combinations of distance and argument produce ripples that do not approximate simple sines, as shown in~\cref{fig:mars_25_interf_distance_fit_cold_poor}.
 \begin{table}
+    \centering
     % HOT
     % ## Distance param 1.6491521148703148
     % ## Distance error 8.5017794640728818e-05
@@ -762,7 +759,6 @@ This is due to the fact that some combinations of distance and argument produce 
     % ## Angle param 4.1915111156985274
     % ## Angle error 0.068293124275238634
     % X2 = 0.00289102399052
-    \centering
     \begin{tabular}{l c c}
         \toprule
             load
@@ -775,28 +771,51 @@ This is due to the fact that some combinations of distance and argument produce 
             cold & $\num{1.53496} \pm \num{6.4e-5}$    &    $\num{4.19} \pm \num{0.06}$ \\
         \bottomrule
     \end{tabular}
-    \caption{Parameters that make the interference model of the hot and cold spectra fit their perfect-sine model.}
+    \caption{
+        Parameters that make the interference model of the hot and cold spectra fit
+        their perfect-sine model.
+    }
     \label{tab:interf_vs_perfectsine}
 \end{table}
+\begin{figure}
+    \centering
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics{mars_25_interf_distance_fit_hot}
+        \caption{Best fit of the hot ripple.}
+        \label{fig:mars_25_interf_distance_fit_hot}
+    \end{subfigure}%
+    \\
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics{mars_25_interf_distance_fit_cold}
+        \caption{Best fit of the cold ripple.}
+        \label{fig:mars_25_interf_distance_fit_cold}
+    \end{subfigure}%
+    \\
+    \begin{subfigure}{\linewidth}
+        \centering
+        \includegraphics{mars_25_interf_distance_fit_cold_poor}
+        \caption{Some narrow ranges of the argument of the reflection coefficient produce complex ripples that prevent a better fit.}
+        \label{fig:mars_25_interf_distance_fit_cold_poor}
+    \end{subfigure}%
+    \caption{
+        The period of a ripple relates to the length of a cavity.
+        One can determine a cavity length by matching a period 
+        (\subref{fig:mars_25_interf_distance_fit_hot} and \subref{fig:mars_25_interf_distance_fit_cold}),
+        although complex interference patterns (\subref{fig:mars_25_interf_distance_fit_cold_poor}) make the task difficult.
+    }
+    \label{fig:mars_25_interf_distance_fit}
+\end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics{mars_25_interf_distance_fit_hot}
-    \caption{Best fit of the hot ripple.}
-    \label{fig:mars_25_interf_distance_fit_hot}
-\end{figure}
-\begin{figure}
-    \centering
-    \includegraphics{mars_25_interf_distance_fit_cold}
-    \caption{Best fit of the cold ripple.}
-    \label{fig:mars_25_interf_distance_fit_cold}
-\end{figure}
-\begin{figure}
-    \centering
-    \includegraphics{mars_25_interf_distance_fit_cold_poor}
-    \caption{Some narrow ranges of the argument of the reflection coefficient produce complex ripples that prevent a better fit.}
-    \label{fig:mars_25_interf_distance_fit_cold_poor}
-\end{figure}
+
+\Cref{tab:interf_vs_perfectsine} lists the parameters of the interference model that best reproduce the perfect-sine model of the hot and the cold load.
+The corresponding ripples are shown in~\cref{fig:mars_25_interf_distance_fit_cold,fig:mars_25_interf_distance_fit_hot}.
+The vertical axis is arbitrary because the ripples are normalized.
+Neither the hot and cold best interference models match the perfect-sine model perfectly.
+This is due to the fact that some combinations of distance and argument produce ripples that do not approximate simple sines, as shown in~\cref{fig:mars_25_interf_distance_fit_cold_poor}.
+
+
 
 We have compared one model to another in order to determine the mixer--load distances
 and the argument of the reflection coefficient of the loads.
@@ -807,16 +826,13 @@ This gives us a very good first-guess to seed a fit that compares our complete i
 
 
 %#############################################################################
-\FloatBarrier
-
-
 
 \section{Full model fit}
 The analysis done in the previous section gives us very good first-guesses for the mixer--load distances and the argument of the reflection coefficient of the two loads.
 In this section, we compare our interference model to the real Mars data.
 
 The free parameters are
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
     \item the hot reflection coefficient, magnitude,
     \item the hot reflection coefficient, argument,
     \item the cold reflection coefficient, magnitude,
@@ -907,6 +923,11 @@ Although the model seems to fit the data quite well in~\cref{fig:mars_25_interf_
 These are due to small mismatches in amplitude or in phase.
 This model is not good enough to make quantitative predictions of the ripples, but its qualitative predictions are satisfactory.
 
+For this study, the mixer was modeled as a plane interface with a reflection coefficient whose argument and magnitude do not vary with frequency, which is an extreme simplification of reality (see~\vref{sec:mixer_model}).
+The reflection coefficient of a real mixer is frequency-dependent.
+This fact alone is sufficient to explain the variable phase difference between our model and the data.
+It would be possible to use Tucker's theory of mixing~\parencite{tucker1985quantum} in order to create a more accurate model.
+
 The spectrum of Mars with which we have worked so far is part of a series of spectra taken with different pointings.
 \Cref{fig:mars_24_interf_smoothed_vs_interf} shows the very same model applied to another spectrum of Mars.
 With this pointing, Mars couples less to the beam, which explains the lower continuum (\SI{4}{\kelvin} here, versus \SI{7.2}{\kelvin} with the original spectrum).
@@ -944,13 +965,14 @@ With three parameters in three cavities, the degeneracy should disappear.
     \label{fig:hbb_photo}
 \end{figure}
 The model for the loads may be lacking.
-We model the loads as a single plane surface because the Direct Fourier Transform of the HIFI data does not show any evidence of something mode complicated.
-It may be the case, though, that the loads need to be modeled with two surfaces instead of one.
+We model the loads as a single plane surface because the Direct Fourier Transform of the HIFI data does not show any evidence of something more complicated.
+It may be the case, though, that the loads need to be modeled with two surfaces instead of one, or even as a distributed surface~(see~\vref{sec:distributed_interface}).
 The hot load of HIFI is shown in~\cref{fig:hbb_photo}.
 It is a wedge-shaped hole coated in an absorbent material.
 Although the entire beam is supposed to couple to the wedge-shaped aperture, part of it may couple to the flat surface around it, especially in Band~1 where the beam is the widest.
 A better model of the hot load may require two surfaces: one for the aperture and one for its surrounding.
 Surprisingly high or low reflection coefficients may result from an inadequate model of the loads.
+
 
 With more data we could constrain these parameters better and refine the model.
 However, even in its current simple state and despite a low signal-to-noise ratio,
