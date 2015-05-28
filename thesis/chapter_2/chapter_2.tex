@@ -1885,7 +1885,7 @@ The ``Ensure'' statements are assertions, propositions that must be true if the 
     \end{algorithmic}
 \end{algorithm}
 
-Let us apply the permutation matrix $\matr{Q}$ produced in the example \cref{algo:separate_inside_outside_example} to a vector~$a$ and the scattering matrix~$S$, following \cref{eq:permute_s}.
+Let us apply the permutation matrix $\matr{Q}$ produced in the example \cref{algo:separate_inside_outside_example} to a vector~$\vectcp{a}$ and the scattering matrix~$\matrcp{S}$, following \cref{eq:permute_s}.
 The results are
 \begin{equation}
     \matr{Q} \vectcp{a}
@@ -2820,6 +2820,7 @@ in which~$\matr{I}_3$ is the identity matrix of rank~3.
 %=============================================================================
 
 \subsection{Distributed interface}
+\label{sec:distributed_interface}
 
 The interfaces described in the previous sections are clearly localized, they are are planar and their reflection coefficient matches that of the material.
 
@@ -3923,6 +3924,7 @@ Our model considers depolarized light as absorbed.
 %=============================================================================
 \clearpage
 \subsection{Mixer}
+\label{sec:mixer_model}
 Accurately modeling the reflection coefficient of a superconductor--insulator--superconductor tunnel junction (SIS) is outside of the scope of this chapter.
 \Textcite{tucker1985quantum} describe the theory of mixing from quantum principles.
 Applications to HIFI can be found in \textcite{kooi2008}.
