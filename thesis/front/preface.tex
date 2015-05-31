@@ -1,5 +1,4 @@
 \cleardoublepage
-%\begin{refsection}
 \chapter{Preface}
 \label{sec:preface}
 
@@ -46,18 +45,6 @@ In addition, Planck's law peaks in the far-infrared and submillimeter for temper
 %
 Consequently, these are regions of choice to study the chemistry and dynamics of the cold universe.
 
-%\begin{figure}
-%    \centering
-%    \begin{tikzpicture}[scale = 0.7]
-%        \draw[->] (0,0) -- (10.5,0) node[anchor=west] {frequency [\si{\tera\hertz}]};
-%        \foreach \x in {0,1,...,10} {
-%            \draw (\x,0) -- (\x,-0.3) node[anchor=north] {$10^{\x}$};
-%        }
-%    \end{tikzpicture}
-%    \caption{The terahertz gap.}
-%    \label{fig:terahertzgap}
-%\end{figure}
-
 The far-infrared and submillimeter domain resides between
 the optical world of mirrors and lenses on one side,
 and the microwave world of waveguides and antennas on the other side.
@@ -77,39 +64,30 @@ Terahertz astronomy became a priority in the early 1980's.
 In 1985, ESA selected FIRST (who would be later known as the Herschel Space Observatory) as a ``cornerstone'' mission of its ``horizon 2000'' program.
 In 1988, NASA established a ``Center for Space Terahertz Technology'' at the University of Michigan.
 In 1989, the Cosmic Background Explorer (COBE) was launched.
-In 1990 was organized the first ``International Symposium on Space Terahertz Technology'' (ISSTT).
+In 1990 the first ``International Symposium on Space Terahertz Technology'' (ISSTT) was organized.
 This ISSTT has been held every year since and has maintained the synergy between astronomers, space engineers and all terahertz scientists worldwide.
 The ISSTT proceedings are published on the NRAO website~\parencite{nrao:isstt}.
-In 1990, stratospheric or space missions like IRTS, ISO, PRONAOS, SIRTF (Spitzer), SMMM, SOFIA and SWAS were either ready to launch or on in their design phase.
-The research and development for the most ambitious projects took decades.
+In the nineties, stratospheric or space missions like IRTS, ISO, PRONAOS, SIRTF (Spitzer), SMMM, SOFIA and SWAS were either ready to launch or on in their design phase.
+The research and development for the most ambitious of these projects took decades.
 
-I was granted the honor to present my work during the 24\textsuperscript{th}
-edition of the ISSTT in 2013%
-\footnote{
-    Unfortunately, ISSTT did not publish proceedings that year.
-}%
-, which was held in Groningen (The Netherlands) and organized by the University of Groningen (RUG) and the Netherlands Institute for Space Research (SRON).
-The date and the place were wisely chosen:
+The 24\textsuperscript{th} edition of the ISSTT was held in Groningen (The Netherlands) in 2013, organized by the University of Groningen (RUG) and the Netherlands Institute for Space Research (SRON).
+The date and the place were aptly chosen:
 2013 coincided with the end of the four-year flight of the Herschel Space Observatory, nearly \SI{30}{years} after its inception;
 and SRON-Groningen was the Principal Investigator institute for Herschel's high-resolution spectrometer, HIFI~\parencite{AA_518_L6}.
-SRON coordinated the efforts of~25 institutes over a dozen countries, which created the technology that gave the astronomical community an instrument that could cover four frequency octaves (from \num{480} to \SI{1910}{\giga\hertz}) with a spectral resolution between \num{0.5e6} and \num{15e6} and a near-quantum-limited sensitivity.
+SRON coordinated the efforts of 25~institutes over a dozen countries, which created the technology that gave the astronomical community an instrument that could cover four frequency octaves (from \num{480} to \SI{1910}{\giga\hertz}) with a spectral resolution between \num{0.5e6} and \num{15e6} and a near-quantum-limited sensitivity.
 
 The problem of standing waves and optical interferences in HIFI, which motivated my work, is not the result of an oversight or a poor design; precautions were taken from the very beginning of the project to minimize them.
-On the contrary, worrying about these remaining interferences is a luxury only made possible by the low noise and high stability of the system~\parencite{AA_537_A17}.
+On the contrary, worrying about these remaining interferences is, in some sense, a luxury only made possible by the low noise and high stability of the system~\parencite{AA_537_A17}.
+At the Optics session of ISSTT~2013, I~presented a technique that I had developed to model and predict the optical interferences of HIFI%
+\footnote{
+    Unfortunately, ISSTT did not publish proceedings that year.  The program is available on the SRON website (\url{https://home.sron.nl/isstt2013}).
+}%
+.
+A technique which has, since then, considerably evolved.
+This thesis describes the latest version of the mathematical framework and algorithms that can explain and predict the effect of electromagnetic interferences on the gain of coherent sub-millimeter detectors.
 
-Research and development are going on.
+The research and development of terahertz theories and technologies are going on.
 One can find examples both on the front of spectroscopy
 --- sideband-separating mixers performing at \SI{700}{\giga\hertz} are now available~\parencite{khudchenko2011first} --- and imaging --- with the tenfold increase in the sensitivity of Transition Edge Sensors~\parencite{jackson2012spica}.
 
-
 The terahertz gap may still not be filled today, but astronomers have bridged it.
-
-
-
-
-
-
-%#############################################################################
-%\clearpage
-%\printbibliography[heading=subbibliography]
-%\end{refsection}
